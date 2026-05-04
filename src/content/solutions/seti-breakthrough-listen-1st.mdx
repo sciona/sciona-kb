@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.seti_breakthrough_listen_1st
+title: SETI Breakthrough Listen - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by SETI Breakthrough Listen - 1st Place (2021): prepare the data, build task-specific representations, train or a…"
+problem_statement: "Spectrogram classification (Anomaly detection) solution template for SETI Breakthrough Listen - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Array formatting, Image augmentation, MixUp, Deep modeling, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: SETI Breakthrough Listen - 1st Place (2021)
+placement: 1st
+year: 2021
+domain: signal_classification
+paradigm: loss_function
+family: signal_classification
+tags:
+  - efficientnet
+  - spectrogram
+  - rag
+  - classification
+  - anomaly
+  - detection
+key_insight: "The load-bearing idea is the pipeline topology: Array formatting creates the representation needed by Multi-resolution ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/seti-breakthrough-listen/discussion/266385
+source_license: null
+---
+
+# SETI Breakthrough Listen - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+Spectrogram classification (Anomaly detection) solution template for SETI Breakthrough Listen - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Array formatting, Image augmentation, MixUp, Deep modeling, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by SETI Breakthrough Listen - 1st Place (2021): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.seti_breakthrough_listen_1st" readOnly={true} /> */}
+
+1. **Array formatting** -- This stage reshape the raw signal arrays into 6-channel 2D spatial matrices representing different ON/OFF telescope positions (numpy).
+1. **Image augmentation** -- This stage apply temporal masking, spatial masking (like SpecAugment), and horizontal flips (Albumentations).
+1. **MixUp** -- This stage blend random pairs of 6-channel arrays during training to force the model to handle heavily overlapping signals (PyTorch).
+1. **Deep modeling** -- This stage train EfficientNet-B1, B3, and NFNet architectures on the matrices using BCE loss.
+1. **Multi-resolution ensembling** -- This stage average predictions of models trained at different image resolutions (e.g., 256x256, 512x512) to catch different signal frequencies.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Array formatting creates the representation needed by Multi-resolution ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.seti_breakthrough_listen_1st" label="Reproduce this solution in Sciona" /> */}

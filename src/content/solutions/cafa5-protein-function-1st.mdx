@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.cafa5_protein_function_1st
+title: CAFA-5 Protein Function Prediction - 1st Place (2023) - Pipeline Template
+description: "This template captures the ordered steps used by CAFA-5 Protein Function Prediction - 1st Place (2023): prepare the data, build task-specific representations, …"
+problem_statement: "Learning-to-rank / Multi-modal solution template for CAFA-5 Protein Function Prediction - 1st Place (2023), modeled as a 6-stage deterministic pipeline: Embeddings Generation, Modality 1: Structural, Modality 2: Literature, Modality 3: Text Retrieval, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: CAFA-5 Protein Function Prediction - 1st Place (2023)
+placement: 1st
+year: 2023
+domain: learning_to_rank
+paradigm: searching
+family: learning_to_rank
+tags:
+  - lightgbm
+  - xgboost
+  - transformer
+  - learning
+  - multi
+  - modal
+key_insight: "The load-bearing idea is the pipeline topology: Embeddings Generation creates the representation needed by Learning-to-Rank Meta-Model, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/writeups/gocurator-1st-place-solution-for-the-cafa5
+source_license: null
+---
+
+# CAFA-5 Protein Function Prediction - 1st Place (2023) - Pipeline Template
+
+## Problem
+
+Learning-to-rank / Multi-modal solution template for CAFA-5 Protein Function Prediction - 1st Place (2023), modeled as a 6-stage deterministic pipeline: Embeddings Generation, Modality 1: Structural, Modality 2: Literature, Modality 3: Text Retrieval, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by CAFA-5 Protein Function Prediction - 1st Place (2023): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.cafa5_protein_function_1st" readOnly={true} /> */}
+
+1. **Embeddings Generation** -- This stage execute InterProScan and the ESM-1b transformer to generate highly dense protein domain and sequence embeddings (transformers, torch).
+1. **Modality 1: Structural** -- This stage pass the physical structure data through a FoldSeek-KNN component method to assess geometrical similarity (scikit-learn).
+1. **Modality 2: Literature** -- This stage pass biological literature text describing the proteins through an extreme multi-label classifier (GOXML).
+1. **Modality 3: Text Retrieval** -- This stage pass the basic protein descriptions into a specialized two-stage deep learning framework (GORetrieval).
+1. **Modality 4: Concatenation** -- This stage combine the sequence, text, and literature representations mathematically via LR-MEM to construct a unified protein vector.
+1. **Learning-to-Rank Meta-Model** -- This stage concatenate the continuous output scores of all four component methods and use them to train a pairwise Learning-to-Rank model (e.g., LambdaMART) to generate the final sorted functionality predictions (xgboost or lightgbm).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Embeddings Generation creates the representation needed by Learning-to-Rank Meta-Model, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.cafa5_protein_function_1st" label="Reproduce this solution in Sciona" /> */}

@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.initializecollectioncontext
+predicate_id: initializecollectioncontext
+repo: sciona-atoms
+domain: inference
+type_signature: "(n_collect: int, chain_state_0: HMCState, kernel_spec: StateModelSpec) -> tuple[array/tensor[n_collect, n_chains, dim], tuple(int n_chains, int dim), chain trace accumulator]"
+informal_desc: Derive chain dimensions from the initial state, allocate the time-major sample buffer, and initialize trace/progress bookkeeping state.
+conceptual_summary: ""
+inputs:
+  - name: n_collect
+    type_desc: int
+    constraints: ">= 0"
+  - name: chain_state_0
+    type_desc: HMCState
+    constraints: positions has shape [n_chains, dim]
+  - name: kernel_spec
+    type_desc: StateModelSpec
+    constraints: may include diagnostics/progress settings
+outputs:
+  - name: collection_buffer_0
+    type_desc: np.ndarray
+    constraints: allocated and empty
+  - name: chain_dims
+    type_desc: tuple[int, int]
+    constraints: inferred from chain_state_0
+  - name: trace_state_0
+    type_desc: object
+    constraints: initialized, no observations yet
+concept_type: dimensionality_reduction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Initializecollectioncontext
+description: Derive chain dimensions from the initial state, allocate the time-major sample buffer, and initialize trace/progress bookkeeping state.
+---
+
+# Initializecollectioncontext
+
+> Derive chain dimensions from the initial state, allocate the time-major sample buffer, and initialize trace/progress bookkeeping state.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(n_collect: int, chain_state_0: HMCState, kernel_spec: StateModelSpec) -> tuple[array/tensor[n_collect, n_chains, dim], tuple(int n_chains, int dim), chain trace accumulator]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

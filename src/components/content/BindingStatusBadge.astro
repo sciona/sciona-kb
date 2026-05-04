@@ -1,0 +1,27 @@
+---
+interface Props {
+  status: "active" | "gap" | "approximate";
+  confidence?: number;
+}
+
+const { status, confidence } = Astro.props;
+
+const styles: Record<string, string> = {
+  active: "bg-atlas-green/10 text-atlas-green border-atlas-green/30",
+  approximate: "bg-atlas-yellow/10 text-atlas-yellow border-atlas-yellow/30",
+  gap: "bg-atlas-red/10 text-atlas-red border-atlas-red/30",
+};
+
+const labels: Record<string, string> = {
+  active: "Bound",
+  approximate: "Approx",
+  gap: "Gap",
+};
+---
+
+<span class:list={["inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded border", styles[status]]}>
+  {labels[status]}
+  {confidence !== undefined && confidence > 0 && (
+    <span class="opacity-70">{Math.round(confidence * 100)}%</span>
+  )}
+</span>

@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.nasa_airport_pushback_phase_1_3rd_place_1st
+title: NASA Airport Pushback Phase 1 - 3rd Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by NASA Airport Pushback Phase 1 - 3rd Place (2022): prepare the data, build task-specific representations, train…"
+problem_statement: "Tabular regression / Classification correction solution template for NASA Airport Pushback Phase 1 - 3rd Place (2022), modeled as a 5-stage deterministic pipeline: Feature Engineering, Primary Regression, Residual Calculation, Secondary Classification, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: NASA Airport Pushback Phase 1 - 3rd Place (2022)
+placement: 3rd
+year: 2022
+domain: tabular_regression
+paradigm: optimization
+family: tabular_regression
+tags:
+  - xgboost
+  - rag
+  - tabular
+  - regression
+  - classification
+  - correction
+key_insight: "The load-bearing idea is the pipeline topology: Feature Engineering creates the representation needed by Probabilistic Adjustment, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://github.com/drivendataorg/nasa-airport-pushback
+source_license: null
+---
+
+# NASA Airport Pushback Phase 1 - 3rd Place (2022) - Pipeline Template
+
+## Problem
+
+Tabular regression / Classification correction solution template for NASA Airport Pushback Phase 1 - 3rd Place (2022), modeled as a 5-stage deterministic pipeline: Feature Engineering, Primary Regression, Residual Calculation, Secondary Classification, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by NASA Airport Pushback Phase 1 - 3rd Place (2022): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.nasa_airport_pushback_phase_1_3rd_place_1st" readOnly={true} /> */}
+
+1. **Feature Engineering** -- This stage extract time-of-day, weather severity metrics, and historical delay averages from the public feature set (pandas).
+1. **Primary Regression** -- This stage train a baseline XGBoost regressor to predict the continuous pushback time for each airport (xgboost).
+1. **Residual Calculation** -- This stage calculate the residuals (errors) between the predicted pushback times and the actual times in the training data.
+1. **Secondary Classification** -- This stage train a secondary XGBoost classifier specifically designed to detect whether the primary regressor has over-estimated or under-estimated the target based on the residuals.
+1. **Probabilistic Adjustment** -- This stage use the output probabilities of the secondary classifier to mathematically adjust the continuous predictions of the primary regressor (numpy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Feature Engineering creates the representation needed by Probabilistic Adjustment, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.nasa_airport_pushback_phase_1_3rd_place_1st" label="Reproduce this solution in Sciona" /> */}

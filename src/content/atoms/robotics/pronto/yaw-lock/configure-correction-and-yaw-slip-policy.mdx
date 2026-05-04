@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.robotics.pronto.yaw_lock.configure_correction_and_yaw_slip_policy
+predicate_id: configure_correction_and_yaw_slip_policy
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(state_in: YawLockState, correction_period_in: numeric/time-like, yaw_slip_detect_in: bool, yaw_slip_threshold_degrees_in: numeric/degrees, yaw_slip_disable_period_in: numeric/time-like) -> YawLockState"
+informal_desc: Set correction cadence and yaw-slip detection policy by returning a new state with updated parameter fields.
+conceptual_summary: "ImmutableStatePolicyParameterUpdate. Constructs a new state object by functionally copying an immutable configuration container and replacing a targeted subset of policy parameters. The transform performs deterministic field substitution for a cadence scalar, an event-detection enable flag, a non-negative detection threshold, and a non-negative suppression interval. No historical accumulation or iterative optimization occurs; output is a single-step reparameterized state.. Applications: Robotics: reconfigure control-loop cadence and deviation-trigger thresholds for actuator safety monitoring without mutating runtime state., Network security: update anomaly detector enablement, sensitivity threshold, and alert cooldown in an immutable policy snapshot., Clinical monitoring software: adjust sampling interval, alarm activation flag, alarm threshold, and alarm silencing period for patient signal surveillance., Industrial process automation: publish a revised machine supervision policy with new correction frequency and fault-detection suppression timing."
+inputs:
+  - name: state_in
+    type_desc: YawLockState
+    constraints: Immutable input state.
+  - name: correction_period_in
+    type_desc: float
+    constraints: Expected positive.
+  - name: yaw_slip_detect_in
+    type_desc: bool
+    constraints: isinstance(x, bool)
+  - name: yaw_slip_threshold_degrees_in
+    type_desc: float
+    constraints: Non-negative threshold.
+  - name: yaw_slip_disable_period_in
+    type_desc: float
+    constraints: Expected non-negative.
+outputs:
+  - name: state_out
+    type_desc: YawLockState
+    constraints: New object with correction_period, yaw_slip_detect, yaw_slip_threshold_degrees, yaw_slip_disable_period replaced.
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Configure_correction_and_yaw_slip_policy
+description: Set correction cadence and yaw-slip detection policy by returning a new state with updated parameter fields.
+---
+
+# Configure_correction_and_yaw_slip_policy
+
+> Set correction cadence and yaw-slip detection policy by returning a new state with updated parameter fields.
+
+## Conceptual Summary
+
+ImmutableStatePolicyParameterUpdate. Constructs a new state object by functionally copying an immutable configuration container and replacing a targeted subset of policy parameters. The transform performs deterministic field substitution for a cadence scalar, an event-detection enable flag, a non-negative detection threshold, and a non-negative suppression interval. No historical accumulation or iterative optimization occurs; output is a single-step reparameterized state.. Applications: Robotics: reconfigure control-loop cadence and deviation-trigger thresholds for actuator safety monitoring without mutating runtime state., Network security: update anomaly detector enablement, sensitivity threshold, and alert cooldown in an immutable policy snapshot., Clinical monitoring software: adjust sampling interval, alarm activation flag, alarm threshold, and alarm silencing period for patient signal surveillance., Industrial process automation: publish a revised machine supervision policy with new correction frequency and fault-detection suppression timing.
+
+## Type Signature
+
+```
+(state_in: YawLockState, correction_period_in: numeric/time-like, yaw_slip_detect_in: bool, yaw_slip_threshold_degrees_in: numeric/degrees, yaw_slip_disable_period_in: numeric/time-like) -> YawLockState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

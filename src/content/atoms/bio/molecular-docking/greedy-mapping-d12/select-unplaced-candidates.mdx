@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping_d12.select_unplaced_candidates
+predicate_id: select_unplaced_candidates
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(considered_nodes: Collection[NodeId], mapping_state_seeded: MappingState) -> Collection[NodeId]"
+informal_desc: Filter considered nodes to only those not already mapped in the seeded state.
+conceptual_summary: ""
+inputs:
+  - name: considered_nodes
+    type_desc: Collection[NodeId]
+    constraints: Candidate graph nodes for expansion.
+    required: true
+    default_value_repr: ""
+  - name: mapping_state_seeded
+    type_desc: MappingState
+    constraints: Must contain current mapping keys.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: unplaced_nodes
+    type_desc: Collection[NodeId]
+    constraints: Subset of considered_nodes not in mapping.
+    required: true
+    default_value_repr: ""
+concept_type: set_theory
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Select_unplaced_candidates
+description: Filter considered nodes to only those not already mapped in the seeded state.
+---
+
+# Select_unplaced_candidates
+
+> Filter considered nodes to only those not already mapped in the seeded state.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(considered_nodes: Collection[NodeId], mapping_state_seeded: MappingState) -> Collection[NodeId]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

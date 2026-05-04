@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.parkinsons_fog_1st
+title: Parkinson's Freezing of Gait Prediction - 1st Place (2023) - Pipeline Template
+description: "This template captures the ordered steps used by Parkinson's Freezing of Gait Prediction - 1st Place (2023): prepare the data, build task-specific representati…"
+problem_statement: "Time Series Classification (High frequency) solution template for Parkinson's Freezing of Gait Prediction - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Sliding window extraction, Spectral feature extraction, CNN processing, Model ensembling, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Parkinson's Freezing of Gait Prediction - 1st Place (2023)
+placement: 1st
+year: 2023
+domain: time_series_classification
+paradigm: signal_filter
+family: time_series_classification
+tags:
+  - lightgbm
+  - cnn
+  - gru
+  - series
+  - classification
+  - frequency
+key_insight: "The load-bearing idea is the pipeline topology: Sliding window extraction creates the representation needed by Post-processing, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416443
+source_license: null
+---
+
+# Parkinson's Freezing of Gait Prediction - 1st Place (2023) - Pipeline Template
+
+## Problem
+
+Time Series Classification (High frequency) solution template for Parkinson's Freezing of Gait Prediction - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Sliding window extraction, Spectral feature extraction, CNN processing, Model ensembling, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Parkinson's Freezing of Gait Prediction - 1st Place (2023): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.parkinsons_fog_1st" readOnly={true} /> */}
+
+1. **Sliding window extraction** -- This stage segment raw 3D accelerometer data into 2-second overlapping windows (numpy).
+1. **Spectral feature extraction** -- This stage apply Fast Fourier Transform (FFT) and calculate power spectral densities for each axis (scipy.signal).
+1. **CNN processing** -- This stage pass the raw sequence chunks through a 1D CNN + Bi-GRU architecture (PyTorch).
+1. **Model ensembling** -- This stage blend the predictions from the deep learning architecture with a LightGBM model trained on the spectral features.
+1. **Post-processing** -- This stage apply a Gaussian smoothing filter over the time-series probability predictions to eliminate biologically impossible rapid state flipping.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Sliding window extraction creates the representation needed by Post-processing, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.parkinsons_fog_1st" label="Reproduce this solution in Sciona" /> */}

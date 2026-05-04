@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.nuts_llm.computerunstatsfromsamples
+predicate_id: computerunstatsfromsamples
+repo: sciona-atoms
+domain: inference
+type_signature: "(sample_tensor: Tensor<B, 3>) -> RunStats"
+informal_desc: Materialize sample data, form a 3D ndarray view, and derive run-level diagnostics/statistics.
+conceptual_summary: ""
+inputs:
+  - name: sample_tensor
+    type_desc: Tensor
+    constraints: data convertible to contiguous f32 slice
+outputs:
+  - name: run_stats
+    type_desc: RunStats
+    constraints: computed from full sample tensor
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for initializing target log-density state, gradient information, acceptance target, and explicit stochastic state before transition building.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a local state initializer and not a full NUTS transition implementation.
+title: Computerunstatsfromsamples
+description: Materialize sample data, form a 3D ndarray view, and derive run-level diagnostics/statistics.
+---
+
+# Computerunstatsfromsamples
+
+> Materialize sample data, form a 3D ndarray view, and derive run-level diagnostics/statistics.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(sample_tensor: Tensor<B, 3>) -> RunStats
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

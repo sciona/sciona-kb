@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.robotics.pronto.yaw_lock.read_initial_joint_angles
+predicate_id: read_initial_joint_angles
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(state_in: YawLockState) -> numeric collection"
+informal_desc: Read stored initial joint angles from immutable state.
+conceptual_summary: "Immutable Baseline Vector Retrieval. Consumes an immutable structured state object and performs a schema-bound field projection to extract a predefined numeric collection. The operation applies no numerical transformation and does not mutate input state; it returns the stored baseline sequence exactly as represented (by value copy or read-only reference). The mapping is deterministic and repeatable for identical input state.. Applications: Computational neuroscience: retrieve initial parameter vectors from immutable simulation snapshots before iterative integration, Materials modeling: extract baseline coefficient arrays from frozen experiment configurations for reproducible solver initialization, Distributed optimization systems: read starting weight vectors from immutable checkpoints to ensure restart determinism"
+inputs:
+  - name: state_in
+    type_desc: YawLockState
+    constraints: Immutable input state.
+outputs:
+  - name: joint_angles_init
+    type_desc: np.ndarray
+    constraints: x is not None
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Read_initial_joint_angles
+description: Read stored initial joint angles from immutable state.
+---
+
+# Read_initial_joint_angles
+
+> Read stored initial joint angles from immutable state.
+
+## Conceptual Summary
+
+Immutable Baseline Vector Retrieval. Consumes an immutable structured state object and performs a schema-bound field projection to extract a predefined numeric collection. The operation applies no numerical transformation and does not mutate input state; it returns the stored baseline sequence exactly as represented (by value copy or read-only reference). The mapping is deterministic and repeatable for identical input state.. Applications: Computational neuroscience: retrieve initial parameter vectors from immutable simulation snapshots before iterative integration, Materials modeling: extract baseline coefficient arrays from frozen experiment configurations for reproducible solver initialization, Distributed optimization systems: read starting weight vectors from immutable checkpoints to ensure restart determinism
+
+## Type Signature
+
+```
+(state_in: YawLockState) -> numeric collection
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

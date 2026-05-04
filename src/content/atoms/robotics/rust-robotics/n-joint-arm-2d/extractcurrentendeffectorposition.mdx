@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.n_joint_arm_2d.extractcurrentendeffectorposition
+predicate_id: extractcurrentendeffectorposition
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(x: array-like, dof: integer, state_dim_ratio: integer) -> array-like"
+informal_desc: Read terminal end-effector (x, y) from the packed state vector using degree-of-freedom and state ratio layout.
+conceptual_summary: ""
+inputs:
+  - name: x
+    type_desc: np.ndarray
+    constraints: length == dof * state_dim_ratio
+  - name: dof
+    type_desc: int
+    constraints: dof > 0
+  - name: state_dim_ratio
+    type_desc: int
+    constraints: ratio >= 3
+outputs:
+  - name: ee_position_current
+    type_desc: np.ndarray
+    constraints: length == 2
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Extractcurrentendeffectorposition
+description: Read terminal end-effector (x, y) from the packed state vector using degree-of-freedom and state ratio layout.
+---
+
+# Extractcurrentendeffectorposition
+
+> Read terminal end-effector (x, y) from the packed state vector using degree-of-freedom and state ratio layout.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(x: array-like, dof: integer, state_dim_ratio: integer) -> array-like
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,25 @@
+---
+const navItems = [
+  { label: "Atoms", href: "/atoms" },
+  { label: "CDGs", href: "/cdgs" },
+  { label: "Solutions", href: "/solutions" },
+];
+---
+
+<header class="sticky top-0 z-40 bg-atlas-bg/80 backdrop-blur-md border-b border-atlas-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2 font-bold text-lg text-atlas-text hover:text-atlas-accent transition-colors">
+      <span class="text-atlas-accent">S</span>ciona Atlas
+    </a>
+    <nav class="flex items-center gap-6">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>

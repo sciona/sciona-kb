@@ -1,0 +1,52 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.linearizedynamicswrtvelocityinput
+predicate_id: linearizedynamicswrtvelocityinput
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(model_spec: ModelSpec, u: ControlVector<2>, yaw_plus_sideslip: f64, wheelbase_total: f64) -> Vector<3>"
+informal_desc: Compute the velocity-input sensitivity column (df/du0), including translational terms and yaw-rate term normalization.
+conceptual_summary: ""
+inputs:
+  - name: model_spec
+    type_desc: ModelSpec
+    constraints: Provides rear-length parameter.
+  - name: u
+    type_desc: np.ndarray
+    constraints: Finite; steering not at singular tan/cos points.
+  - name: yaw_plus_sideslip
+    type_desc: float
+    constraints: Finite.
+  - name: wheelbase_total
+    type_desc: float
+    constraints: Non-zero.
+outputs:
+  - name: velocity_column
+    type_desc: np.ndarray
+    constraints: Ordered as [df0/du0, df1/du0, df2/du0].
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Linearizedynamicswrtvelocityinput
+description: Compute the velocity-input sensitivity column (df/du0), including translational terms and yaw-rate term normalization.
+---
+
+# Linearizedynamicswrtvelocityinput
+
+> Compute the velocity-input sensitivity column (df/du0), including translational terms and yaw-rate term normalization.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(model_spec: ModelSpec, u: ControlVector<2>, yaw_plus_sideslip: f64, wheelbase_total: f64) -> Vector<3>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

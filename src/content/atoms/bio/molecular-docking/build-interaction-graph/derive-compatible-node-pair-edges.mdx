@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.build_interaction_graph.derive_compatible_node_pair_edges
+predicate_id: derive_compatible_node_pair_edges
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(nodes: list[InteractionNode], L_distance_matrix: OrderedTupleDict[MinMaxDistance], R_distance_matrix: OrderedTupleDict[float], effective_interaction_distance: float) -> tuple[set[tuple[InteractionNode, InteractionNode]], set[tuple[InteractionNode, InteractionNode]]]"
+informal_desc: Enumerate unique unordered node pairs, fetch corresponding left min-max and right scalar distances, and retain only pairs whose distances satisfy the interaction-matching criterion.
+conceptual_summary: ""
+inputs:
+  - name: nodes
+    type_desc: list[InteractionNode]
+    constraints: Each node contains L_feature and R_feature
+  - name: L_distance_matrix
+    type_desc: OrderedTupleDict[MinMaxDistance]
+    constraints: Indexable by (L_feature, L_feature)
+  - name: R_distance_matrix
+    type_desc: OrderedTupleDict[float]
+    constraints: Indexable by (R_feature, R_feature)
+  - name: effective_interaction_distance
+    type_desc: float
+    constraints: Used as tolerance in distance matching
+outputs:
+  - name: compatible_edges
+    type_desc: set[tuple[InteractionNode, InteractionNode]]
+    constraints: Contains only distance-compatible node pairs
+  - name: all_examined_pairs
+    type_desc: set[tuple[InteractionNode, InteractionNode]]
+    constraints: All unique unordered node pairs (diagnostic/intermediate)
+concept_type: graph_optimization
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Derive_compatible_node_pair_edges
+description: Enumerate unique unordered node pairs, fetch corresponding left min-max and right scalar distances, and retain only pairs whose distances satisfy the interacti…
+---
+
+# Derive_compatible_node_pair_edges
+
+> Enumerate unique unordered node pairs, fetch corresponding left min-max and right scalar distances, and retain only pairs whose distances satisfy the interaction-matching criterion.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(nodes: list[InteractionNode], L_distance_matrix: OrderedTupleDict[MinMaxDistance], R_distance_matrix: OrderedTupleDict[float], effective_interaction_distance: float) -> tuple[set[tuple[InteractionNode, InteractionNode]], set[tuple[InteractionNode, InteractionNode]]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

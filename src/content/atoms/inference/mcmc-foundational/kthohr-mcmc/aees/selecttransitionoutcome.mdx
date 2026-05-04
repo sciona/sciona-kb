@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.kthohr_mcmc.aees.selecttransitionoutcome
+predicate_id: selecttransitionoutcome
+repo: sciona-atoms
+domain: inference
+type_signature: "(z: fp_t, comp_val: fp_t, X_new: ColVec_t, X_prev: ColVec_t, val_new: fp_t, val_prev: fp_t) -> object { x_next: ColVec_t, log_kernel_val: fp_t, accepted: bool }"
+informal_desc: Apply MH acceptance rule and emit the next state payload.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kou2006equi
+    citation: Source-shaped AEES local Metropolis step attribution.
+  - title: repo_mcmc
+    citation: Upstream implementation is mapped to the vendored mcmc repository.
+title: Selecttransitionoutcome
+description: Apply MH acceptance rule and emit the next state payload.
+---
+
+# Selecttransitionoutcome
+
+> Apply MH acceptance rule and emit the next state payload.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(z: fp_t, comp_val: fp_t, X_new: ColVec_t, X_prev: ColVec_t, val_new: fp_t, val_prev: fp_t) -> object { x_next: ColVec_t, log_kernel_val: fp_t, accepted: bool }
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.initializefrontierfromstartnode
+predicate_id: initializefrontierfromstartnode
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mapping_context: MappingContext, starting_node: NodeId, mapping: Map[GraphNode,LatticeNode], unmapping: Map[LatticeNode,GraphNode], unexpanded_nodes: Set[GraphNode]) -> MappingState"
+informal_desc: Create initial mapping/unmapping frontier state from a selected starting node.
+conceptual_summary: "SeedBidirectionalCorrespondenceFrontier. Initializes a search state by anchoring a partial correspondence between two relational structures at a selected source element. It takes an existing forward map, its inverse map, and a set of unexpanded source elements, then returns a new immutable state where correspondence consistency constraints are preserved. The result is a frontier-ready state for subsequent expansion steps in a correspondence-construction process.. Applications: Bootstrapping residue-contact-graph to template-topology alignment in computational biology, Seeding component-netlist to physical-layout correspondence in electronic design automation, Initializing landmark-topology matching between sensed environment graphs and prior maps in robotics, Starting entity-alignment search between heterogeneous knowledge graphs in information systems"
+inputs:
+  - name: mapping_context
+    type_desc: MappingContext
+    constraints: requires lattice in context
+  - name: starting_node
+    type_desc: NodeId
+    constraints: must exist in graph
+  - name: mapping
+    type_desc: Map[GraphNode,LatticeNode]
+    constraints: input state, may be empty
+  - name: unmapping
+    type_desc: Map[LatticeNode,GraphNode]
+    constraints: inverse-consistent with mapping
+  - name: unexpanded_nodes
+    type_desc: Set[GraphNode]
+    constraints: frontier nodes pending expansion
+outputs:
+  - name: initialized_mapping_state
+    type_desc: MappingState
+    constraints: returns new mapping/unmapping/frontier state; no hidden mutation
+concept_type: graph_traversal
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Initializefrontierfromstartnode
+description: Create initial mapping/unmapping frontier state from a selected starting node.
+---
+
+# Initializefrontierfromstartnode
+
+> Create initial mapping/unmapping frontier state from a selected starting node.
+
+## Conceptual Summary
+
+SeedBidirectionalCorrespondenceFrontier. Initializes a search state by anchoring a partial correspondence between two relational structures at a selected source element. It takes an existing forward map, its inverse map, and a set of unexpanded source elements, then returns a new immutable state where correspondence consistency constraints are preserved. The result is a frontier-ready state for subsequent expansion steps in a correspondence-construction process.. Applications: Bootstrapping residue-contact-graph to template-topology alignment in computational biology, Seeding component-netlist to physical-layout correspondence in electronic design automation, Initializing landmark-topology matching between sensed environment graphs and prior maps in robotics, Starting entity-alignment search between heterogeneous knowledge graphs in information systems
+
+## Type Signature
+
+```
+(mapping_context: MappingContext, starting_node: NodeId, mapping: Map[GraphNode,LatticeNode], unmapping: Map[LatticeNode,GraphNode], unexpanded_nodes: Set[GraphNode]) -> MappingState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

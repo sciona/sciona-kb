@@ -1,0 +1,41 @@
+---
+fqdn: sciona.atoms.inference.jax_advi.optimize_advi.prepare_stochastic_elbo_oracle
+predicate_id: prepare_stochastic_elbo_oracle
+repo: sciona-atoms
+domain: inference
+type_signature: "(flat_theta_template: jnp.ndarray, shape_summary: flatten/reconstruct metadata, constrain_fun_dict: dict[str, callable], log_lik_fun: callable, log_prior_fun: callable, seed: int | PRNGKey-like RNG state, M: int) -> tuple[callable, int | PRNGKey-like RNG state]"
+informal_desc: Uses the seed to generate fixed standard-normal Monte Carlo noise and curries a stochastic ELBO objective callable over model-specific components.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kucukelbir2017advi
+    citation: Exact ADVI attribution for jax_advi atoms.
+  - title: titsias2014dsvb
+    citation: Complementary reparameterization-gradient VI attribution.
+  - title: repo_jax_advi
+    citation: Upstream implementation is mapped to the vendored jax_advi repository.
+title: Prepare_stochastic_elbo_oracle
+description: Uses the seed to generate fixed standard-normal Monte Carlo noise and curries a stochastic ELBO objective callable over model-specific components.
+---
+
+# Prepare_stochastic_elbo_oracle
+
+> Uses the seed to generate fixed standard-normal Monte Carlo noise and curries a stochastic ELBO objective callable over model-specific components.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(flat_theta_template: jnp.ndarray, shape_summary: flatten/reconstruct metadata, constrain_fun_dict: dict[str, callable], log_lik_fun: callable, log_prior_fun: callable, seed: int | PRNGKey-like RNG state, M: int) -> tuple[callable, int | PRNGKey-like RNG state]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

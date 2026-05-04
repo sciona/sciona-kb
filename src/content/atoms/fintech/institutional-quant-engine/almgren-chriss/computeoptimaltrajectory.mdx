@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.fintech.institutional_quant_engine.almgren_chriss.computeoptimaltrajectory
+predicate_id: computeoptimaltrajectory
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(total_shares: float, days: int, risk_aversion: float) -> np.ndarray"
+informal_desc: Computes the optimal share-execution trajectory over the planning horizon given risk preference.
+conceptual_summary: Computes a monotone liquidation schedule over a finite horizon by linearly reducing remaining inventory at each step.
+inputs:
+  - name: total_shares
+    type_desc: float
+    constraints: required argument
+  - name: days
+    type_desc: int
+    constraints: required argument
+  - name: risk_aversion
+    type_desc: float
+    constraints: required argument
+outputs:
+  - name: result
+    type_desc: np.ndarray
+    constraints: function return value
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: almgren2000
+    citation: Execution scheduling attribution.
+  - title: repo_institutional_quant_engine
+    citation: Primary repository attribution for Institutional-Quant-Engine atoms.
+title: Computeoptimaltrajectory
+description: Computes the optimal share-execution trajectory over the planning horizon given risk preference.
+---
+
+# Computeoptimaltrajectory
+
+> Computes the optimal share-execution trajectory over the planning horizon given risk preference.
+
+## Conceptual Summary
+
+Computes a monotone liquidation schedule over a finite horizon by linearly reducing remaining inventory at each step.
+
+## Type Signature
+
+```
+(total_shares: float, days: int, risk_aversion: float) -> np.ndarray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

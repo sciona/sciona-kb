@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.numenta_anomaly_benchmark
+title: Numenta Anomaly Benchmark (NAB) - Standard High-Tier Pipeline - Pipeline Template
+description: "This template captures the ordered steps used by Numenta Anomaly Benchmark (NAB) - Standard High-Tier Pipeline: prepare the data, build task-specific represent…"
+problem_statement: "Unsupervised Streaming Anomaly Detection solution template for Numenta Anomaly Benchmark (NAB) - Standard High-Tier Pipeline, modeled as a 5-stage deterministic pipeline: Streaming ingestion, Representation generation, Predictive scoring, Dynamic thresholding, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Numenta Anomaly Benchmark (NAB) - Standard High-Tier Pipeline
+placement: ""
+year: 0
+domain: time_series_anomaly_detection
+paradigm: optimization
+family: time_series_anomaly_detection
+tags:
+  - anomaly_detection
+  - unsupervised
+  - streaming
+  - anomaly
+  - detection
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Streaming ingestion creates the representation needed by Windowed Evaluation, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://github.com/numenta/NAB
+source_license: null
+---
+
+# Numenta Anomaly Benchmark (NAB) - Standard High-Tier Pipeline - Pipeline Template
+
+## Problem
+
+Unsupervised Streaming Anomaly Detection solution template for Numenta Anomaly Benchmark (NAB) - Standard High-Tier Pipeline, modeled as a 5-stage deterministic pipeline: Streaming ingestion, Representation generation, Predictive scoring, Dynamic thresholding, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Numenta Anomaly Benchmark (NAB) - Standard High-Tier Pipeline: prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.numenta_anomaly_benchmark" readOnly={true} /> */}
+
+1. **Streaming ingestion** -- This stage load single-variate time-series readings sequentially without future look-ahead (pandas).
+1. **Representation generation** -- This stage use an isolation forest or continuous autoencoder to map the trailing window of points into a compressed feature space (sklearn/Keras).
+1. **Predictive scoring** -- This stage calculate the deviation/reconstruction error between the incoming data point and the model's expectation (numpy).
+1. **Dynamic thresholding** -- This stage maintain a rolling mean and variance of the anomaly scores, triggering an anomaly flag only when the current score exceeds $3\sigma$ of the local rolling window (numpy).
+1. **Windowed Evaluation** -- This stage score the predictions using the NAB metric, which rewards early detection and heavily penalizes late detection within specific "anomaly windows".
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Streaming ingestion creates the representation needed by Windowed Evaluation, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.numenta_anomaly_benchmark" label="Reproduce this solution in Sciona" /> */}

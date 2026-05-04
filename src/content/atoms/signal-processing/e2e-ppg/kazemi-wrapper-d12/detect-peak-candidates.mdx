@@ -1,0 +1,41 @@
+---
+fqdn: sciona.atoms.signal_processing.e2e_ppg.kazemi_wrapper_d12.detect_peak_candidates
+predicate_id: detect_peak_candidates
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(normalized_prediction: numpy.ndarray, raw_signal: numpy.ndarray) -> list of int"
+informal_desc: Scans the normalized prediction using a sliding window (size 15, or 7 near the end) to locate candidate peak indices. For each window where the threshold ≥ 0.70 is met, finds the position of the maximum normalized value; if ties exist, resolves them by selecting the position of the maximum in the corresponding raw signal window. Advances the cursor by the window size after each match, or by 1 otherwise.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kazemi2022ppg
+    citation: Exact E2E-PPG peak detection attribution.
+  - title: feli2023pipeline
+    citation: Primary E2E-PPG pipeline paper.
+  - title: repo_e2e_ppg
+    citation: Upstream implementation is mapped to the vendored E2E-PPG repository.
+title: Detect_peak_candidates
+description: Scans the normalized prediction using a sliding window (size 15, or 7 near the end) to locate candidate peak indices. For each window where the threshold ≥ 0.7…
+---
+
+# Detect_peak_candidates
+
+> Scans the normalized prediction using a sliding window (size 15, or 7 near the end) to locate candidate peak indices. For each window where the threshold ≥ 0.70 is met, finds the position of the maximum normalized value; if ties exist, resolves them by selecting the position of the maximum in the corresponding raw signal window. Advances the cursor by the window size after each match, or by 1 otherwise.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(normalized_prediction: numpy.ndarray, raw_signal: numpy.ndarray) -> list of int
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

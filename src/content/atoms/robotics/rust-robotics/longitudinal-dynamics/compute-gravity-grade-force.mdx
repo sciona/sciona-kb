@@ -1,0 +1,43 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.longitudinal_dynamics.compute_gravity_grade_force
+predicate_id: compute_gravity_grade_force
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(grade_angle: float) -> float"
+informal_desc: Compute gravity-induced force component along the road grade.
+conceptual_summary: "signed_trigonometric_projection_of_constant_vector_field. Transforms an orientation scalar into the directed component of an otherwise constant-magnitude vector field along a chosen axis. The operation applies a trigonometric projection (typically proportional to sin(theta)) with a fixed scale factor from model constants, yielding a signed scalar that indicates direction and intensity along that axis. This is a coordinate-resolution step from angular representation to 1D effective loading.. Applications: Resolving a uniform field load onto a tilted microfluidic channel axis to estimate net transport-driving component., Computing the component of a constant inertial/body-force vector along a robotic link’s motion axis from joint orientation., Projecting environmental acceleration onto an instrument-sensitive axis in inertial sensing and calibration pipelines., Estimating downslope tangential stress component from terrain inclination in geomechanical stability screening."
+inputs:
+  - name: grade_angle
+    type_desc: float
+    constraints: angle in radians (or consistent internal unit)
+outputs:
+  - name: f_grade
+    type_desc: float
+    constraints: force in model units
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Compute_gravity_grade_force
+description: Compute gravity-induced force component along the road grade.
+---
+
+# Compute_gravity_grade_force
+
+> Compute gravity-induced force component along the road grade.
+
+## Conceptual Summary
+
+signed_trigonometric_projection_of_constant_vector_field. Transforms an orientation scalar into the directed component of an otherwise constant-magnitude vector field along a chosen axis. The operation applies a trigonometric projection (typically proportional to sin(theta)) with a fixed scale factor from model constants, yielding a signed scalar that indicates direction and intensity along that axis. This is a coordinate-resolution step from angular representation to 1D effective loading.. Applications: Resolving a uniform field load onto a tilted microfluidic channel axis to estimate net transport-driving component., Computing the component of a constant inertial/body-force vector along a robotic link’s motion axis from joint orientation., Projecting environmental acceleration onto an instrument-sensitive axis in inertial sensing and calibration pipelines., Estimating downslope tangential stress component from terrain inclination in geomechanical stability screening.
+
+## Type Signature
+
+```
+(grade_angle: float) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

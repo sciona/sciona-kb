@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.initializeseedplacement
+predicate_id: initializeseedplacement
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mapping_context: MappingContext, starting_node: NodeId) -> tuple[MappingState, NodeId, NodeId]"
+informal_desc: Create empty bidirectional mapping state and place the starting graph node on its initial lattice node via initialization logic.
+conceptual_summary: ""
+inputs:
+  - name: mapping_context
+    type_desc: MappingContext
+    constraints: Provides graph, lattice, and initialize_mapping helper
+  - name: starting_node
+    type_desc: NodeId
+    constraints: Must exist in the input graph
+outputs:
+  - name: initialized_mapping_state
+    type_desc: MappingState
+    constraints: Contains mapping, unmapping, and unexpanded_nodes seeded with starting_node
+  - name: current_node
+    type_desc: NodeId
+    constraints: Initialized to starting_node
+  - name: current_lattice_node
+    type_desc: NodeId
+    constraints: Lattice node assigned to current_node
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Initializeseedplacement
+description: Create empty bidirectional mapping state and place the starting graph node on its initial lattice node via initialization logic.
+---
+
+# Initializeseedplacement
+
+> Create empty bidirectional mapping state and place the starting graph node on its initial lattice node via initialization logic.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mapping_context: MappingContext, starting_node: NodeId) -> tuple[MappingState, NodeId, NodeId]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

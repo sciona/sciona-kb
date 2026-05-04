@@ -1,0 +1,69 @@
+---
+cdg_asset_id: solution.kaggle.moa_prediction_1st
+title: MoA Prediction 1st Place — Multi-Label Tabular Classification with Deep Ensembles
+description: Predict which biological mechanisms a drug activates by enriching gene and cell features with compressed representations, training multiple neural network arch…
+problem_statement: Multi-label mechanism-of-action prediction from gene expression and cell viability features using PCA/UMAP-enriched deep tabular models (MLP, TabNet, 1D-CNN ResNet) with label smoothing, pseudo-labeling, and second-layer stacking.
+platform: kaggle
+competition_name: MoA Prediction 1st Place — Multi-Label Tabular Classification with Deep Ensembles
+placement: ""
+year: 0
+domain: multilabel_tabular
+paradigm: neural_network
+family: multilabel_tabular
+tags:
+  - multi_label_classification
+  - drug_mechanism_prediction
+  - tabular_deep_learning
+  - pseudo_labeling
+  - stacking_ensemble
+  - pca_umap_enrichment
+  - label_smoothing
+  - high_dimensional_tabular
+  - semi_supervised
+  - variance_thresholding
+  - feature_importance_selection
+  - logistic_regression_stacker
+  - multi_architecture_diversity
+key_insight: The combination of PCA+UMAP dimensionality reduction with pseudo-labeling creates a feedback loop — reduced features help the pseudo-labeler produce cleaner soft labels, and pseudo-labels help the feature selector identify signal vs. noise columns. Label smoothing prevents the BCE loss from driving predictions to extreme 0/1 values, which is critical when most labels are negative and the model would otherwise become overconfident on the majority class.
+failure_modes:
+  - "Label sparsity too extreme (>99.9% zeros): pseudo-labels are dominated by negatives and the feedback loop reinforces false negatives"
+  - "Features are already low-dimensional and decorrelated: PCA/UMAP enrichment adds redundant columns that increase overfitting risk"
+  - "Test distribution differs significantly from train: pseudo-labeling propagates distribution shift errors into the training loop"
+source_url: ""
+source_license: null
+---
+
+# MoA Prediction 1st Place — Multi-Label Tabular Classification with Deep Ensembles
+
+## Problem
+
+Multi-label mechanism-of-action prediction from gene expression and cell viability features using PCA/UMAP-enriched deep tabular models (MLP, TabNet, 1D-CNN ResNet) with label smoothing, pseudo-labeling, and second-layer stacking.
+
+## Approach
+
+Predict which biological mechanisms a drug activates by enriching gene and cell features with compressed representations, training multiple neural network architectures, and combining their predictions through a second-layer model.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.moa_prediction_1st" readOnly={true} /> */}
+
+1. **Variance Thresholding** -- Drop features that barely change across samples since they carry little useful information.
+1. **Dimensionality Reduction** -- Create compressed summaries of the data using two different methods and add them as extra columns alongside the original features.
+1. **Pseudo-Label Feature Selection** -- Use preliminary predictions on the test set as if they were real labels, then train a tree model to figure out which features matter most.
+1. **Deep Tabular Models** -- Train three different types of neural networks on the prepared features, each bringing a different learning style to the problem.
+1. **Label Smoothing** -- Slightly soften the yes/no labels so the model does not become too certain, which helps it generalize better.
+1. **Stacking** -- Combine predictions from all neural networks using a simple model that learns the optimal weighting of each network's opinion.
+
+## Key Insight
+
+The combination of PCA+UMAP dimensionality reduction with pseudo-labeling creates a feedback loop — reduced features help the pseudo-labeler produce cleaner soft labels, and pseudo-labels help the feature selector identify signal vs. noise columns. Label smoothing prevents the BCE loss from driving predictions to extreme 0/1 values, which is critical when most labels are negative and the model would otherwise become overconfident on the majority class.
+
+## Failure Modes
+
+- Label sparsity too extreme (>99.9% zeros): pseudo-labels are dominated by negatives and the feedback loop reinforces false negatives
+- Features are already low-dimensional and decorrelated: PCA/UMAP enrichment adds redundant columns that increase overfitting risk
+- Test distribution differs significantly from train: pseudo-labeling propagates distribution shift errors into the training loop
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.moa_prediction_1st" label="Reproduce this solution in Sciona" /> */}

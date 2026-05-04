@@ -1,0 +1,71 @@
+---
+cdg_asset_id: solution.kaggle.melanoma_1st
+title: SIIM-ISIC Melanoma Classification 1st Place — Multi-Modal CNN with Pseudo-Labeling and Rank Averaging
+description: Detect skin cancer from photographs by training image-recognition networks with realistic data distortions, combining image features with patient information, …
+problem_statement: Melanoma classification from dermoscopic images and patient metadata using EfficientNet/SE-ResNeXt backbones with domain-specific augmentations, metadata concatenation, pseudo-labeling on prior competition data, and rank-average ensembling across 15+ models.
+platform: kaggle
+competition_name: SIIM-ISIC Melanoma Classification 1st Place — Multi-Modal CNN with Pseudo-Labeling and Rank Averaging
+placement: ""
+year: 0
+domain: medical_image_tabular
+paradigm: neural_network
+family: medical_image_tabular
+tags:
+  - melanoma_detection
+  - dermoscopy_classification
+  - medical_imaging
+  - multimodal_image_tabular
+  - pseudo_labeling
+  - rank_average_ensemble
+  - extreme_class_imbalance
+  - focal_loss
+  - domain_specific_augmentation
+  - metadata_fusion
+  - external_data_pseudo_labels
+  - cutmix
+  - hair_artifact_augmentation
+  - efficientnet
+  - se_resnext
+key_insight: Domain-specific augmentations (microscope borders, hair overlay, CutMix) are the primary regularizer for extreme class imbalance — they force the model to learn lesion-intrinsic features rather than memorizing imaging artifacts. Metadata concatenation at the penultimate layer provides clinical priors (e.g., melanoma is more common at certain ages and anatomical sites) that pure image models cannot learn from pixels alone. Pseudo-labeling on historical competition data expands the effective positive sample count, which is the binding constraint at <2% prevalence.
+failure_modes:
+  - "Domain-specific augmentations do not match the target imaging modality: e.g., hair overlay and microscope borders are meaningless for non-dermoscopic images"
+  - "Pseudo-labeled external data overwhelms the real labels: if the external dataset is much larger, the model may overfit to pseudo-label noise"
+  - "Metadata leaks demographic bias into predictions: the model may learn age/sex correlations that do not generalize to different populations"
+source_url: https://www.kaggle.com/c/siim-isic-melanoma-classification/discussion/175412
+source_license: null
+---
+
+# SIIM-ISIC Melanoma Classification 1st Place — Multi-Modal CNN with Pseudo-Labeling and Rank Averaging
+
+## Problem
+
+Melanoma classification from dermoscopic images and patient metadata using EfficientNet/SE-ResNeXt backbones with domain-specific augmentations, metadata concatenation, pseudo-labeling on prior competition data, and rank-average ensembling across 15+ models.
+
+## Approach
+
+Detect skin cancer from photographs by training image-recognition networks with realistic data distortions, combining image features with patient information, adding pseudo-labeled historical data, and averaging rankings across many models.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.melanoma_1st" readOnly={true} /> */}
+
+1. **Microscope Augmentation** -- Add realistic distortions to training images like circular borders, fake hairs, and image mixing to help the model handle real-world dermoscopic variation.
+1. **Image Backbone Training** -- Train several powerful image-recognition networks on the skin images, using a special loss function that pays extra attention to the rare cancer cases.
+1. **Metadata Concatenation** -- Combine the image features extracted by the neural network with patient information like age, sex, and where the lesion is on the body.
+1. **Meta Head** -- Feed the combined image and patient features through a small neural network to produce the final cancer probability.
+1. **Pseudo-Labeling** -- Apply trained models to older competition datasets to generate predicted labels, then add these extra labeled examples to the training data.
+1. **Rank Average Ensemble** -- Combine predictions from many different models by converting each to rankings, averaging the rankings, to get a final robust prediction.
+
+## Key Insight
+
+Domain-specific augmentations (microscope borders, hair overlay, CutMix) are the primary regularizer for extreme class imbalance — they force the model to learn lesion-intrinsic features rather than memorizing imaging artifacts. Metadata concatenation at the penultimate layer provides clinical priors (e.g., melanoma is more common at certain ages and anatomical sites) that pure image models cannot learn from pixels alone. Pseudo-labeling on historical competition data expands the effective positive sample count, which is the binding constraint at &lt;2% prevalence.
+
+## Failure Modes
+
+- Domain-specific augmentations do not match the target imaging modality: e.g., hair overlay and microscope borders are meaningless for non-dermoscopic images
+- Pseudo-labeled external data overwhelms the real labels: if the external dataset is much larger, the model may overfit to pseudo-label noise
+- Metadata leaks demographic bias into predictions: the model may learn age/sex correlations that do not generalize to different populations
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.melanoma_1st" label="Reproduce this solution in Sciona" /> */}

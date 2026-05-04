@@ -1,0 +1,55 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.deriveoperatingpointgeometry
+predicate_id: deriveoperatingpointgeometry
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(model_spec: ModelSpec, x: StateVector<3>, u: ControlVector<2>) -> tuple[f64, f64, f64]"
+informal_desc: Compute shared geometric/kinematic terms at the operating point (sideslip, wheelbase, and combined heading) used by both Jacobians.
+conceptual_summary: ""
+inputs:
+  - name: model_spec
+    type_desc: ModelSpec
+    constraints: Provides wheelbase and rear-length parameters; deterministic sideslip mapping.
+  - name: x
+    type_desc: np.ndarray
+    constraints: x[2] is yaw.
+  - name: u
+    type_desc: np.ndarray
+    constraints: u[0] is longitudinal velocity, u[1] is steering angle.
+outputs:
+  - name: sideslip
+    type_desc: float
+    constraints: Finite.
+  - name: wheelbase_total
+    type_desc: float
+    constraints: Non-zero; typically positive.
+  - name: yaw_plus_sideslip
+    type_desc: float
+    constraints: Finite.
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Deriveoperatingpointgeometry
+description: Compute shared geometric/kinematic terms at the operating point (sideslip, wheelbase, and combined heading) used by both Jacobians.
+---
+
+# Deriveoperatingpointgeometry
+
+> Compute shared geometric/kinematic terms at the operating point (sideslip, wheelbase, and combined heading) used by both Jacobians.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(model_spec: ModelSpec, x: StateVector<3>, u: ControlVector<2>) -> tuple[f64, f64, f64]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

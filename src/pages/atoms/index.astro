@@ -1,0 +1,20 @@
+---
+import CatalogLayout from "../../layouts/CatalogLayout.astro";
+import { getCollection } from "astro:content";
+
+const atoms = await getCollection("atoms");
+
+const items = atoms.map((a) => ({
+  slug: a.id,
+  href: `/atoms/${a.id}`,
+  title: a.data.title,
+  description: a.data.informal_desc,
+  tags: [a.data.concept_type, a.data.domain, a.data.repo],
+}));
+---
+
+<CatalogLayout
+  title="Atoms"
+  description={`${items.length} mathematical building blocks -- type-checked, contract-verified, composable.`}
+  items={items}
+/>

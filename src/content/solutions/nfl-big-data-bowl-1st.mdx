@@ -1,0 +1,59 @@
+---
+cdg_asset_id: solution.kaggle.nfl_big_data_bowl_1st
+title: NFL Big Data Bowl - 1st Place (2020) - Pipeline Template
+description: "This template captures the ordered steps used by NFL Big Data Bowl - 1st Place (2020): prepare the data, build task-specific representations, run the main mode…"
+problem_statement: "Spatial Trajectory / 1D CNN solution template for NFL Big Data Bowl - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Spatial normalization, Relative coordinate mapping, Spatial tensor formatting, 1D CNN Architecture, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: NFL Big Data Bowl - 1st Place (2020)
+placement: ""
+year: 0
+domain: trajectory_prediction
+paradigm: optimization
+family: trajectory_prediction
+tags:
+  - spatial
+  - trajectory
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Spatial normalization creates the representation needed by Continuous Ranked Probability Score (CRPS), so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/nfl-big-data-bowl-2020/discussion/119400
+source_license: null
+---
+
+# NFL Big Data Bowl - 1st Place (2020) - Pipeline Template
+
+## Problem
+
+Spatial Trajectory / 1D CNN solution template for NFL Big Data Bowl - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Spatial normalization, Relative coordinate mapping, Spatial tensor formatting, 1D CNN Architecture, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by NFL Big Data Bowl - 1st Place (2020): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.nfl_big_data_bowl_1st" readOnly={true} /> */}
+
+1. **Spatial normalization** -- This stage strictly flip all player X/Y coordinates and velocities so the offensive team is always moving left-to-right (numpy).
+1. **Relative coordinate mapping** -- This stage recalculate all 21 players' X/Y positions relative to the exact X/Y position of the ball carrier (pandas).
+1. **Spatial tensor formatting** -- This stage flatten the 22 players' features into a 1D sequence and sort them deterministically (e.g., offense first, defense second, sorted by distance to ball) (numpy).
+1. **1D CNN Architecture** -- This stage pass the 1D sequence through a 1D Convolutional Neural Network (instead of an MLP) to naturally capture localized spatial relationships between adjacent players (Keras).
+1. **Continuous Ranked Probability Score (CRPS)** -- This stage output a cumulative distribution function (CDF) of expected yards gained, strictly optimizing for CRPS loss (Keras).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Spatial normalization creates the representation needed by Continuous Ranked Probability Score (CRPS), so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.nfl_big_data_bowl_1st" label="Reproduce this solution in Sciona" /> */}

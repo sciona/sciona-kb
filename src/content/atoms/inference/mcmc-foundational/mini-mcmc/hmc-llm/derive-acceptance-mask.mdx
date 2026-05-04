@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.derive_acceptance_mask
+predicate_id: derive_acceptance_mask
+repo: sciona-atoms
+domain: inference
+type_signature: "(accept_log_ratio: Tensor[n_chains], uniform_u: Tensor[n_chains]) -> Tensor[n_chains] (bool)"
+informal_desc: Convert uniform draws and log acceptance ratio into a boolean accept/reject decision per chain.
+conceptual_summary: ""
+inputs:
+  - name: accept_log_ratio
+    type_desc: Tensor[n_chains]
+    constraints: From compute_acceptance_log_ratio.
+  - name: uniform_u
+    type_desc: Tensor[n_chains]
+    constraints: 0 < uniform_u < 1.
+outputs:
+  - name: accept_mask
+    type_desc: Tensor
+    constraints: accept_mask[i] = (accept_log_ratio[i] >= log(uniform_u[i])).
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Derive_acceptance_mask
+description: Convert uniform draws and log acceptance ratio into a boolean accept/reject decision per chain.
+---
+
+# Derive_acceptance_mask
+
+> Convert uniform draws and log acceptance ratio into a boolean accept/reject decision per chain.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(accept_log_ratio: Tensor[n_chains], uniform_u: Tensor[n_chains]) -> Tensor[n_chains] (bool)
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

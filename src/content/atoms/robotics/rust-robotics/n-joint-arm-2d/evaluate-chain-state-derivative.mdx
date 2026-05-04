@@ -1,0 +1,58 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.n_joint_arm_2d.evaluate_chain_state_derivative
+predicate_id: evaluate_chain_state_derivative
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(x: DVector<f64>, u: DVector<f64>, link_lengths: Vec<f64>, ratio: usize, num_states: usize, dof: usize) -> DVector<f64>"
+informal_desc: Compute continuous-time state derivatives by accumulating upstream link kinematic contributions to planar velocity components, then assigning joint angle-rate and angular-acceleration components per DOF.
+conceptual_summary: ""
+inputs:
+  - name: x
+    type_desc: np.ndarray
+    constraints: Indexed in blocks of size ratio
+  - name: u
+    type_desc: np.ndarray
+    constraints: One control per DOF
+  - name: link_lengths
+    type_desc: list[float]
+    constraints: Length equals dof
+  - name: ratio
+    type_desc: int
+    constraints: Block stride for each DOF state
+  - name: num_states
+    type_desc: int
+    constraints: Size of output derivative vector
+  - name: dof
+    type_desc: int
+    constraints: Loop bound for per-joint dynamics
+outputs:
+  - name: x_dot
+    type_desc: np.ndarray
+    constraints: Same length as x; translational and rotational derivatives populated
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Evaluate_chain_state_derivative
+description: Compute continuous-time state derivatives by accumulating upstream link kinematic contributions to planar velocity components, then assigning joint angle-rate …
+---
+
+# Evaluate_chain_state_derivative
+
+> Compute continuous-time state derivatives by accumulating upstream link kinematic contributions to planar velocity components, then assigning joint angle-rate and angular-acceleration components per DOF.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(x: DVector<f64>, u: DVector<f64>, link_lengths: Vec<f64>, ratio: usize, num_states: usize, dof: usize) -> DVector<f64>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

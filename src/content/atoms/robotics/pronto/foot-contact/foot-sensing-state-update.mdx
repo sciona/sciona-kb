@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.robotics.pronto.foot_contact.foot_sensing_state_update
+predicate_id: foot_sensing_state_update
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(foot_sensing_state_in: object { lfoot_sensing_: bool, rfoot_sensing_: bool }, foot_sensing_command: object { lfoot_sensing: bool, rfoot_sensing: bool }) -> object { lfoot_sensing_: bool, rfoot_sensing_: bool }"
+informal_desc: Applies a pure state transition for left/right foot sensing flags, returning a new sensing state object.
+conceptual_summary: "Binary Channel State Overwrite Transition. Transforms an immutable binary state snapshot by applying a command vector that specifies target values for each boolean channel. The operation constructs a new state object with updated channel bits rather than mutating the input snapshot. This is a discrete finite-state transition with direct per-field assignment and no intermediate optimization or inference.. Applications: Control engineering: updating a two-actuator enable/disable latch in a sampled-time controller., Computational biology instrumentation: setting a two-channel acquisition mask for a measurement cycle., Distributed systems: applying a two-flag runtime feature-state update in immutable configuration snapshots., Digital communications: overwriting a two-bit mode register in protocol state progression."
+inputs:
+  - name: foot_sensing_state_in
+    type_desc: object
+    constraints: Immutable input state snapshot.
+  - name: foot_sensing_command
+    type_desc: object
+    constraints: Desired sensing values for this transition.
+outputs:
+  - name: foot_sensing_state_out
+    type_desc: object
+    constraints: New state object; no in-place mutation.
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Foot_sensing_state_update
+description: Applies a pure state transition for left/right foot sensing flags, returning a new sensing state object.
+---
+
+# Foot_sensing_state_update
+
+> Applies a pure state transition for left/right foot sensing flags, returning a new sensing state object.
+
+## Conceptual Summary
+
+Binary Channel State Overwrite Transition. Transforms an immutable binary state snapshot by applying a command vector that specifies target values for each boolean channel. The operation constructs a new state object with updated channel bits rather than mutating the input snapshot. This is a discrete finite-state transition with direct per-field assignment and no intermediate optimization or inference.. Applications: Control engineering: updating a two-actuator enable/disable latch in a sampled-time controller., Computational biology instrumentation: setting a two-channel acquisition mask for a measurement cycle., Distributed systems: applying a two-flag runtime feature-state update in immutable configuration snapshots., Digital communications: overwriting a two-bit mode register in protocol state progression.
+
+## Type Signature
+
+```
+(foot_sensing_state_in: object { lfoot_sensing_: bool, rfoot_sensing_: bool }, foot_sensing_command: object { lfoot_sensing: bool, rfoot_sensing: bool }) -> object { lfoot_sensing_: bool, rfoot_sensing_: bool }
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

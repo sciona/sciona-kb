@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.robotics.pronto.leg_odometer.pose_query_accessors
+predicate_id: pose_query_accessors
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: () -> Pose/position/orientation values or placeholders
+informal_desc: Provides stateless pose-related query endpoints and no-op/placeholder call sites with no declared state reads or writes.
+conceptual_summary: "Stateless Spatial-State Query Interface. Implements nullary accessor functions that expose a standardized geometric-state descriptor (e.g., translation coordinates and orientation encoding) or typed placeholder values when no concrete estimate is available. The mapping is read-only and side-effect free: invocation does not alter persistent memory, internal state, or external systems. The operation primarily serves as an interface contract that stabilizes downstream consumption of spatial-state outputs independent of how estimates are produced.. Applications: Astronomical instrument control: exposing mount alignment vectors and rotation states to scheduling software without modifying control state., Medical imaging pipelines: querying scanner/table coordinate frames and orientation metadata for reconstruction modules through a stable no-mutation API., Autonomous marine sensing: serving vehicle frame translation/attitude estimates (or placeholders during dropout) to navigation fusion components., Protein-structure simulation tooling: providing conformer frame coordinates and rotational descriptors to analysis stages via pure query accessors."
+inputs:
+  - name: pose
+    type_desc: np.ndarray
+    constraints: ndim >= 1
+outputs:
+  - name: pose_related_outputs
+    type_desc: np.ndarray
+    constraints: No persistent state mutation in provided summaries.
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Pose_query_accessors
+description: Provides stateless pose-related query endpoints and no-op/placeholder call sites with no declared state reads or writes.
+---
+
+# Pose_query_accessors
+
+> Provides stateless pose-related query endpoints and no-op/placeholder call sites with no declared state reads or writes.
+
+## Conceptual Summary
+
+Stateless Spatial-State Query Interface. Implements nullary accessor functions that expose a standardized geometric-state descriptor (e.g., translation coordinates and orientation encoding) or typed placeholder values when no concrete estimate is available. The mapping is read-only and side-effect free: invocation does not alter persistent memory, internal state, or external systems. The operation primarily serves as an interface contract that stabilizes downstream consumption of spatial-state outputs independent of how estimates are produced.. Applications: Astronomical instrument control: exposing mount alignment vectors and rotation states to scheduling software without modifying control state., Medical imaging pipelines: querying scanner/table coordinate frames and orientation metadata for reconstruction modules through a stable no-mutation API., Autonomous marine sensing: serving vehicle frame translation/attitude estimates (or placeholders during dropout) to navigation fusion components., Protein-structure simulation tooling: providing conformer frame coordinates and rotational descriptors to analysis stages via pure query accessors.
+
+## Type Signature
+
+```
+() -> Pose/position/orientation values or placeholders
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

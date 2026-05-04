@@ -1,0 +1,56 @@
+---
+fqdn: sciona.atoms.signal_processing.e2e_ppg.reconstruction.build_upsampled_alignment_context
+predicate_id: build_upsampled_alignment_context
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(reconstructed_windows: list[dict], sig_scaled: np.ndarray, sampling_rate_working: int, upsampling_rate: float) -> list[dict]"
+informal_desc: Upsample reconstructed and neighboring clean segments and collect peak markers needed for boundary alignment.
+conceptual_summary: ""
+inputs:
+  - name: reconstructed_windows
+    type_desc: list[dict]
+    constraints: GAN outputs with noisy-window metadata
+  - name: sig_scaled
+    type_desc: np.ndarray
+    constraints: Scaled full signal
+  - name: sampling_rate_working
+    type_desc: int
+    constraints: Peak spacing reference
+  - name: upsampling_rate
+    type_desc: float
+    constraints: Temporal upsampling factor
+outputs:
+  - name: alignment_contexts
+    type_desc: list[dict]
+    constraints: Upsampled segments plus detected peaks and validity metadata
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: wang2022ppg
+    citation: Exact E2E-PPG reconstruction attribution.
+  - title: feli2023pipeline
+    citation: Primary E2E-PPG pipeline paper.
+  - title: repo_e2e_ppg
+    citation: Upstream implementation is mapped to the vendored E2E-PPG repository.
+title: Build_upsampled_alignment_context
+description: Upsample reconstructed and neighboring clean segments and collect peak markers needed for boundary alignment.
+---
+
+# Build_upsampled_alignment_context
+
+> Upsample reconstructed and neighboring clean segments and collect peak markers needed for boundary alignment.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(reconstructed_windows: list[dict], sig_scaled: np.ndarray, sampling_rate_working: int, upsampling_rate: float) -> list[dict]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,71 @@
+---
+cdg_asset_id: solution.kaggle.hubmap_kidney_1st
+title: HuBMAP Hacking the Kidney 1st Place — Gigapixel Glomeruli Segmentation (2021)
+description: Segment kidney structures (glomeruli) from enormous microscope images by cutting them into overlapping tiles, normalizing the staining colors, training a segme…
+problem_statement: Gigapixel whole-slide image segmentation pipeline using Macenko stain normalization, DeepLabV3+ with ResNeSt-50 backbone trained with Lovasz-BCE loss, 8x TTA on overlapping tiles, and gigapixel mask reconstruction via prediction averaging.
+platform: kaggle
+competition_name: HuBMAP Hacking the Kidney 1st Place — Gigapixel Glomeruli Segmentation (2021)
+placement: ""
+year: 0
+domain: gigapixel_segmentation
+paradigm: neural_network
+family: gigapixel_segmentation
+tags:
+  - whole_slide_image
+  - histopathology_segmentation
+  - glomeruli_detection
+  - tile_based_inference
+  - stain_normalization
+  - deeplabv3_plus
+  - lovasz_loss
+  - iou_optimization
+  - gigapixel_inference
+  - overlapping_tiles
+  - macenko_normalization
+  - resnest_backbone
+  - dihedral_tta
+  - medical_imaging
+  - binary_segmentation
+key_insight: "The three-part combination of Macenko stain normalization, Lovasz-BCE loss, and overlapping-tile stitching addresses the three core challenges of gigapixel histopathology: cross-scanner color variation, metric-loss mismatch for IoU evaluation, and memory-constrained inference on images too large to process whole. Each component is individually well-known, but their specific combination is what makes this pipeline robust for gigapixel medical segmentation."
+failure_modes:
+  - "Structures larger than the tile size: the model cannot see enough context to segment structures spanning multiple tiles, leading to fragmented predictions"
+  - "Non-H&E stained tissue: Macenko normalization assumes hematoxylin-eosin staining and will produce artifacts on immunohistochemistry or special stains"
+  - "Very sparse targets (e.g., rare cells): the extreme class imbalance within tiles causes most tiles to be all-background, wasting compute and biasing the model toward predicting background"
+source_url: ""
+source_license: null
+---
+
+# HuBMAP Hacking the Kidney 1st Place — Gigapixel Glomeruli Segmentation (2021)
+
+## Problem
+
+Gigapixel whole-slide image segmentation pipeline using Macenko stain normalization, DeepLabV3+ with ResNeSt-50 backbone trained with Lovasz-BCE loss, 8x TTA on overlapping tiles, and gigapixel mask reconstruction via prediction averaging.
+
+## Approach
+
+Segment kidney structures (glomeruli) from enormous microscope images by cutting them into overlapping tiles, normalizing the staining colors, training a segmentation neural network with a specialized loss function, and stitching the predictions back together into a full-resolution mask.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.hubmap_kidney_1st" readOnly={true} /> */}
+
+1. **Tiling** -- Cut the enormous microscope image into small overlapping squares that can fit in memory, so each square can be processed independently.
+1. **Stain Normalization** -- Adjust the colors of each tissue tile so that all images look like they were stained and scanned the same way, since different labs use slightly different dye concentrations.
+1. **Segmentation Architecture** -- Train a segmentation neural network that labels each pixel as glomerulus or background, using a modern backbone architecture with attention mechanisms.
+1. **Lovasz-BCE Loss** -- Use a specialized training objective that directly optimizes the competition scoring metric (overlap between predicted and true masks) combined with a standard pixel-by-pixel loss for training stability.
+1. **TTA on Tiles** -- For each tile, predict the segmentation mask on the original plus 7 rotated/flipped versions, then average all predictions to get a more reliable mask.
+1. **Gigapixel Stitching** -- Put all the small predicted masks back together into one giant mask matching the original image size, averaging where tiles overlap, and converting probabilities to yes/no predictions.
+
+## Key Insight
+
+The three-part combination of Macenko stain normalization, Lovasz-BCE loss, and overlapping-tile stitching addresses the three core challenges of gigapixel histopathology: cross-scanner color variation, metric-loss mismatch for IoU evaluation, and memory-constrained inference on images too large to process whole. Each component is individually well-known, but their specific combination is what makes this pipeline robust for gigapixel medical segmentation.
+
+## Failure Modes
+
+- Structures larger than the tile size: the model cannot see enough context to segment structures spanning multiple tiles, leading to fragmented predictions
+- Non-H&E stained tissue: Macenko normalization assumes hematoxylin-eosin staining and will produce artifacts on immunohistochemistry or special stains
+- Very sparse targets (e.g., rare cells): the extreme class imbalance within tiles causes most tiles to be all-background, wasting compute and biasing the model toward predicting background
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.hubmap_kidney_1st" label="Reproduce this solution in Sciona" /> */}

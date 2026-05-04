@@ -1,0 +1,58 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.trajectory.orient_trajectory_segments
+predicate_id: orient_trajectory_segments
+repo: sciona-atoms
+domain: inference
+type_signature: "(initial_tree: BinaryTree, expansion_tree: BinaryTree, direction: Int) -> tuple[BinaryTree, BinaryTree]"
+informal_desc: Determines the order of the two trajectory segments (initial and expansion) based on the direction of traversal.
+conceptual_summary: ""
+inputs:
+  - name: initial_tree
+    type_desc: BinaryTree
+    constraints: x is not None
+  - name: expansion_tree
+    type_desc: BinaryTree
+    constraints: x is not None
+  - name: direction
+    type_desc: Int
+    constraints: Value is -1 or 1
+outputs:
+  - name: left_tree
+    type_desc: BinaryTree
+    constraints: x is not None
+  - name: right_tree
+    type_desc: BinaryTree
+    constraints: x is not None
+concept_type: clustering
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for doubling trajectory trees and No-U-Turn termination.
+  - title: advancedhmc2020
+    citation: Package paper for AdvancedHMC.jl trajectory construction.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper returns compact NumPy leaves rather than Julia BinaryTree objects.
+  - title: neal2011hmc
+    citation: Canonical HMC reference for Hamiltonian dynamics and Metropolis-style energy diagnostics used by NUTS.
+title: Orient_trajectory_segments
+description: Determines the order of the two trajectory segments (initial and expansion) based on the direction of traversal.
+---
+
+# Orient_trajectory_segments
+
+> Determines the order of the two trajectory segments (initial and expansion) based on the direction of traversal.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(initial_tree: BinaryTree, expansion_tree: BinaryTree, direction: Int) -> tuple[BinaryTree, BinaryTree]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

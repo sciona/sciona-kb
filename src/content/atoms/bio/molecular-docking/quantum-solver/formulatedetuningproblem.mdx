@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.formulatedetuningproblem
+predicate_id: formulatedetuningproblem
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(permuted_weights: List[float], max_interaction_strength: float) -> tuple[np.ndarray, float, Dict]"
+informal_desc: Encodes the problem's objective function into the hardware by normalizing weights and mapping them to a local detuning field (DMM) and global detuning strength.
+conceptual_summary: ""
+inputs:
+  - name: permuted_weights
+    type_desc: List[float]
+    constraints: Reordered list of node weights.
+  - name: max_interaction_strength
+    type_desc: float
+    constraints: The 'u_max' value for scaling.
+outputs:
+  - name: inverted_normalized_weights
+    type_desc: np.ndarray
+    constraints: 1D array of (1 - normalized_weights).
+  - name: detuning_spread
+    type_desc: float
+    constraints: Calculated spread for the DMM.
+  - name: base_hamiltonian_params
+    type_desc: Dict
+    constraints: Dictionary with evolution duration, amplitude, and detuning maximums.
+concept_type: signal_transform
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Formulatedetuningproblem
+description: Encodes the problem's objective function into the hardware by normalizing weights and mapping them to a local detuning field (DMM) and global detuning strength.
+---
+
+# Formulatedetuningproblem
+
+> Encodes the problem's objective function into the hardware by normalizing weights and mapping them to a local detuning field (DMM) and global detuning strength.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(permuted_weights: List[float], max_interaction_strength: float) -> tuple[np.ndarray, float, Dict]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

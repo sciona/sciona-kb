@@ -1,0 +1,63 @@
+---
+cdg_asset_id: solution.kaggle.rsna_cervical_spine_1st
+title: RSNA Cervical Spine Fracture Detection - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by RSNA Cervical Spine Fracture Detection - 1st Place (2022): prepare the data, build task-specific representatio…"
+problem_statement: "Semantic segmentation / Structured prediction solution template for RSNA Cervical Spine Fracture Detection - 1st Place (2022), modeled as a 6-stage deterministic pipeline: Voxel Preprocessing, 3D Semantic Segmentation, Mask Generation, 2.5D Cropping, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: RSNA Cervical Spine Fracture Detection - 1st Place (2022)
+placement: 1st
+year: 2022
+domain: semantic_segmentation
+paradigm: neural_network
+family: semantic_segmentation
+tags:
+  - cnn
+  - lstm
+  - efficientnet
+  - segmentation
+  - semantic
+  - structured
+  - prediction
+key_insight: "The load-bearing idea is the pipeline topology: Voxel Preprocessing creates the representation needed by Multi-Objective Blending, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/writeups/qishen-ha-1st-place-solution
+source_license: null
+---
+
+# RSNA Cervical Spine Fracture Detection - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+Semantic segmentation / Structured prediction solution template for RSNA Cervical Spine Fracture Detection - 1st Place (2022), modeled as a 6-stage deterministic pipeline: Voxel Preprocessing, 3D Semantic Segmentation, Mask Generation, 2.5D Cropping, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by RSNA Cervical Spine Fracture Detection - 1st Place (2022): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.rsna_cervical_spine_1st" readOnly={true} /> */}
+
+1. **Voxel Preprocessing** -- This stage load massive 3D medical scans and resize them via interpolation to a uniform, memory-efficient 128x128x128 volume (nibabel, scipy.ndimage).
+1. **3D Semantic Segmentation** -- This stage train a 3D U-Net (utilizing a ResNet18d or EfficientNetV2s backbone) to segment the C1-C7 vertebrae into 7 distinct spatial channels (monai, torch).
+1. **Mask Generation** -- This stage predict and cache the 3D masks for all 2,000 samples in the training set using the trained segmentation network.
+1. **2.5D Cropping** -- This stage extract individual 2D slice sequences for each localized vertebra based precisely on the generated 3D masks, reducing the computational burden for the next phase (numpy).
+1. **Sequential Classification** -- This stage pass the sequential 2.5D slices through a CNN+LSTM classifier to detect micro-fractures across the spatial slices (torch.nn.LSTM, timm).
+1. **Multi-Objective Blending** -- This stage linearly combine the final probabilistic predictions from two different types of Stage-2 classification architectures.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Voxel Preprocessing creates the representation needed by Multi-Objective Blending, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.rsna_cervical_spine_1st" label="Reproduce this solution in Sciona" /> */}

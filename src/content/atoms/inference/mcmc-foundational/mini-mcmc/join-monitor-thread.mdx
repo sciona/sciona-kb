@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.join_monitor_thread
+predicate_id: join_monitor_thread
+repo: sciona-atoms
+domain: inference
+type_signature: "(monitor_thread_handle: JoinHandle) -> None"
+informal_desc: Blocks execution until the progress monitor thread finishes, ensuring all progress reporting is complete before returning.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS tree-building reference for recursive subtree endpoints, slice-valid candidate counts, U-turn continuation checks, divergence flags, and acceptance accumulation.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local callable returns compact NumPy trajectory bookkeeping rather than only a rightmost position.
+title: Join_monitor_thread
+description: Blocks execution until the progress monitor thread finishes, ensuring all progress reporting is complete before returning.
+---
+
+# Join_monitor_thread
+
+> Blocks execution until the progress monitor thread finishes, ensuring all progress reporting is complete before returning.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(monitor_thread_handle: JoinHandle) -> None
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

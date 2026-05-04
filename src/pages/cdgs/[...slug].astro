@@ -1,0 +1,20 @@
+---
+import CDGLayout from "../../layouts/CDGLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const cdgs = await getCollection("cdgs");
+  return cdgs.map((cdg) => ({
+    params: { slug: cdg.id },
+    props: { cdg },
+  }));
+}
+
+const { cdg } = Astro.props;
+const { Content } = await render(cdg);
+const contentPath = `cdgs/${cdg.id}.mdx`;
+---
+
+<CDGLayout cdg={cdg} contentPath={contentPath}>
+  <Content />
+</CDGLayout>

@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.process_simulation_results
+predicate_id: process_simulation_results
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(raw_simulation_results: SimulationResults, permutation_list: List[Permutation], backend_flags: Dict) -> CountDistribution"
+informal_desc: Extracts final measurement counts from the raw simulation results by sampling the final state. For the MPS backend, it also applies an inverse permutation to the sampled bitstrings to align them with the original qubit order.
+conceptual_summary: ""
+inputs:
+  - name: raw_simulation_results
+    type_desc: SimulationResults
+    constraints: x is not None
+  - name: permutation_list
+    type_desc: List[Permutation]
+    constraints: Required only for specific backends (e.g., MPS) that require result reordering.
+  - name: backend_flags
+    type_desc: Dict
+    constraints: Used to determine the correct result extraction and processing logic for the backend that was run.
+outputs:
+  - name: measurement_counts
+    type_desc: CountDistribution
+    constraints: A distribution of measured final states.
+concept_type: posterior_update
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Process_simulation_results
+description: Extracts final measurement counts from the raw simulation results by sampling the final state. For the MPS backend, it also applies an inverse permutation to t…
+---
+
+# Process_simulation_results
+
+> Extracts final measurement counts from the raw simulation results by sampling the final state. For the MPS backend, it also applies an inverse permutation to the sampled bitstrings to align them with the original qubit order.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(raw_simulation_results: SimulationResults, permutation_list: List[Permutation], backend_flags: Dict) -> CountDistribution
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

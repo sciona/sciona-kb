@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.physics.tempo_jl.tai2utc_d12.extract_fractional_day_and_julian_offset
+predicate_id: extract_fractional_day_and_julian_offset
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(u1: float, u2: float) -> tuple[float, float]"
+informal_desc: Calls jd2cal on the ordered two-part Julian date to decompose it into calendar fields and extract the sub-day fractional part fd. Also computes z2, the integer-day portion of u2 by subtracting fd, for later reassembly.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: urban2013almanac
+    citation: Broad astronomical time-scale attribution.
+  - title: repo_tempo_jl
+    citation: Primary Tempo.jl software attribution.
+title: Extract_fractional_day_and_julian_offset
+description: Calls jd2cal on the ordered two-part Julian date to decompose it into calendar fields and extract the sub-day fractional part fd. Also computes z2, the integer…
+---
+
+# Extract_fractional_day_and_julian_offset
+
+> Calls jd2cal on the ordered two-part Julian date to decompose it into calendar fields and extract the sub-day fractional part fd. Also computes z2, the integer-day portion of u2 by subtracting fd, for later reassembly.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(u1: float, u2: float) -> tuple[float, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

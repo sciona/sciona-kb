@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.computeabsoluteweightedindexdistances
+predicate_id: computeabsoluteweightedindexdistances
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(square_mat: 2D numeric ndarray) -> sequence of numeric values"
+informal_desc: Enumerate all entries and compute absolute weighted index distance for each element as abs(value * (row_index - col_index)).
+conceptual_summary: ""
+inputs:
+  - name: square_mat
+    type_desc: np.ndarray
+    constraints: square matrix
+outputs:
+  - name: weighted_distances
+    type_desc: np.ndarray
+    constraints: non-negative, one value per matrix entry
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Computeabsoluteweightedindexdistances
+description: Enumerate all entries and compute absolute weighted index distance for each element as abs(value * (row_index - col_index)).
+---
+
+# Computeabsoluteweightedindexdistances
+
+> Enumerate all entries and compute absolute weighted index distance for each element as abs(value * (row_index - col_index)).
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(square_mat: 2D numeric ndarray) -> sequence of numeric values
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

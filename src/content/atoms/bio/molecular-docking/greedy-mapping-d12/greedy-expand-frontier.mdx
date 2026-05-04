@@ -1,0 +1,64 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping_d12.greedy_expand_frontier
+predicate_id: greedy_expand_frontier
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(problem_context: GreedyMappingContext, mapping_state: MappingState, remove_invalid_placement_nodes: bool, rank_nodes: bool) -> MappingState"
+informal_desc: While unexpanded nodes remain, remove current node from frontier, derive free lattice neighbors and graph neighbors, call `extend_mapping_with_nodes`, and advance to the next unexpanded anchor.
+conceptual_summary: ""
+inputs:
+  - name: problem_context
+    type_desc: GreedyMappingContext
+    constraints: Must provide graph, lattice, and extend_mapping_with_nodes helper.
+    required: true
+    default_value_repr: ""
+  - name: mapping_state
+    type_desc: MappingState
+    constraints: Must include valid current_node/current_lattice_node and mutable mapping sets.
+    required: true
+    default_value_repr: ""
+  - name: remove_invalid_placement_nodes
+    type_desc: bool
+    constraints: Controls candidate pruning during extension.
+    required: true
+    default_value_repr: ""
+  - name: rank_nodes
+    type_desc: bool
+    constraints: Controls heuristic ranking during extension.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: expanded_mapping_state
+    type_desc: MappingState
+    constraints: Frontier exhausted (`unexpanded_nodes` empty) with accumulated mapping/unmapping.
+    required: true
+    default_value_repr: ""
+concept_type: greedy
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Greedy_expand_frontier
+description: While unexpanded nodes remain, remove current node from frontier, derive free lattice neighbors and graph neighbors, call `extend_mapping_with_nodes`, and adva…
+---
+
+# Greedy_expand_frontier
+
+> While unexpanded nodes remain, remove current node from frontier, derive free lattice neighbors and graph neighbors, call `extend_mapping_with_nodes`, and advance to the next unexpanded anchor.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(problem_context: GreedyMappingContext, mapping_state: MappingState, remove_invalid_placement_nodes: bool, rank_nodes: bool) -> MappingState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

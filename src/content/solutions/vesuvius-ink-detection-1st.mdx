@@ -1,0 +1,58 @@
+---
+cdg_asset_id: solution.kaggle.vesuvius_ink_detection_1st
+title: Vesuvius Challenge 2023 - 1st Place (2023) - Pipeline Template
+description: "This template captures the ordered steps used by Vesuvius Challenge 2023 - 1st Place (2023): prepare the data, build task-specific representations, train or ap…"
+problem_statement: "3D Volume to 2D Segmentation solution template for Vesuvius Challenge 2023 - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Z-axis slicing, Volumetric augmentation, 2.5D architecture, Decoder projection, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Vesuvius Challenge 2023 - 1st Place (2023)
+placement: 1st
+year: 2023
+domain: semantic_segmentation
+paradigm: optimization
+family: semantic_segmentation
+tags:
+  - unet
+  - segmentation
+  - volume
+key_insight: "The load-bearing idea is the pipeline topology: Z-axis slicing creates the representation needed by Thresholding, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417496
+source_license: null
+---
+
+# Vesuvius Challenge 2023 - 1st Place (2023) - Pipeline Template
+
+## Problem
+
+3D Volume to 2D Segmentation solution template for Vesuvius Challenge 2023 - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Z-axis slicing, Volumetric augmentation, 2.5D architecture, Decoder projection, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Vesuvius Challenge 2023 - 1st Place (2023): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.vesuvius_ink_detection_1st" readOnly={true} /> */}
+
+1. **Z-axis slicing** -- This stage extract sub-volumes around the known papyrus surface mesh (e.g., slices 20 to 40 out of 65) to discard empty air in the CT scans (numpy).
+1. **Volumetric augmentation** -- This stage apply 3D rotations and random elastic deformations to the CT volumes (TorchIO).
+1. **2.5D architecture** -- This stage treat the Z-axis of the 3D volume as the channels of a 2D image, and pass it through a ResNet34 backbone (PyTorch).
+1. **Decoder projection** -- This stage pass the backbone embeddings through a UNet-style decoder to project the multi-channel volume down into a single 2D segmentation mask representing ink (segmentation_models_pytorch).
+1. **Thresholding** -- This stage apply a strict probability threshold to generate the final binary map, dropping small isolated pixel noise.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Z-axis slicing creates the representation needed by Thresholding, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.vesuvius_ink_detection_1st" label="Reproduce this solution in Sciona" /> */}

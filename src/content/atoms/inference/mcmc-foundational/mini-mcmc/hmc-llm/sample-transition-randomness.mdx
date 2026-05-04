@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.sample_transition_randomness
+predicate_id: sample_transition_randomness
+repo: sciona-atoms
+domain: inference
+type_signature: "(prng_key_in: PRNGKey, n_chains: usize, dim: usize) -> tuple[Tensor[n_chains, dim], Tensor[n_chains], PRNGKey]"
+informal_desc: Consume RNG state to draw initial Gaussian momenta and per-chain uniform variates for Metropolis acceptance.
+conceptual_summary: ""
+inputs:
+  - name: prng_key_in
+    type_desc: PRNGKey
+    constraints: Valid RNG state.
+  - name: n_chains
+    type_desc: int
+    constraints: From infer_chain_geometry.
+  - name: dim
+    type_desc: int
+    constraints: From infer_chain_geometry.
+outputs:
+  - name: momentum_0
+    type_desc: Tensor[n_chains, dim]
+    constraints: IID Normal(0,1).
+  - name: uniform_u
+    type_desc: Tensor[n_chains]
+    constraints: IID Uniform(0,1).
+  - name: prng_key_out
+    type_desc: PRNGKey
+    constraints: RNG state after all draws.
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Sample_transition_randomness
+description: Consume RNG state to draw initial Gaussian momenta and per-chain uniform variates for Metropolis acceptance.
+---
+
+# Sample_transition_randomness
+
+> Consume RNG state to draw initial Gaussian momenta and per-chain uniform variates for Metropolis acceptance.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(prng_key_in: PRNGKey, n_chains: usize, dim: usize) -> tuple[Tensor[n_chains, dim], Tensor[n_chains], PRNGKey]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

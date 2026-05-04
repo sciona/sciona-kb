@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.state_estimation.kalman_filters.static_kf.initializelineargaussianstatemodel
+predicate_id: initializelineargaussianstatemodel
+repo: sciona-atoms
+domain: state_estimation
+type_signature: "(initial_state: Vector[float] (x0), initial_covariance: Matrix[float] (P0), transition_matrix: Matrix[float] (F), process_noise: Matrix[float] (Q), observation_matrix: Matrix[float] (H), measurement_noise: Matrix[float] (R)) -> StateModelSpec{x, P, F, Q, H, R}"
+informal_desc: Create the immutable Kalman state-space model with latent mean and covariance plus fixed system/noise matrices.
+conceptual_summary: "Immutable Linear-Gaussian Dynamical System Specification. Binds an initial latent mean vector and covariance matrix with linear evolution and linear projection operators, plus additive noise covariances, into a single formal model specification. The operation does not propagate or update state; it only maps raw numerical tensors into an immutable typed object that encodes first-order Markov and Gaussian assumptions for later recursive estimation.. Applications: Multisensor robot pose tracking with uncertain motion and observation channels, Neural time-series latent trajectory decoding from noisy electrode measurements, Geophysical data assimilation for evolving spatial fields with partial observations, Industrial process digital twins for hidden system-state monitoring and anomaly detection"
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kalman1960
+    citation: Canonical Kalman filter attribution.
+  - title: repo_kalman_filters
+    citation: Upstream implementation is mapped to the vendored kalman_filters repository.
+title: Initializelineargaussianstatemodel
+description: Create the immutable Kalman state-space model with latent mean and covariance plus fixed system/noise matrices.
+---
+
+# Initializelineargaussianstatemodel
+
+> Create the immutable Kalman state-space model with latent mean and covariance plus fixed system/noise matrices.
+
+## Conceptual Summary
+
+Immutable Linear-Gaussian Dynamical System Specification. Binds an initial latent mean vector and covariance matrix with linear evolution and linear projection operators, plus additive noise covariances, into a single formal model specification. The operation does not propagate or update state; it only maps raw numerical tensors into an immutable typed object that encodes first-order Markov and Gaussian assumptions for later recursive estimation.. Applications: Multisensor robot pose tracking with uncertain motion and observation channels, Neural time-series latent trajectory decoding from noisy electrode measurements, Geophysical data assimilation for evolving spatial fields with partial observations, Industrial process digital twins for hidden system-state monitoring and anomaly detection
+
+## Type Signature
+
+```
+(initial_state: Vector[float] (x0), initial_covariance: Matrix[float] (P0), transition_matrix: Matrix[float] (F), process_noise: Matrix[float] (Q), observation_matrix: Matrix[float] (H), measurement_noise: Matrix[float] (R)) -> StateModelSpec{x, P, F, Q, H, R}
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,69 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.buildextendedmappingstatewithpruningpolicy
+predicate_id: buildextendedmappingstatewithpruningpolicy
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mapping_context: MappingContext, updated_mapping: Map[GraphNode,LatticeNode], updated_unmapping: Map[LatticeNode,GraphNode], updated_unexpanded_nodes: Set[GraphNode], updated_already_placed_nodes: Set[GraphNode], remaining_unplaced_nodes: List[GraphNode], remove_invalid_placement_nodes: bool, candidate_scores: Map[GraphNode,float]) -> tuple[MappingState, Map[GraphNode,float]]"
+informal_desc: Apply invalid-placement pruning policy to residual unplaced nodes and construct the final extended mapping state while carrying candidate scores.
+conceptual_summary: ""
+inputs:
+  - name: mapping_context
+    type_desc: MappingContext
+    constraints: Receives optional graph-node removals when pruning is enabled.
+  - name: updated_mapping
+    type_desc: Map[GraphNode,LatticeNode]
+    constraints: Forward map after greedy assignment.
+  - name: updated_unmapping
+    type_desc: Map[LatticeNode,GraphNode]
+    constraints: Reverse map after greedy assignment.
+  - name: updated_unexpanded_nodes
+    type_desc: Set[GraphNode]
+    constraints: Unexpanded frontier after extension.
+  - name: updated_already_placed_nodes
+    type_desc: Set[GraphNode]
+    constraints: Final placed set.
+  - name: remaining_unplaced_nodes
+    type_desc: List[GraphNode]
+    constraints: Pruned from graph only when remove_invalid_placement_nodes=true.
+  - name: remove_invalid_placement_nodes
+    type_desc: bool
+    constraints: Controls pruning application.
+  - name: candidate_scores
+    type_desc: Map[GraphNode,float]
+    constraints: Score output passed through unchanged.
+outputs:
+  - name: extended_mapping_state
+    type_desc: MappingState
+    constraints: Contains updated mapping/unmapping/frontier and pruning effects.
+  - name: candidate_scores
+    type_desc: Map[GraphNode,float]
+    constraints: Same semantic score map produced by scoring step.
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Buildextendedmappingstatewithpruningpolicy
+description: Apply invalid-placement pruning policy to residual unplaced nodes and construct the final extended mapping state while carrying candidate scores.
+---
+
+# Buildextendedmappingstatewithpruningpolicy
+
+> Apply invalid-placement pruning policy to residual unplaced nodes and construct the final extended mapping state while carrying candidate scores.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mapping_context: MappingContext, updated_mapping: Map[GraphNode,LatticeNode], updated_unmapping: Map[LatticeNode,GraphNode], updated_unexpanded_nodes: Set[GraphNode], updated_already_placed_nodes: Set[GraphNode], remaining_unplaced_nodes: List[GraphNode], remove_invalid_placement_nodes: bool, candidate_scores: Map[GraphNode,float]) -> tuple[MappingState, Map[GraphNode,float]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

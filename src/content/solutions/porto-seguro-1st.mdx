@@ -1,0 +1,65 @@
+---
+cdg_asset_id: solution.kaggle.porto_seguro_1st
+title: Porto Seguro Safe Driver Prediction 1st Place — Denoising Autoencoder Feature Engineering
+description: Predict which drivers will file insurance claims by first training a neural network to reconstruct noisy versions of the input data, then using its internal re…
+problem_statement: Tabular binary classification on highly imbalanced driver safety data using denoising autoencoder feature extraction, concatenation with original features, and rank-averaged ensemble of LightGBM, XGBoost, and MLP models.
+platform: kaggle
+competition_name: Porto Seguro Safe Driver Prediction 1st Place — Denoising Autoencoder Feature Engineering
+placement: ""
+year: 0
+domain: tabular_classification
+paradigm: neural_network
+family: tabular_classification
+tags:
+  - denoising_autoencoder_features
+  - tabular_deep_learning
+  - swap_noise_dae
+  - gbm_nn_ensemble
+  - rank_averaging
+  - highly_imbalanced
+  - high_cardinality_categorical
+  - sentinel_missing_values
+  - binary_classification
+  - insurance
+key_insight: The DAE learns a smooth manifold of the feature space. Its hidden activations capture non-linear feature interactions that tree models cannot discover from raw features alone. The swap-noise corruption forces the DAE to learn robust, denoised representations rather than memorizing individual rows, because swap noise preserves marginal distributions while destroying pairwise correlations.
+failure_modes:
+  - "Very small datasets (<1000 rows): DAE overfits and produces noisy features that hurt downstream models"
+  - "Highly correlated features: DAE hidden layer collapses to first few PCA components, adding no information beyond what PCA would provide"
+  - "Time-series data with temporal ordering: DAE ignores sequential structure, producing inferior features vs. lag-based or recurrent approaches"
+source_url: ""
+source_license: null
+---
+
+# Porto Seguro Safe Driver Prediction 1st Place — Denoising Autoencoder Feature Engineering
+
+## Problem
+
+Tabular binary classification on highly imbalanced driver safety data using denoising autoencoder feature extraction, concatenation with original features, and rank-averaged ensemble of LightGBM, XGBoost, and MLP models.
+
+## Approach
+
+Predict which drivers will file insurance claims by first training a neural network to reconstruct noisy versions of the input data, then using its internal representations as extra features alongside the originals, and combining predictions from several different model types.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.porto_seguro_1st" readOnly={true} /> */}
+
+1. **Missing Value Imputation** -- Clean up the data by replacing placeholder missing values and converting category columns into numbers.
+1. **Denoising Autoencoder Features** -- Train a neural network to reconstruct the original data from a randomly scrambled version, then use the network's internal representation as new features that capture patterns in the data.
+1. **Feature Concatenation** -- Combine the original data columns with the new features learned by the autoencoder into one wider table.
+1. **Model Training** -- Train three different types of prediction models on the enriched feature set: two tree-based models and a neural network.
+1. **Rank Average Ensemble** -- Instead of averaging raw predictions, rank all predictions from each model separately, then average the ranks to get a final ordering that is robust to differences in how each model scores confidence.
+
+## Key Insight
+
+The DAE learns a smooth manifold of the feature space. Its hidden activations capture non-linear feature interactions that tree models cannot discover from raw features alone. The swap-noise corruption forces the DAE to learn robust, denoised representations rather than memorizing individual rows, because swap noise preserves marginal distributions while destroying pairwise correlations.
+
+## Failure Modes
+
+- Very small datasets (&lt;1000 rows): DAE overfits and produces noisy features that hurt downstream models
+- Highly correlated features: DAE hidden layer collapses to first few PCA components, adding no information beyond what PCA would provide
+- Time-series data with temporal ordering: DAE ignores sequential structure, producing inferior features vs. lag-based or recurrent approaches
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.porto_seguro_1st" label="Reproduce this solution in Sciona" /> */}

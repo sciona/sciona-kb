@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.convertwindowtosamples
+predicate_id: convertwindowtosamples
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(search_window_ms: int, sampling_rate_hz: float) -> int"
+informal_desc: Converts the search window from milliseconds to an integer number of samples based on the sampling frequency.
+conceptual_summary: ""
+inputs:
+  - name: search_window_ms
+    type_desc: int
+    constraints: Time in milliseconds.
+  - name: sampling_rate_hz
+    type_desc: float
+    constraints: Sampling rate in Hz.
+outputs:
+  - name: search_window_samples
+    type_desc: int
+    constraints: Window size in number of samples.
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Convertwindowtosamples
+description: Converts the search window from milliseconds to an integer number of samples based on the sampling frequency.
+---
+
+# Convertwindowtosamples
+
+> Converts the search window from milliseconds to an integer number of samples based on the sampling frequency.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(search_window_ms: int, sampling_rate_hz: float) -> int
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

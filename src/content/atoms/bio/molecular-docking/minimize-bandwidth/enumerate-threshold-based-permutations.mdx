@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.enumerate_threshold_based_permutations
+predicate_id: enumerate_threshold_based_permutations
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(validated_mat: np.ndarray (2D numeric), mat_amplitude: float, truncation_values: np.ndarray (1D float)) -> iterable[np.ndarray | list[int]]"
+informal_desc: Generate candidate permutations by calling thresholded bandwidth minimization for each scaled truncation value.
+conceptual_summary: ""
+inputs:
+  - name: validated_mat
+    type_desc: np.ndarray
+    constraints: symmetric
+  - name: mat_amplitude
+    type_desc: float
+    constraints: non-negative
+  - name: truncation_values
+    type_desc: np.ndarray
+    constraints: finite values in [0.1, 1.0)
+outputs:
+  - name: candidate_permutations
+    type_desc: list[np.ndarray]
+    constraints: each item is a valid row/column permutation
+concept_type: searching
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Enumerate_threshold_based_permutations
+description: Generate candidate permutations by calling thresholded bandwidth minimization for each scaled truncation value.
+---
+
+# Enumerate_threshold_based_permutations
+
+> Generate candidate permutations by calling thresholded bandwidth minimization for each scaled truncation value.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(validated_mat: np.ndarray (2D numeric), mat_amplitude: float, truncation_values: np.ndarray (1D float)) -> iterable[np.ndarray | list[int]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

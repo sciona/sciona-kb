@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.assemblestaticmappingcontext
+predicate_id: assemblestaticmappingcontext
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(graph: Graph, lattice_instance: LatticeInstance, previously_generated_subgraphs: Collection[Subgraph], seed: int|None) -> MappingContext"
+informal_desc: Construct immutable algorithm context from constructor inputs so all later stages consume explicit state instead of hidden class fields.
+conceptual_summary: "ImmutableCompositeStateAssembler. Aggregates multiple externally supplied data structures and an optional deterministic control scalar into a single explicit state record. The transform is structural: it preserves each input by reference/value while reifying them as immutable fields, eliminating implicit ambient state. The result is a canonical context object that downstream procedures can consume with fixed, reproducible access semantics.. Applications: Computational biology: package interaction network, folding-topology constraints, prior motif candidates, and optional randomization seed into a reproducible experiment context, Robotics planning: package environment connectivity map, kinematic constraint manifold, prior trajectory fragments, and tie-break seed into a fixed planning context, Distributed systems optimization: package service dependency graph, resource-topology model, prior allocation subplans, and deterministic seed into an immutable scheduling context, Materials simulation: package atomic connectivity structure, lattice/mesh topology instance, previously sampled local configurations, and seed into a reproducible simulation context"
+inputs:
+  - name: graph
+    type_desc: Graph
+    constraints: must be a valid source graph
+  - name: lattice_instance
+    type_desc: LatticeInstance
+    constraints: must expose lattice topology
+  - name: previously_generated_subgraphs
+    type_desc: Collection[Subgraph]
+    constraints: used for reuse/avoidance scoring
+  - name: seed
+    type_desc: Optional[int]
+    constraints: deterministic tie-breaking if provided
+outputs:
+  - name: mapping_context
+    type_desc: MappingContext
+    constraints: contains graph, lattice, lattice_instance, previously_generated_subgraphs, seed as immutable fields
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Assemblestaticmappingcontext
+description: Construct immutable algorithm context from constructor inputs so all later stages consume explicit state instead of hidden class fields.
+---
+
+# Assemblestaticmappingcontext
+
+> Construct immutable algorithm context from constructor inputs so all later stages consume explicit state instead of hidden class fields.
+
+## Conceptual Summary
+
+ImmutableCompositeStateAssembler. Aggregates multiple externally supplied data structures and an optional deterministic control scalar into a single explicit state record. The transform is structural: it preserves each input by reference/value while reifying them as immutable fields, eliminating implicit ambient state. The result is a canonical context object that downstream procedures can consume with fixed, reproducible access semantics.. Applications: Computational biology: package interaction network, folding-topology constraints, prior motif candidates, and optional randomization seed into a reproducible experiment context, Robotics planning: package environment connectivity map, kinematic constraint manifold, prior trajectory fragments, and tie-break seed into a fixed planning context, Distributed systems optimization: package service dependency graph, resource-topology model, prior allocation subplans, and deterministic seed into an immutable scheduling context, Materials simulation: package atomic connectivity structure, lattice/mesh topology instance, previously sampled local configurations, and seed into a reproducible simulation context
+
+## Type Signature
+
+```
+(graph: Graph, lattice_instance: LatticeInstance, previously_generated_subgraphs: Collection[Subgraph], seed: int|None) -> MappingContext
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

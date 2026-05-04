@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.derivesamplingshape
+predicate_id: derivesamplingshape
+repo: sciona-atoms
+domain: inference
+type_signature: "(hmc_state_in: StateModelSpec) -> tuple[int, int]"
+informal_desc: Read chain count and latent dimension from the incoming HMC state to define tensor geometry for collection.
+conceptual_summary: ""
+inputs:
+  - name: hmc_state_in
+    type_desc: StateModelSpec
+    constraints: contains current positions with shape [n_chains, dim]
+outputs:
+  - name: n_chains
+    type_desc: int
+    constraints: ">= 1"
+  - name: dim
+    type_desc: int
+    constraints: ">= 1"
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Derivesamplingshape
+description: Read chain count and latent dimension from the incoming HMC state to define tensor geometry for collection.
+---
+
+# Derivesamplingshape
+
+> Read chain count and latent dimension from the incoming HMC state to define tensor geometry for collection.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(hmc_state_in: StateModelSpec) -> tuple[int, int]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

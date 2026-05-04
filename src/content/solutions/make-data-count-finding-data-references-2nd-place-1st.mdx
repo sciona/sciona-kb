@@ -1,0 +1,58 @@
+---
+cdg_asset_id: solution.kaggle.make_data_count_finding_data_references_2nd_place_1st
+title: "Make Data Count: Finding Data References - 2nd Place (2022) - Pipeline Template"
+description: "This template captures the ordered steps used by Make Data Count: Finding Data References - 2nd Place (2022): prepare the data, build task-specific representat…"
+problem_statement: "NLP Text Classification solution template for Make Data Count: Finding Data References - 2nd Place (2022), modeled as a 5-stage deterministic pipeline: External Data Gathering, RegEx Filtering, Text Classification Model, Cross-Validation, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: "Make Data Count: Finding Data References - 2nd Place (2022)"
+placement: 2nd
+year: 2022
+domain: nlp_classification
+paradigm: signal_filter
+family: nlp_classification
+tags:
+  - transformer
+  - rag
+  - classification
+key_insight: "The load-bearing idea is the pipeline topology: External Data Gathering creates the representation needed by Ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/make-data-count-finding-data-references/writeups/2nd-place-solution
+source_license: null
+---
+
+# Make Data Count: Finding Data References - 2nd Place (2022) - Pipeline Template
+
+## Problem
+
+NLP Text Classification solution template for Make Data Count: Finding Data References - 2nd Place (2022), modeled as a 5-stage deterministic pipeline: External Data Gathering, RegEx Filtering, Text Classification Model, Cross-Validation, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Make Data Count: Finding Data References - 2nd Place (2022): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.make_data_count_finding_data_references_2nd_place_1st" readOnly={true} /> */}
+
+1. **External Data Gathering** -- This stage execute automated scripts to download supplementary open-access corpus data directly from PubMed. This step physically augments the heavily constrained training set prior to any modeling (requests, beautifulsoup).
+1. **RegEx Filtering** -- This stage apply a rigid, regular expression-based programmatic system to detect common dataset name variations and filter out severe noise strings (re).
+1. **Text Classification Model** -- This stage train a robust transformer-based text classifier on the augmented dataset, entirely bypassing structurally unstable NER models that failed to converge on the small dataset (transformers).
+1. **Cross-Validation** -- This stage train the models across multiple strict folds to stabilize severe early-epoch convergence issues explicitly caused by the microscopic dataset size.
+1. **Ensembling** -- This stage average the output classification probabilities across all stable folds.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: External Data Gathering creates the representation needed by Ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.make_data_count_finding_data_references_2nd_place_1st" label="Reproduce this solution in Sciona" /> */}

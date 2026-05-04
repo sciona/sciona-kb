@@ -1,0 +1,38 @@
+---
+import CatalogLayout from "../../layouts/CatalogLayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const cdgs = await getCollection("cdgs");
+  const families = [...new Set(cdgs.map((c) => c.data.family))];
+  return families.map((family) => ({
+    params: { family },
+    props: {
+      family,
+      items: cdgs
+        .filter((c) => c.data.family === family)
+        .map((c) => ({
+          slug: c.id,
+          href: `/cdgs/${c.id}`,
+          title: c.data.name,
+          description: c.data.dejargonized_summary || c.data.summary,
+          tags: [c.data.paradigm, ...c.data.variant_hints.slice(0, 3)],
+        })),
+    },
+  }));
+}
+
+const { family, items } = Astro.props;
+const label = family.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+---
+
+<CatalogLayout
+  title={`${label} Solutions`}
+  description={`${items.length} algorithmic pipelines in the ${label} problem family.`}
+  items={items}
+  breadcrumbs={[
+    { label: "Atlas", href: "/" },
+    { label: "Families", href: "/cdgs" },
+    { label: label, href: `/family/${family}` },
+  ]}
+/>

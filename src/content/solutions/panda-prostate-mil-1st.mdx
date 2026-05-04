@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.panda_prostate_mil_1st
+title: Prostate cANcer graDe Assessment (PANDA) - 1st Place (2020) - Pipeline Template
+description: "This template captures the ordered steps used by Prostate cANcer graDe Assessment (PANDA) - 1st Place (2020): prepare the data, build task-specific representat…"
+problem_statement: "Multi-Instance Learning (Gigapixel images) solution template for Prostate cANcer graDe Assessment (PANDA) - 1st Place (2020), modeled as a 5-stage deterministic pipeline: White-space culling, N-Tile generation, Grid concatenation, CNN Backbone, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Prostate cANcer graDe Assessment (PANDA) - 1st Place (2020)
+placement: ""
+year: 0
+domain: gigapixel_segmentation
+paradigm: loss_function
+family: gigapixel_segmentation
+tags:
+  - gigapixel
+  - multi
+  - instance
+  - learning
+  - images
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: White-space culling creates the representation needed by Ordinal Regression, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/prostate-cancer-grade-assessment/discussion/169143
+source_license: null
+---
+
+# Prostate cANcer graDe Assessment (PANDA) - 1st Place (2020) - Pipeline Template
+
+## Problem
+
+Multi-Instance Learning (Gigapixel images) solution template for Prostate cANcer graDe Assessment (PANDA) - 1st Place (2020), modeled as a 5-stage deterministic pipeline: White-space culling, N-Tile generation, Grid concatenation, CNN Backbone, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Prostate cANcer graDe Assessment (PANDA) - 1st Place (2020): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.panda_prostate_mil_1st" readOnly={true} /> */}
+
+1. **White-space culling** -- This stage run a fast thresholding heuristic across the gigapixel slide to drop 90% of the image that is empty glass/white space (OpenCV).
+1. **N-Tile generation** -- This stage extract the top 36 most tissue-dense 256x256 patches from the remaining area (numpy).
+1. **Grid concatenation** -- This stage stitch the 36 individual patches back together into a single 6x6 dense grid (yielding a uniform 1536x1536 image without white space) (OpenCV).
+1. **CNN Backbone** -- This stage train an EfficientNet-B1 / SE-ResNext50 directly on the stitched grid (PyTorch).
+1. **Ordinal Regression** -- This stage instead of classification, use an ordinal regression loss head to penalize predicting Grade 1 when the true answer is Grade 5 (PyTorch).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: White-space culling creates the representation needed by Ordinal Regression, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.panda_prostate_mil_1st" label="Reproduce this solution in Sciona" /> */}

@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.proposegreedypermutationstep
+predicate_id: proposegreedypermutationstep
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(iteration_state: object) -> tuple[object, list[int], np.ndarray, int]"
+informal_desc: From the current working matrix, compute one candidate permutation and its resulting matrix bandwidth.
+conceptual_summary: ""
+inputs:
+  - name: iteration_state
+    type_desc: object
+    constraints: Contains current working_matrix and associated state
+outputs:
+  - name: current_iteration_state
+    type_desc: object
+    constraints: Pass-through of input state for synchronized evaluation
+  - name: candidate_permutation
+    type_desc: list[int]
+    constraints: Produced by minimize_bandwidth_global on current working_matrix
+  - name: candidate_matrix
+    type_desc: np.ndarray
+    constraints: permute_matrix(current working_matrix, candidate_permutation)
+  - name: candidate_bandwidth
+    type_desc: int
+    constraints: matrix_bandwidth(candidate_matrix)
+concept_type: greedy
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Proposegreedypermutationstep
+description: From the current working matrix, compute one candidate permutation and its resulting matrix bandwidth.
+---
+
+# Proposegreedypermutationstep
+
+> From the current working matrix, compute one candidate permutation and its resulting matrix bandwidth.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(iteration_state: object) -> tuple[object, list[int], np.ndarray, int]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

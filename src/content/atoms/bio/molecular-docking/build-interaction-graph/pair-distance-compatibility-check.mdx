@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.build_interaction_graph.pair_distance_compatibility_check
+predicate_id: pair_distance_compatibility_check
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(L_feature_min_max: array-like numeric bounds, R_features_distance: array-like numeric, interaction_distance: float) -> bool"
+informal_desc: Evaluates whether a candidate left/right feature pair satisfies interaction-distance constraints.
+conceptual_summary: "Interval-Constrained Pairwise Metric Predicate. This operation performs a feasibility test over pairwise metric relationships by comparing candidate distance values against a bounded admissible interval and a non-negative reference distance. It maps numeric distance descriptors from two entities into a single Boolean decision indicating whether the pair is geometrically compatible under the specified constraints. Conceptually, it is a constraint-satisfaction projection from continuous metric space to a binary validity state.. Applications: Robotics: validating whether two manipulator waypoints can be connected under kinematic separation bounds, Computational biology: checking whether candidate residue pairs satisfy allowable spatial separation ranges in structural modeling, Wireless systems: testing whether transmitter-receiver candidate links meet admissible range constraints for connectivity, 3D computer vision: screening feature correspondences by verifying epipolar or depth-consistent distance envelopes"
+inputs:
+  - name: L_feature_min_max
+    type_desc: np.ndarray
+    constraints: Expected to encode min/max distance envelope for left feature context.
+  - name: R_features_distance
+    type_desc: np.ndarray
+    constraints: Distance values for right-side feature candidates.
+  - name: interaction_distance
+    type_desc: float
+    constraints: Non-negative interaction threshold/target distance.
+outputs:
+  - name: distance_match
+    type_desc: bool
+    constraints: True when pair satisfies distance constraints.
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Pair_distance_compatibility_check
+description: Evaluates whether a candidate left/right feature pair satisfies interaction-distance constraints.
+---
+
+# Pair_distance_compatibility_check
+
+> Evaluates whether a candidate left/right feature pair satisfies interaction-distance constraints.
+
+## Conceptual Summary
+
+Interval-Constrained Pairwise Metric Predicate. This operation performs a feasibility test over pairwise metric relationships by comparing candidate distance values against a bounded admissible interval and a non-negative reference distance. It maps numeric distance descriptors from two entities into a single Boolean decision indicating whether the pair is geometrically compatible under the specified constraints. Conceptually, it is a constraint-satisfaction projection from continuous metric space to a binary validity state.. Applications: Robotics: validating whether two manipulator waypoints can be connected under kinematic separation bounds, Computational biology: checking whether candidate residue pairs satisfy allowable spatial separation ranges in structural modeling, Wireless systems: testing whether transmitter-receiver candidate links meet admissible range constraints for connectivity, 3D computer vision: screening feature correspondences by verifying epipolar or depth-consistent distance envelopes
+
+## Type Signature
+
+```
+(L_feature_min_max: array-like numeric bounds, R_features_distance: array-like numeric, interaction_distance: float) -> bool
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

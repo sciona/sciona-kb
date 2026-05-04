@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.bayes_rs.bernoulli_probabilistic_oracle
+predicate_id: bernoulli_probabilistic_oracle
+repo: sciona-atoms
+domain: inference
+type_signature: "(p: float, x: int | array<int>) -> float | array<float>"
+informal_desc: Defines and evaluates a Bernoulli distribution as a pure probabilistic oracle with no persistent mutable state.
+conceptual_summary: "Binary_State_LogMass_Oracle. Maps a binary observation and a unit-interval parameter to the log of a two-outcome discrete mass function. The computation is closed-form and elementwise: log_mass = x * log(p) + (1 - x) * log(1 - p), with broadcasting over arrays when provided. It performs no parameter updates or internal caching, so identical inputs always produce identical outputs.. Applications: Digital communications: scoring observed bit sequences under a binary noise/channel model., Reliability engineering: evaluating pass/fail component test outcomes against hypothesized failure propensity., Computational biology: modeling binary assay readouts (activation/inactivation) under a latent success-rate parameter."
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_bayes
+    citation: Upstream implementation is mapped to the vendored bayes repository.
+  - title: clrs2009
+    citation: Fallback broad reference; implementation attribution comes from the upstream repository.
+title: Bernoulli_probabilistic_oracle
+description: Defines and evaluates a Bernoulli distribution as a pure probabilistic oracle with no persistent mutable state.
+---
+
+# Bernoulli_probabilistic_oracle
+
+> Defines and evaluates a Bernoulli distribution as a pure probabilistic oracle with no persistent mutable state.
+
+## Conceptual Summary
+
+Binary_State_LogMass_Oracle. Maps a binary observation and a unit-interval parameter to the log of a two-outcome discrete mass function. The computation is closed-form and elementwise: log_mass = x * log(p) + (1 - x) * log(1 - p), with broadcasting over arrays when provided. It performs no parameter updates or internal caching, so identical inputs always produce identical outputs.. Applications: Digital communications: scoring observed bit sequences under a binary noise/channel model., Reliability engineering: evaluating pass/fail component test outcomes against hypothesized failure propensity., Computational biology: modeling binary assay readouts (activation/inactivation) under a latent success-rate parameter.
+
+## Type Signature
+
+```
+(p: float, x: int | array<int>) -> float | array<float>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.robotics.pronto.blip_filter.bandpass_filter
+predicate_id: bandpass_filter
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(signal: np.ndarray) -> np.ndarray"
+informal_desc: Apply FIR bandpass filter (3-45 Hz) to remove baseline wander and high-frequency noise from the raw ECG signal.
+conceptual_summary: "Frequency Band Isolation Transform. A transformation on a 1D ordered numerical vector that attenuates signal components whose frequencies lie outside a specified range. It functions as a selective sieve, preserving cyclical patterns within a target periodicity band while suppressing both low-frequency drifts and high-frequency noise.. Applications: Isolating specific seismic wave frequencies from raw seismograph readings to identify earthquake epicenters., Extracting the frequency range of a specific instrument or voice from a complex audio mix for audio engineering., Detrending financial time-series data by removing long-term market cycles and short-term noise to analyze mid-term business cycle volatility., Filtering radio telescope data to isolate the spectral emission lines of specific chemical elements, removing background cosmic noise and instrumental drift."
+inputs:
+  - name: signal
+    type_desc: np.ndarray
+    constraints: 1D raw ECG signal
+outputs:
+  - name: filtered
+    type_desc: np.ndarray
+    constraints: bandpass-filtered ECG
+concept_type: signal_filter
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Bandpass_filter
+description: Apply FIR bandpass filter (3-45 Hz) to remove baseline wander and high-frequency noise from the raw ECG signal.
+---
+
+# Bandpass_filter
+
+> Apply FIR bandpass filter (3-45 Hz) to remove baseline wander and high-frequency noise from the raw ECG signal.
+
+## Conceptual Summary
+
+Frequency Band Isolation Transform. A transformation on a 1D ordered numerical vector that attenuates signal components whose frequencies lie outside a specified range. It functions as a selective sieve, preserving cyclical patterns within a target periodicity band while suppressing both low-frequency drifts and high-frequency noise.. Applications: Isolating specific seismic wave frequencies from raw seismograph readings to identify earthquake epicenters., Extracting the frequency range of a specific instrument or voice from a complex audio mix for audio engineering., Detrending financial time-series data by removing long-term market cycles and short-term noise to analyze mid-term business cycle volatility., Filtering radio telescope data to isolate the spectral emission lines of specific chemical elements, removing background cosmic noise and instrumental drift.
+
+## Type Signature
+
+```
+(signal: np.ndarray) -> np.ndarray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

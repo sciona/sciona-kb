@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.execute_chains_in_parallel
+predicate_id: execute_chains_in_parallel
+repo: sciona-atoms
+domain: inference
+type_signature: "(chains: &mut [Chain], progress_senders: Vec<Sender<ChainStats>>, n_collect: int, n_discard: int) -> Vec<Tensor<B, 2>>"
+informal_desc: Spawns a scoped thread for each MCMC chain, running the sampler and piping progress statistics to the monitor thread.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS tree-building reference for recursive subtree endpoints, slice-valid candidate counts, U-turn continuation checks, divergence flags, and acceptance accumulation.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local callable returns compact NumPy trajectory bookkeeping rather than only a rightmost position.
+title: Execute_chains_in_parallel
+description: Spawns a scoped thread for each MCMC chain, running the sampler and piping progress statistics to the monitor thread.
+---
+
+# Execute_chains_in_parallel
+
+> Spawns a scoped thread for each MCMC chain, running the sampler and piping progress statistics to the monitor thread.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(chains: &mut [Chain], progress_senders: Vec<Sender<ChainStats>>, n_collect: int, n_discard: int) -> Vec<Tensor<B, 2>>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

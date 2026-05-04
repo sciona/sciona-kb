@@ -1,0 +1,34 @@
+---
+interface Props {
+  cdgAssetIds: string[];
+}
+
+const { cdgAssetIds } = Astro.props;
+
+function assetIdToSlug(assetId: string): string {
+  // "solution.kaggle.adversarial_attacks_1st" -> "adversarial-attacks-1st"
+  const tail = assetId.split(".").slice(2).join(".");
+  return tail.replace(/_/g, "-");
+}
+
+function assetIdToLabel(assetId: string): string {
+  const tail = assetId.split(".").slice(2).join(" ");
+  return tail.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+---
+
+<ul class="space-y-2">
+  {cdgAssetIds.map((id) => (
+    <li>
+      <a
+        href={`/cdgs/${assetIdToSlug(id)}`}
+        class="inline-flex items-center gap-2 text-atlas-accent hover:text-atlas-accent-hover transition-colors"
+      >
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        {assetIdToLabel(id)}
+      </a>
+    </li>
+  ))}
+</ul>

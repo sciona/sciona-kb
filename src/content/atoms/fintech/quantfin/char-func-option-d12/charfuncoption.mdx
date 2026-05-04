@@ -1,0 +1,138 @@
+---
+fqdn: sciona.atoms.fintech.quantfin.char_func_option_d12.charfuncoption
+predicate_id: charfuncoption
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(: Any, cf: Any, charFuncMart: Any, d: Any, damp: Any, damp': Any, disc: Any, exp: Any, f: Any, fg: Any, func1: Any, func2: Any, i: Any, intF: Any, k: Any, leftTerm: Any, log: Any, model: Any, opt: Any, p1: Any, p2: Any, pi: Any, q: Any, realPart: Any, rightTerm: Any, s: Any, strike: Any, tmat: Any, v: Any, v': Any, x: Any, yc: Any) -> Any"
+informal_desc: ""
+conceptual_summary: ""
+inputs:
+  - name: arg0
+    type_desc: float
+    constraints: auxiliary scalar passthrough
+  - name: cf
+    type_desc: Callable[[complex], complex]
+    constraints: characteristic function evaluator
+  - name: charFuncMart
+    type_desc: Callable[[QuantfinContext, QuantfinContext, float], Callable[[complex], complex]]
+    constraints: martingale-corrected characteristic-function builder
+  - name: d
+    type_desc: float
+    constraints: discount-factor workspace scalar
+  - name: damp
+    type_desc: float
+    constraints: finite damping coefficient
+  - name: damp_prime
+    type_desc: float
+    constraints: finite shifted damping coefficient
+  - name: disc
+    type_desc: Callable[[float], float]
+    constraints: discount curve evaluator
+  - name: exp
+    type_desc: Callable[[complex], complex]
+    constraints: complex exponential
+  - name: f
+    type_desc: Callable[[Callable[[complex], complex], complex, complex, complex, Callable[[complex], float], complex, complex, complex], float]
+    constraints: real-valued Fourier integrand helper
+  - name: fg
+    type_desc: Mapping[str, float | complex | str | bool]
+    constraints: forward-generator context
+  - name: func1
+    type_desc: Callable[[float], float]
+    constraints: first inversion integrand
+  - name: func2
+    type_desc: Callable[[float], float]
+    constraints: second inversion integrand
+  - name: i
+    type_desc: complex
+    constraints: imaginary unit
+  - name: intF
+    type_desc: Callable[[Callable[[float], float], float, float, float], float]
+    constraints: deterministic scalar integrator
+  - name: k
+    type_desc: float
+    constraints: log-strike workspace scalar
+  - name: leftTerm
+    type_desc: complex
+    constraints: damping-dependent numerator factor
+  - name: log
+    type_desc: Callable[[float], float]
+    constraints: natural logarithm
+  - name: model
+    type_desc: Mapping[str, float | complex | str | bool]
+    constraints: pricing-model context
+  - name: opt
+    type_desc: str
+    constraints: option-type label
+  - name: p1
+    type_desc: float
+    constraints: workspace probability scalar
+  - name: p2
+    type_desc: float
+    constraints: workspace probability scalar
+  - name: pi
+    type_desc: float
+    constraints: positive circle constant
+  - name: q
+    type_desc: float
+    constraints: forward adjustment factor
+  - name: realPart
+    type_desc: Callable[[complex], float]
+    constraints: real-part extractor
+  - name: rightTerm
+    type_desc: complex
+    constraints: characteristic-function value
+  - name: s
+    type_desc: float
+    constraints: spot price
+  - name: strike
+    type_desc: float
+    constraints: positive strike
+  - name: tmat
+    type_desc: float
+    constraints: positive time to maturity
+  - name: v
+    type_desc: complex
+    constraints: complex integration variable
+  - name: v_prime
+    type_desc: complex
+    constraints: shifted complex integration variable
+  - name: x
+    type_desc: float
+    constraints: workspace scalar
+  - name: yc
+    type_desc: Mapping[str, float | complex | str | bool]
+    constraints: yield-curve context
+outputs:
+  - name: price
+    type_desc: float
+    constraints: finite option price
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: heston1993
+    citation: Characteristic-function option pricing attribution.
+  - title: repo_quantfin
+    citation: Upstream implementation is mapped to the vendored quantfin repository.
+title: Charfuncoption
+description: ""
+---
+
+# Charfuncoption
+
+> 
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(: Any, cf: Any, charFuncMart: Any, d: Any, damp: Any, damp': Any, disc: Any, exp: Any, f: Any, fg: Any, func1: Any, func2: Any, i: Any, intF: Any, k: Any, leftTerm: Any, log: Any, model: Any, opt: Any, p1: Any, p2: Any, pi: Any, q: Any, realPart: Any, rightTerm: Any, s: Any, strike: Any, tmat: Any, v: Any, v': Any, x: Any, yc: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

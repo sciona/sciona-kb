@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.extractgraphproperties
+predicate_id: extractgraphproperties
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(graph: nx.Graph) -> tuple[np.ndarray, List[any]]"
+informal_desc: Extracts node weights and a corresponding list of node identifiers from the input graph.
+conceptual_summary: ""
+inputs:
+  - name: graph
+    type_desc: object
+    constraints: Graph with 'weight' attribute on nodes.
+outputs:
+  - name: original_weight_array
+    type_desc: np.ndarray
+    constraints: 1D array of node weights.
+  - name: node_ids
+    type_desc: List[any]
+    constraints: List of node identifiers.
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Extractgraphproperties
+description: Extracts node weights and a corresponding list of node identifiers from the input graph.
+---
+
+# Extractgraphproperties
+
+> Extracts node weights and a corresponding list of node identifiers from the input graph.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(graph: nx.Graph) -> tuple[np.ndarray, List[any]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

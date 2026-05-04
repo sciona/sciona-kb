@@ -1,0 +1,41 @@
+---
+fqdn: sciona.atoms.inference.jax_advi.optimize_advi.summarize_latent_layout
+predicate_id: summarize_latent_layout
+repo: sciona-atoms
+domain: inference
+type_signature: "(theta_shape_dict: dict[str, tuple[int, ...]]) -> tuple[jnp.ndarray, flatten/reconstruct metadata]"
+informal_desc: Builds placeholder latent tensors from shape specs and derives flatten/reconstruction metadata for a single unconstrained latent vector.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kucukelbir2017advi
+    citation: Exact ADVI attribution for jax_advi atoms.
+  - title: titsias2014dsvb
+    citation: Complementary reparameterization-gradient VI attribution.
+  - title: repo_jax_advi
+    citation: Upstream implementation is mapped to the vendored jax_advi repository.
+title: Summarize_latent_layout
+description: Builds placeholder latent tensors from shape specs and derives flatten/reconstruction metadata for a single unconstrained latent vector.
+---
+
+# Summarize_latent_layout
+
+> Builds placeholder latent tensors from shape specs and derives flatten/reconstruction metadata for a single unconstrained latent vector.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(theta_shape_dict: dict[str, tuple[int, ...]]) -> tuple[jnp.ndarray, flatten/reconstruct metadata]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

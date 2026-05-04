@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.solutionextraction
+predicate_id: solutionextraction
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(measurement_counts: CountDistribution, final_register: QuantumRegister, num_solutions: Integer) -> List[Solution]"
+informal_desc: Processes the raw results from the quantum sampler. It interprets the measurement count distribution to extract the top solutions for the optimization problem.
+conceptual_summary: "MostProbableStateDecoder. Filters a discrete probability distribution to identify the 'K' most frequently observed states. It then decodes these high-frequency states from a raw format into a structured representation, effectively reducing a large outcome space to a small set of the most likely results.. Applications: Genomics: Identifying the most common genetic variants in a population from sequencing count data., Natural Language Processing: Extracting the most likely candidate words from a language model's output probability distribution for use in beam search decoding., Failure Analysis: Pinpointing the most frequent error codes from system logs to prioritize investigation of system failure modes., Market Research: Determining the most popular product choices from a large set of customer transaction data."
+inputs:
+  - name: measurement_counts
+    type_desc: CountDistribution
+    constraints: A distribution of measurement outcomes from the simulation.
+  - name: final_register
+    type_desc: QuantumRegister
+    constraints: The final state of the quantum register.
+  - name: num_solutions
+    type_desc: Integer
+    constraints: The number of top solutions to extract.
+outputs:
+  - name: solutions
+    type_desc: List[Solution]
+    constraints: The final, processed solutions to the problem.
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Solutionextraction
+description: Processes the raw results from the quantum sampler. It interprets the measurement count distribution to extract the top solutions for the optimization problem.
+---
+
+# Solutionextraction
+
+> Processes the raw results from the quantum sampler. It interprets the measurement count distribution to extract the top solutions for the optimization problem.
+
+## Conceptual Summary
+
+MostProbableStateDecoder. Filters a discrete probability distribution to identify the 'K' most frequently observed states. It then decodes these high-frequency states from a raw format into a structured representation, effectively reducing a large outcome space to a small set of the most likely results.. Applications: Genomics: Identifying the most common genetic variants in a population from sequencing count data., Natural Language Processing: Extracting the most likely candidate words from a language model's output probability distribution for use in beam search decoding., Failure Analysis: Pinpointing the most frequent error codes from system logs to prioritize investigation of system failure modes., Market Research: Determining the most popular product choices from a large set of customer transaction data.
+
+## Type Signature
+
+```
+(measurement_counts: CountDistribution, final_register: QuantumRegister, num_solutions: Integer) -> List[Solution]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

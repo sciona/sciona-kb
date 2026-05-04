@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.createinitialregister
+predicate_id: createinitialregister
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(node_ids: List[any], coordinates_layout: Dict) -> tuple[Register, Dict]"
+informal_desc: Builds the quantum register by assigning physical coordinates to each node (qubit) from the graph.
+conceptual_summary: ""
+inputs:
+  - name: node_ids
+    type_desc: List[any]
+    constraints: List of node identifiers.
+  - name: coordinates_layout
+    type_desc: Dict
+    constraints: Mapping from node ID to coordinate.
+outputs:
+  - name: initial_register
+    type_desc: Register
+    constraints: pulser_analog.Register object.
+  - name: register_coordinates
+    type_desc: Dict
+    constraints: Mapping from node ID to coordinate for nodes in the graph.
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Createinitialregister
+description: Builds the quantum register by assigning physical coordinates to each node (qubit) from the graph.
+---
+
+# Createinitialregister
+
+> Builds the quantum register by assigning physical coordinates to each node (qubit) from the graph.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(node_ids: List[any], coordinates_layout: Dict) -> tuple[Register, Dict]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,38 @@
+---
+import CatalogLayout from "../../layouts/CatalogLayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const atoms = await getCollection("atoms");
+  const types = [...new Set(atoms.map((a) => a.data.concept_type))];
+  return types.map((concept_type) => ({
+    params: { concept_type },
+    props: {
+      concept_type,
+      items: atoms
+        .filter((a) => a.data.concept_type === concept_type)
+        .map((a) => ({
+          slug: a.id,
+          href: `/atoms/${a.id}`,
+          title: a.data.title,
+          description: a.data.informal_desc,
+          tags: [a.data.domain, a.data.repo],
+        })),
+    },
+  }));
+}
+
+const { concept_type, items } = Astro.props;
+const label = concept_type.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+---
+
+<CatalogLayout
+  title={`${label} Atoms`}
+  description={`${items.length} atoms classified as ${label}.`}
+  items={items}
+  breadcrumbs={[
+    { label: "Atlas", href: "/" },
+    { label: "Concepts", href: "/atoms" },
+    { label: label, href: `/concept/${concept_type}` },
+  ]}
+/>

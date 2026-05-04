@@ -1,0 +1,71 @@
+---
+cdg_asset_id: solution.kaggle.petfinder_adoption_1st
+title: PetFinder.my Adoption Prediction 1st Place — Multimodal Ordinal Classification with Threshold Optimization
+description: Predict how quickly a pet will be adopted by combining information from its photos, text description, and profile data, training multiple models and then optim…
+problem_statement: Ordinal adoption speed prediction from pet images, text descriptions, and tabular metadata via DenseNet121 image embeddings, TF-IDF/SVD text features, target-encoded tabular features, an XGBoost/LightGBM/TabNet ensemble, and Nelder-Mead threshold optimization for Quadratic Weighted Kappa.
+platform: kaggle
+competition_name: PetFinder.my Adoption Prediction - 1st Place (2019)
+placement: 1st
+year: 2019
+domain: multimodal_classification
+paradigm: optimization
+family: multimodal_classification
+tags:
+  - multimodal_ordinal_regression
+  - image_text_tabular_fusion
+  - threshold_optimized_classification
+  - qwk_optimization
+  - pet_adoption_prediction
+  - nelder_mead_threshold
+  - densenet_image_embedding
+  - tfidf_svd_text
+  - target_encoding
+  - ordinal_bin_optimization
+  - quadratic_weighted_kappa
+  - xgboost_lightgbm_tabnet_ensemble
+  - sentiment_features
+key_insight: Nelder-Mead threshold optimization on QWK is the critical stage -- it converts continuous regression outputs into optimal ordinal bins, which is non-obvious because naive rounding loses significant QWK score. By treating the regression-to-ordinal conversion as a separate optimization problem with a derivative-free solver, the pipeline decouples learning the ranking from learning the bin boundaries, and the 4-threshold search space is small enough for Nelder-Mead to find near-global optima.
+failure_modes:
+  - "Nelder-Mead finds a local optimum: QWK landscape can have multiple local optima, especially with skewed class distributions — multiple random restarts are needed"
+  - "Target encoding leakage: if not properly cross-validated, target encoding inflates validation QWK and thresholds overfit"
+  - "Class distribution shift between train and test: thresholds optimized on training distribution produce suboptimal bins on a shifted test distribution"
+  - "Dominant modality drowns out others: if tabular features overwhelm image/text features in the flat concatenation, the ensemble effectively ignores visual and textual signal"
+source_url: https://www.kaggle.com/competitions/petfinder-adoption-prediction/discussion/88773
+source_license: null
+---
+
+# PetFinder.my Adoption Prediction 1st Place — Multimodal Ordinal Classification with Threshold Optimization
+
+## Problem
+
+Ordinal adoption speed prediction from pet images, text descriptions, and tabular metadata via DenseNet121 image embeddings, TF-IDF/SVD text features, target-encoded tabular features, an XGBoost/LightGBM/TabNet ensemble, and Nelder-Mead threshold optimization for Quadratic Weighted Kappa.
+
+## Approach
+
+Predict how quickly a pet will be adopted by combining information from its photos, text description, and profile data, training multiple models and then optimizing the cutoff points between adoption speed categories.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.petfinder_adoption_1st" readOnly={true} /> */}
+
+1. **Image Processing** -- Use a pretrained image model to extract numerical features from pet photos, capturing visual attributes like breed appearance and photo quality.
+1. **Text Processing** -- Convert text descriptions into numerical features by measuring word importance and reducing to key themes, plus add sentiment analysis scores.
+1. **Tabular Processing** -- Convert categorical attributes like breed and location into numbers based on how they relate to the target variable, and compute summary statistics grouped by key attributes.
+1. **Feature Union** -- Combine all the different types of features side by side into one wide table for model training.
+1. **Level-1 Models** -- Train multiple different prediction models that each output a continuous score estimating adoption speed.
+1. **Threshold Optimization** -- Find the best cutoff points to convert continuous scores into the 5 adoption speed categories, searching for the cutoffs that give the highest agreement with true labels.
+
+## Key Insight
+
+Nelder-Mead threshold optimization on QWK is the critical stage -- it converts continuous regression outputs into optimal ordinal bins, which is non-obvious because naive rounding loses significant QWK score. By treating the regression-to-ordinal conversion as a separate optimization problem with a derivative-free solver, the pipeline decouples learning the ranking from learning the bin boundaries, and the 4-threshold search space is small enough for Nelder-Mead to find near-global optima.
+
+## Failure Modes
+
+- Nelder-Mead finds a local optimum: QWK landscape can have multiple local optima, especially with skewed class distributions — multiple random restarts are needed
+- Target encoding leakage: if not properly cross-validated, target encoding inflates validation QWK and thresholds overfit
+- Class distribution shift between train and test: thresholds optimized on training distribution produce suboptimal bins on a shifted test distribution
+- Dominant modality drowns out others: if tabular features overwhelm image/text features in the flat concatenation, the ensemble effectively ignores visual and textual signal
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.petfinder_adoption_1st" label="Reproduce this solution in Sciona" /> */}

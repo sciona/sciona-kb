@@ -1,0 +1,69 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.integrate_leapfrog_proposal
+predicate_id: integrate_leapfrog_proposal
+repo: sciona-atoms
+domain: inference
+type_signature: "(state_in.positions: Tensor[n_chains, dim], momentum_0: Tensor[n_chains, dim], grad_half_0: Tensor[n_chains, dim], kernel_spec.step_size: scalar, kernel_spec.n_leapfrog: usize, logp_oracle: callable(position_batch) -> Tensor[n_chains]) -> tuple[Tensor[n_chains, dim], Tensor[n_chains, dim], Tensor[n_chains], Tensor[n_chains, dim]]"
+informal_desc: Run n_leapfrog symplectic updates to produce proposed positions/momenta and final proposed log density.
+conceptual_summary: ""
+inputs:
+  - name: state_in.positions
+    type_desc: Tensor[n_chains, dim]
+    constraints: Initial position.
+  - name: momentum_0
+    type_desc: Tensor[n_chains, dim]
+    constraints: Initial momentum.
+  - name: grad_half_0
+    type_desc: Tensor[n_chains, dim]
+    constraints: Initial half-step momentum increment.
+  - name: kernel_spec.step_size
+    type_desc: float
+    constraints: Leapfrog step size.
+  - name: kernel_spec.n_leapfrog
+    type_desc: int
+    constraints: Number of integration steps.
+  - name: logp_oracle
+    type_desc: Callable
+    constraints: Differentiable oracle.
+outputs:
+  - name: proposed_positions
+    type_desc: Tensor[n_chains, dim]
+    constraints: Position after leapfrog integration.
+  - name: proposed_momenta
+    type_desc: Tensor[n_chains, dim]
+    constraints: Momentum after leapfrog integration.
+  - name: logp_proposed
+    type_desc: Tensor[n_chains]
+    constraints: Unnormalized log density at proposed positions.
+  - name: grad_half_last
+    type_desc: Tensor[n_chains, dim]
+    constraints: Final half-step gradient increment from last leapfrog substep.
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Integrate_leapfrog_proposal
+description: Run n_leapfrog symplectic updates to produce proposed positions/momenta and final proposed log density.
+---
+
+# Integrate_leapfrog_proposal
+
+> Run n_leapfrog symplectic updates to produce proposed positions/momenta and final proposed log density.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(state_in.positions: Tensor[n_chains, dim], momentum_0: Tensor[n_chains, dim], grad_half_0: Tensor[n_chains, dim], kernel_spec.step_size: scalar, kernel_spec.n_leapfrog: usize, logp_oracle: callable(position_batch) -> Tensor[n_chains]) -> tuple[Tensor[n_chains, dim], Tensor[n_chains, dim], Tensor[n_chains], Tensor[n_chains, dim]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

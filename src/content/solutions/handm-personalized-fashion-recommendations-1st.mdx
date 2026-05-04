@@ -1,0 +1,60 @@
+---
+cdg_asset_id: solution.kaggle.handm_personalized_fashion_recommendations_1st
+title: H&M Personalized Fashion Recommendations - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by H&M Personalized Fashion Recommendations - 1st Place (2022): prepare the data, build task-specific representat…"
+problem_statement: "Information Retrieval / Candidate generation solution template for H&M Personalized Fashion Recommendations - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Trend generation, Collaborative filtering, Candidate merging, Feature engineering, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: H&M Personalized Fashion Recommendations - 1st Place (2022)
+placement: 1st
+year: 2022
+domain: nlp_span_detection
+paradigm: signal_filter
+family: nlp_span_detection
+tags:
+  - lightgbm
+  - information
+  - retrieval
+  - candidate
+  - generation
+key_insight: "The load-bearing idea is the pipeline topology: Trend generation creates the representation needed by Ranking model, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324070
+source_license: null
+---
+
+# H&M Personalized Fashion Recommendations - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+Information Retrieval / Candidate generation solution template for H&M Personalized Fashion Recommendations - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Trend generation, Collaborative filtering, Candidate merging, Feature engineering, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by H&M Personalized Fashion Recommendations - 1st Place (2022): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.handm_personalized_fashion_recommendations_1st" readOnly={true} /> */}
+
+1. **Trend generation** -- This stage compute the top 100 most popular items in the trailing 2 weeks (pandas).
+1. **Collaborative filtering** -- This stage use Alternating Least Squares (ALS) to generate matrix factorization candidates for users (implicit).
+1. **Candidate merging** -- This stage union trend candidates, ALS candidates, and historically purchased items into a master pool.
+1. **Feature engineering** -- This stage calculate user spending power, item price trends, and seasonal overlap (pandas).
+1. **Ranking model** -- This stage train LightGBM in Ranker mode (Lambdarank) optimizing for MAP@12.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Trend generation creates the representation needed by Ranking model, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.handm_personalized_fashion_recommendations_1st" label="Reproduce this solution in Sciona" /> */}

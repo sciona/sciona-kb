@@ -1,0 +1,59 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.integrator.assembletransitionresult
+predicate_id: assembletransitionresult
+repo: sciona-atoms
+domain: inference
+type_signature: "(collect_full_trajectory: Bool, trajectory_accum_next: Nothing | Vector{P}, loop_state_next: {..., z_current}, is_valid: Bool) -> tuple[P | Vector{P}, Bool]"
+informal_desc: "Choose final return payload from terminal state: full trajectory when requested, otherwise final phase-point; propagate validity flag."
+conceptual_summary: ""
+inputs:
+  - name: collect_full_trajectory
+    type_desc: Bool
+    constraints: isinstance(x, bool)
+  - name: trajectory_accum_next
+    type_desc: Optional[np.ndarray]
+    constraints: must be non-nothing when collect_full_trajectory is true
+  - name: loop_state_next
+    type_desc: object
+    constraints: z_current is the terminal phase-point
+  - name: is_valid
+    type_desc: Bool
+    constraints: terminal validity from loop
+outputs:
+  - name: h_next
+    type_desc: object
+    constraints: Vector{P} if collect_full_trajectory else P
+  - name: is_valid
+    type_desc: Bool
+    constraints: unchanged pass-through
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for leapfrog Hamiltonian phase-point updates.
+  - title: advancedhmc2020
+    citation: Package paper for the AdvancedHMC.jl integrator family that this NumPy atom mirrors at a compact phase-point level.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper is a local NumPy implementation rather than a direct Julia object binding.
+title: Assembletransitionresult
+description: "Choose final return payload from terminal state: full trajectory when requested, otherwise final phase-point; propagate validity flag."
+---
+
+# Assembletransitionresult
+
+> Choose final return payload from terminal state: full trajectory when requested, otherwise final phase-point; propagate validity flag.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(collect_full_trajectory: Bool, trajectory_accum_next: Nothing | Vector{P}, loop_state_next: {..., z_current}, is_valid: Bool) -> tuple[P | Vector{P}, Bool]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

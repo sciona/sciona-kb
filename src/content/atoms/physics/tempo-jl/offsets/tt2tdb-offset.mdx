@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.physics.tempo_jl.offsets.tt2tdb_offset
+predicate_id: tt2tdb_offset
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(seconds: float | array-like of floats) -> float | array-like of floats"
+informal_desc: Computes the relativistic time scale offset between Terrestrial Time (TT) and Barycentric Dynamical Time (TDB) in seconds, using a sinusoidal approximation of the periodic correction term derived from Earth's orbital eccentricity.
+conceptual_summary: PeriodicPhaseOffsetFromElapsedScalar. Maps a monotonically increasing scalar (elapsed time or phase accumulator) to a bounded periodic correction term by evaluating a sinusoidal function whose argument is a linear function of the input.
+inputs:
+  - name: seconds
+    type_desc: float | np.ndarray
+    constraints: scalar or array of elapsed seconds from J2000
+outputs:
+  - name: offset
+    type_desc: float | np.ndarray
+    constraints: shape-preserving TT to TDB offset in seconds
+concept_type: time_conversion
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: urban2013almanac
+    citation: Broad astronomical time-scale attribution.
+  - title: repo_tempo_jl
+    citation: Primary Tempo.jl software attribution.
+title: Tt2tdb_offset
+description: Computes the relativistic time scale offset between Terrestrial Time (TT) and Barycentric Dynamical Time (TDB) in seconds, using a sinusoidal approximation of …
+---
+
+# Tt2tdb_offset
+
+> Computes the relativistic time scale offset between Terrestrial Time (TT) and Barycentric Dynamical Time (TDB) in seconds, using a sinusoidal approximation of the periodic correction term derived from Earth's orbital eccentricity.
+
+## Conceptual Summary
+
+PeriodicPhaseOffsetFromElapsedScalar. Maps a monotonically increasing scalar (elapsed time or phase accumulator) to a bounded periodic correction term by evaluating a sinusoidal function whose argument is a linear function of the input.
+
+## Type Signature
+
+```
+(seconds: float | array-like of floats) -> float | array-like of floats
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

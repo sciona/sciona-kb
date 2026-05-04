@@ -1,0 +1,56 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.kthohr_mcmc.aees.targetlogkerneloracle
+predicate_id: targetlogkerneloracle
+repo: sciona-atoms
+domain: inference
+type_signature: "(state_candidate: object, temper_val: float) -> float"
+informal_desc: Stateless oracle that evaluates target log-kernel values for candidate/current states used by MH acceptance logic.
+conceptual_summary: "TemperedLogMeasureEvaluator. Maps a single state element from an arbitrary measurable space and a scalar scaling parameter to a real-valued log score representing that state's compatibility with a target measure. The operation evaluates an unnormalized log-kernel (equivalently, negative energy up to constants) at one point, with the scaling parameter modulating concentration/dispersion of the score landscape. It performs no state transition or normalization; it provides a pointwise scalar used by downstream stochastic decision rules.. Applications: Molecular conformation sampling: score candidate geometries via tempered log-potential before accept/reject moves., Bayesian inverse problems in geophysics: evaluate tempered log-posterior for candidate field configurations during stochastic exploration., Robotics trajectory inference: assign tempered log-likelihood to candidate latent motion states in sequential Monte Carlo or MCMC pipelines., Generative model latent-space sampling: compute tempered log-density of candidate latent vectors for transition acceptance criteria."
+inputs:
+  - name: state_candidate
+    type_desc: np.ndarray
+    required: true
+  - name: weights
+    type_desc: np.ndarray
+    required: true
+  - name: means
+    type_desc: np.ndarray
+    required: true
+  - name: variances
+    type_desc: np.ndarray
+    required: true
+  - name: temper_val
+    type_desc: float
+    required: false
+outputs:
+  - name: result
+    type_desc: float
+concept_type: probabilistic_oracle
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kou2006equi
+    citation: Source-shaped AEES local Metropolis step attribution.
+  - title: repo_mcmc
+    citation: Upstream implementation is mapped to the vendored mcmc repository.
+title: Targetlogkerneloracle
+description: Stateless oracle that evaluates target log-kernel values for candidate/current states used by MH acceptance logic.
+---
+
+# Targetlogkerneloracle
+
+> Stateless oracle that evaluates target log-kernel values for candidate/current states used by MH acceptance logic.
+
+## Conceptual Summary
+
+TemperedLogMeasureEvaluator. Maps a single state element from an arbitrary measurable space and a scalar scaling parameter to a real-valued log score representing that state's compatibility with a target measure. The operation evaluates an unnormalized log-kernel (equivalently, negative energy up to constants) at one point, with the scaling parameter modulating concentration/dispersion of the score landscape. It performs no state transition or normalization; it provides a pointwise scalar used by downstream stochastic decision rules.. Applications: Molecular conformation sampling: score candidate geometries via tempered log-potential before accept/reject moves., Bayesian inverse problems in geophysics: evaluate tempered log-posterior for candidate field configurations during stochastic exploration., Robotics trajectory inference: assign tempered log-likelihood to candidate latent motion states in sequential Monte Carlo or MCMC pipelines., Generative model latent-space sampling: compute tempered log-density of candidate latent vectors for transition acceptance criteria.
+
+## Type Signature
+
+```
+(state_candidate: object, temper_val: float) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

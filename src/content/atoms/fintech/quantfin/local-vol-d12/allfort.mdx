@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.fintech.quantfin.local_vol_d12.allfort
+predicate_id: allfort
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(map: Any, quotes: Any, sts: Any, t': Any, x: Any) -> Any"
+informal_desc: ""
+conceptual_summary: ""
+inputs:
+  - name: map
+    type_desc: Callable[..., list[float]]
+    constraints: map-like higher-order function
+  - name: quotes
+    type_desc: dict[tuple[float, float], float]
+    constraints: quoted implied volatilities
+  - name: sts
+    type_desc: list[float]
+    constraints: grid strikes
+  - name: t_prime
+    type_desc: float
+    constraints: target maturity value
+  - name: x
+    type_desc: float
+    constraints: workspace strike scalar
+outputs:
+  - name: quote_slice
+    type_desc: list[float]
+    constraints: one quoted volatility per strike
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: gatheral2006
+    citation: Local-volatility / vol-surface attribution.
+  - title: repo_quantfin
+    citation: Upstream implementation is mapped to the vendored quantfin repository.
+title: Allfort
+description: ""
+---
+
+# Allfort
+
+> 
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(map: Any, quotes: Any, sts: Any, t': Any, x: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

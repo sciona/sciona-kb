@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.updatestatewithimprovementcriterion
+predicate_id: updatestatewithimprovementcriterion
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(current_iteration_state: object, candidate_permutation: list[int], candidate_matrix: np.ndarray, candidate_bandwidth: int) -> tuple[object, bool]"
+informal_desc: Apply iteration budget checks, compare candidate vs current bandwidth, and either accept the candidate state or terminate without update.
+conceptual_summary: ""
+inputs:
+  - name: current_iteration_state
+    type_desc: object
+    constraints: Contains working_matrix, accumulated_permutation, bandwidth, remaining_iterations
+  - name: candidate_permutation
+    type_desc: list[int]
+    constraints: Permutation proposed for this iteration
+  - name: candidate_matrix
+    type_desc: np.ndarray
+    constraints: Permuted working matrix for this iteration
+  - name: candidate_bandwidth
+    type_desc: int
+    constraints: Bandwidth of candidate_matrix
+outputs:
+  - name: next_iteration_state
+    type_desc: object
+    constraints: Counter decremented; if candidate improves bandwidth, state is updated, otherwise state remains effectively terminal
+  - name: continue_search
+    type_desc: bool
+    constraints: True only when candidate_bandwidth < current bandwidth and budget not exhausted
+concept_type: greedy
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Updatestatewithimprovementcriterion
+description: Apply iteration budget checks, compare candidate vs current bandwidth, and either accept the candidate state or terminate without update.
+---
+
+# Updatestatewithimprovementcriterion
+
+> Apply iteration budget checks, compare candidate vs current bandwidth, and either accept the candidate state or terminate without update.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(current_iteration_state: object, candidate_permutation: list[int], candidate_matrix: np.ndarray, candidate_bandwidth: int) -> tuple[object, bool]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.optimizeregisterlayout
+predicate_id: optimizeregisterlayout
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(initial_register: Register, original_weight_array: np.ndarray) -> tuple[Register, List[float], List[int]]"
+informal_desc: Finds and applies a permutation to the register and weights to minimize the interaction bandwidth, aiming to improve simulation efficiency.
+conceptual_summary: ""
+inputs:
+  - name: initial_register
+    type_desc: Register
+    constraints: Unoptimized pulser_analog.Register object.
+  - name: original_weight_array
+    type_desc: np.ndarray
+    constraints: 1D array of node weights, ordered according to initial_register.
+outputs:
+  - name: optimized_register
+    type_desc: Register
+    constraints: Permuted pulser_analog.Register object.
+  - name: permuted_weights
+    type_desc: List[float]
+    constraints: List of weights, reordered according to the optimized layout.
+  - name: permutation_list
+    type_desc: List[int]
+    constraints: The permutation indices used to reorder the register.
+concept_type: graph_optimization
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Optimizeregisterlayout
+description: Finds and applies a permutation to the register and weights to minimize the interaction bandwidth, aiming to improve simulation efficiency.
+---
+
+# Optimizeregisterlayout
+
+> Finds and applies a permutation to the register and weights to minimize the interaction bandwidth, aiming to improve simulation efficiency.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(initial_register: Register, original_weight_array: np.ndarray) -> tuple[Register, List[float], List[int]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.lyft_3d_object_detection_1st
+title: Lyft 3D Object Detection for Autonomous Vehicles - 1st Place (2019) - Pipeline Template
+description: "This template captures the ordered steps used by Lyft 3D Object Detection for Autonomous Vehicles - 1st Place (2019): prepare the data, build task-specific rep…"
+problem_statement: "3D Object Detection (LiDAR Point Clouds) solution template for Lyft 3D Object Detection for Autonomous Vehicles - 1st Place (2019), modeled as a 5-stage deterministic pipeline: Voxelization, PointPillars encoding, Multi-modal fusion, 2D CNN Backbone, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Lyft 3D Object Detection for Autonomous Vehicles - 1st Place (2019)
+placement: ""
+year: 0
+domain: object_detection_2d
+paradigm: neural_network
+family: object_detection_2d
+tags:
+  - object
+  - detection
+  - lidar
+  - point
+  - clouds
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Voxelization creates the representation needed by Box-NMS, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/3d-object-detection-for-autonomous-vehicles/discussion/119958
+source_license: null
+---
+
+# Lyft 3D Object Detection for Autonomous Vehicles - 1st Place (2019) - Pipeline Template
+
+## Problem
+
+3D Object Detection (LiDAR Point Clouds) solution template for Lyft 3D Object Detection for Autonomous Vehicles - 1st Place (2019), modeled as a 5-stage deterministic pipeline: Voxelization, PointPillars encoding, Multi-modal fusion, 2D CNN Backbone, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Lyft 3D Object Detection for Autonomous Vehicles - 1st Place (2019): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.lyft_3d_object_detection_1st" readOnly={true} /> */}
+
+1. **Voxelization** -- This stage discretize the continuous LiDAR point cloud into a structured 3D grid of voxels (custom C++ / numpy).
+1. **PointPillars encoding** -- This stage project the voxels vertically to convert the 3D space into a dense 2D pseudo-image (Bird's Eye View) (PyTorch).
+1. **Multi-modal fusion** -- This stage project the 2D bounding boxes from camera images onto the 3D LiDAR space to "paint" the point cloud with RGB features (OpenCV).
+1. **2D CNN Backbone** -- This stage pass the BEV pseudo-image through a standard 2D CNN (ResNet/FPN) to predict 3D bounding box dimensions, rotation, and class (PyTorch).
+1. **Box-NMS** -- This stage apply Non-Maximum Suppression specifically designed for rotated 3D boxes to drop overlapping predictions (numpy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Voxelization creates the representation needed by Box-NMS, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.lyft_3d_object_detection_1st" label="Reproduce this solution in Sciona" /> */}

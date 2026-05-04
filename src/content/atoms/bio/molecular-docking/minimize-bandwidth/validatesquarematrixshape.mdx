@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.validatesquarematrixshape
+predicate_id: validatesquarematrixshape
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mat: 2D numeric ndarray) -> 2D numeric ndarray"
+informal_desc: Check that the input matrix has identical row and column counts; fail if not square.
+conceptual_summary: ""
+inputs:
+  - name: mat
+    type_desc: np.ndarray
+    constraints: must have shape (n, n)
+outputs:
+  - name: square_mat
+    type_desc: np.ndarray
+    constraints: same data as input, guaranteed square
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Validatesquarematrixshape
+description: Check that the input matrix has identical row and column counts; fail if not square.
+---
+
+# Validatesquarematrixshape
+
+> Check that the input matrix has identical row and column counts; fail if not square.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mat: 2D numeric ndarray) -> 2D numeric ndarray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

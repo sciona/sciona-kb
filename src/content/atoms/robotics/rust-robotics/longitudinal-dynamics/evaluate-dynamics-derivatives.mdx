@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.longitudinal_dynamics.evaluate_dynamics_derivatives
+predicate_id: evaluate_dynamics_derivatives
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(x: state vector, u: input/control vector, _t: float) -> state derivative vector"
+informal_desc: Compute state derivatives for the system dynamics.
+conceptual_summary: evaluate_dynamics_derivatives
+inputs:
+  - name: x
+    type_desc: np.ndarray
+    constraints: shape must match model state dimension
+  - name: u
+    type_desc: np.ndarray
+    constraints: shape must match input dimension
+  - name: _t
+    type_desc: float
+    constraints: time scalar; may be unused
+outputs:
+  - name: x_dot
+    type_desc: np.ndarray
+    constraints: same state dimension as x
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Evaluate_dynamics_derivatives
+description: Compute state derivatives for the system dynamics.
+---
+
+# Evaluate_dynamics_derivatives
+
+> Compute state derivatives for the system dynamics.
+
+## Conceptual Summary
+
+evaluate_dynamics_derivatives
+
+## Type Signature
+
+```
+(x: state vector, u: input/control vector, _t: float) -> state derivative vector
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

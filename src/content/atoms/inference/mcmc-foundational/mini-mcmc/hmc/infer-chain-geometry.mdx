@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.infer_chain_geometry
+predicate_id: infer_chain_geometry
+repo: sciona-atoms
+domain: inference
+type_signature: "(chain_state_in: StateModelSpec) -> tuple[usize, usize, Tensor<B,2>]"
+informal_desc: Extract chain count and latent dimension from the current position tensor shape.
+conceptual_summary: ""
+inputs:
+  - name: chain_state_in
+    type_desc: StateModelSpec
+    constraints: contains positions tensor with shape [n_chains, dim]
+outputs:
+  - name: n_chains
+    type_desc: int
+    constraints: "> 0"
+  - name: dim
+    type_desc: int
+    constraints: "> 0"
+  - name: positions_current
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+concept_type: dimensionality_reduction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Infer_chain_geometry
+description: Extract chain count and latent dimension from the current position tensor shape.
+---
+
+# Infer_chain_geometry
+
+> Extract chain count and latent dimension from the current position tensor shape.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(chain_state_in: StateModelSpec) -> tuple[usize, usize, Tensor<B,2>]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

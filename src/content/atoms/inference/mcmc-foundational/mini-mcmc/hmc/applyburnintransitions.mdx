@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.applyburnintransitions
+predicate_id: applyburnintransitions
+repo: sciona-atoms
+domain: inference
+type_signature: "(hmc_state_in: StateModelSpec, n_discard: int) -> StateModelSpec"
+informal_desc: Advance the HMC kernel for discard iterations and return the post-burn-in state.
+conceptual_summary: ""
+inputs:
+  - name: hmc_state_in
+    type_desc: StateModelSpec
+    constraints: valid kernel state
+  - name: n_discard
+    type_desc: int
+    constraints: ">= 0"
+outputs:
+  - name: hmc_state_burned_in
+    type_desc: StateModelSpec
+    constraints: state after exactly n_discard transitions
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Applyburnintransitions
+description: Advance the HMC kernel for discard iterations and return the post-burn-in state.
+---
+
+# Applyburnintransitions
+
+> Advance the HMC kernel for discard iterations and return the post-burn-in state.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(hmc_state_in: StateModelSpec, n_discard: int) -> StateModelSpec
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

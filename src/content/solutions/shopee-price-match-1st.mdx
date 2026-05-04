@@ -1,0 +1,67 @@
+---
+cdg_asset_id: solution.kaggle.shopee_price_match_1st
+title: Shopee Price Match Guarantee 1st Place — Multimodal ArcFace Retrieval with Graph Matching
+description: Find matching products by computing visual and textual similarity scores, combining them, finding all pairs above a confidence threshold, and grouping connecte…
+problem_statement: Multimodal product matching using ArcFace-trained image embeddings (NFNet/ResNeXt), multilingual BERT and TF-IDF text embeddings, L2-normalized fusion, RAPIDS cuML cosine similarity search, dynamic thresholding, and connected component extraction for final group assignment.
+platform: kaggle
+competition_name: Shopee Price Match Guarantee 1st Place — Multimodal ArcFace Retrieval with Graph Matching
+placement: ""
+year: 0
+domain: multimodal_retrieval
+paradigm: neural_network
+family: multimodal_retrieval
+tags:
+  - arcface_embedding
+  - multimodal_retrieval
+  - image_text_fusion
+  - cosine_similarity_search
+  - connected_component_grouping
+  - multilingual_text
+  - product_matching
+  - near_duplicate_detection
+  - metric_learning
+  - large_scale_retrieval
+  - e_commerce
+key_insight: "ArcFace margin loss transforms the embedding space so that cosine similarity becomes a reliable proxy for semantic equivalence: it enforces an angular margin between classes, meaning the threshold for 'same product' is geometrically well-separated from 'different product'. This makes the downstream thresholding step robust rather than fragile. Connected components then propagate transitive matches, recovering groups that no single pairwise comparison would capture."
+failure_modes:
+  - "Connected component error propagation: one false-positive match can merge two unrelated product groups, and the error is irrecoverable without post-hoc splitting"
+  - "Modality mismatch: products with identical images but different text (or vice versa) produce ambiguous fused embeddings — the fusion weights must reflect which modality is more discriminative for the domain"
+  - "Threshold sensitivity on non-ArcFace embeddings: without angular margin training, the similarity distribution has no clean separation gap, making any fixed threshold fragile"
+source_url: ""
+source_license: null
+---
+
+# Shopee Price Match Guarantee 1st Place — Multimodal ArcFace Retrieval with Graph Matching
+
+## Problem
+
+Multimodal product matching using ArcFace-trained image embeddings (NFNet/ResNeXt), multilingual BERT and TF-IDF text embeddings, L2-normalized fusion, RAPIDS cuML cosine similarity search, dynamic thresholding, and connected component extraction for final group assignment.
+
+## Approach
+
+Find matching products by computing visual and textual similarity scores, combining them, finding all pairs above a confidence threshold, and grouping connected matches together.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.shopee_price_match_1st" readOnly={true} /> */}
+
+1. **Image Embedding** -- Convert each product image into a compact 512-number fingerprint using a deep neural network trained so that images of the same product end up close together and different products end up far apart.
+1. **Text Embedding** -- Convert each product description into a numeric fingerprint using both a deep language model (for meaning) and a word-frequency method (for exact word matches).
+1. **Embedding Fusion** -- Combine the image and text fingerprints into one unified fingerprint and normalize its length.
+1. **Pairwise Similarity** -- Compare every product's fingerprint against every other product's fingerprint to find the most similar pairs, using GPU acceleration for speed.
+1. **Dynamic Thresholding** -- Decide which product pairs are actual matches by applying a confidence cutoff, potentially adjusting the cutoff based on how similar each product's neighbors are.
+1. **Connected Components** -- Group all matched product pairs into clusters by following chains of matches: if A matches B and B matches C, then A, B, and C are all in the same group.
+
+## Key Insight
+
+ArcFace margin loss transforms the embedding space so that cosine similarity becomes a reliable proxy for semantic equivalence: it enforces an angular margin between classes, meaning the threshold for 'same product' is geometrically well-separated from 'different product'. This makes the downstream thresholding step robust rather than fragile. Connected components then propagate transitive matches, recovering groups that no single pairwise comparison would capture.
+
+## Failure Modes
+
+- Connected component error propagation: one false-positive match can merge two unrelated product groups, and the error is irrecoverable without post-hoc splitting
+- Modality mismatch: products with identical images but different text (or vice versa) produce ambiguous fused embeddings — the fusion weights must reflect which modality is more discriminative for the domain
+- Threshold sensitivity on non-ArcFace embeddings: without angular margin training, the similarity distribution has no clean separation gap, making any fixed threshold fragile
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.shopee_price_match_1st" label="Reproduce this solution in Sciona" /> */}

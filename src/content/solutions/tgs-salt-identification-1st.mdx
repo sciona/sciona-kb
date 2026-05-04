@@ -1,0 +1,60 @@
+---
+cdg_asset_id: solution.kaggle.tgs_salt_identification_1st
+title: TGS Salt Identification Challenge - 1st Place (2018) - Pipeline Template
+description: "This template captures the ordered steps used by TGS Salt Identification Challenge - 1st Place (2018): prepare the data, build task-specific representations, r…"
+problem_statement: "Image Segmentation (Seismic Data) solution template for TGS Salt Identification Challenge - 1st Place (2018), modeled as a 5-stage deterministic pipeline: Depth feature fusion, U-Net Backbone, Spatial SE Block, Lovász-Softmax Loss, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: TGS Salt Identification Challenge - 1st Place (2018)
+placement: ""
+year: 0
+domain: semantic_segmentation
+paradigm: loss_function
+family: semantic_segmentation
+tags:
+  - segmentation
+  - image
+  - seismic
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Depth feature fusion creates the representation needed by Ensembling with TTA, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/tgs-salt-identification-challenge/discussion/69106
+source_license: null
+---
+
+# TGS Salt Identification Challenge - 1st Place (2018) - Pipeline Template
+
+## Problem
+
+Image Segmentation (Seismic Data) solution template for TGS Salt Identification Challenge - 1st Place (2018), modeled as a 5-stage deterministic pipeline: Depth feature fusion, U-Net Backbone, Spatial SE Block, Lovász-Softmax Loss, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by TGS Salt Identification Challenge - 1st Place (2018): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.tgs_salt_identification_1st" readOnly={true} /> */}
+
+1. **Depth feature fusion** -- This stage explicitly broadcast the 1D depth coordinate of the seismic slice across the entire X-axis and concatenate it as an additional channel to the 2D seismic image (numpy).
+1. **U-Net Backbone** -- This stage train a U-Net with a ResNet34 backbone on the augmented 2D slices (PyTorch).
+1. **Spatial SE Block** -- This stage implement custom Spatial Squeeze-and-Excitation blocks to allow the network to weigh specific spatial regions over others (PyTorch).
+1. **Lovász-Softmax Loss** -- This stage initialize training with BCE loss, then switch entirely to Lovász-Softmax loss directly optimizing the Intersection-over-Union (IoU) metric without mathematically smooth approximations.
+1. **Ensembling with TTA** -- This stage sum the mask probabilities from 5-fold cross-validation utilizing Test-Time Augmentation (horizontal flips) and threshold at 0.5.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Depth feature fusion creates the representation needed by Ensembling with TTA, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.tgs_salt_identification_1st" label="Reproduce this solution in Sciona" /> */}

@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.arc_program_synthesis_1st
+title: Abstraction and Reasoning Challenge (ARC) - 1st Place (2020) - Pipeline Template
+description: "This template captures the ordered steps used by Abstraction and Reasoning Challenge (ARC) - 1st Place (2020): prepare the data, build task-specific representa…"
+problem_statement: "Program Synthesis / Cellular Automata solution template for Abstraction and Reasoning Challenge (ARC) - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Grid translation, DSL Construction, Tree Search, Program Validation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Abstraction and Reasoning Challenge (ARC) - 1st Place (2020)
+placement: ""
+year: 0
+domain: program_synthesis
+paradigm: searching
+family: program_synthesis
+tags:
+  - program_synthesis
+  - program
+  - synthesis
+  - cellular
+  - automata
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Grid translation creates the representation needed by Inference, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/abstraction-and-reasoning-challenge/discussion/154597
+source_license: null
+---
+
+# Abstraction and Reasoning Challenge (ARC) - 1st Place (2020) - Pipeline Template
+
+## Problem
+
+Program Synthesis / Cellular Automata solution template for Abstraction and Reasoning Challenge (ARC) - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Grid translation, DSL Construction, Tree Search, Program Validation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Abstraction and Reasoning Challenge (ARC) - 1st Place (2020): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.arc_program_synthesis_1st" readOnly={true} /> */}
+
+1. **Grid translation** -- This stage convert the 2D visual color grids into discrete graph representations (connected components, bounding boxes, internal shapes) (custom Python).
+1. **DSL Construction** -- This stage define a Domain Specific Language (DSL) consisting of standard functional primitives (e.g., rotate, fill, translate, intersect).
+1. **Tree Search** -- This stage implement an A* search algorithm to iteratively combine DSL primitives into candidate functional programs.
+1. **Program Validation** -- This stage execute the candidate programs against the provided "train" input grids; if the output matches the "train" output grids perfectly, save the program.
+1. **Inference** -- This stage apply the successfully discovered functional program to the unseen "test" input grid to generate the final prediction (Python).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Grid translation creates the representation needed by Inference, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.arc_program_synthesis_1st" label="Reproduce this solution in Sciona" /> */}

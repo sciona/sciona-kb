@@ -1,0 +1,60 @@
+---
+cdg_asset_id: solution.kaggle.aimo_llm_tool_use_topology
+title: AI Mathematical Olympiad (AIMO) Prize - Top Solution Topology (2024) - Pipeline Template
+description: "This template captures the ordered steps used by AI Mathematical Olympiad (AIMO) Prize - Top Solution Topology (2024): prepare the data, build task-specific re…"
+problem_statement: "Automated Reasoning / LLM Tool Use solution template for AI Mathematical Olympiad (AIMO) Prize - Top Solution Topology (2024), modeled as a 5-stage deterministic pipeline: Prompt injection, Code Generation, Sandbox Execution, Reflection Loop, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: AI Mathematical Olympiad (AIMO) Prize - Top Solution Topology (2024)
+placement: ""
+year: 0
+domain: llm_tool_use
+paradigm: external_tool
+family: llm_tool_use
+tags:
+  - llm_tool_use
+  - automated
+  - reasoning
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Prompt injection creates the representation needed by Majority Voting, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/516086
+source_license: null
+---
+
+# AI Mathematical Olympiad (AIMO) Prize - Top Solution Topology (2024) - Pipeline Template
+
+## Problem
+
+Automated Reasoning / LLM Tool Use solution template for AI Mathematical Olympiad (AIMO) Prize - Top Solution Topology (2024), modeled as a 5-stage deterministic pipeline: Prompt injection, Code Generation, Sandbox Execution, Reflection Loop, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by AI Mathematical Olympiad (AIMO) Prize - Top Solution Topology (2024): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.aimo_llm_tool_use_topology" readOnly={true} /> */}
+
+1. **Prompt injection** -- This stage wrap the math problem in a system prompt instructing the LLM to write a Python script to solve it algebraically (HuggingFace).
+1. **Code Generation** -- This stage run a fine-tuned Code Llama or DeepSeek-Math LLM to generate the raw Python code (vLLM).
+1. **Sandbox Execution** -- This stage execute the generated Python code securely in an isolated subprocess (Python subprocess).
+1. **Reflection Loop** -- This stage if the code errors, feed the traceback directly back into the LLM prompt and ask it to fix the bug (up to 3 retries).
+1. **Majority Voting** -- This stage run the generation/execution loop 50 times at high temperature, collect all successful integer outputs, and submit the mode (most common answer) (numpy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Prompt injection creates the representation needed by Majority Voting, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.aimo_llm_tool_use_topology" label="Reproduce this solution in Sciona" /> */}

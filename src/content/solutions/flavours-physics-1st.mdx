@@ -1,0 +1,69 @@
+---
+cdg_asset_id: solution.kaggle.flavours_physics_1st
+title: Flavours of Physics 1st Place -- Constraint-Satisfying Classification
+description: "Train three separate classifiers with different strategies for avoiding bias toward a protected variable (particle mass): one uses only safe features, one pena…"
+problem_statement: Three parallel classification paths (safe-feature vanilla GBM, flatness-constrained gradient boosting with mass decorrelation, full-feature GBM with noise injection) evaluated against statistical constraint gates (KS agreement < 0.09, CvM mass decorrelation < 0.002) using a truncated weighted AUC metric that emphasizes low-TPR precision.
+platform: kaggle
+competition_name: "Flavours of Physics: Finding tau to 3mu"
+placement: 1st
+year: 2015
+domain: constrained_classification
+paradigm: optimization
+family: constrained_ml
+tags:
+  - constrained_classification
+  - fairness_aware_ml
+  - decorrelation
+  - mass_independent_classifier
+  - flatness_boosting
+  - cvm_decorrelation
+  - ks_agreement_test
+  - protected_variable
+  - training_time_penalty
+  - hard_constraint_gate
+  - statistical_independence
+  - tabular_with_fairness
+  - simulation_agreement
+key_insight: The flatness penalty gradient pushes per-bin CDFs toward the global CDF, enforcing statistical independence between predictions and the protected variable during training. This is a training-time penalty (not post-hoc), so the model learns representations that are intrinsically decorrelated from the protected variable rather than having correlation removed after the fact.
+failure_modes:
+  - "Protected variable with very few unique values (e.g., binary): flatness binning has too few bins for meaningful CDF comparison"
+  - "Very strong correlation between features and protected variable: flatness penalty must be extremely strong, collapsing model capacity"
+  - "Constraint thresholds (KS < 0.09, CvM < 0.002) are too tight for the data size: even a truly decorrelated model may fail the statistical test due to finite-sample noise"
+source_url: https://github.com/yandexdataschool/flavours-of-physics-start
+source_license: NO LICENSE (blocked for ingestion; hep_ml is Apache-2.0)
+---
+
+# Flavours of Physics 1st Place -- Constraint-Satisfying Classification
+
+## Problem
+
+Three parallel classification paths (safe-feature vanilla GBM, flatness-constrained gradient boosting with mass decorrelation, full-feature GBM with noise injection) evaluated against statistical constraint gates (KS agreement &lt; 0.09, CvM mass decorrelation &lt; 0.002) using a truncated weighted AUC metric that emphasizes low-TPR precision.
+
+## Approach
+
+Train three separate classifiers with different strategies for avoiding bias toward a protected variable (particle mass): one uses only safe features, one penalizes mass-correlated predictions during training, and one adds random noise afterward. Each must pass statistical tests proving its predictions are independent of mass before being accepted.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.flavours_physics_1st" readOnly={true} /> */}
+
+1. **Safe Feature Selection** -- Pick only the features that are guaranteed not to leak information about the protected variable (mass), even though this limits the model's power.
+1. **Flatness-Constrained Gradient Boosting** -- Train a tree-based classifier that is explicitly penalized whenever its predictions become correlated with the protected variable, learning to ignore mass-related patterns during training itself.
+1. **Noise Injection Decorrelation** -- Add random noise to a strong model's predictions to wash out any correlation with the protected variable, trading some accuracy for constraint compliance.
+1. **KS Agreement Test** -- Check whether the model gives similar predictions on real data and simulated data -- if not, the model may be exploiting simulation artifacts rather than real physics.
+1. **CvM Mass Decorrelation Test** -- Check whether the model's predictions change depending on particle mass -- if they do, the model is biased and must be rejected. Uses a statistical test that is insensitive to how predictions are scaled.
+1. **Truncated Weighted ROC AUC** -- Measure classifier quality focusing only on the high-confidence predictions, ignoring performance on hard-to-classify examples where the model guesses.
+
+## Key Insight
+
+The flatness penalty gradient pushes per-bin CDFs toward the global CDF, enforcing statistical independence between predictions and the protected variable during training. This is a training-time penalty (not post-hoc), so the model learns representations that are intrinsically decorrelated from the protected variable rather than having correlation removed after the fact.
+
+## Failure Modes
+
+- Protected variable with very few unique values (e.g., binary): flatness binning has too few bins for meaningful CDF comparison
+- Very strong correlation between features and protected variable: flatness penalty must be extremely strong, collapsing model capacity
+- Constraint thresholds (KS &lt; 0.09, CvM &lt; 0.002) are too tight for the data size: even a truly decorrelated model may fail the statistical test due to finite-sample noise
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.flavours_physics_1st" label="Reproduce this solution in Sciona" /> */}

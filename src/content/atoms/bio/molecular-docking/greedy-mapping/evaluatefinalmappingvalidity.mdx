@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.evaluatefinalmappingvalidity
+predicate_id: evaluatefinalmappingvalidity
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mapping_context: MappingContext, extended_mapping_state: MappingState) -> bool"
+informal_desc: Check whether the final bidirectional mapping state is globally consistent.
+conceptual_summary: ""
+inputs:
+  - name: mapping_context
+    type_desc: MappingContext
+    constraints: Provides check_mapping_validity helper
+  - name: extended_mapping_state
+    type_desc: MappingState
+    constraints: Candidate final state from greedy expansion
+outputs:
+  - name: mapping_is_valid
+    type_desc: bool
+    constraints: True iff mapping and unmapping are mutually consistent and valid
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Evaluatefinalmappingvalidity
+description: Check whether the final bidirectional mapping state is globally consistent.
+---
+
+# Evaluatefinalmappingvalidity
+
+> Check whether the final bidirectional mapping state is globally consistent.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mapping_context: MappingContext, extended_mapping_state: MappingState) -> bool
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.initializereductionstate
+predicate_id: initializereductionstate
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(symmetric_matrix: np.ndarray) -> object {working_matrix: np.ndarray, accumulated_permutation: list[int], bandwidth: int, remaining_iterations: int}"
+informal_desc: Create the sanitized working matrix and initial optimization state for greedy bandwidth descent.
+conceptual_summary: ""
+inputs:
+  - name: symmetric_matrix
+    type_desc: np.ndarray
+    constraints: Symmetric numeric matrix
+outputs:
+  - name: iteration_state
+    type_desc: object
+    constraints: working_matrix=abs(copy), accumulated_permutation=identity permutation, bandwidth=matrix_bandwidth(working_matrix), remaining_iterations=100
+concept_type: greedy
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Initializereductionstate
+description: Create the sanitized working matrix and initial optimization state for greedy bandwidth descent.
+---
+
+# Initializereductionstate
+
+> Create the sanitized working matrix and initial optimization state for greedy bandwidth descent.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(symmetric_matrix: np.ndarray) -> object {working_matrix: np.ndarray, accumulated_permutation: list[int], bandwidth: int, remaining_iterations: int}
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

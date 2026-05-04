@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.assemble_register_coordinates
+predicate_id: assemble_register_coordinates
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(atoms_id: list[node_id], coordinates_layout: dict[node_id, (float,float)]) -> tuple[Register, dict[node_id, (float,float)]]"
+informal_desc: Filter the full coordinates_layout to retain only the entries whose trap IDs match atom IDs in the graph, then construct a Pulser Register from the matched coordinate dict.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Assemble_register_coordinates
+description: Filter the full coordinates_layout to retain only the entries whose trap IDs match atom IDs in the graph, then construct a Pulser Register from the matched coo…
+---
+
+# Assemble_register_coordinates
+
+> Filter the full coordinates_layout to retain only the entries whose trap IDs match atom IDs in the graph, then construct a Pulser Register from the matched coordinate dict.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(atoms_id: list[node_id], coordinates_layout: dict[node_id, (float,float)]) -> tuple[Register, dict[node_id, (float,float)]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

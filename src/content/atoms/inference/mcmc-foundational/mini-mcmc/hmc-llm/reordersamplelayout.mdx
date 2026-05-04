@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.reordersamplelayout
+predicate_id: reordersamplelayout
+repo: sciona-atoms
+domain: inference
+type_signature: "(collection_buffer_filled: array/tensor[n_collect, n_chains, dim]) -> array/tensor[n_chains, n_collect, dim]"
+informal_desc: Convert collected samples from time-major [collect, chain, dim] layout to chain-major [chain, collect, dim] layout.
+conceptual_summary: ""
+inputs:
+  - name: collection_buffer_filled
+    type_desc: np.ndarray
+    constraints: ndim >= 1
+outputs:
+  - name: samples
+    type_desc: np.ndarray
+    constraints: final sample output layout
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Reordersamplelayout
+description: Convert collected samples from time-major [collect, chain, dim] layout to chain-major [chain, collect, dim] layout.
+---
+
+# Reordersamplelayout
+
+> Convert collected samples from time-major [collect, chain, dim] layout to chain-major [chain, collect, dim] layout.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(collection_buffer_filled: array/tensor[n_collect, n_chains, dim]) -> array/tensor[n_chains, n_collect, dim]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

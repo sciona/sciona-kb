@@ -1,0 +1,60 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.initializehmcstate
+predicate_id: initializehmcstate
+repo: sciona-atoms
+domain: inference
+type_signature: "(target: callable log_prob oracle, initial_positions: array[float], step_size: float, n_leapfrog: int, seed: int) -> tuple[StateModelSpec, object]"
+informal_desc: Construct immutable HMC state and static kernel parameters, including explicit RNG state (PRNGKey/seed-derived state).
+conceptual_summary: "Reproducible Gradient-Kernel State Bootstrap. Builds an immutable initial state for a gradient-informed iterative transition process by evaluating a differentiable scalar-field oracle at an initial tensor point and storing the point, scalar value, local derivative, random generator state, and trace container. In parallel, it factorizes constant transition hyperparameters into a static kernel object so per-iteration updates can reuse fixed settings without reconfiguration. If a seed is provided, stochastic behavior is made exactly replayable under identical inputs and numeric conditions.. Applications: Computational chemistry: initializing reproducible trajectory-based exploration of high-dimensional energy landscapes for molecular conformations., Geophysical inverse modeling: bootstrapping iterative state transitions for parameter-field reconstruction from indirect sensor measurements., Robotics system identification: initializing gradient-informed stochastic search over dynamic model parameters with replayable randomness., Medical image reconstruction: setting up reproducible iterative posterior exploration for latent volume parameters under differentiable forward models."
+inputs:
+  - name: target
+    type_desc: Callable
+    constraints: stateless density/gradient evaluator
+  - name: initial_positions
+    type_desc: np.ndarray
+    constraints: shape fixed for chain state
+  - name: step_size
+    type_desc: float
+    constraints: "> 0"
+  - name: n_leapfrog
+    type_desc: int
+    constraints: ">= 1"
+  - name: seed
+    type_desc: int
+    constraints: optional; when provided initializes RNG state
+outputs:
+  - name: hmc_state_0
+    type_desc: StateModelSpec
+    constraints: contains positions, logp_current, gradient, rng_state, trace
+  - name: kernel_static
+    type_desc: object
+    constraints: contains target, step_size, n_leapfrog, mass_matrix (implicit or explicit)
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Initializehmcstate
+description: Construct immutable HMC state and static kernel parameters, including explicit RNG state (PRNGKey/seed-derived state).
+---
+
+# Initializehmcstate
+
+> Construct immutable HMC state and static kernel parameters, including explicit RNG state (PRNGKey/seed-derived state).
+
+## Conceptual Summary
+
+Reproducible Gradient-Kernel State Bootstrap. Builds an immutable initial state for a gradient-informed iterative transition process by evaluating a differentiable scalar-field oracle at an initial tensor point and storing the point, scalar value, local derivative, random generator state, and trace container. In parallel, it factorizes constant transition hyperparameters into a static kernel object so per-iteration updates can reuse fixed settings without reconfiguration. If a seed is provided, stochastic behavior is made exactly replayable under identical inputs and numeric conditions.. Applications: Computational chemistry: initializing reproducible trajectory-based exploration of high-dimensional energy landscapes for molecular conformations., Geophysical inverse modeling: bootstrapping iterative state transitions for parameter-field reconstruction from indirect sensor measurements., Robotics system identification: initializing gradient-informed stochastic search over dynamic model parameters with replayable randomness., Medical image reconstruction: setting up reproducible iterative posterior exploration for latent volume parameters under differentiable forward models.
+
+## Type Signature
+
+```
+(target: callable log_prob oracle, initial_positions: array[float], step_size: float, n_leapfrog: int, seed: int) -> tuple[StateModelSpec, object]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.robotics.pronto.yaw_lock.set_robot_standing_status
+predicate_id: set_robot_standing_status
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(state_in: YawLockState, is_robot_standing_in: bool) -> YawLockState"
+informal_desc: Write robot standing status by producing a new immutable state.
+conceptual_summary: "Immutable Boolean Field Override. Creates a new structured state instance by replacing exactly one designated binary attribute with a provided boolean value while preserving all other attributes unchanged. The operation is a functional record-update transform: input state is not mutated, and output is a value-level copy (or structurally shared equivalent) with a single-field substitution. This is equivalent to applying a deterministic projection-update on one coordinate of a composite data object.. Applications: Bioinformatics: update an immutable sample-processing state by overriding a single quality-pass flag., Distributed systems: produce a new node snapshot with one liveness indicator bit replaced., Clinical informatics: generate a new patient-monitoring state object with an alert-enabled boolean toggled."
+inputs:
+  - name: state_in
+    type_desc: YawLockState
+    constraints: Immutable input state.
+  - name: is_robot_standing_in
+    type_desc: bool
+    constraints: isinstance(x, bool)
+outputs:
+  - name: state_out
+    type_desc: YawLockState
+    constraints: New object with is_robot_standing replaced.
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Set_robot_standing_status
+description: Write robot standing status by producing a new immutable state.
+---
+
+# Set_robot_standing_status
+
+> Write robot standing status by producing a new immutable state.
+
+## Conceptual Summary
+
+Immutable Boolean Field Override. Creates a new structured state instance by replacing exactly one designated binary attribute with a provided boolean value while preserving all other attributes unchanged. The operation is a functional record-update transform: input state is not mutated, and output is a value-level copy (or structurally shared equivalent) with a single-field substitution. This is equivalent to applying a deterministic projection-update on one coordinate of a composite data object.. Applications: Bioinformatics: update an immutable sample-processing state by overriding a single quality-pass flag., Distributed systems: produce a new node snapshot with one liveness indicator bit replaced., Clinical informatics: generate a new patient-monitoring state object with an alert-enabled boolean toggled.
+
+## Type Signature
+
+```
+(state_in: YawLockState, is_robot_standing_in: bool) -> YawLockState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

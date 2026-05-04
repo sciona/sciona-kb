@@ -1,0 +1,63 @@
+---
+cdg_asset_id: solution.kaggle.champs_molecular_properties_1st
+title: Predicting Molecular Properties (CHAMPS) - 1st Place (2019) - Pipeline Template
+description: "This template captures the ordered steps used by Predicting Molecular Properties (CHAMPS) - 1st Place (2019): prepare the data, build task-specific representat…"
+problem_statement: "Quantum Chemistry / Graph Neural Networks solution template for Predicting Molecular Properties (CHAMPS) - 1st Place (2019), modeled as a 5-stage deterministic pipeline: Spatial Graphing, Target scaling, Message Passing Neural Network (MPNN), Attention mechanism, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Predicting Molecular Properties (CHAMPS) - 1st Place (2019)
+placement: ""
+year: 0
+domain: graph_regression
+paradigm: graph_signal_processing
+family: graph_regression
+tags:
+  - lightgbm
+  - quantum
+  - chemistry
+  - graph
+  - neural
+  - networks
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Spatial Graphing creates the representation needed by Ensembling, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/champs-scalar-coupling/discussion/106293
+source_license: null
+---
+
+# Predicting Molecular Properties (CHAMPS) - 1st Place (2019) - Pipeline Template
+
+## Problem
+
+Quantum Chemistry / Graph Neural Networks solution template for Predicting Molecular Properties (CHAMPS) - 1st Place (2019), modeled as a 5-stage deterministic pipeline: Spatial Graphing, Target scaling, Message Passing Neural Network (MPNN), Attention mechanism, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Predicting Molecular Properties (CHAMPS) - 1st Place (2019): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.champs_molecular_properties_1st" readOnly={true} /> */}
+
+1. **Spatial Graphing** -- This stage convert 3D Cartesian coordinates of atoms into distance matrices representing molecular bonds (pandas/numpy).
+1. **Target scaling** -- This stage mathematically standardize the highly variant scalar coupling constants into a normal distribution for stable gradient descent (sklearn).
+1. **Message Passing Neural Network (MPNN)** -- This stage train a specialized SchNet architecture (a continuous-filter convolutional neural network for modeling quantum interactions) on the atomic nodes and distances (PyTorch).
+1. **Attention mechanism** -- This stage apply an attention layer to pool the final node embeddings into pair-wise interaction scores (PyTorch).
+1. **Ensembling** -- This stage average predictions across dozens of MPNN seeds and LightGBM models trained purely on the extracted graph features.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Spatial Graphing creates the representation needed by Ensembling, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.champs_molecular_properties_1st" label="Reproduce this solution in Sciona" /> */}

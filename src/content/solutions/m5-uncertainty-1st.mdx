@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.m5_uncertainty_1st
+title: M5 Forecasting (Uncertainty) - 1st Place (2020) - Pipeline Template
+description: "This template captures the ordered steps used by M5 Forecasting (Uncertainty) - 1st Place (2020): prepare the data, build task-specific representations, run th…"
+problem_statement: "Probabilistic Hierarchical Time Series solution template for M5 Forecasting (Uncertainty) - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Base Forecasting, Residual calculation, Probability distribution fitting, Quantile Generation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: M5 Forecasting (Uncertainty) - 1st Place (2020)
+placement: ""
+year: 0
+domain: time_series_forecasting
+paradigm: loss_function
+family: time_series_forecasting
+tags:
+  - lightgbm
+  - probabilistic
+  - hierarchical
+  - series
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Base Forecasting creates the representation needed by Hierarchical scaling, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/m5-forecasting-uncertainty/discussion/165311
+source_license: null
+---
+
+# M5 Forecasting (Uncertainty) - 1st Place (2020) - Pipeline Template
+
+## Problem
+
+Probabilistic Hierarchical Time Series solution template for M5 Forecasting (Uncertainty) - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Base Forecasting, Residual calculation, Probability distribution fitting, Quantile Generation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by M5 Forecasting (Uncertainty) - 1st Place (2020): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.m5_uncertainty_1st" readOnly={true} /> */}
+
+1. **Base Forecasting** -- This stage generate point predictions for all items using the standard M5 Accuracy methodology (LightGBM with Tweedie loss) (LightGBM).
+1. **Residual calculation** -- This stage calculate the historical errors (residuals) of the trained model over the validation period (pandas/numpy).
+1. **Probability distribution fitting** -- This stage fit continuous mathematical distributions (e.g., Gaussian, Negative Binomial) over the grouped residuals to estimate the variance for each product category (scipy.stats).
+1. **Quantile Generation** -- This stage sample the fitted distributions to calculate the exact 9 discrete target quantiles (e.g., 0.005, 0.50, 0.995) required by the competition (numpy).
+1. **Hierarchical scaling** -- This stage scale the lower-level quantiles algorithmically so that the statistical spread of the lowest item perfectly aligns with the required variance of the top-level national aggregate (custom math / scipy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Base Forecasting creates the representation needed by Hierarchical scaling, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.m5_uncertainty_1st" label="Reproduce this solution in Sciona" /> */}

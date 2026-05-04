@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.compute_current_hamiltonian
+predicate_id: compute_current_hamiltonian
+repo: sciona-atoms
+domain: inference
+type_signature: "(momentum_0: Tensor[n_chains, dim], logp_current: Tensor[n_chains]) -> Tensor[n_chains]"
+informal_desc: Compute current kinetic energy and Hamiltonian from sampled momenta and current log density.
+conceptual_summary: ""
+inputs:
+  - name: momentum_0
+    type_desc: Tensor[n_chains, dim]
+    constraints: From sample_transition_randomness.
+  - name: logp_current
+    type_desc: Tensor[n_chains]
+    constraints: From evaluate_current_log_density_and_initial_half_grad.
+outputs:
+  - name: h_current
+    type_desc: Tensor[n_chains]
+    constraints: h_current = -logp_current + 0.5*sum_d(momentum_0^2).
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Compute_current_hamiltonian
+description: Compute current kinetic energy and Hamiltonian from sampled momenta and current log density.
+---
+
+# Compute_current_hamiltonian
+
+> Compute current kinetic energy and Hamiltonian from sampled momenta and current log density.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(momentum_0: Tensor[n_chains, dim], logp_current: Tensor[n_chains]) -> Tensor[n_chains]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

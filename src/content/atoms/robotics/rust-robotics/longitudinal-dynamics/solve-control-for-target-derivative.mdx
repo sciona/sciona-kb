@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.longitudinal_dynamics.solve_control_for_target_derivative
+predicate_id: solve_control_for_target_derivative
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(x: state vector, x_dot_desired: state derivative vector, _t: float) -> input/control vector"
+informal_desc: Compute control input required to match desired state derivative.
+conceptual_summary: "instantaneous inverse state-rate actuation solver. This atom maps a current state vector and a target first-order state-rate vector to an actuation vector by inverting the model's differential relation at a single instant. Formally, it solves an algebraic inverse problem of the form find u such that f(x, u, t) matches the requested state derivative. The result is an immediate command-level solution, not a multi-step optimization over a horizon.. Applications: Aerospace guidance: compute thruster or control-surface commands to realize a desired attitude-rate vector at the current state., Bioreactor automation: derive pump/heater actuation to enforce a target rate of change in concentration-temperature state variables., Smart-grid power electronics: solve inverter command vectors to produce desired derivatives of voltage-frequency state coordinates., Musculoskeletal assistive systems: map desired joint-state velocity/acceleration profiles to actuator command vectors in wearable devices."
+inputs:
+  - name: x
+    type_desc: np.ndarray
+    constraints: shape must match model state dimension
+  - name: x_dot_desired
+    type_desc: np.ndarray
+    constraints: same dimension as x
+  - name: _t
+    type_desc: float
+    constraints: time scalar; may be unused
+outputs:
+  - name: u
+    type_desc: np.ndarray
+    constraints: shape must match input dimension
+concept_type: algebra
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Solve_control_for_target_derivative
+description: Compute control input required to match desired state derivative.
+---
+
+# Solve_control_for_target_derivative
+
+> Compute control input required to match desired state derivative.
+
+## Conceptual Summary
+
+instantaneous inverse state-rate actuation solver. This atom maps a current state vector and a target first-order state-rate vector to an actuation vector by inverting the model's differential relation at a single instant. Formally, it solves an algebraic inverse problem of the form find u such that f(x, u, t) matches the requested state derivative. The result is an immediate command-level solution, not a multi-step optimization over a horizon.. Applications: Aerospace guidance: compute thruster or control-surface commands to realize a desired attitude-rate vector at the current state., Bioreactor automation: derive pump/heater actuation to enforce a target rate of change in concentration-temperature state variables., Smart-grid power electronics: solve inverter command vectors to produce desired derivatives of voltage-frequency state coordinates., Musculoskeletal assistive systems: map desired joint-state velocity/acceleration profiles to actuator command vectors in wearable devices.
+
+## Type Signature
+
+```
+(x: state vector, x_dot_desired: state derivative vector, _t: float) -> input/control vector
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

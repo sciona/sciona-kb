@@ -1,0 +1,49 @@
+---
+import "../styles/global.css";
+import SEOHead from "../components/seo/SEOHead.astro";
+import Navbar from "../components/nav/Navbar.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  canonicalUrl?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { title, description, ogImage, canonicalUrl, jsonLd } = Astro.props;
+const siteName = "Sciona Algorithm Atlas";
+const fullTitle = `${title} | ${siteName}`;
+---
+
+<!doctype html>
+<html lang="en" class="bg-atlas-bg text-atlas-text">
+  <head>
+    <SEOHead
+      title={fullTitle}
+      description={description}
+      canonicalUrl={canonicalUrl}
+      ogImage={ogImage}
+      jsonLd={jsonLd}
+    />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-atlas-accent focus:text-white focus:px-4 focus:py-2 focus:rounded">
+      Skip to content
+    </a>
+    <Navbar />
+    <main id="main" class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <slot />
+    </main>
+    <footer class="border-t border-atlas-border py-8 mt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-atlas-text-muted text-sm">
+        <p>&copy; {new Date().getFullYear()} Sciona. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="/atoms" class="hover:text-atlas-accent transition-colors">Atoms</a>
+          <a href="/cdgs" class="hover:text-atlas-accent transition-colors">CDGs</a>
+          <a href="/solutions" class="hover:text-atlas-accent transition-colors">Solutions</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

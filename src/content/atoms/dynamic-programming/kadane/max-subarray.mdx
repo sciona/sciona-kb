@@ -1,0 +1,81 @@
+---
+fqdn: sciona.atoms.dynamic_programming.kadane.max_subarray
+predicate_id: max_subarray
+repo: sciona-atoms-cs
+domain: dynamic_programming
+type_signature: "(array: list[int]) -> int"
+informal_desc: |-
+  Find the maximum sum of a contiguous subarray using Kadane's algorithm.
+
+  Args:
+      array: List of integers (containing at least one number).
+
+  Returns:
+      Largest sum among all contiguous subarrays.
+
+  Examples:
+      >>> max_subarray([1, 2, -3, 4, 5, -7, 23])
+      25 [query]
+conceptual_summary: Canonical query operation via max_subarray.
+inputs:
+  - name: array
+    type_desc: list[int]
+    constraints: ""
+    data_kind: ""
+    time_basis: ""
+    provenance: ""
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: result
+    type_desc: int
+    constraints: ""
+    data_kind: ""
+    time_basis: ""
+    provenance: ""
+    required: true
+    default_value_repr: ""
+concept_type: searching
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_keon_algorithms
+    citation: Imported from algorithms.dynamic_programming.max_subarray. References Kadane's algorithm for maximum subarray sum.
+title: Max_subarray
+description: |-
+  Find the maximum sum of a contiguous subarray using Kadane's algorithm.
+
+  Args:
+      array: List of integers (containing at least one number).
+
+  Returns:
+      Larg…
+---
+
+# Max_subarray
+
+> Find the maximum sum of a contiguous subarray using Kadane's algorithm.
+
+Args:
+    array: List of integers (containing at least one number).
+
+Returns:
+    Largest sum among all contiguous subarrays.
+
+Examples:
+    >>> max_subarray([1, 2, -3, 4, 5, -7, 23])
+    25 [query]
+
+## Conceptual Summary
+
+Canonical query operation via max_subarray.
+
+## Type Signature
+
+```
+(array: list[int]) -> int
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

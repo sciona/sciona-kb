@@ -1,0 +1,69 @@
+---
+fqdn: sciona.atoms.fintech.quantfin.monte_carlo_anti_d12.runsimulationanti
+predicate_id: runsimulationanti
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(ccs: Any, modl: Any, runSim: Any, seed: Any, trials: Any) -> Any"
+informal_desc: ""
+conceptual_summary: ""
+inputs:
+  - name: ccs
+    type_desc: Any
+    constraints: valid Any
+    required: true
+    default_value_repr: ""
+  - name: modl
+    type_desc: Any
+    constraints: valid Any
+    required: true
+    default_value_repr: ""
+  - name: runSim
+    type_desc: Any
+    constraints: valid Any
+    required: true
+    default_value_repr: ""
+  - name: seed
+    type_desc: Any
+    constraints: valid PRNG key or seed
+    required: true
+    default_value_repr: ""
+  - name: trials
+    type_desc: Any
+    constraints: valid Any
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: result
+    type_desc: Any
+    constraints: valid Any
+    required: true
+    default_value_repr: ""
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: glasserman2003
+    citation: Monte Carlo pricing attribution.
+  - title: repo_quantfin
+    citation: Upstream implementation is mapped to the vendored quantfin repository.
+title: Runsimulationanti
+description: ""
+---
+
+# Runsimulationanti
+
+> 
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(ccs: Any, modl: Any, runSim: Any, seed: Any, trials: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

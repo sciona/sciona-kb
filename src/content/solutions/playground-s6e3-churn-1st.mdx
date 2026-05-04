@@ -1,0 +1,65 @@
+---
+cdg_asset_id: solution.kaggle.playground_s6e3_churn_1st
+title: "Kaggle Playground S6E3: Customer Churn - 1st Place (2026) - Pipeline Template"
+description: "This template captures the ordered steps used by Kaggle Playground S6E3: Customer Churn - 1st Place (2026): prepare the data, build task-specific representatio…"
+problem_statement: "Tabular classification solution template for Kaggle Playground S6E3: Customer Churn - 1st Place (2026), modeled as a 6-stage deterministic pipeline: Data Split, GPU Feature Engineering, Nearest Neighbor Extraction, Model Zoo Generation, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: "Kaggle Playground S6E3: Customer Churn - 1st Place (2026)"
+placement: 1st
+year: 2026
+domain: tabular_classification
+paradigm: graph_signal_processing
+family: tabular_classification
+tags:
+  - lightgbm
+  - xgboost
+  - catboost
+  - transformer
+  - nearest_neighbor
+  - graph
+  - target_encoding
+  - tabular
+  - classification
+key_insight: "The load-bearing idea is the pipeline topology: Data Split creates the representation needed by Meta-Stacking, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/playground-series-s6e3/writeups/1st-place-gpt54-gemini3-1-claudeopus4-6-kgm
+source_license: null
+---
+
+# Kaggle Playground S6E3: Customer Churn - 1st Place (2026) - Pipeline Template
+
+## Problem
+
+Tabular classification solution template for Kaggle Playground S6E3: Customer Churn - 1st Place (2026), modeled as a 6-stage deterministic pipeline: Data Split, GPU Feature Engineering, Nearest Neighbor Extraction, Model Zoo Generation, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Kaggle Playground S6E3: Customer Churn - 1st Place (2026): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.playground_s6e3_churn_1st" readOnly={true} /> */}
+
+1. **Data Split** -- This stage configure a strict 5-fold Stratified K-Fold setup utilizing a fixed seed to ensure absolute parity across the subsequent 150 models (sklearn.model_selection).
+1. **GPU Feature Engineering** -- This stage generate anchor target encodings, digit extraction features, radix interactions, and apply TF-IDF transformations specifically on numerical features utilizing GPU dataframes (cuml, rapids).
+1. **Nearest Neighbor Extraction** -- This stage perform high-speed KDTree lookups to generate proximity-based tabular features, effectively translating spatial relationships into tabular columns (scipy.spatial).
+1. **Model Zoo Generation** -- This stage train a massive ensemble of 150 diverse models spanning 4 GBDT libraries (XGBoost, LightGBM, CatBoost, HistGradientBoosting) and 25 deep learning architectures (Transformers, Graph networks, Multiplicative modules) automatically tuned via Optuna.
+1. **Greedy Forward Selection** -- This stage execute a hill-climbing algorithm on the Out-Of-Fold (OOF) AUC metrics to iteratively greedily select the highest-contributing models for the final ensemble (numpy, sklearn.metrics).
+1. **Meta-Stacking** -- This stage train a final Logistic Regression stacker model to learn the specific regional trust weights across the selected ensemble, allowing the system to depend on different sub-models in different regions of the feature space (sklearn.linear_model).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Data Split creates the representation needed by Meta-Stacking, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.playground_s6e3_churn_1st" label="Reproduce this solution in Sciona" /> */}

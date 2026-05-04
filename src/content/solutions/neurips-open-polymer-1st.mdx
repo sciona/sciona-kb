@@ -1,0 +1,64 @@
+---
+cdg_asset_id: solution.kaggle.neurips_open_polymer_1st
+title: NeurIPS Open Polymer Prediction - 1st Place (2025) - Pipeline Template
+description: "This template captures the ordered steps used by NeurIPS Open Polymer Prediction - 1st Place (2025): prepare the data, build task-specific representations, tra…"
+problem_statement: "Multi-label / Multi-target Regression (Structured Data) solution template for NeurIPS Open Polymer Prediction - 1st Place (2025), modeled as a 7-stage deterministic pipeline: Chemical Descriptor Extraction, Data Augmentation, LM Representation, Tabular Modeling, and downstream competition-specific post-processing."
+platform: neurips
+competition_name: NeurIPS Open Polymer Prediction - 1st Place (2025)
+placement: 1st
+year: 2025
+domain: multilabel_tabular
+paradigm: neural_network
+family: multilabel_tabular
+tags:
+  - transformer
+  - rag
+  - multi
+  - label
+  - target
+  - regression
+  - structured
+key_insight: "The load-bearing idea is the pipeline topology: Chemical Descriptor Extraction creates the representation needed by Exact Match Override, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://github.com/nkwork9999/NeurIP2025_mytrial_following_1st_solution
+source_license: null
+---
+
+# NeurIPS Open Polymer Prediction - 1st Place (2025) - Pipeline Template
+
+## Problem
+
+Multi-label / Multi-target Regression (Structured Data) solution template for NeurIPS Open Polymer Prediction - 1st Place (2025), modeled as a 7-stage deterministic pipeline: Chemical Descriptor Extraction, Data Augmentation, LM Representation, Tabular Modeling, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by NeurIPS Open Polymer Prediction - 1st Place (2025): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.neurips_open_polymer_1st" readOnly={true} /> */}
+
+1. **Chemical Descriptor Extraction** -- This stage process SMILES chemical strings to structurally generate RDKit molecular descriptors and Morgan fingerprints (rdkit).
+1. **Data Augmentation** -- This stage apply randomized SMILES generation protocols (10x augmentation) to create robust text representations of identical molecules.
+1. **LM Representation** -- This stage fine-tune a code-pretrained language model (CodeBERTa) on the SMILES strings to predict multiple continuous properties simultaneously (transformers, torch).
+1. **Tabular Modeling** -- This stage parallelly train an AutoGluon tabular model specifically on the generated RDKit/Morgan descriptor outputs (autogluon).
+1. **Ensembling** -- This stage calculate target-specific weighted averages across both streams (heavily weighting the BERT model, assigning it a 0.91-0.97 coefficient).
+1. **Distribution Shift Post-processing** -- This stage shift the predictions for specific targets (e.g., Tg) by statistical factors (std * 0.5644) to manually correct a known train/test distribution mismatch (numpy).
+1. **Exact Match Override** -- This stage intercept the pipeline output and forcefully replace predictions with ground-truth values if the test SMILES perfectly matches a known training sample.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Chemical Descriptor Extraction creates the representation needed by Exact Match Override, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.neurips_open_polymer_1st" label="Reproduce this solution in Sciona" /> */}

@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.physics.tempo_jl.tai2utc_d12.order_tai_parts_by_magnitude
+predicate_id: order_tai_parts_by_magnitude
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(tai1: float, tai2: float) -> tuple[float, float, bool]"
+informal_desc: Determines which of the two TAI Julian date parts has greater absolute magnitude and reorders them so the larger part comes first, recording the original ordering for later restoration.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: urban2013almanac
+    citation: Broad astronomical time-scale attribution.
+  - title: repo_tempo_jl
+    citation: Primary Tempo.jl software attribution.
+title: Order_tai_parts_by_magnitude
+description: Determines which of the two TAI Julian date parts has greater absolute magnitude and reorders them so the larger part comes first, recording the original order…
+---
+
+# Order_tai_parts_by_magnitude
+
+> Determines which of the two TAI Julian date parts has greater absolute magnitude and reorders them so the larger part comes first, recording the original ordering for later restoration.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(tai1: float, tai2: float) -> tuple[float, float, bool]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

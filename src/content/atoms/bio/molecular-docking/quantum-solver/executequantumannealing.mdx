@@ -1,0 +1,60 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.executequantumannealing
+predicate_id: executequantumannealing
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(base_hamiltonian_params: Dict, inverted_normalized_weights: np.ndarray, detuning_spread: float, initial_register: Register, optimized_register: Register, permutation_list: List[int]) -> Dict"
+informal_desc: Performs the quantum evolution by running a simulation. It selects an appropriate backend (State Vector or Matrix Product State) based on the number of atoms and constructs the final DMM map.
+conceptual_summary: ""
+inputs:
+  - name: base_hamiltonian_params
+    type_desc: Dict
+    constraints: Core parameters for the quantum evolution.
+  - name: inverted_normalized_weights
+    type_desc: np.ndarray
+    constraints: Weights used to create the DMM map.
+  - name: detuning_spread
+    type_desc: float
+    constraints: Global detuning for the DMM.
+  - name: initial_register
+    type_desc: Register
+    constraints: Required for small-scale simulations.
+  - name: optimized_register
+    type_desc: Register
+    constraints: Required for large-scale simulations.
+  - name: permutation_list
+    type_desc: List[int]
+    constraints: Used to correctly map weights in large-scale simulations.
+outputs:
+  - name: measurement_counts
+    type_desc: Dict
+    constraints: A dictionary mapping final quantum states (as bitstrings) to their occurrence counts.
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Executequantumannealing
+description: Performs the quantum evolution by running a simulation. It selects an appropriate backend (State Vector or Matrix Product State) based on the number of atoms a…
+---
+
+# Executequantumannealing
+
+> Performs the quantum evolution by running a simulation. It selects an appropriate backend (State Vector or Matrix Product State) based on the number of atoms and constructs the final DMM map.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(base_hamiltonian_params: Dict, inverted_normalized_weights: np.ndarray, detuning_spread: float, initial_register: Register, optimized_register: Register, permutation_list: List[int]) -> Dict
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,71 @@
+---
+cdg_asset_id: solution.kaggle.plasticc_1st
+title: PLAsTiCC Astronomical Classification 1st Place — Time Series Classification via GP Interpolation and Gradient Boosting
+description: Classify astronomical objects by extracting statistical features from their brightness measurements over time, smoothing the irregular measurements with Gaussi…
+problem_statement: Multi-class astronomical object classification from irregularly-sampled light curves using red-shift flux correction, tsfresh/cesium feature extraction, Gaussian Process interpolation for smooth curve parameters, and an ensemble of LightGBM and custom MLPs with Platt-calibrated probabilities.
+platform: kaggle
+competition_name: PLAsTiCC Astronomical Classification 1st Place — Time Series Classification via GP Interpolation and Gradient Boosting
+placement: ""
+year: 0
+domain: time_series_classification
+paradigm: optimization
+family: time_series_classification
+tags:
+  - light_curve_classification
+  - astronomical_transient_classification
+  - irregular_time_series_features
+  - gp_interpolated_features
+  - multi_passband_classification
+  - tsfresh_feature_extraction
+  - cesium_features
+  - redshift_flux_correction
+  - platt_calibration
+  - minority_class_augmentation
+  - irregularly_sampled
+  - multi_channel_time_series
+  - lightgbm_mlp_ensemble
+key_insight: GP interpolation converts irregularly-sampled light curves into a uniform feature space where tabular models work, while preserving uncertainty information that raw interpolation discards. The GP kernel hyperparameters (length-scale, amplitude, noise variance) themselves become discriminative features that encode the timescale and smoothness of variability -- information that summary statistics alone cannot capture.
+failure_modes:
+  - "Objects with very few observations (<5 data points): GP fits are underdetermined and produce unreliable hyperparameters"
+  - "Uniformly sampled data: GP interpolation degenerates to simple smoothing, and kernel hyperparameters carry little discriminative information"
+  - "High-dimensional feature space from tsfresh (>1000 features) without selection: LightGBM handles this well but MLP may overfit"
+  - "Extreme class imbalance beyond augmentation capacity: rarest classes may still have too few examples for stable GP fitting and feature extraction"
+source_url: https://www.kaggle.com/c/PLAsTiCC-2018/discussion/75033
+source_license: null
+---
+
+# PLAsTiCC Astronomical Classification 1st Place — Time Series Classification via GP Interpolation and Gradient Boosting
+
+## Problem
+
+Multi-class astronomical object classification from irregularly-sampled light curves using red-shift flux correction, tsfresh/cesium feature extraction, Gaussian Process interpolation for smooth curve parameters, and an ensemble of LightGBM and custom MLPs with Platt-calibrated probabilities.
+
+## Approach
+
+Classify astronomical objects by extracting statistical features from their brightness measurements over time, smoothing the irregular measurements with Gaussian Processes, and combining gradient boosting with neural networks to predict object type probabilities.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.plasticc_1st" readOnly={true} /> */}
+
+1. **Flux Correction** -- Adjust brightness measurements to remove the effect of how far away each object is, so objects of the same type look similar regardless of distance.
+1. **Time Series Feature Extraction** -- Compute numerical summaries of each brightness curve such as average, variability, peak brightness, and rate of change.
+1. **Gaussian Process Interpolation** -- Fit smooth curves through the sparse brightness measurements and use the curve shape parameters as additional features describing each object.
+1. **Feature Merging** -- Combine all the different types of features into one wide table where each row is an object and each column is a feature.
+1. **Model Training** -- Train multiple prediction models that each learn to classify objects, oversampling rare object types so the models do not ignore them.
+1. **Platt Calibration** -- Fine-tune the predicted probabilities so they better reflect true likelihoods, using a simple adjustment learned on held-out data.
+
+## Key Insight
+
+GP interpolation converts irregularly-sampled light curves into a uniform feature space where tabular models work, while preserving uncertainty information that raw interpolation discards. The GP kernel hyperparameters (length-scale, amplitude, noise variance) themselves become discriminative features that encode the timescale and smoothness of variability -- information that summary statistics alone cannot capture.
+
+## Failure Modes
+
+- Objects with very few observations (&lt;5 data points): GP fits are underdetermined and produce unreliable hyperparameters
+- Uniformly sampled data: GP interpolation degenerates to simple smoothing, and kernel hyperparameters carry little discriminative information
+- High-dimensional feature space from tsfresh (>1000 features) without selection: LightGBM handles this well but MLP may overfit
+- Extreme class imbalance beyond augmentation capacity: rarest classes may still have too few examples for stable GP fitting and feature extraction
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.plasticc_1st" label="Reproduce this solution in Sciona" /> */}

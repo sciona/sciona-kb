@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.llm_science_exam_1st
+title: Kaggle LLM Science Exam - 1st Place (2023) - Pipeline Template
+description: "This template captures the ordered steps used by Kaggle LLM Science Exam - 1st Place (2023): prepare the data, build task-specific representations, train or ap…"
+problem_statement: "NLP Multiple Choice (RAG System) solution template for Kaggle LLM Science Exam - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Offline Indexing, Dense Retrieval, Context concatenation, LLM inference, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Kaggle LLM Science Exam - 1st Place (2023)
+placement: 1st
+year: 2023
+domain: nlp_classification
+paradigm: graph_signal_processing
+family: nlp_classification
+tags:
+  - transformer
+  - faiss
+  - graph
+  - rag
+  - multiple
+  - choice
+  - system
+key_insight: "The load-bearing idea is the pipeline topology: Offline Indexing creates the representation needed by Confidence weighting, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446261
+source_license: null
+---
+
+# Kaggle LLM Science Exam - 1st Place (2023) - Pipeline Template
+
+## Problem
+
+NLP Multiple Choice (RAG System) solution template for Kaggle LLM Science Exam - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Offline Indexing, Dense Retrieval, Context concatenation, LLM inference, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Kaggle LLM Science Exam - 1st Place (2023): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.llm_science_exam_1st" readOnly={true} /> */}
+
+1. **Offline Indexing** -- This stage embed the entire Wikipedia dataset using a sentence-transformer (HuggingFace).
+1. **Dense Retrieval** -- This stage embed the test question and use FAISS to extract the top 5 most relevant Wikipedia paragraphs.
+1. **Context concatenation** -- This stage construct a prompt string: [Context] + [Question] + [Option A, B, C, D, E].
+1. **LLM inference** -- This stage process the string through a fine-tuned DeBERTa-V3-Large model equipped with a 5-way multiple choice classification head (PyTorch/HuggingFace).
+1. **Confidence weighting** -- This stage average the multiple-choice probabilities across 3 different retrieved context permutations to produce final ranking.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Offline Indexing creates the representation needed by Confidence weighting, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.llm_science_exam_1st" label="Reproduce this solution in Sciona" /> */}

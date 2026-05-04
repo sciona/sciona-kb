@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018_d12.computekurtosissqi
+predicate_id: computekurtosissqi
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(signal: array-like, fisher: bool) -> float"
+informal_desc: Computes kurtosis-based ECG quality score from the input signal.
+conceptual_summary: "Standardized Fourth-Moment Signal Concentration Score. Maps a 1-D sampled scalar sequence to a single distribution-shape statistic by computing its standardized fourth central moment. The transform quantifies tail heaviness and peak concentration relative to variance, producing either excess kurtosis (Fisher convention) or raw kurtosis (Pearson convention) based on a binary mode selector. This is a many-to-one statistical reduction from sample-level structure to a scalar quality/regularity indicator.. Applications: Mechanical condition monitoring: score impulsiveness of accelerometer streams to detect bearing or gear faults., Communications engineering: characterize burstiness/non-Gaussianity of channel noise or interference samples., Geophysical sensing: detect transient event contamination in seismic trace windows via tail-heaviness scoring., Neurosignal processing: assess artifact contamination in electrophysiology segments using fourth-moment concentration."
+inputs:
+  - name: signal
+    type_desc: ndarray
+    constraints: ECG samples
+    required: true
+    default_value_repr: ""
+  - name: fisher
+    type_desc: bool
+    constraints: SciPy kurtosis convention
+    required: false
+    default_value_repr: "True"
+outputs:
+  - name: k_sqi
+    type_desc: float
+    constraints: kurtosis score
+    required: true
+    default_value_repr: ""
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Computekurtosissqi
+description: Computes kurtosis-based ECG quality score from the input signal.
+---
+
+# Computekurtosissqi
+
+> Computes kurtosis-based ECG quality score from the input signal.
+
+## Conceptual Summary
+
+Standardized Fourth-Moment Signal Concentration Score. Maps a 1-D sampled scalar sequence to a single distribution-shape statistic by computing its standardized fourth central moment. The transform quantifies tail heaviness and peak concentration relative to variance, producing either excess kurtosis (Fisher convention) or raw kurtosis (Pearson convention) based on a binary mode selector. This is a many-to-one statistical reduction from sample-level structure to a scalar quality/regularity indicator.. Applications: Mechanical condition monitoring: score impulsiveness of accelerometer streams to detect bearing or gear faults., Communications engineering: characterize burstiness/non-Gaussianity of channel noise or interference samples., Geophysical sensing: detect transient event contamination in seismic trace windows via tail-heaviness scoring., Neurosignal processing: assess artifact contamination in electrophysiology segments using fourth-moment concentration.
+
+## Type Signature
+
+```
+(signal: array-like, fisher: bool) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

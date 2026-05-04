@@ -1,0 +1,60 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.computegreedycandidatescores
+predicate_id: computegreedycandidatescores
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mapping_context: MappingContext, unplaced_nodes: List[GraphNode], mapping: Map[GraphNode,LatticeNode], remove_invalid_placement_nodes: bool, rank_nodes: bool) -> tuple[Map[GraphNode,Tuple[float,float]], Map[GraphNode,float]]"
+informal_desc: Optionally invoke the greedy scoring heuristic for unplaced nodes and expose deterministic candidate scores for downstream ranking/reporting.
+conceptual_summary: ""
+inputs:
+  - name: mapping_context
+    type_desc: MappingContext
+    constraints: Provides graph, lattice stats, and previously generated subgraphs.
+  - name: unplaced_nodes
+    type_desc: List[GraphNode]
+    constraints: Nodes to score.
+  - name: mapping
+    type_desc: Map[GraphNode,LatticeNode]
+    constraints: Used by heuristic non-neighbor component.
+  - name: remove_invalid_placement_nodes
+    type_desc: bool
+    constraints: Controls invalid-placement penalty behavior.
+  - name: rank_nodes
+    type_desc: bool
+    constraints: When false, scoring can return empty maps.
+outputs:
+  - name: ranking_scores
+    type_desc: Map[GraphNode,Tuple[float,float]]
+    constraints: Primary score plus random tiebreaker, descending sort key.
+  - name: candidate_scores
+    type_desc: Map[GraphNode,float]
+    constraints: Primary heuristic score per candidate; empty when ranking is skipped.
+concept_type: greedy
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Computegreedycandidatescores
+description: Optionally invoke the greedy scoring heuristic for unplaced nodes and expose deterministic candidate scores for downstream ranking/reporting.
+---
+
+# Computegreedycandidatescores
+
+> Optionally invoke the greedy scoring heuristic for unplaced nodes and expose deterministic candidate scores for downstream ranking/reporting.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mapping_context: MappingContext, unplaced_nodes: List[GraphNode], mapping: Map[GraphNode,LatticeNode], remove_invalid_placement_nodes: bool, rank_nodes: bool) -> tuple[Map[GraphNode,Tuple[float,float]], Map[GraphNode,float]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

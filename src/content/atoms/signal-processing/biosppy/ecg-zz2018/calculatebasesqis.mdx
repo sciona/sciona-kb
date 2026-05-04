@@ -1,0 +1,69 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.calculatebasesqis
+predicate_id: calculatebasesqis
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(signal: NDArray, detector_1: NDArray, detector_2: NDArray, fs: float, search_window: int, nseg: int) -> tuple[float, float, float, float]"
+informal_desc: Computes four fundamental Signal Quality Indices (qSQI, pSQI, kSQI, basSQI) using external specialized functions.
+conceptual_summary: ""
+inputs:
+  - name: signal
+    type_desc: NDArray
+    constraints: Input ECG signal.
+  - name: detector_1
+    type_desc: NDArray
+    constraints: R-peak locations from the first detector.
+  - name: detector_2
+    type_desc: NDArray
+    constraints: R-peak locations from the second detector.
+  - name: fs
+    type_desc: float
+    constraints: Sampling frequency.
+  - name: search_window
+    type_desc: int
+    constraints: Search window in ms for bSQI.
+  - name: nseg
+    type_desc: int
+    constraints: Frequency axis resolution for fSQI.
+outputs:
+  - name: qsqi
+    type_desc: float
+    constraints: Beat-matching quality index.
+  - name: psqi
+    type_desc: float
+    constraints: QRS power-spectrum quality index.
+  - name: ksqi
+    type_desc: float
+    constraints: Kurtosis quality index.
+  - name: bassqi
+    type_desc: float
+    constraints: Baseline wander quality index.
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Calculatebasesqis
+description: Computes four fundamental Signal Quality Indices (qSQI, pSQI, kSQI, basSQI) using external specialized functions.
+---
+
+# Calculatebasesqis
+
+> Computes four fundamental Signal Quality Indices (qSQI, pSQI, kSQI, basSQI) using external specialized functions.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(signal: NDArray, detector_1: NDArray, detector_2: NDArray, fs: float, search_window: int, nseg: int) -> tuple[float, float, float, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

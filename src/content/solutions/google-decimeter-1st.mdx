@@ -1,0 +1,60 @@
+---
+cdg_asset_id: solution.kaggle.google_decimeter_1st
+title: Google Smartphone Decimeter Challenge - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by Google Smartphone Decimeter Challenge - 1st Place (2021): prepare the data, build task-specific representation…"
+problem_statement: "Sensor fusion / Trajectory Optimization solution template for Google Smartphone Decimeter Challenge - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Raw GNSS processing, Outlier rejection, State estimation, Smoothing, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Google Smartphone Decimeter Challenge - 1st Place (2021)
+placement: 1st
+year: 2021
+domain: sensor_fusion
+paradigm: sequential_filter
+family: sensor_fusion
+tags:
+  - kalman_filter
+  - sensor
+  - fusion
+  - trajectory
+  - optimization
+key_insight: "The load-bearing idea is the pipeline topology: Raw GNSS processing creates the representation needed by Phone position snapping, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/google-smartphone-decimeter-challenge/discussion/263284
+source_license: null
+---
+
+# Google Smartphone Decimeter Challenge - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+Sensor fusion / Trajectory Optimization solution template for Google Smartphone Decimeter Challenge - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Raw GNSS processing, Outlier rejection, State estimation, Smoothing, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Google Smartphone Decimeter Challenge - 1st Place (2021): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.google_decimeter_1st" readOnly={true} /> */}
+
+1. **Raw GNSS processing** -- This stage extract pseudo-ranges and carrier phases from raw Android log files (custom parsing).
+1. **Outlier rejection** -- This stage filter satellite signals based on carrier-to-noise density (C/N0) and multipath indicators (pandas).
+1. **State estimation** -- This stage apply an Extended Kalman Filter (EKF) to fuse the GNSS positioning with IMU data (accelerometer, gyro) (custom math).
+1. **Smoothing** -- This stage apply a forward-backward Rauch-Tung-Striebel (RTS) smoother to the EKF trajectory (scipy).
+1. **Phone position snapping** -- This stage snap the derived trajectory to a localized highway/street grid using map matching.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Raw GNSS processing creates the representation needed by Phone position snapping, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.google_decimeter_1st" label="Reproduce this solution in Sciona" /> */}

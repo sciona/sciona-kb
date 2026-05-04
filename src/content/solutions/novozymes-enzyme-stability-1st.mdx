@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.novozymes_enzyme_stability_1st
+title: Novozymes Enzyme Stability Prediction - 1st Place (2023) - Pipeline Template
+description: "This template captures the ordered steps used by Novozymes Enzyme Stability Prediction - 1st Place (2023): prepare the data, build task-specific representation…"
+problem_statement: "Bioinformatics / 3D Protein Graph solution template for Novozymes Enzyme Stability Prediction - 1st Place (2023), modeled as a 5-stage deterministic pipeline: 3D Structure Parsing, LLM Embedding, 3D GNN Backbone, Feature concatenation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Novozymes Enzyme Stability Prediction - 1st Place (2023)
+placement: ""
+year: 0
+domain: bioinformatics
+paradigm: external_tool
+family: bioinformatics
+tags:
+  - gnn
+  - bioinformatics
+  - protein
+  - graph
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: 3D Structure Parsing creates the representation needed by Regression Head, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375765
+source_license: null
+---
+
+# Novozymes Enzyme Stability Prediction - 1st Place (2023) - Pipeline Template
+
+## Problem
+
+Bioinformatics / 3D Protein Graph solution template for Novozymes Enzyme Stability Prediction - 1st Place (2023), modeled as a 5-stage deterministic pipeline: 3D Structure Parsing, LLM Embedding, 3D GNN Backbone, Feature concatenation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Novozymes Enzyme Stability Prediction - 1st Place (2023): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.novozymes_enzyme_stability_1st" readOnly={true} /> */}
+
+1. **3D Structure Parsing** -- This stage convert the provided PDB (Protein Data Bank) files into 3D spatial graphs, where nodes are amino acids and edges connect atoms within a specific angstrom radius (BioPython/numpy).
+1. **LLM Embedding** -- This stage pass the 1D amino acid sequence through a pre-trained biological language model (ESM-2) to extract rich semantic sequence embeddings (HuggingFace).
+1. **3D GNN Backbone** -- This stage train a specialized 3D Graph Neural Network (e.g., SchNet or EGNN) to process the spatial coordinates, natively handling rotational and translational equivariance (PyTorch Geometric).
+1. **Feature concatenation** -- This stage combine the ESM-2 sequence embeddings and the EGNN structural embeddings into a unified vector.
+1. **Regression Head** -- This stage output the continuous melting point (Tm) prediction using an MLP.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: 3D Structure Parsing creates the representation needed by Regression Head, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.novozymes_enzyme_stability_1st" label="Reproduce this solution in Sciona" /> */}

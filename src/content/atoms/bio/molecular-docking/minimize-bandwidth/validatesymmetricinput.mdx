@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.validatesymmetricinput
+predicate_id: validatesymmetricinput
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(matrix: np.ndarray (2D numeric square matrix)) -> np.ndarray"
+informal_desc: Verify the matrix is numerically symmetric within tolerance before any reordering logic proceeds.
+conceptual_summary: ""
+inputs:
+  - name: matrix
+    type_desc: np.ndarray
+    constraints: Must satisfy allclose(matrix, matrix.T, atol=1e-8)
+outputs:
+  - name: symmetric_matrix
+    type_desc: np.ndarray
+    constraints: Same values as input; guaranteed symmetric or function fails
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Validatesymmetricinput
+description: Verify the matrix is numerically symmetric within tolerance before any reordering logic proceeds.
+---
+
+# Validatesymmetricinput
+
+> Verify the matrix is numerically symmetric within tolerance before any reordering logic proceeds.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(matrix: np.ndarray (2D numeric square matrix)) -> np.ndarray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

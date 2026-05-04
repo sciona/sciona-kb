@@ -1,0 +1,41 @@
+---
+fqdn: sciona.atoms.inference.advancedvi.gradient_oracle_evaluation
+predicate_id: gradient_oracle_evaluation
+repo: sciona-atoms
+domain: inference
+type_signature: "(rng_in: RNG state / PRNGKey, obj: Objective/model handle, adtype: Automatic differentiation mode/config, out_in: Gradient output container, state_in: Algorithm state, params: Parameter vector/structure, restructure: Parameter restructuring function) -> tuple[Gradient output container, Objective value, Algorithm state, RNG state / PRNGKey]"
+informal_desc: Computes objective value and gradient for the current parameters using the provided AD mode, while threading RNG and algorithm state as explicit immutable inputs/outputs.
+conceptual_summary: "State-Threaded First-Order Differential Oracle. Evaluates a scalar-valued functional at a candidate point in parameter space and computes its first-order derivative with respect to that point using a selected differentiation strategy. The operation maps between flat and structured parameter representations, writes derivatives into a provided output container, and returns all side-channel context (stochastic key and algorithm state) as explicit immutable outputs. This yields a purity-preserving oracle step suitable for composable iterative methods.. Applications: Calibrating constitutive parameters in computational mechanics by evaluating loss and sensitivity of simulation outputs to model coefficients., Estimating control-policy parameters in robotics using gradient-based updates with explicit simulator and randomness state threading., Fitting inverse-problem parameters in medical imaging reconstruction where objective value and gradient are required per iteration., Optimizing hyperparameters of physics-informed neural operators by computing scalar objective and parameter sensitivities in a reproducible pipeline."
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kucukelbir2017advi
+    citation: Broad ADVI/VI attribution for AdvancedVI atoms.
+  - title: repo_advancedvi_jl
+    citation: Upstream implementation is mapped to the vendored AdvancedVI.jl repository.
+  - title: titsias2014dsvb
+    citation: Reparameterization-gradient VI attribution.
+title: Gradient_oracle_evaluation
+description: Computes objective value and gradient for the current parameters using the provided AD mode, while threading RNG and algorithm state as explicit immutable inpu…
+---
+
+# Gradient_oracle_evaluation
+
+> Computes objective value and gradient for the current parameters using the provided AD mode, while threading RNG and algorithm state as explicit immutable inputs/outputs.
+
+## Conceptual Summary
+
+State-Threaded First-Order Differential Oracle. Evaluates a scalar-valued functional at a candidate point in parameter space and computes its first-order derivative with respect to that point using a selected differentiation strategy. The operation maps between flat and structured parameter representations, writes derivatives into a provided output container, and returns all side-channel context (stochastic key and algorithm state) as explicit immutable outputs. This yields a purity-preserving oracle step suitable for composable iterative methods.. Applications: Calibrating constitutive parameters in computational mechanics by evaluating loss and sensitivity of simulation outputs to model coefficients., Estimating control-policy parameters in robotics using gradient-based updates with explicit simulator and randomness state threading., Fitting inverse-problem parameters in medical imaging reconstruction where objective value and gradient are required per iteration., Optimizing hyperparameters of physics-informed neural operators by computing scalar objective and parameter sensitivities in a reproducible pipeline.
+
+## Type Signature
+
+```
+(rng_in: RNG state / PRNGKey, obj: Objective/model handle, adtype: Automatic differentiation mode/config, out_in: Gradient output container, state_in: Algorithm state, params: Parameter vector/structure, restructure: Parameter restructuring function) -> tuple[Gradient output container, Objective value, Algorithm state, RNG state / PRNGKey]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.finalizechaintrace
+predicate_id: finalizechaintrace
+repo: sciona-atoms
+domain: inference
+type_signature: "(trace_state_final: chain trace accumulator, discard_events: array/dict, samples: array/tensor[n_chains, n_collect, dim]) -> array/dict"
+informal_desc: Compute final run diagnostics/statistics from accumulated trace state and samples, producing a pure chain_trace artifact.
+conceptual_summary: ""
+inputs:
+  - name: trace_state_final
+    type_desc: object
+    constraints: x is not None
+  - name: discard_events
+    type_desc: object
+    constraints: may be empty
+  - name: samples
+    type_desc: np.ndarray
+    constraints: ndim >= 1
+outputs:
+  - name: chain_trace
+    type_desc: object
+    constraints: contains diagnostics summary and optional warnings/progress history
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Finalizechaintrace
+description: Compute final run diagnostics/statistics from accumulated trace state and samples, producing a pure chain_trace artifact.
+---
+
+# Finalizechaintrace
+
+> Compute final run diagnostics/statistics from accumulated trace state and samples, producing a pure chain_trace artifact.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(trace_state_final: chain trace accumulator, discard_events: array/dict, samples: array/tensor[n_chains, n_collect, dim]) -> array/dict
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,71 @@
+---
+cdg_asset_id: solution.kaggle.commonlit_readability_1st
+title: CommonLit Readability Prize 1st Place — Domain-Adapted Transformers with SWA and SVR Calibration
+description: Predict how easy a text passage is to read by first teaching language models on similar literature, then using attention-based feature extraction and model ave…
+problem_statement: Text readability regression using domain-adapted RoBERTa and DeBERTa transformers with attention pooling, stochastic weight averaging, and SVR/Ridge calibration heads on extracted embeddings.
+platform: kaggle
+competition_name: CommonLit Readability Prize 1st Place — Domain-Adapted Transformers with SWA and SVR Calibration
+placement: ""
+year: 0
+domain: nlp_regression
+paradigm: neural_network
+family: nlp_regression
+tags:
+  - readability_prediction
+  - text_regression
+  - domain_adaptation
+  - transformer_finetuning
+  - stochastic_weight_averaging
+  - svr_calibration
+  - small_dataset_nlp
+  - mlm_pretraining
+  - attention_pooling
+  - roberta
+  - deberta
+  - ridge_regression
+  - embedding_extraction
+  - flat_minima
+  - dynamic_padding
+key_insight: The SVR calibration head on top of transformer embeddings corrects for the known miscalibration of fine-tuned transformers on small regression datasets — the transformer learns good representations but its linear head overfits to the small label set. SWA stabilizes the embedding space so the SVR sees consistent features across folds, preventing the calibration head from fitting to noise in any single checkpoint's representation.
+failure_modes:
+  - "Domain adaptation corpus is too dissimilar to target text: continued MLM degrades the pre-trained representations rather than adapting them"
+  - "SWA averaging window is too wide: averaging checkpoints from very different training phases produces a blurred model worse than any individual checkpoint"
+  - "Very short texts (<20 tokens): attention pooling degenerates when there are too few tokens to learn meaningful importance weights over"
+source_url: https://www.kaggle.com/c/commonlitreadabilityprize/discussion/260744
+source_license: null
+---
+
+# CommonLit Readability Prize 1st Place — Domain-Adapted Transformers with SWA and SVR Calibration
+
+## Problem
+
+Text readability regression using domain-adapted RoBERTa and DeBERTa transformers with attention pooling, stochastic weight averaging, and SVR/Ridge calibration heads on extracted embeddings.
+
+## Approach
+
+Predict how easy a text passage is to read by first teaching language models on similar literature, then using attention-based feature extraction and model averaging to produce stable readability scores, with a final calibration step using simpler models.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.commonlit_readability_1st" readOnly={true} /> */}
+
+1. **Domain Adaptation** -- Continue training the language models on lots of similar texts so they better understand the style and vocabulary of the competition passages.
+1. **Tokenization** -- Convert text passages into sequences of token IDs that the model can process, padding each batch to the longest sequence rather than a fixed maximum.
+1. **Attention Pooling** -- Summarize the model's understanding of the entire text into a single fixed-size vector by learning which parts of the text matter most.
+1. **Regression Head** -- A simple final layer that converts the text representation into a single readability number, trained to minimize prediction error.
+1. **Stochastic Weight Averaging** -- Average the model's internal parameters across several late training checkpoints to get a more stable and reliable model.
+1. **SVR Calibration Head** -- Take the text representations from the trained language models and train a simple regression model on top for more calibrated final scores.
+
+## Key Insight
+
+The SVR calibration head on top of transformer embeddings corrects for the known miscalibration of fine-tuned transformers on small regression datasets — the transformer learns good representations but its linear head overfits to the small label set. SWA stabilizes the embedding space so the SVR sees consistent features across folds, preventing the calibration head from fitting to noise in any single checkpoint's representation.
+
+## Failure Modes
+
+- Domain adaptation corpus is too dissimilar to target text: continued MLM degrades the pre-trained representations rather than adapting them
+- SWA averaging window is too wide: averaging checkpoints from very different training phases produces a blurred model worse than any individual checkpoint
+- Very short texts (&lt;20 tokens): attention pooling degenerates when there are too few tokens to learn meaningful importance weights over
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.commonlit_readability_1st" label="Reproduce this solution in Sciona" /> */}

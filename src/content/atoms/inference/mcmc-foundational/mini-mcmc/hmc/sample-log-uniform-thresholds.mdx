@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.sample_log_uniform_thresholds
+predicate_id: sample_log_uniform_thresholds
+repo: sciona-atoms
+domain: inference
+type_signature: "(n_chains: usize, kernel_static: object) -> Tensor<B,1>"
+informal_desc: Draw one uniform variate per chain and convert to log-space acceptance thresholds.
+conceptual_summary: ""
+inputs:
+  - name: n_chains
+    type_desc: int
+    constraints: number of chains
+  - name: kernel_static
+    type_desc: object
+    constraints: provides RNG/backend random sampler
+outputs:
+  - name: ln_u
+    type_desc: Tensor
+    constraints: shape [n_chains], ln(u), u~Uniform(0,1)
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Sample_log_uniform_thresholds
+description: Draw one uniform variate per chain and convert to log-space acceptance thresholds.
+---
+
+# Sample_log_uniform_thresholds
+
+> Draw one uniform variate per chain and convert to log-space acceptance thresholds.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(n_chains: usize, kernel_static: object) -> Tensor<B,1>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

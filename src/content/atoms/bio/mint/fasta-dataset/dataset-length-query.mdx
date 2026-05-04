@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.bio.mint.fasta_dataset.dataset_length_query
+predicate_id: dataset_length_query
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(dataset_state: DatasetState) -> int"
+informal_desc: Return the number of labeled sequences in dataset_state.
+conceptual_summary: Labeled collection cardinality extractor.
+inputs:
+  - name: dataset_state
+    type_desc: DatasetState
+    constraints: Must contain sequence_labels.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: dataset_length
+    type_desc: int
+    constraints: Non-negative count of labels.
+    required: true
+    default_value_repr: ""
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: mint2026
+    citation: Primary mint paper cited by the upstream repository.
+  - title: repo_mint
+    citation: Upstream implementation is mapped to the vendored mint repository.
+title: Dataset_length_query
+description: Return the number of labeled sequences in dataset_state.
+---
+
+# Dataset_length_query
+
+> Return the number of labeled sequences in dataset_state.
+
+## Conceptual Summary
+
+Labeled collection cardinality extractor.
+
+## Type Signature
+
+```
+(dataset_state: DatasetState) -> int
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

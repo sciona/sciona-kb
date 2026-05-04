@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.ml.sklearn.images.voxel_grid_graph_assembly
+predicate_id: voxel_grid_graph_assembly
+repo: sciona-atoms-ml
+domain: ml
+type_signature: "(n_x: Any, n_y: Any, n_z: Any, mask: Any, return_as: Any, dtype: Any) -> sparse graph / adjacency matrix"
+informal_desc: Constructs a 3D grid adjacency graph by generating lattice edges, optionally computing gradient-based edge weights, optionally masking invalid connections, and returning the graph in the requested representation. [query]
+conceptual_summary: "Canonical query operation via grid_to_graph. Planned group: voxel_grid_graph_assembly."
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_sklearn
+    citation: Adapted from sklearn.feature_extraction.image.extract_patches_2d in scikit-learn 1.8.0.
+  - title: pedregosa2011sklearn
+    citation: Project-level publication for scikit-learn.
+title: Voxel_grid_graph_assembly
+description: Constructs a 3D grid adjacency graph by generating lattice edges, optionally computing gradient-based edge weights, optionally masking invalid connections, and…
+---
+
+# Voxel_grid_graph_assembly
+
+> Constructs a 3D grid adjacency graph by generating lattice edges, optionally computing gradient-based edge weights, optionally masking invalid connections, and returning the graph in the requested representation. [query]
+
+## Conceptual Summary
+
+Canonical query operation via grid_to_graph. Planned group: voxel_grid_graph_assembly.
+
+## Type Signature
+
+```
+(n_x: Any, n_y: Any, n_z: Any, mask: Any, return_as: Any, dtype: Any) -> sparse graph / adjacency matrix
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

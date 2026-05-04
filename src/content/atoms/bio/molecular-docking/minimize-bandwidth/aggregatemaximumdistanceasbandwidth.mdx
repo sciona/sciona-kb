@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.aggregatemaximumdistanceasbandwidth
+predicate_id: aggregatemaximumdistanceasbandwidth
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(weighted_distances: sequence of numeric values) -> float"
+informal_desc: Take the maximum weighted distance and convert it to float as the final bandwidth metric.
+conceptual_summary: ""
+inputs:
+  - name: weighted_distances
+    type_desc: np.ndarray
+    constraints: non-empty if matrix has at least one element
+outputs:
+  - name: bandwidth
+    type_desc: float
+    constraints: ">= 0"
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Aggregatemaximumdistanceasbandwidth
+description: Take the maximum weighted distance and convert it to float as the final bandwidth metric.
+---
+
+# Aggregatemaximumdistanceasbandwidth
+
+> Take the maximum weighted distance and convert it to float as the final bandwidth metric.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(weighted_distances: sequence of numeric values) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.countmutualdetections
+predicate_id: countmutualdetections
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(primary_detections: NDArray, secondary_detections: NDArray, search_window_samples: int) -> int"
+informal_desc: Counts the number of beats in the first detector's output that have a corresponding beat in the second detector's output within the search window.
+conceptual_summary: ""
+inputs:
+  - name: primary_detections
+    type_desc: NDArray
+    constraints: Array of beat locations from the first detector.
+  - name: secondary_detections
+    type_desc: NDArray
+    constraints: Array of beat locations from the second detector.
+  - name: search_window_samples
+    type_desc: int
+    constraints: The number of samples around each primary beat to search for a secondary beat.
+outputs:
+  - name: mutual_detection_count
+    type_desc: int
+    constraints: The total number of beats found by both detectors within the search window.
+concept_type: searching
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Countmutualdetections
+description: Counts the number of beats in the first detector's output that have a corresponding beat in the second detector's output within the search window.
+---
+
+# Countmutualdetections
+
+> Counts the number of beats in the first detector's output that have a corresponding beat in the second detector's output within the search window.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(primary_detections: NDArray, secondary_detections: NDArray, search_window_samples: int) -> int
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

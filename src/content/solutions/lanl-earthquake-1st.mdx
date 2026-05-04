@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.lanl_earthquake_1st
+title: LANL Earthquake Prediction - 1st Place (2019) - Pipeline Template
+description: "This template captures the ordered steps used by LANL Earthquake Prediction - 1st Place (2019): prepare the data, build task-specific representations, train or…"
+problem_statement: "Signal processing / Regression solution template for LANL Earthquake Prediction - 1st Place (2019), modeled as a 6-stage deterministic pipeline: Signal chunking, Time-domain features, Frequency-domain features, Adversarial validation, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: LANL Earthquake Prediction - 1st Place (2019)
+placement: 1st
+year: 2019
+domain: signal_regression
+paradigm: signal_transform
+family: signal_regression
+tags:
+  - lightgbm
+  - rag
+  - signal
+  - processing
+  - regression
+key_insight: "The load-bearing idea is the pipeline topology: Signal chunking creates the representation needed by Stacking, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/LANL-Earthquake-Prediction/discussion/94390
+source_license: null
+---
+
+# LANL Earthquake Prediction - 1st Place (2019) - Pipeline Template
+
+## Problem
+
+Signal processing / Regression solution template for LANL Earthquake Prediction - 1st Place (2019), modeled as a 6-stage deterministic pipeline: Signal chunking, Time-domain features, Frequency-domain features, Adversarial validation, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by LANL Earthquake Prediction - 1st Place (2019): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.lanl_earthquake_1st" readOnly={true} /> */}
+
+1. **Signal chunking** -- This stage slice the continuous 1D acoustic data into fixed-size chunks of 150,000 readings (numpy).
+1. **Time-domain features** -- This stage calculate mean, standard deviation, quantiles, and rolling peak counts per chunk (pandas).
+1. **Frequency-domain features** -- This stage apply Welch's method to extract dominant frequency bands from the acoustic chunks (scipy.signal).
+1. **Adversarial validation** -- This stage train a classifier to distinguish train vs test data, and drop features that drastically differ between sets (LightGBM).
+1. **Model training** -- This stage fit Support Vector Regressors (SVR), Kernel Ridge Regression, and LightGBM models.
+1. **Stacking** -- This stage average the outputs and apply a strict floor/ceiling based on physical bounds of the earthquake cycle.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Signal chunking creates the representation needed by Stacking, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.lanl_earthquake_1st" label="Reproduce this solution in Sciona" /> */}

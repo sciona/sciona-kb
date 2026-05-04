@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.google_landmark_retrieval_1st
+title: Google Landmark Retrieval - 1st Place (2020) - Pipeline Template
+description: "This template captures the ordered steps used by Google Landmark Retrieval - 1st Place (2020): prepare the data, build task-specific representations, train or …"
+problem_statement: "Image Retrieval / Metric Learning solution template for Google Landmark Retrieval - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Image preprocessing, Metric learning model, Embedding extraction, Nearest neighbor search, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Google Landmark Retrieval - 1st Place (2020)
+placement: 1st
+year: 2020
+domain: multimodal_retrieval
+paradigm: loss_function
+family: multimodal_retrieval
+tags:
+  - faiss
+  - nearest_neighbor
+  - metric_learning
+  - image
+  - retrieval
+  - metric
+  - learning
+key_insight: "The load-bearing idea is the pipeline topology: Image preprocessing creates the representation needed by Spatial verification, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/landmark-retrieval-2020/discussion/176037
+source_license: null
+---
+
+# Google Landmark Retrieval - 1st Place (2020) - Pipeline Template
+
+## Problem
+
+Image Retrieval / Metric Learning solution template for Google Landmark Retrieval - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Image preprocessing, Metric learning model, Embedding extraction, Nearest neighbor search, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Google Landmark Retrieval - 1st Place (2020): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.google_landmark_retrieval_1st" readOnly={true} /> */}
+
+1. **Image preprocessing** -- This stage resize and centrally crop landmark images (OpenCV).
+1. **Metric learning model** -- This stage train a ResNet-101 with a Generalized Mean (GeM) pooling layer and ArcFace loss to separate class embeddings radially (PyTorch).
+1. **Embedding extraction** -- This stage extract 512-dimensional L2-normalized embeddings for all index and query images.
+1. **Nearest neighbor search** -- This stage perform exact cosine similarity search to find the top 100 index images for every query image (FAISS).
+1. **Spatial verification** -- This stage run SuperPoint and RANSAC on the top retrieved pairs to rerank the candidates based on actual geometric feature matching (OpenCV/PyTorch).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Image preprocessing creates the representation needed by Spatial verification, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.google_landmark_retrieval_1st" label="Reproduce this solution in Sciona" /> */}

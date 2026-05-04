@@ -1,0 +1,57 @@
+---
+cdg_asset_id: solution.kaggle.commonlit_readability_4th
+title: CommonLit Readability Prize - 4th Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by CommonLit Readability Prize - 4th Place (2021): prepare the data, build task-specific representations, train o…"
+problem_statement: "NLP Text Classification / Regression solution template for CommonLit Readability Prize - 4th Place (2021), modeled as a 5-stage deterministic pipeline: Linguistic Feature Extraction, Pairwise Construction, Bradley-Terry Modeling, Concatenation, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: CommonLit Readability Prize - 4th Place (2021)
+placement: 4th
+year: 2021
+domain: nlp_classification
+paradigm: optimization
+family: nlp_classification
+tags:
+  - classification
+  - regression
+key_insight: "The load-bearing idea is the pipeline topology: Linguistic Feature Extraction creates the representation needed by Final Regression, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/code/kashnitsky/essay-competition-cards-recent-nlp-competitions
+source_license: null
+---
+
+# CommonLit Readability Prize - 4th Place (2021) - Pipeline Template
+
+## Problem
+
+NLP Text Classification / Regression solution template for CommonLit Readability Prize - 4th Place (2021), modeled as a 5-stage deterministic pipeline: Linguistic Feature Extraction, Pairwise Construction, Bradley-Terry Modeling, Concatenation, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by CommonLit Readability Prize - 4th Place (2021): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.commonlit_readability_4th" readOnly={true} /> */}
+
+1. **Linguistic Feature Extraction** -- This stage process text to extract classic readability metrics such as the Flesch reading ease score and the SMOG index as structural metadata (textstat).
+1. **Pairwise Construction** -- This stage construct training samples by pairing different text excerpts against each other rather than treating them as isolated regression targets.
+1. **Bradley-Terry Modeling** -- This stage treat the readability scoring task as a text ranking problem, computing Bradley-Terry scores based on the paired excerpts to determine relative difficulty.
+1. **Concatenation** -- This stage merge the computed ranking scores with the classic linguistic features.
+1. **Final Regression** -- This stage feed the concatenated feature set into a linear regressor to output the final absolute readability score (sklearn.linear_model).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Linguistic Feature Extraction creates the representation needed by Final Regression, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.commonlit_readability_4th" label="Reproduce this solution in Sciona" /> */}

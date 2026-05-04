@@ -1,0 +1,60 @@
+---
+cdg_asset_id: solution.kaggle.rsna_mammography_breast_cancer_1st
+title: RSNA Screening Mammography Breast Cancer Detection - 1st Place (2023) - Pipeline Template
+description: "This template captures the ordered steps used by RSNA Screening Mammography Breast Cancer Detection - 1st Place (2023): prepare the data, build task-specific r…"
+problem_statement: "Medical Imaging (Multi-view 2D) solution template for RSNA Screening Mammography Breast Cancer Detection - 1st Place (2023), modeled as a 5-stage deterministic pipeline: DICOM preprocessing, ROI extraction, Multi-view grouping, Multi-view CNN, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: RSNA Screening Mammography Breast Cancer Detection - 1st Place (2023)
+placement: ""
+year: 0
+domain: medical_detection_2d
+paradigm: neural_network
+family: medical_detection_2d
+tags:
+  - medical
+  - imaging
+  - multi
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: DICOM preprocessing creates the representation needed by Probabilistic pooling, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/393220
+source_license: null
+---
+
+# RSNA Screening Mammography Breast Cancer Detection - 1st Place (2023) - Pipeline Template
+
+## Problem
+
+Medical Imaging (Multi-view 2D) solution template for RSNA Screening Mammography Breast Cancer Detection - 1st Place (2023), modeled as a 5-stage deterministic pipeline: DICOM preprocessing, ROI extraction, Multi-view grouping, Multi-view CNN, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by RSNA Screening Mammography Breast Cancer Detection - 1st Place (2023): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.rsna_mammography_breast_cancer_1st" readOnly={true} /> */}
+
+1. **DICOM preprocessing** -- This stage extract 16-bit medical images using strict VOI LUT (Value of Interest Look-Up Table) transformations to ensure correct tissue contrast, cropping heavily to remove black background (pydicom/cv2).
+1. **ROI extraction** -- This stage train a lightweight YOLO model to predict exactly where the breast tissue is, drastically cropping the image to discard empty space (Ultralytics).
+1. **Multi-view grouping** -- This stage strictly group the CC (top-down) and MLO (side-angle) views of the same breast into a single batched input (pandas).
+1. **Multi-view CNN** -- This stage pass both views simultaneously through an EfficientNet backbone (PyTorch).
+1. **Probabilistic pooling** -- This stage pool the embeddings of both views utilizing an Attention mechanism before passing them through the final classification head to output the cancer probability.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: DICOM preprocessing creates the representation needed by Probabilistic pooling, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.rsna_mammography_breast_cancer_1st" label="Reproduce this solution in Sciona" /> */}

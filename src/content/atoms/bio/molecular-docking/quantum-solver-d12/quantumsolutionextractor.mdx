@@ -1,0 +1,64 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.quantumsolutionextractor
+predicate_id: quantumsolutionextractor
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(count_dist: dict[bitstring, int] — raw measurement counts from the sampler, register: Pulser Register — used for node-index to qubit-index mapping, num_solutions: int — number of top solutions to extract) -> tuple[list of node-set dicts ranked by measurement frequency, list of int — occurrence counts corresponding to each solution]"
+informal_desc: Post-processes the raw measurement count distribution to decode, rank, and filter the top-k bitstring solutions corresponding to valid independent sets (or QUBO ground states), mapping them back to the original graph node labelling.
+conceptual_summary: "FrequencyRankedTopKDecoder. Transforms a raw empirical frequency distribution over a discrete combinatorial symbol space (bitstrings) into a ranked, filtered, and semantically re-labeled subset of the k most probable feasible configurations. The operation applies a validity predicate to prune infeasible configurations, sorts survivors by descending observation frequency, and then applies an index-relabeling bijection to map internal symbolic indices back to the original external identifier namespace. The result is a lossy compression of the full distribution that retains only the highest-frequency, constraint-satisfying points, annotated with their original structural context.. Applications: Genomics / variant calling: given a multiset of observed read alignment patterns (bitstrings encoding SNP presence/absence across loci), extract the top-k most frequently observed haplotype configurations that satisfy biological feasibility constraints (e.g., Hardy-Weinberg consistency), remapping internal read indices back to chromosome position labels, Combinatorial optimization / scheduling: after stochastic local search or simulated annealing produces a histogram of visited assignment vectors, decode and rank the top-k feasible schedules (satisfying resource or precedence constraints) and re-label internal slot indices back to human-readable job/machine identifiers, Natural language processing / beam decoding: given a count distribution over discrete token-sequence samples from a language model, filter sequences satisfying a structural grammar predicate, rank by empirical frequency, and remap internal vocabulary integer IDs back to surface-form string tokens for the top-k outputs, Sensor fusion / fault detection: given a distribution of binary system-state snapshots (each bit encoding a sensor's alarm status) collected over a monitoring window, extract the k most frequently occurring fault-pattern configurations that match known failure-mode signatures, remapping bit positions back to physical sensor identifiers in the engineering schematic"
+inputs:
+  - name: count_dist
+    type_desc: dict[str, int]
+    constraints: measurement counts
+    required: true
+    default_value_repr: ""
+  - name: register
+    type_desc: QuantumRegister
+    constraints: valid register
+    required: true
+    default_value_repr: ""
+  - name: num_sol
+    type_desc: int
+    constraints: ">= 1"
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: solutions
+    type_desc: list[list[str]]
+    constraints: len <= num_sol
+    required: true
+    default_value_repr: ""
+  - name: count_dist
+    type_desc: dict[str, int]
+    constraints: forwarded counts
+    required: true
+    default_value_repr: ""
+concept_type: ranking
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Quantumsolutionextractor
+description: Post-processes the raw measurement count distribution to decode, rank, and filter the top-k bitstring solutions corresponding to valid independent sets (or QUB…
+---
+
+# Quantumsolutionextractor
+
+> Post-processes the raw measurement count distribution to decode, rank, and filter the top-k bitstring solutions corresponding to valid independent sets (or QUBO ground states), mapping them back to the original graph node labelling.
+
+## Conceptual Summary
+
+FrequencyRankedTopKDecoder. Transforms a raw empirical frequency distribution over a discrete combinatorial symbol space (bitstrings) into a ranked, filtered, and semantically re-labeled subset of the k most probable feasible configurations. The operation applies a validity predicate to prune infeasible configurations, sorts survivors by descending observation frequency, and then applies an index-relabeling bijection to map internal symbolic indices back to the original external identifier namespace. The result is a lossy compression of the full distribution that retains only the highest-frequency, constraint-satisfying points, annotated with their original structural context.. Applications: Genomics / variant calling: given a multiset of observed read alignment patterns (bitstrings encoding SNP presence/absence across loci), extract the top-k most frequently observed haplotype configurations that satisfy biological feasibility constraints (e.g., Hardy-Weinberg consistency), remapping internal read indices back to chromosome position labels, Combinatorial optimization / scheduling: after stochastic local search or simulated annealing produces a histogram of visited assignment vectors, decode and rank the top-k feasible schedules (satisfying resource or precedence constraints) and re-label internal slot indices back to human-readable job/machine identifiers, Natural language processing / beam decoding: given a count distribution over discrete token-sequence samples from a language model, filter sequences satisfying a structural grammar predicate, rank by empirical frequency, and remap internal vocabulary integer IDs back to surface-form string tokens for the top-k outputs, Sensor fusion / fault detection: given a distribution of binary system-state snapshots (each bit encoding a sensor's alarm status) collected over a monitoring window, extract the k most frequently occurring fault-pattern configurations that match known failure-mode signatures, remapping bit positions back to physical sensor identifiers in the engineering schematic
+
+## Type Signature
+
+```
+(count_dist: dict[bitstring, int] — raw measurement counts from the sampler, register: Pulser Register — used for node-index to qubit-index mapping, num_solutions: int — number of top solutions to extract) -> tuple[list of node-set dicts ranked by measurement frequency, list of int — occurrence counts corresponding to each solution]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

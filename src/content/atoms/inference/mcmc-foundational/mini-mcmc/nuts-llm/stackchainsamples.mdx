@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.nuts_llm.stackchainsamples
+predicate_id: stackchainsamples
+repo: sciona-atoms
+domain: inference
+type_signature: "(chain_samples: Vec<Tensor<B, 2>>) -> Tensor<B, 3>"
+informal_desc: Aggregate per-chain 2D tensors into one 3D tensor along the chain axis.
+conceptual_summary: ""
+inputs:
+  - name: chain_samples
+    type_desc: list[Tensor]
+    constraints: non-empty and shape-compatible
+outputs:
+  - name: sample_tensor
+    type_desc: Tensor
+    constraints: axis 0 indexes chains
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for initializing target log-density state, gradient information, acceptance target, and explicit stochastic state before transition building.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a local state initializer and not a full NUTS transition implementation.
+title: Stackchainsamples
+description: Aggregate per-chain 2D tensors into one 3D tensor along the chain axis.
+---
+
+# Stackchainsamples
+
+> Aggregate per-chain 2D tensors into one 3D tensor along the chain axis.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(chain_samples: Vec<Tensor<B, 2>>) -> Tensor<B, 3>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

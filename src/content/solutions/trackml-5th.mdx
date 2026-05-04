@@ -1,0 +1,73 @@
+---
+cdg_asset_id: solution.kaggle.trackml_5th
+title: TrackML Particle Tracking 5th Place — Physics-Geometric Track Reconstruction
+description: Find which detector hits belong to the same particle track by fitting helical curves through groups of hits, using physics to predict where the next hit should…
+problem_statement: Reconstruct charged particle trajectories from 3D hit positions using analytic helix geometry, adaptive Bayesian neighbor matching, and perturbative learned corrections. No neural networks — pure geometry plus interpolated lookup tables.
+platform: kaggle
+competition_name: TrackML Particle Tracking Challenge
+placement: 5th
+year: 2018
+domain: particle_tracking
+paradigm: geometry
+family: particle_tracking
+tags:
+  - particle_tracking
+  - helix_fitting
+  - track_reconstruction
+  - hit_matching
+  - physics_geometric_tracking
+  - kepler_equation
+  - analytic_intersection
+  - layered_detector_geometry
+  - high_hit_density
+  - magnetic_field_trajectories
+  - perturbative_correction
+  - greedy_assignment
+key_insight: The Kepler-equation reduction for helix-point distance connects particle physics tracking to orbital mechanics, enabling O(1) nearest-point queries instead of iterative root-finding. Three hits uniquely determine a helix, and analytic cylinder/cap intersections predict next-layer hits without numerical integration.
+failure_modes:
+  - "Strong B-field inhomogeneity: perfect-helix assumption breaks down and perturbative corrections become large and unreliable"
+  - "Very low momentum particles with large energy loss per layer: helix parameters change significantly between layers"
+  - "Detector with large gaps between layers: helix extrapolation error accumulates and predicted intersections miss real hits"
+source_url: https://github.com/edwinst/trackml_solution
+source_license: BSD-2-Clause
+---
+
+# TrackML Particle Tracking 5th Place — Physics-Geometric Track Reconstruction
+
+## Problem
+
+Reconstruct charged particle trajectories from 3D hit positions using analytic helix geometry, adaptive Bayesian neighbor matching, and perturbative learned corrections. No neural networks — pure geometry plus interpolated lookup tables.
+
+## Approach
+
+Find which detector hits belong to the same particle track by fitting helical curves through groups of hits, using physics to predict where the next hit should be, and learning small corrections for real-world imperfections.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.trackml_5th" readOnly={true} /> */}
+
+1. **Detector Geometry Autodiscovery** -- Figure out the detector's layered structure automatically from the positions of its modules.
+1. **Coordinate Rescaling for kNN** -- Warp the coordinate system so that nearby hits in the detector sense are also nearby in the math sense, enabling standard nearest-neighbor search.
+1. **Per-Layer kNN Search** -- For each detector layer, find the closest hits to a predicted position using a standard nearest-neighbor search.
+1. **Circle From Three Points** -- Find the circle that passes through three detector hits, which represents the particle's curved path through the magnetic field.
+1. **Helix Pitch Least Squares** -- Once you know the circular path, figure out the pitch (how much the particle climbs per revolution) by fitting a line to the z-coordinates.
+1. **Helix-Cylinder Intersection** -- Predict exactly where a helical track will cross a cylindrical detector layer, using a closed-form geometric formula.
+1. **Helix-Cap Intersection** -- Predict where a helical track will cross a flat disk-shaped detector layer.
+1. **Perturbative Helix Correction** -- Correct the predicted hit positions for real-world imperfections using learned correction maps that scale correctly with particle speed.
+1. **Helix Nearest Point (Newton/Kepler)** -- Find the closest point on the predicted helical track to an actual detector hit, using a connection to orbital mechanics.
+1. **Bayesian Neighbor Evaluation** -- Decide whether a nearby hit is a real match or random background, using Bayesian statistics that automatically adapt to how crowded each detector region is.
+1. **Greedy Track Commit with Overlap Resolution** -- Assign hits to tracks starting with the best-quality tracks first, resolving conflicts when two tracks claim the same hit.
+
+## Key Insight
+
+The Kepler-equation reduction for helix-point distance connects particle physics tracking to orbital mechanics, enabling O(1) nearest-point queries instead of iterative root-finding. Three hits uniquely determine a helix, and analytic cylinder/cap intersections predict next-layer hits without numerical integration.
+
+## Failure Modes
+
+- Strong B-field inhomogeneity: perfect-helix assumption breaks down and perturbative corrections become large and unreliable
+- Very low momentum particles with large energy loss per layer: helix parameters change significantly between layers
+- Detector with large gaps between layers: helix extrapolation error accumulates and predicted intersections miss real hits
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.trackml_5th" label="Reproduce this solution in Sciona" /> */}

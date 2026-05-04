@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.build_interaction_graph.networkx_weighted_graph_materialization
+predicate_id: networkx_weighted_graph_materialization
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(edges: list of weighted edge tuples, nodes: list/set of node identifiers) -> networkx.Graph or networkx.DiGraph"
+informal_desc: Constructs the final weighted NetworkX graph from derived nodes and edges.
+conceptual_summary: "Weighted Relational Topology Materialization. Transforms two finite collections—entity identifiers and weighted pairwise relations—into an explicit adjacency-based topology object. The procedure first materializes the vertex set, then inserts each relation as an edge annotated by a scalar weight, preserving the provided connectivity pattern. It performs structural encoding rather than optimization or inference, yielding a directly queryable weighted graph representation.. Applications: Neuroscience: materializing weighted synaptic connectivity maps between recorded neural units, Infrastructure engineering: constructing weighted utility or transport connectivity networks from link measurements, Computational biology: encoding weighted interaction topologies among molecular entities, Distributed systems: representing weighted communication latency graphs between compute nodes"
+inputs:
+  - name: edges
+    type_desc: list[tuple]
+    constraints: Must be consistent with node identifiers.
+  - name: nodes
+    type_desc: list[int]
+    constraints: Node IDs should be hashable.
+outputs:
+  - name: weighted_graph
+    type_desc: object
+    constraints: Contains all provided nodes and weighted edges.
+concept_type: graph_optimization
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Networkx_weighted_graph_materialization
+description: Constructs the final weighted NetworkX graph from derived nodes and edges.
+---
+
+# Networkx_weighted_graph_materialization
+
+> Constructs the final weighted NetworkX graph from derived nodes and edges.
+
+## Conceptual Summary
+
+Weighted Relational Topology Materialization. Transforms two finite collections—entity identifiers and weighted pairwise relations—into an explicit adjacency-based topology object. The procedure first materializes the vertex set, then inserts each relation as an edge annotated by a scalar weight, preserving the provided connectivity pattern. It performs structural encoding rather than optimization or inference, yielding a directly queryable weighted graph representation.. Applications: Neuroscience: materializing weighted synaptic connectivity maps between recorded neural units, Infrastructure engineering: constructing weighted utility or transport connectivity networks from link measurements, Computational biology: encoding weighted interaction topologies among molecular entities, Distributed systems: representing weighted communication latency graphs between compute nodes
+
+## Type Signature
+
+```
+(edges: list of weighted edge tuples, nodes: list/set of node identifiers) -> networkx.Graph or networkx.DiGraph
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

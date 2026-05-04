@@ -1,0 +1,67 @@
+---
+cdg_asset_id: solution.kaggle.global_wheat_1st
+title: Global Wheat Detection 1st Place — Pseudo-Labeled Multi-Detector Fusion
+description: Detect wheat heads in field images by training two different detection models with aggressive image augmentation, using the models to generate labels on unlabe…
+problem_statement: Two-stage object detection pipeline combining Faster R-CNN (ResNeSt-101) and YOLOv5 with heavy mosaic/CutMix augmentation, pseudo-label-based self-training on test data, and weighted box fusion for final bounding box merging.
+platform: kaggle
+competition_name: Global Wheat Detection - 1st Place (2020)
+placement: 1st
+year: 2020
+domain: object_detection_2d
+paradigm: neural_network
+family: object_detection_2d
+tags:
+  - mosaic_augmentation
+  - pseudo_labeling
+  - weighted_box_fusion
+  - two_stage_detector
+  - one_stage_detector
+  - self_training
+  - domain_shift
+  - dense_small_objects
+  - semi_supervised
+  - agricultural
+  - multi_detector_ensemble
+key_insight: "The pipeline's power comes from the synergy between architectural diversity and pseudo-label domain adaptation. Two architecturally different detectors (two-stage Faster R-CNN vs. one-stage YOLO) make complementary errors: Faster R-CNN has higher recall on occluded objects while YOLO is better at dense small objects. Pseudo-labeling bridges the train-test domain gap by letting the models adapt to test-time field conditions, and WBF exploits the complementary error profiles by averaging box coordinates weighted by confidence rather than simply suppressing duplicates."
+failure_modes:
+  - "Pseudo-label error amplification: if initial models have low precision, confident false positives become training labels and compound across the self-training loop"
+  - "WBF threshold miscalibration: too-low IoU threshold merges distinct nearby objects into one box (critical for dense detection); too-high threshold fails to merge overlapping predictions"
+  - "Domain shift too extreme: pseudo-labels from a domain the model has never seen can be systematically wrong (e.g., completely different crop type or imaging modality)"
+source_url: https://www.kaggle.com/competitions/global-wheat-detection/discussion/175961
+source_license: null
+---
+
+# Global Wheat Detection 1st Place — Pseudo-Labeled Multi-Detector Fusion
+
+## Problem
+
+Two-stage object detection pipeline combining Faster R-CNN (ResNeSt-101) and YOLOv5 with heavy mosaic/CutMix augmentation, pseudo-label-based self-training on test data, and weighted box fusion for final bounding box merging.
+
+## Approach
+
+Detect wheat heads in field images by training two different detection models with aggressive image augmentation, using the models to generate labels on unlabeled test data, retraining on the combined data, and merging the bounding boxes from both models.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.global_wheat_1st" readOnly={true} /> */}
+
+1. **Mosaic Augmentation** -- Create more varied training images by stitching four images together, pasting random patches between images, and randomly shifting colors.
+1. **Heavy Detector** -- Train a large, accurate detection model that first proposes candidate regions, then classifies and refines each one.
+1. **Light Detector** -- Train a fast, single-pass detection model that predicts all bounding boxes at once, providing a different perspective from the heavy model.
+1. **Pseudo-Labeling** -- Use the trained models to predict wheat head locations on unlabeled images, keeping only the highly confident predictions as new training labels.
+1. **Pseudo-Label Retraining** -- Retrain both detection models on the expanded dataset that now includes the auto-labeled test images, allowing the models to adapt to the test conditions.
+1. **Weighted Box Fusion** -- Combine the bounding boxes from both models by averaging overlapping boxes weighted by their confidence, producing more accurate final boxes than simply picking one.
+
+## Key Insight
+
+The pipeline's power comes from the synergy between architectural diversity and pseudo-label domain adaptation. Two architecturally different detectors (two-stage Faster R-CNN vs. one-stage YOLO) make complementary errors: Faster R-CNN has higher recall on occluded objects while YOLO is better at dense small objects. Pseudo-labeling bridges the train-test domain gap by letting the models adapt to test-time field conditions, and WBF exploits the complementary error profiles by averaging box coordinates weighted by confidence rather than simply suppressing duplicates.
+
+## Failure Modes
+
+- Pseudo-label error amplification: if initial models have low precision, confident false positives become training labels and compound across the self-training loop
+- WBF threshold miscalibration: too-low IoU threshold merges distinct nearby objects into one box (critical for dense detection); too-high threshold fails to merge overlapping predictions
+- Domain shift too extreme: pseudo-labels from a domain the model has never seen can be systematically wrong (e.g., completely different crop type or imaging modality)
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.global_wheat_1st" label="Reproduce this solution in Sciona" /> */}

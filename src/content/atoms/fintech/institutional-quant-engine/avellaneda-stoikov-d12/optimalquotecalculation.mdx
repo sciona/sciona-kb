@@ -1,0 +1,84 @@
+---
+fqdn: sciona.atoms.fintech.institutional_quant_engine.avellaneda_stoikov_d12.optimalquotecalculation
+predicate_id: optimalquotecalculation
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(gamma: float — absolute risk-aversion coefficient, k: float — market-depth / order-arrival rate parameter, q: float — current inventory position, s: float — current mid-price, sigma: float — asset price volatility) -> tuple[float — optimal bid quote, float — optimal ask quote, float — inventory-adjusted mid-price, float — total bid-ask spread]"
+informal_desc: Applies the Avellaneda-Stoikov closed-form formulae to derive (1) the inventory-skewed reservation price r = s − q·γ·σ² and (2) the symmetric optimal half-spread δ = γ·σ²·T + (2/γ)·ln(1 + γ/k), yielding a firm bid quote (r − δ/2) and ask quote (r + δ/2) that maximise expected utility under inventory risk.
+conceptual_summary: "RiskAversion-Weighted Symmetric Interval Placement with Positional Skew. Given a scalar reference point and a signed displacement (positional imbalance), this transform first skews the reference point proportionally to the displacement, a quadratic variance measure, and a risk-aversion scalar — producing a bias-corrected central anchor. It then computes a symmetric half-interval around that anchor whose width is jointly determined by the risk-aversion scalar, the variance measure, a time-horizon scalar, and a logarithmic correction term derived from an arrival-rate parameter — yielding a lower bound and upper bound that are equidistant from the corrected anchor and guaranteed to straddle it.. Applications: Adaptive sensor threshold placement in signal detection systems: given a sensor's baseline signal level, its noise variance, and a signed accumulation of recent false-positive or false-negative errors (positional imbalance), compute skew-corrected upper and lower detection thresholds that minimize expected classification loss under a specified penalty-per-deviation parameter., Robotic joint torque bracketing in motion control: given a robot actuator's nominal torque setpoint, the variance of disturbance forces, and the current signed deviation of the joint from its neutral pose, derive an asymmetry-corrected torque command with symmetric upper/lower saturation bounds that balance trajectory tracking against mechanical stress risk., Dynamic pricing interval generation in resource allocation systems: given a baseline resource valuation scalar, the variance of demand fluctuations, and a signed measure of current resource surplus or deficit, compute a corrected target allocation rate and symmetric upper/lower offer bounds that maximize expected throughput utility under inventory-imbalance risk., Ecological habitat corridor width optimization: given a baseline migration corridor centerline, the variance of species dispersal distances, and a signed measure of current population density asymmetry across the corridor, derive a skew-adjusted centerline and symmetric lateral boundary offsets that maximize expected gene-flow utility while penalizing large positional deviations from carrying-capacity balance."
+inputs:
+  - name: gamma
+    type_desc: float
+    constraints: gamma > 0
+    required: true
+    default_value_repr: ""
+  - name: k
+    type_desc: float
+    constraints: k > 0
+    required: true
+    default_value_repr: ""
+  - name: q
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: s
+    type_desc: float
+    constraints: s > 0
+    required: true
+    default_value_repr: ""
+  - name: sigma
+    type_desc: float
+    constraints: sigma > 0
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: bid_price
+    type_desc: float
+    constraints: bid_price < s
+    required: true
+    default_value_repr: ""
+  - name: ask_price
+    type_desc: float
+    constraints: ask_price > s
+    required: true
+    default_value_repr: ""
+  - name: reservation_price
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: optimal_spread
+    type_desc: float
+    constraints: optimal_spread > 0
+    required: true
+    default_value_repr: ""
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: avellaneda2008
+    citation: Market-making attribution.
+  - title: repo_institutional_quant_engine
+    citation: Primary repository attribution for Institutional-Quant-Engine atoms.
+title: Optimalquotecalculation
+description: Applies the Avellaneda-Stoikov closed-form formulae to derive (1) the inventory-skewed reservation price r = s − q·γ·σ² and (2) the symmetric optimal half-spre…
+---
+
+# Optimalquotecalculation
+
+> Applies the Avellaneda-Stoikov closed-form formulae to derive (1) the inventory-skewed reservation price r = s − q·γ·σ² and (2) the symmetric optimal half-spread δ = γ·σ²·T + (2/γ)·ln(1 + γ/k), yielding a firm bid quote (r − δ/2) and ask quote (r + δ/2) that maximise expected utility under inventory risk.
+
+## Conceptual Summary
+
+RiskAversion-Weighted Symmetric Interval Placement with Positional Skew. Given a scalar reference point and a signed displacement (positional imbalance), this transform first skews the reference point proportionally to the displacement, a quadratic variance measure, and a risk-aversion scalar — producing a bias-corrected central anchor. It then computes a symmetric half-interval around that anchor whose width is jointly determined by the risk-aversion scalar, the variance measure, a time-horizon scalar, and a logarithmic correction term derived from an arrival-rate parameter — yielding a lower bound and upper bound that are equidistant from the corrected anchor and guaranteed to straddle it.. Applications: Adaptive sensor threshold placement in signal detection systems: given a sensor's baseline signal level, its noise variance, and a signed accumulation of recent false-positive or false-negative errors (positional imbalance), compute skew-corrected upper and lower detection thresholds that minimize expected classification loss under a specified penalty-per-deviation parameter., Robotic joint torque bracketing in motion control: given a robot actuator's nominal torque setpoint, the variance of disturbance forces, and the current signed deviation of the joint from its neutral pose, derive an asymmetry-corrected torque command with symmetric upper/lower saturation bounds that balance trajectory tracking against mechanical stress risk., Dynamic pricing interval generation in resource allocation systems: given a baseline resource valuation scalar, the variance of demand fluctuations, and a signed measure of current resource surplus or deficit, compute a corrected target allocation rate and symmetric upper/lower offer bounds that maximize expected throughput utility under inventory-imbalance risk., Ecological habitat corridor width optimization: given a baseline migration corridor centerline, the variance of species dispersal distances, and a signed measure of current population density asymmetry across the corridor, derive a skew-adjusted centerline and symmetric lateral boundary offsets that maximize expected gene-flow utility while penalizing large positional deviations from carrying-capacity balance.
+
+## Type Signature
+
+```
+(gamma: float — absolute risk-aversion coefficient, k: float — market-depth / order-arrival rate parameter, q: float — current inventory position, s: float — current mid-price, sigma: float — asset price volatility) -> tuple[float — optimal bid quote, float — optimal ask quote, float — inventory-adjusted mid-price, float — total bid-ask spread]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

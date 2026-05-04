@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.robotics.pronto.dynamic_stance_estimator.query_stance
+predicate_id: query_stance
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(current_state: StateModelSpec) -> float"
+informal_desc: Extracts the stance (position) from the state vector.
+conceptual_summary: "ExtractPrimaryComponent. Selects and returns a single scalar component from a multi-dimensional state vector. This operation projects the state onto a single axis, isolating a specific quantity of interest from the broader system representation, which may include associated uncertainty or covariance data.. Applications: Extracting the estimated inflation rate from a state-space model of a national economy., Retrieving the activation value of a specific neuron from a layer's state tensor in an artificial neural network., Isolating the measured temperature from a multi-parameter vector describing a physical system's state (e.g., pressure, volume, temperature)., Determining a satellite's current altitude from its full 6D pose vector (position and orientation)."
+inputs:
+  - name: current_state
+    type_desc: StateModelSpec
+    constraints: Current state (x, P)
+outputs:
+  - name: stance
+    type_desc: float
+    constraints: The estimated position
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Query_stance
+description: Extracts the stance (position) from the state vector.
+---
+
+# Query_stance
+
+> Extracts the stance (position) from the state vector.
+
+## Conceptual Summary
+
+ExtractPrimaryComponent. Selects and returns a single scalar component from a multi-dimensional state vector. This operation projects the state onto a single axis, isolating a specific quantity of interest from the broader system representation, which may include associated uncertainty or covariance data.. Applications: Extracting the estimated inflation rate from a state-space model of a national economy., Retrieving the activation value of a specific neuron from a layer's state tensor in an artificial neural network., Isolating the measured temperature from a multi-parameter vector describing a physical system's state (e.g., pressure, volume, temperature)., Determining a satellite's current altitude from its full 6D pose vector (position and orientation).
+
+## Type Signature
+
+```
+(current_state: StateModelSpec) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

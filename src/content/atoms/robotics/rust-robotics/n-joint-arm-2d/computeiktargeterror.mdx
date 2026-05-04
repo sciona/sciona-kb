@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.n_joint_arm_2d.computeiktargeterror
+predicate_id: computeiktargeterror
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(ee_position_current: array-like, position_desired: array-like) -> tuple[array-like, float]"
+informal_desc: Compute Cartesian error between desired target position and current end-effector position for IK correction.
+conceptual_summary: ""
+inputs:
+  - name: ee_position_current
+    type_desc: np.ndarray
+    constraints: length == 2
+  - name: position_desired
+    type_desc: np.ndarray
+    constraints: length == 2
+outputs:
+  - name: ik_error_vector
+    type_desc: np.ndarray
+    constraints: length == 2
+  - name: ik_error_squared
+    type_desc: float
+    constraints: ">= 0"
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Computeiktargeterror
+description: Compute Cartesian error between desired target position and current end-effector position for IK correction.
+---
+
+# Computeiktargeterror
+
+> Compute Cartesian error between desired target position and current end-effector position for IK correction.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(ee_position_current: array-like, position_desired: array-like) -> tuple[array-like, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

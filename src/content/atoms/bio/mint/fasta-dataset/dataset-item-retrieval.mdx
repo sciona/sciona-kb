@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.mint.fasta_dataset.dataset_item_retrieval
+predicate_id: dataset_item_retrieval
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(dataset_state: DatasetState, idx: int) -> tuple[str, str]"
+informal_desc: Retrieve one labeled sequence by index.
+conceptual_summary: Aligned pair index lookup.
+inputs:
+  - name: dataset_state
+    type_desc: DatasetState
+    constraints: Must contain sequence_labels and sequence_strs with equal length.
+    required: true
+    default_value_repr: ""
+  - name: idx
+    type_desc: int
+    constraints: Valid Python list index for the dataset.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: sequence_record
+    type_desc: tuple[str, str]
+    constraints: (label, sequence_str) from the same index.
+    required: true
+    default_value_repr: ""
+concept_type: searching
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: mint2026
+    citation: Primary mint paper cited by the upstream repository.
+  - title: repo_mint
+    citation: Upstream implementation is mapped to the vendored mint repository.
+title: Dataset_item_retrieval
+description: Retrieve one labeled sequence by index.
+---
+
+# Dataset_item_retrieval
+
+> Retrieve one labeled sequence by index.
+
+## Conceptual Summary
+
+Aligned pair index lookup.
+
+## Type Signature
+
+```
+(dataset_state: DatasetState, idx: int) -> tuple[str, str]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,60 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.classifysqisheuristically
+predicate_id: classifysqisheuristically
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(qsqi: float, psqi: float, ksqi: float, bassqi: float, detector_1: NDArray, fs: float) -> NDArray"
+informal_desc: Classifies each of the four base SQIs into discrete categories (0=unqualified, 1=suspicious, 2=optimal) based on a set of heuristic rules, some of which are adaptive to heart rate.
+conceptual_summary: ""
+inputs:
+  - name: qsqi
+    type_desc: float
+    constraints: Beat-matching quality index.
+  - name: psqi
+    type_desc: float
+    constraints: QRS power-spectrum quality index.
+  - name: ksqi
+    type_desc: float
+    constraints: Kurtosis quality index.
+  - name: bassqi
+    type_desc: float
+    constraints: Baseline wander quality index.
+  - name: detector_1
+    type_desc: NDArray
+    constraints: R-peak locations for heart rate calculation.
+  - name: fs
+    type_desc: float
+    constraints: Sampling frequency.
+outputs:
+  - name: class_matrix
+    type_desc: NDArray
+    constraints: An array of four integer class labels.
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Classifysqisheuristically
+description: Classifies each of the four base SQIs into discrete categories (0=unqualified, 1=suspicious, 2=optimal) based on a set of heuristic rules, some of which are ad…
+---
+
+# Classifysqisheuristically
+
+> Classifies each of the four base SQIs into discrete categories (0=unqualified, 1=suspicious, 2=optimal) based on a set of heuristic rules, some of which are adaptive to heart rate.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(qsqi: float, psqi: float, ksqi: float, bassqi: float, detector_1: NDArray, fs: float) -> NDArray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

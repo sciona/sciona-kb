@@ -1,0 +1,67 @@
+---
+cdg_asset_id: solution.kaggle.santander_transaction_1st
+title: Santander Customer Transaction Prediction 1st Place — Synthetic Data Detection with Count Encoding
+description: Predict which bank customers will make a transaction by first figuring out which test-set rows are fake padding (added by the competition organizers), removing…
+problem_statement: Tabular binary classification pipeline that detects and removes synthetic padding rows from the test set, replaces raw feature values with frequency-count encodings, applies shuffle augmentation within target classes, and trains LightGBM with heavy regularization.
+platform: kaggle
+competition_name: Santander Customer Transaction Prediction - 1st Place (2019)
+placement: 1st
+year: 2019
+domain: tabular_classification
+paradigm: optimization
+family: tabular_classification
+tags:
+  - tabular_binary_classification
+  - count_encoding
+  - synthetic_data_detection
+  - frequency_feature
+  - adversarial_test_set
+  - test_set_data_leakage
+  - fake_row_detection
+  - value_frequency_encoding
+  - anonymized_features
+  - shuffle_augmentation
+  - lightgbm_heavy_regularization
+key_insight: "The real insight is detecting and removing synthetic padding rows from the test set. The competition organizers injected fake rows with unique values to prevent leakage-based solutions, but this injection itself leaks information: real rows share values with the training set while fake rows have values appearing exactly once. Removing fake rows before computing frequency counts ensures the count features reflect the true data distribution, and these clean counts become the dominant signal for the downstream classifier."
+failure_modes:
+  - "No synthetic rows in the test set: the fake data identification stage finds nothing and the pipeline reduces to vanilla count encoding with no special advantage"
+  - "Synthetic detection heuristic is wrong: misidentifying real rows as fake corrupts the count statistics and degrades performance"
+  - "Features are truly continuous (no value repetition): count encoding maps everything to 1 and the model has no signal beyond raw values"
+source_url: https://www.kaggle.com/c/santander-customer-transaction-prediction/discussion/89003
+source_license: null
+---
+
+# Santander Customer Transaction Prediction 1st Place — Synthetic Data Detection with Count Encoding
+
+## Problem
+
+Tabular binary classification pipeline that detects and removes synthetic padding rows from the test set, replaces raw feature values with frequency-count encodings, applies shuffle augmentation within target classes, and trains LightGBM with heavy regularization.
+
+## Approach
+
+Predict which bank customers will make a transaction by first figuring out which test-set rows are fake padding (added by the competition organizers), removing them so they do not corrupt frequency statistics, then counting how often each value appears and using those counts as features for a gradient-boosted tree model.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.santander_transaction_1st" readOnly={true} /> */}
+
+1. **Count Encoding** -- For each feature column, count how many times each value appears in the data.
+1. **Fake Data Identification** -- Find test-set rows that have values appearing nowhere else in the data — these are artificial rows added as padding and should not be used.
+1. **Real Data Filtering** -- Remove the fake rows from the test set so they do not pollute the frequency counts.
+1. **Value Substitution** -- Swap each feature value for how often it appears in the data, and also keep the original values alongside.
+1. **LightGBM Training** -- Train a gradient-boosted tree model using only a random subset of features and data rows at each step to prevent overfitting.
+1. **Shuffle Augmentation** -- Create extra training examples by randomly rearranging feature values among rows with the same label, giving the model more data to learn from.
+
+## Key Insight
+
+The real insight is detecting and removing synthetic padding rows from the test set. The competition organizers injected fake rows with unique values to prevent leakage-based solutions, but this injection itself leaks information: real rows share values with the training set while fake rows have values appearing exactly once. Removing fake rows before computing frequency counts ensures the count features reflect the true data distribution, and these clean counts become the dominant signal for the downstream classifier.
+
+## Failure Modes
+
+- No synthetic rows in the test set: the fake data identification stage finds nothing and the pipeline reduces to vanilla count encoding with no special advantage
+- Synthetic detection heuristic is wrong: misidentifying real rows as fake corrupts the count statistics and degrades performance
+- Features are truly continuous (no value repetition): count encoding maps everything to 1 and the model has no signal beyond raw values
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.santander_transaction_1st" label="Reproduce this solution in Sciona" /> */}

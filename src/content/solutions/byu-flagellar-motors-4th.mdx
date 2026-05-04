@@ -1,0 +1,59 @@
+---
+cdg_asset_id: solution.kaggle.byu_flagellar_motors_4th
+title: BYU Locating Bacterial Flagellar Motors - 4th Place (2025) - Pipeline Template
+description: "This template captures the ordered steps used by BYU Locating Bacterial Flagellar Motors - 4th Place (2025): prepare the data, build task-specific representati…"
+problem_statement: "Object detection (2D) solution template for BYU Locating Bacterial Flagellar Motors - 4th Place (2025), modeled as a 6-stage deterministic pipeline: Data Ingestion, Medical Augmentation, Classification Feature Extraction, Object Detection, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: BYU Locating Bacterial Flagellar Motors - 4th Place (2025)
+placement: 4th
+year: 2025
+domain: object_detection_2d
+paradigm: optimization
+family: object_detection_2d
+tags:
+  - rag
+  - object
+  - detection
+key_insight: "The load-bearing idea is the pipeline topology: Data Ingestion creates the representation needed by Ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/writeups/daddies-4th-place-simple-resnet18-classification
+source_license: null
+---
+
+# BYU Locating Bacterial Flagellar Motors - 4th Place (2025) - Pipeline Template
+
+## Problem
+
+Object detection (2D) solution template for BYU Locating Bacterial Flagellar Motors - 4th Place (2025), modeled as a 6-stage deterministic pipeline: Data Ingestion, Medical Augmentation, Classification Feature Extraction, Object Detection, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by BYU Locating Bacterial Flagellar Motors - 4th Place (2025): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.byu_flagellar_motors_4th" readOnly={true} /> */}
+
+1. **Data Ingestion** -- This stage load cryo-ET biological imagery and systematically merge it with supplementary external datasets to increase diversity (pandas).
+1. **Medical Augmentation** -- This stage apply domain-specific tensor augmentations (rotation, volumetric scaling, Gaussian noise injection) tailored specifically for biological and medical imaging (MONAI).
+1. **Classification Feature Extraction** -- This stage train a straightforward 3D-ResNet18 classification backbone to simply identify whether regions contain flagellar motors, acting as a rapid filtration mechanism (torch.nn).
+1. **Object Detection** -- This stage train specialized medical object detection networks strictly on the high-probability regions identified by the ResNet (MONAI).
+1. **Model Export & Acceleration** -- This stage compile the trained models to TensorRT via TorchScript (JIT). This architectural choice enables ultra-fast inference, deliberately sacrificing a fraction of precision to allow for a vastly larger ensemble within strict competition time limits (tensorrt, torch.jit).
+1. **Ensembling** -- This stage average the resulting bounding box coordinates and confidences across the parallel ResNet and MONAI detection streams (numpy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Data Ingestion creates the representation needed by Ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.byu_flagellar_motors_4th" label="Reproduce this solution in Sciona" /> */}

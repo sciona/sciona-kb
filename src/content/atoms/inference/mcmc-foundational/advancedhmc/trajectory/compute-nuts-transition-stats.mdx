@@ -1,0 +1,67 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.trajectory.compute_nuts_transition_stats
+predicate_id: compute_nuts_transition_stats
+repo: sciona-atoms
+domain: inference
+type_signature: "(final_zcand: PhasePoint, final_tree: BinaryTree, H0: Real, final_depth: Int, final_termination: Termination, h: Hamiltonian, integrator_stats: dict) -> dict"
+informal_desc: Computes the final energy of the chosen candidate state and aggregates all relevant statistics for the NUTS transition, such as acceptance rate, energy error, tree depth, and numerical errors.
+conceptual_summary: ""
+inputs:
+  - name: final_zcand
+    type_desc: PhasePoint
+    constraints: The final candidate state.
+  - name: final_tree
+    type_desc: BinaryTree
+    constraints: The completed proposal tree.
+  - name: H0
+    type_desc: Real
+    constraints: Initial energy for calculating error.
+  - name: final_depth
+    type_desc: Int
+    constraints: Final tree depth.
+  - name: final_termination
+    type_desc: Termination
+    constraints: Final termination status.
+  - name: h
+    type_desc: Hamiltonian
+    constraints: Used to compute final energy.
+  - name: integrator_stats
+    type_desc: dict
+    constraints: Statistics from the trajectory integrator.
+outputs:
+  - name: transition_stats
+    type_desc: dict
+    constraints: Aggregated statistics for the transition.
+concept_type: posterior_update
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for doubling trajectory trees and No-U-Turn termination.
+  - title: advancedhmc2020
+    citation: Package paper for AdvancedHMC.jl trajectory construction.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper returns compact NumPy leaves rather than Julia BinaryTree objects.
+  - title: neal2011hmc
+    citation: Canonical HMC reference for Hamiltonian dynamics and Metropolis-style energy diagnostics used by NUTS.
+title: Compute_nuts_transition_stats
+description: Computes the final energy of the chosen candidate state and aggregates all relevant statistics for the NUTS transition, such as acceptance rate, energy error, …
+---
+
+# Compute_nuts_transition_stats
+
+> Computes the final energy of the chosen candidate state and aggregates all relevant statistics for the NUTS transition, such as acceptance rate, energy error, tree depth, and numerical errors.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(final_zcand: PhasePoint, final_tree: BinaryTree, H0: Real, final_depth: Int, final_termination: Termination, h: Hamiltonian, integrator_stats: dict) -> dict
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

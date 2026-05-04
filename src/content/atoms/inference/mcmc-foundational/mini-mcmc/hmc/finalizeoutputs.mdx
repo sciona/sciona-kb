@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.finalizeoutputs
+predicate_id: finalizeoutputs
+repo: sciona-atoms
+domain: inference
+type_signature: "(buffer_filled: Tensor[float; n_collect, n_chains, dim], trace_raw: object) -> tuple[Tensor[float; n_chains, n_collect, dim], object]"
+informal_desc: Convert collected tensor to chain-major layout and derive final run trace/statistics object.
+conceptual_summary: ""
+inputs:
+  - name: buffer_filled
+    type_desc: Tensor[float; n_collect, n_chains, dim]
+    constraints: fully populated
+  - name: trace_raw
+    type_desc: object
+    constraints: may include partial diagnostics and errors
+outputs:
+  - name: samples
+    type_desc: Tensor[float; n_chains, n_collect, dim]
+    constraints: chain-major output (permute [1,0,2])
+  - name: trace
+    type_desc: object
+    constraints: finalized diagnostics/stats for the run
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Finalizeoutputs
+description: Convert collected tensor to chain-major layout and derive final run trace/statistics object.
+---
+
+# Finalizeoutputs
+
+> Convert collected tensor to chain-major layout and derive final run trace/statistics object.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(buffer_filled: Tensor[float; n_collect, n_chains, dim], trace_raw: object) -> tuple[Tensor[float; n_chains, n_collect, dim], object]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

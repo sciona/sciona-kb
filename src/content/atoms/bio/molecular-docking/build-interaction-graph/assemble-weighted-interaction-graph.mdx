@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.build_interaction_graph.assemble_weighted_interaction_graph
+predicate_id: assemble_weighted_interaction_graph
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(compatible_edges: set[tuple[InteractionNode, InteractionNode]], nodes: list[InteractionNode]) -> nx.Graph"
+informal_desc: Build the final weighted NetworkX graph from the compatible edges and full node list.
+conceptual_summary: ""
+inputs:
+  - name: compatible_edges
+    type_desc: set[tuple[InteractionNode, InteractionNode]]
+    constraints: Edge endpoints must be present in nodes
+  - name: nodes
+    type_desc: list[InteractionNode]
+    constraints: Defines graph node set
+outputs:
+  - name: interaction_graph
+    type_desc: object
+    constraints: Weighted graph representation of compatible interactions
+concept_type: graph_optimization
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Assemble_weighted_interaction_graph
+description: Build the final weighted NetworkX graph from the compatible edges and full node list.
+---
+
+# Assemble_weighted_interaction_graph
+
+> Build the final weighted NetworkX graph from the compatible edges and full node list.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(compatible_edges: set[tuple[InteractionNode, InteractionNode]], nodes: list[InteractionNode]) -> nx.Graph
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

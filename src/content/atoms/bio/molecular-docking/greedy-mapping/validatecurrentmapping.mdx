@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.validatecurrentmapping
+predicate_id: validatecurrentmapping
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mapping_context: MappingContext, mapping: Map[GraphNode,LatticeNode], unmapping: Map[LatticeNode,GraphNode]) -> bool"
+informal_desc: Evaluate whether the current mapping/unmapping pair satisfies graph-lattice consistency constraints.
+conceptual_summary: "Bidirectional Relation Consistency Validator. Consumes a candidate pair of forward and reverse mappings between two discrete relational structures and tests whether they satisfy a shared constraint system. It verifies inverse coherence (round-trip consistency) and structural admissibility against topology/order constraints encoded in the context object. The result is a single feasibility predicate indicating whether the mapping pair is a valid structure-preserving correspondence.. Applications: Verifying correspondence between segmented regions in multimodal medical images under anatomical adjacency constraints, Checking consistency of symbol-to-state alignments in compiler intermediate-representation lowering with reverse traceability guarantees, Validating entity alignment between heterogeneous knowledge graphs while preserving ontology hierarchy relations, Confirming mesh-to-skeleton attachment maps in computational biomechanics with inverse lookup and topology constraints"
+inputs:
+  - name: mapping_context
+    type_desc: MappingContext
+    constraints: uses graph and lattice constraints
+  - name: mapping
+    type_desc: Map[GraphNode,LatticeNode]
+    constraints: candidate mapping
+  - name: unmapping
+    type_desc: Map[LatticeNode,GraphNode]
+    constraints: must correspond to mapping
+outputs:
+  - name: mapping_is_valid
+    type_desc: bool
+    constraints: true iff all structural constraints hold
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Validatecurrentmapping
+description: Evaluate whether the current mapping/unmapping pair satisfies graph-lattice consistency constraints.
+---
+
+# Validatecurrentmapping
+
+> Evaluate whether the current mapping/unmapping pair satisfies graph-lattice consistency constraints.
+
+## Conceptual Summary
+
+Bidirectional Relation Consistency Validator. Consumes a candidate pair of forward and reverse mappings between two discrete relational structures and tests whether they satisfy a shared constraint system. It verifies inverse coherence (round-trip consistency) and structural admissibility against topology/order constraints encoded in the context object. The result is a single feasibility predicate indicating whether the mapping pair is a valid structure-preserving correspondence.. Applications: Verifying correspondence between segmented regions in multimodal medical images under anatomical adjacency constraints, Checking consistency of symbol-to-state alignments in compiler intermediate-representation lowering with reverse traceability guarantees, Validating entity alignment between heterogeneous knowledge graphs while preserving ontology hierarchy relations, Confirming mesh-to-skeleton attachment maps in computational biomechanics with inverse lookup and topology constraints
+
+## Type Signature
+
+```
+(mapping_context: MappingContext, mapping: Map[GraphNode,LatticeNode], unmapping: Map[LatticeNode,GraphNode]) -> bool
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

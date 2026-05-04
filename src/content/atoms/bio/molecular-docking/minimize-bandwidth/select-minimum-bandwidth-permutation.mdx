@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.select_minimum_bandwidth_permutation
+predicate_id: select_minimum_bandwidth_permutation
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(validated_mat: np.ndarray (2D numeric), candidate_permutations: iterable[np.ndarray | list[int]]) -> list[int]"
+informal_desc: Evaluate each candidate by permuting the matrix and computing resulting bandwidth, then return the best permutation as a Python list.
+conceptual_summary: ""
+inputs:
+  - name: validated_mat
+    type_desc: np.ndarray
+    constraints: symmetric
+  - name: candidate_permutations
+    type_desc: list[np.ndarray]
+    constraints: non-empty iterable of valid permutations
+outputs:
+  - name: optimal_permutation
+    type_desc: list[int]
+    constraints: argmin over matrix_bandwidth(permute_matrix(validated_mat, perm))
+concept_type: combinatorics
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Select_minimum_bandwidth_permutation
+description: Evaluate each candidate by permuting the matrix and computing resulting bandwidth, then return the best permutation as a Python list.
+---
+
+# Select_minimum_bandwidth_permutation
+
+> Evaluate each candidate by permuting the matrix and computing resulting bandwidth, then return the best permutation as a Python list.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(validated_mat: np.ndarray (2D numeric), candidate_permutations: iterable[np.ndarray | list[int]]) -> list[int]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

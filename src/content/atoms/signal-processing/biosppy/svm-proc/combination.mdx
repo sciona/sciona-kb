@@ -1,0 +1,97 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.svm_proc.combination
+predicate_id: combination
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(results: Any, weights: Any) -> Any"
+informal_desc: |-
+  Combine results from multiple classifiers.
+
+  Parameters
+  ----------
+  results : dict
+      Results for each classifier.
+  weights : dict, optional
+      Weight for each classifier.
+
+  Returns
+  -------
+  decision : object
+      Consensus decision.
+  confidence : float
+      Confidence estimate of the decision.
+  counts : array
+      Weight for each possible decision outcome.
+  classes : array
+      List of possible decision outcomes.
+conceptual_summary: ""
+inputs:
+  - name: results
+    type_desc: Mapping[Hashable, Sequence[object] | NDArray]
+    constraints: valid Mapping[Hashable, Sequence[object] | NDArray]
+    required: true
+    default_value_repr: ""
+  - name: weights
+    type_desc: Mapping[Hashable, float] | None
+    constraints: valid Mapping[Hashable, float] | None
+    required: false
+    default_value_repr: None
+outputs:
+  - name: result
+    type_desc: tuple[object, object, object, object]
+    constraints: valid tuple[object, object, object, object]
+    required: true
+    default_value_repr: ""
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Combination
+description: |-
+  Combine results from multiple classifiers.
+
+  Parameters
+  ----------
+  results : dict
+      Results for each classifier.
+  weights : dict, optional
+      Weight for each …
+---
+
+# Combination
+
+> Combine results from multiple classifiers.
+
+Parameters
+----------
+results : dict
+    Results for each classifier.
+weights : dict, optional
+    Weight for each classifier.
+
+Returns
+-------
+decision : object
+    Consensus decision.
+confidence : float
+    Confidence estimate of the decision.
+counts : array
+    Weight for each possible decision outcome.
+classes : array
+    List of possible decision outcomes.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(results: Any, weights: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

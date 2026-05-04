@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping_d12.initialize_state_with_start_anchor
+predicate_id: initialize_state_with_start_anchor
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(problem_context: GreedyMappingContext, starting_node: NodeId (int)) -> MappingState"
+informal_desc: Create empty mapping containers, seed the starting graph node onto the lattice via `initialize_mapping`, and establish the current expansion pointers.
+conceptual_summary: ""
+inputs:
+  - name: problem_context
+    type_desc: GreedyMappingContext
+    constraints: Must provide graph, lattice, and initialize_mapping helper.
+    required: true
+    default_value_repr: ""
+  - name: starting_node
+    type_desc: NodeId (int)
+    constraints: Must exist in graph.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: mapping_state
+    type_desc: MappingState
+    constraints: Contains mapping, unmapping, unexpanded_nodes, current_node, current_lattice_node initialized for first iteration.
+    required: true
+    default_value_repr: ""
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Initialize_state_with_start_anchor
+description: Create empty mapping containers, seed the starting graph node onto the lattice via `initialize_mapping`, and establish the current expansion pointers.
+---
+
+# Initialize_state_with_start_anchor
+
+> Create empty mapping containers, seed the starting graph node onto the lattice via `initialize_mapping`, and establish the current expansion pointers.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(problem_context: GreedyMappingContext, starting_node: NodeId (int)) -> MappingState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

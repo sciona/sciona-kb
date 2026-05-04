@@ -1,0 +1,84 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.svm_proc.assess_runs
+predicate_id: assess_runs
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(results: Any, subjects: Any) -> Any"
+informal_desc: |-
+  Assess the performance of multiple biometric classification runs.
+
+  Parameters
+  ----------
+  results : list
+      Classification assessment for each run.
+  subjects : list
+      Common target subject classes.
+
+  Returns
+  -------
+  assessment : dict
+      Global classification assessment.
+conceptual_summary: ""
+inputs:
+  - name: results
+    type_desc: Sequence[dict[str, object]]
+    constraints: valid Sequence[dict[str, object]]
+    required: true
+    default_value_repr: ""
+  - name: subjects
+    type_desc: Sequence[Hashable]
+    constraints: valid Sequence[Hashable]
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: result
+    type_desc: dict[str, object]
+    constraints: valid dict[str, object]
+    required: true
+    default_value_repr: ""
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Assess_runs
+description: |-
+  Assess the performance of multiple biometric classification runs.
+
+  Parameters
+  ----------
+  results : list
+      Classification assessment for each run.
+  subjects : …
+---
+
+# Assess_runs
+
+> Assess the performance of multiple biometric classification runs.
+
+Parameters
+----------
+results : list
+    Classification assessment for each run.
+subjects : list
+    Common target subject classes.
+
+Returns
+-------
+assessment : dict
+    Global classification assessment.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(results: Any, subjects: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

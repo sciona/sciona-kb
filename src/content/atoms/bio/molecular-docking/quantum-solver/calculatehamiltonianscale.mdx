@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.calculatehamiltonianscale
+predicate_id: calculatehamiltonianscale
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(register_coordinates: Dict, graph: nx.Graph) -> float"
+informal_desc: Determines the global energy scale for the Hamiltonian by calculating the interaction strength for the shortest non-connected qubit pair, which defines the Rydberg blockade radius.
+conceptual_summary: ""
+inputs:
+  - name: register_coordinates
+    type_desc: Dict
+    constraints: Mapping from node ID to coordinate.
+  - name: graph
+    type_desc: object
+    constraints: The problem graph defining connectivity.
+outputs:
+  - name: max_interaction_strength
+    type_desc: float
+    constraints: The calculated 'u_max' value.
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Calculatehamiltonianscale
+description: Determines the global energy scale for the Hamiltonian by calculating the interaction strength for the shortest non-connected qubit pair, which defines the Ryd…
+---
+
+# Calculatehamiltonianscale
+
+> Determines the global energy scale for the Hamiltonian by calculating the interaction strength for the shortest non-connected qubit pair, which defines the Rydberg blockade radius.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(register_coordinates: Dict, graph: nx.Graph) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

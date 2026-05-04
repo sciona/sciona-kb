@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.completemomentumkickandrefreshcarry
+predicate_id: completemomentumkickandrefreshcarry
+repo: sciona-atoms
+domain: inference
+type_signature: "(position_advanced: Tensor<B, 2>, momentum_half_kicked: Tensor<B, 2>, grad_summands: Tensor<B, 2>) -> tuple[Tensor<B, 2>, Tensor<B, 2>, Tensor<B, 2>]"
+informal_desc: Apply the second half-step momentum kick using the newly computed gradient summands and emit the next iteration carry state.
+conceptual_summary: ""
+inputs:
+  - name: position_advanced
+    type_desc: Tensor
+    constraints: Post-drift position
+  - name: momentum_half_kicked
+    type_desc: Tensor
+    constraints: Momentum after first half-kick
+  - name: grad_summands
+    type_desc: Tensor
+    constraints: New scaled gradient half-step
+outputs:
+  - name: position_out
+    type_desc: Tensor
+    constraints: Position carry for next leapfrog iteration
+  - name: momentum_out
+    type_desc: Tensor
+    constraints: Momentum carry for next leapfrog iteration
+  - name: last_grad_summands_out
+    type_desc: Tensor
+    constraints: Gradient carry for next leapfrog iteration
+concept_type: mcmc_proposal
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Completemomentumkickandrefreshcarry
+description: Apply the second half-step momentum kick using the newly computed gradient summands and emit the next iteration carry state.
+---
+
+# Completemomentumkickandrefreshcarry
+
+> Apply the second half-step momentum kick using the newly computed gradient summands and emit the next iteration carry state.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(position_advanced: Tensor<B, 2>, momentum_half_kicked: Tensor<B, 2>, grad_summands: Tensor<B, 2>) -> tuple[Tensor<B, 2>, Tensor<B, 2>, Tensor<B, 2>]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

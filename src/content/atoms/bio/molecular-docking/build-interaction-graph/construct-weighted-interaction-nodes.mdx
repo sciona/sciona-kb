@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.build_interaction_graph.construct_weighted_interaction_nodes
+predicate_id: construct_weighted_interaction_nodes
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(L_features: sequence of left feature objects, R_features: sequence of right feature objects, POTENTIAL_FUNCTION: mapping[(str, str) -> float]) -> list[InteractionNode]"
+informal_desc: Create all candidate interaction nodes as the Cartesian product of left/right features, assigning each node a potential-based weight from feature-family abbreviations.
+conceptual_summary: ""
+inputs:
+  - name: L_features
+    type_desc: list[object]
+    constraints: Each feature exposes family.abbreviation
+  - name: R_features
+    type_desc: list[object]
+    constraints: Each feature exposes family.abbreviation
+  - name: POTENTIAL_FUNCTION
+    type_desc: dict
+    constraints: Must contain keys for all family abbreviation pairs
+outputs:
+  - name: nodes
+    type_desc: list[InteractionNode]
+    constraints: Length equals len(L_features) * len(R_features)
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Construct_weighted_interaction_nodes
+description: Create all candidate interaction nodes as the Cartesian product of left/right features, assigning each node a potential-based weight from feature-family abbrev…
+---
+
+# Construct_weighted_interaction_nodes
+
+> Create all candidate interaction nodes as the Cartesian product of left/right features, assigning each node a potential-based weight from feature-family abbreviations.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(L_features: sequence of left feature objects, R_features: sequence of right feature objects, POTENTIAL_FUNCTION: mapping[(str, str) -> float]) -> list[InteractionNode]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

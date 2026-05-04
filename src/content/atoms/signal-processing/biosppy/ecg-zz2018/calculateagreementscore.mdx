@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.calculateagreementscore
+predicate_id: calculateagreementscore
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(mutual_detection_count: int, detector_1_count: int, detector_2_count: int, mode: str) -> float"
+informal_desc: Calculates the final bSQI score based on the number of mutual detections and the total number of detections from each source, according to the specified mode.
+conceptual_summary: ""
+inputs:
+  - name: mutual_detection_count
+    type_desc: int
+    constraints: Number of agreed-upon detections.
+  - name: detector_1_count
+    type_desc: int
+    constraints: Total number of beats in the first detector's output.
+  - name: detector_2_count
+    type_desc: int
+    constraints: Total number of beats in the second detector's output.
+  - name: mode
+    type_desc: str
+    constraints: One of 'simple', 'matching', or 'n_double'.
+outputs:
+  - name: bSQI_score
+    type_desc: float
+    constraints: The calculated beat-based Signal Quality Index.
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Calculateagreementscore
+description: Calculates the final bSQI score based on the number of mutual detections and the total number of detections from each source, according to the specified mode.
+---
+
+# Calculateagreementscore
+
+> Calculates the final bSQI score based on the number of mutual detections and the total number of detections from each source, according to the specified mode.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mutual_detection_count: int, detector_1_count: int, detector_2_count: int, mode: str) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

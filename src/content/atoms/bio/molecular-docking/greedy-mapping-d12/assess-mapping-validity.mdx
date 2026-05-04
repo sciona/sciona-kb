@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping_d12.assess_mapping_validity
+predicate_id: assess_mapping_validity
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(problem_context: GreedyMappingContext, expanded_mapping_state: MappingState) -> bool"
+informal_desc: Run `check_mapping_validity` to verify bidirectional adjacency consistency between graph and lattice projections.
+conceptual_summary: ""
+inputs:
+  - name: problem_context
+    type_desc: GreedyMappingContext
+    constraints: Must provide check_mapping_validity helper.
+    required: true
+    default_value_repr: ""
+  - name: expanded_mapping_state
+    type_desc: MappingState
+    constraints: Must include mapping and unmapping dictionaries.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: is_valid
+    type_desc: bool
+    constraints: True only if all mapped adjacencies are consistent in both domains.
+    required: true
+    default_value_repr: ""
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Assess_mapping_validity
+description: Run `check_mapping_validity` to verify bidirectional adjacency consistency between graph and lattice projections.
+---
+
+# Assess_mapping_validity
+
+> Run `check_mapping_validity` to verify bidirectional adjacency consistency between graph and lattice projections.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(problem_context: GreedyMappingContext, expanded_mapping_state: MappingState) -> bool
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

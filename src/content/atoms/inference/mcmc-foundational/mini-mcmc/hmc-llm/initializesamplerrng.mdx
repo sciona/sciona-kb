@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.initializesamplerrng
+predicate_id: initializesamplerrng
+repo: sciona-atoms
+domain: inference
+type_signature: "(seed: int) -> PRNGKey/RNG state"
+informal_desc: Initialize explicit stochastic state for pure functional sampling. RNG state is threaded across all transitions and never mutated in place.
+conceptual_summary: "Deterministic Stochastic-State Bootstrap. Maps a single integer entropy token into an immutable pseudo-random state object that can drive probabilistic transitions in a purely functional pipeline. The produced state is not mutated; instead, successor states are derived and explicitly threaded through subsequent computations. This creates reproducible stochastic behavior where identical seeds yield identical random-state trajectories.. Applications: Monte Carlo trajectory initialization in computational physics with reproducible experiment replay, Deterministic randomized augmentation pipelines in machine learning training workflows, Reproducible randomized search initialization in combinatorial optimization and metaheuristics, Procedural pattern/structure generation in graphics or digital fabrication where exact regeneration is required"
+inputs:
+  - name: seed
+    type_desc: int
+    constraints: deterministic reproducibility seed
+outputs:
+  - name: prng_key_state
+    type_desc: np.ndarray
+    constraints: immutable key to be split per transition
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Initializesamplerrng
+description: Initialize explicit stochastic state for pure functional sampling. RNG state is threaded across all transitions and never mutated in place.
+---
+
+# Initializesamplerrng
+
+> Initialize explicit stochastic state for pure functional sampling. RNG state is threaded across all transitions and never mutated in place.
+
+## Conceptual Summary
+
+Deterministic Stochastic-State Bootstrap. Maps a single integer entropy token into an immutable pseudo-random state object that can drive probabilistic transitions in a purely functional pipeline. The produced state is not mutated; instead, successor states are derived and explicitly threaded through subsequent computations. This creates reproducible stochastic behavior where identical seeds yield identical random-state trajectories.. Applications: Monte Carlo trajectory initialization in computational physics with reproducible experiment replay, Deterministic randomized augmentation pipelines in machine learning training workflows, Reproducible randomized search initialization in combinatorial optimization and metaheuristics, Procedural pattern/structure generation in graphics or digital fabrication where exact regeneration is required
+
+## Type Signature
+
+```
+(seed: int) -> PRNGKey/RNG state
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

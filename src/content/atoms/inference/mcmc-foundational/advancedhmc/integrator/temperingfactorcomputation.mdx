@@ -1,0 +1,56 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.integrator.temperingfactorcomputation
+predicate_id: temperingfactorcomputation
+repo: sciona-atoms
+domain: inference
+type_signature: "(lf: Leapfrog/state-transition context, r: Real scalar, step: Integer, n_steps: Integer) -> Real scalar"
+informal_desc: Computes a deterministic tempering multiplier across sub-steps (with bounds checking) to scale the transition strength.
+conceptual_summary: "IndexedTransitionGainSchedule. Maps a global intensity parameter and a discrete sub-step index to a deterministic scalar gain used to modulate update magnitude within a multi-step process. The computation enforces index validity against the total step count, yielding a well-defined scaling factor for every admissible sub-step. This is a pure schedule evaluation: no persistent state is mutated, and output is fully determined by the provided inputs.. Applications: Adaptive learning-rate scaling across inner iterations of numerical optimization in scientific computing, Stepwise trust-region or damping control in nonlinear equation solvers for computational physics, Scheduled actuation gain modulation across micro-steps in robotic trajectory execution, Progressive regularization-strength scheduling over sub-epochs in neural network training"
+inputs:
+  - name: lf
+    type_desc: object
+    constraints: Read-only; no persistent mutation
+  - name: r
+    type_desc: float
+    constraints: Finite
+  - name: step
+    type_desc: Integer
+    constraints: 0 <= step <= n_steps
+  - name: n_steps
+    type_desc: Integer
+    constraints: Positive
+outputs:
+  - name: tempering_scale
+    type_desc: float
+    constraints: Deterministic function of inputs
+concept_type: mcmc_proposal
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for leapfrog Hamiltonian phase-point updates.
+  - title: advancedhmc2020
+    citation: Package paper for the AdvancedHMC.jl integrator family that this NumPy atom mirrors at a compact phase-point level.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper is a local NumPy implementation rather than a direct Julia object binding.
+title: Temperingfactorcomputation
+description: Computes a deterministic tempering multiplier across sub-steps (with bounds checking) to scale the transition strength.
+---
+
+# Temperingfactorcomputation
+
+> Computes a deterministic tempering multiplier across sub-steps (with bounds checking) to scale the transition strength.
+
+## Conceptual Summary
+
+IndexedTransitionGainSchedule. Maps a global intensity parameter and a discrete sub-step index to a deterministic scalar gain used to modulate update magnitude within a multi-step process. The computation enforces index validity against the total step count, yielding a well-defined scaling factor for every admissible sub-step. This is a pure schedule evaluation: no persistent state is mutated, and output is fully determined by the provided inputs.. Applications: Adaptive learning-rate scaling across inner iterations of numerical optimization in scientific computing, Stepwise trust-region or damping control in nonlinear equation solvers for computational physics, Scheduled actuation gain modulation across micro-steps in robotic trajectory execution, Progressive regularization-strength scheduling over sub-epochs in neural network training
+
+## Type Signature
+
+```
+(lf: Leapfrog/state-transition context, r: Real scalar, step: Integer, n_steps: Integer) -> Real scalar
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

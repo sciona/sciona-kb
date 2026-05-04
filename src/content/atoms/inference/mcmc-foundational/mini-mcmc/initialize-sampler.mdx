@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.initialize_sampler
+predicate_id: initialize_sampler
+repo: sciona-atoms
+domain: inference
+type_signature: "(target: Callable[[Array], float], initial_positions: Array, target_accept_p: float, seed: int) -> NUTSState"
+informal_desc: Sets up the initial state for the NUTS sampler, including the PRNG seed, target log-probability function, initial positions, and tuning parameters.
+conceptual_summary: "initialize_stochastic_traversal. Configures and encapsulates the initial conditions for a stateful, iterative search or sampling process. It bundles a scalar potential function (oracle), initial search coordinates, a randomness source (PRNG), and adaptive algorithm parameters into a single, immutable state object, preparing for a subsequent traversal of a high-dimensional space.. Applications: Robotics: Initializing a motion planning search where the oracle scores paths based on collision avoidance and energy cost, and initial coordinates represent different starting joint configurations., Materials Science: Configuring a molecular dynamics simulation to find stable protein folds, where the oracle is an energy potential function and initial coordinates are starting atomic positions., Operations Research: Setting up a metaheuristic solver for a logistics problem, where the oracle scores the efficiency of a given solution and initial coordinates are randomly generated starting solutions., Generative Design: Seeding a search for optimal structural designs (e.g., for an airplane wing), where the oracle is a finite element analysis simulation that scores designs based on stress tolerance and weight, and initial coordinates are starting parameters for the geometry."
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS tree-building reference for recursive subtree endpoints, slice-valid candidate counts, U-turn continuation checks, divergence flags, and acceptance accumulation.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local callable returns compact NumPy trajectory bookkeeping rather than only a rightmost position.
+title: Initialize_sampler
+description: Sets up the initial state for the NUTS sampler, including the PRNG seed, target log-probability function, initial positions, and tuning parameters.
+---
+
+# Initialize_sampler
+
+> Sets up the initial state for the NUTS sampler, including the PRNG seed, target log-probability function, initial positions, and tuning parameters.
+
+## Conceptual Summary
+
+initialize_stochastic_traversal. Configures and encapsulates the initial conditions for a stateful, iterative search or sampling process. It bundles a scalar potential function (oracle), initial search coordinates, a randomness source (PRNG), and adaptive algorithm parameters into a single, immutable state object, preparing for a subsequent traversal of a high-dimensional space.. Applications: Robotics: Initializing a motion planning search where the oracle scores paths based on collision avoidance and energy cost, and initial coordinates represent different starting joint configurations., Materials Science: Configuring a molecular dynamics simulation to find stable protein folds, where the oracle is an energy potential function and initial coordinates are starting atomic positions., Operations Research: Setting up a metaheuristic solver for a logistics problem, where the oracle scores the efficiency of a given solution and initial coordinates are randomly generated starting solutions., Generative Design: Seeding a search for optimal structural designs (e.g., for an airplane wing), where the oracle is a finite element analysis simulation that scores designs based on stress tolerance and weight, and initial coordinates are starting parameters for the geometry.
+
+## Type Signature
+
+```
+(target: Callable[[Array], float], initial_positions: Array, target_accept_p: float, seed: int) -> NUTSState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

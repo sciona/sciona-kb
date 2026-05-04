@@ -1,0 +1,43 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.longitudinal_dynamics.compute_rolling_force
+predicate_id: compute_rolling_force
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(grade_angle: float) -> float"
+informal_desc: Compute rolling resistance force from grade angle.
+conceptual_summary: "orientation_modulated_resistive_scalar. Transforms a single orientation angle into a resistive scalar by applying a trigonometric projection from an inclined frame to its normal component, then scaling to model force units. The mapping is a closed-form arithmetic step that reduces effective resistance as the surface/frame normal component decreases with increasing inclination magnitude.. Applications: Mobile robotics: estimating contact-loss-adjusted drag terms for motion planning on tilted substrates., Conveyor/process engineering: computing orientation-dependent resistance terms for material transport on inclined paths., Biomechanics/prosthetics: modeling posture-angle-dependent dissipative load components during gait or assistive actuation., Aerospace/attitude systems: projecting orientation-dependent parasitic load terms in simplified vehicle dynamics."
+inputs:
+  - name: grade_angle
+    type_desc: float
+    constraints: angle in radians (or consistent internal unit)
+outputs:
+  - name: f_roll
+    type_desc: float
+    constraints: force in model units
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Compute_rolling_force
+description: Compute rolling resistance force from grade angle.
+---
+
+# Compute_rolling_force
+
+> Compute rolling resistance force from grade angle.
+
+## Conceptual Summary
+
+orientation_modulated_resistive_scalar. Transforms a single orientation angle into a resistive scalar by applying a trigonometric projection from an inclined frame to its normal component, then scaling to model force units. The mapping is a closed-form arithmetic step that reduces effective resistance as the surface/frame normal component decreases with increasing inclination magnitude.. Applications: Mobile robotics: estimating contact-loss-adjusted drag terms for motion planning on tilted substrates., Conveyor/process engineering: computing orientation-dependent resistance terms for material transport on inclined paths., Biomechanics/prosthetics: modeling posture-angle-dependent dissipative load components during gait or assistive actuation., Aerospace/attitude systems: projecting orientation-dependent parasitic load terms in simplified vehicle dynamics.
+
+## Type Signature
+
+```
+(grade_angle: float) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

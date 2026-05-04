@@ -1,0 +1,50 @@
+---
+import BindingStatusBadge from "./BindingStatusBadge.astro";
+
+interface Stage {
+  stage_id: string;
+  name: string;
+  description: string;
+  dejargonized_description: string;
+  concept_type: string;
+}
+
+interface Binding {
+  stage_id: string;
+  bound_atom_fqdn: string | null;
+  binding_confidence: number;
+  status: "active" | "gap" | "approximate";
+  action_class: string;
+}
+
+interface Props {
+  stage: Stage;
+  binding?: Binding;
+}
+
+const { stage, binding } = Astro.props;
+
+function atomFqdnToPath(fqdn: string): string {
+  const parts = fqdn.replace("sciona.atoms.", "").split(".");
+  return `/atoms/${parts.map((p) => p.replace(/_/g, "-")).join("/")}`;
+}
+---
+
+<div class="bg-atlas-surface rounded-lg border border-atlas-border p-4">
+  <div class="flex items-start justify-between gap-2 mb-2">
+    <h3 class="font-semibold text-atlas-text">{stage.name}</h3>
+    <div class="flex items-center gap-2 shrink-0">
+      <span class="text-xs px-1.5 py-0.5 rounded bg-atlas-surface-2 text-atlas-text-muted">{stage.concept_type}</span>
+      {binding && <BindingStatusBadge status={binding.status} confidence={binding.binding_confidence} />}
+    </div>
+  </div>
+  <p class="text-sm text-atlas-text-muted mb-2">{stage.dejargonized_description || stage.description}</p>
+  {binding?.bound_atom_fqdn && (
+    <a
+      href={atomFqdnToPath(binding.bound_atom_fqdn)}
+      class="inline-flex items-center gap-1 text-xs font-mono text-atlas-accent hover:text-atlas-accent-hover transition-colors"
+    >
+      {binding.bound_atom_fqdn}
+    </a>
+  )}
+</div>

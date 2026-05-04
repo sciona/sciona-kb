@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.otto_recommender_1st
+title: OTTO - Multi-Objective Recommender System - 1st Place (2023) - Pipeline Template
+description: "This template captures the ordered steps used by OTTO - Multi-Objective Recommender System - 1st Place (2023): prepare the data, build task-specific representa…"
+problem_statement: "Learning-to-rank / Session-based RecSys solution template for OTTO - Multi-Objective Recommender System - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Graph construction, Candidate generation, Feature engineering, Ranker model, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: OTTO - Multi-Objective Recommender System - 1st Place (2023)
+placement: 1st
+year: 2023
+domain: learning_to_rank
+paradigm: graph_signal_processing
+family: learning_to_rank
+tags:
+  - xgboost
+  - graph
+  - learning
+  - session
+  - based
+  - recsys
+key_insight: "The load-bearing idea is the pipeline topology: Graph construction creates the representation needed by Post-processing, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/otto-recommender-system/discussion/382721
+source_license: null
+---
+
+# OTTO - Multi-Objective Recommender System - 1st Place (2023) - Pipeline Template
+
+## Problem
+
+Learning-to-rank / Session-based RecSys solution template for OTTO - Multi-Objective Recommender System - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Graph construction, Candidate generation, Feature engineering, Ranker model, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by OTTO - Multi-Objective Recommender System - 1st Place (2023): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.otto_recommender_1st" readOnly={true} /> */}
+
+1. **Graph construction** -- This stage build item-to-item co-visitation matrices based on historical user sessions (pandas/cuDF).
+1. **Candidate generation** -- This stage use the co-visitation graph to retrieve the top 100 likely next items for a given user session (RAPIDS cuDF).
+1. **Feature engineering** -- This stage calculate user stats, item popularity, and user-item interaction frequency from the candidate pairs (pandas).
+1. **Ranker model** -- This stage train an XGBoost LambdaMART model on the candidates to predict clicks, carts, and orders.
+1. **Post-processing** -- This stage sort candidates by predicted score and truncate to the top 20 recommendations per user.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Graph construction creates the representation needed by Post-processing, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.otto_recommender_1st" label="Reproduce this solution in Sciona" /> */}

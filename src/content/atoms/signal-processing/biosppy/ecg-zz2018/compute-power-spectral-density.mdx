@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.compute_power_spectral_density
+predicate_id: compute_power_spectral_density
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(ecg_signal: NDArray, fs: float, nseg: int) -> tuple[NDArray, NDArray]"
+informal_desc: Computes the power spectral density of the input ECG signal using Welch's method, which provides the signal's power distribution over a range of frequencies.
+conceptual_summary: ""
+inputs:
+  - name: ecg_signal
+    type_desc: NDArray
+    constraints: Must be a 1D array of numerical signal data.
+  - name: fs
+    type_desc: float
+    constraints: Positive value representing the sampling frequency in Hz.
+  - name: nseg
+    type_desc: int
+    constraints: Positive integer for the length of each segment in Welch's method.
+outputs:
+  - name: frequencies
+    type_desc: NDArray
+    constraints: Array of sample frequencies.
+  - name: power_density
+    type_desc: NDArray
+    constraints: Power spectral density of the signal.
+concept_type: signal_transform
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Compute_power_spectral_density
+description: Computes the power spectral density of the input ECG signal using Welch's method, which provides the signal's power distribution over a range of frequencies.
+---
+
+# Compute_power_spectral_density
+
+> Computes the power spectral density of the input ECG signal using Welch's method, which provides the signal's power distribution over a range of frequencies.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(ecg_signal: NDArray, fs: float, nseg: int) -> tuple[NDArray, NDArray]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

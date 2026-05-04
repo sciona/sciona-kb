@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.driftpositionbyfullstep
+predicate_id: driftpositionbyfullstep
+repo: sciona-atoms
+domain: inference
+type_signature: "(position_ad: Tensor<B, 2>, momentum_half_kicked: Tensor<B, 2>, step_size: T) -> Tensor<B, 2>"
+informal_desc: Advance position by a full drift step using the half-kicked momentum and re-enable AD tracking on the new position.
+conceptual_summary: ""
+inputs:
+  - name: position_ad
+    type_desc: Tensor
+    constraints: AD-enabled position from current iteration
+  - name: momentum_half_kicked
+    type_desc: Tensor
+    constraints: Momentum after first half-kick
+  - name: step_size
+    type_desc: float
+    constraints: Leapfrog integration step size
+outputs:
+  - name: position_advanced
+    type_desc: Tensor
+    constraints: Full-step updated, detached, require_grad-enabled
+concept_type: mcmc_proposal
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Driftpositionbyfullstep
+description: Advance position by a full drift step using the half-kicked momentum and re-enable AD tracking on the new position.
+---
+
+# Driftpositionbyfullstep
+
+> Advance position by a full drift step using the half-kicked momentum and re-enable AD tracking on the new position.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(position_ad: Tensor<B, 2>, momentum_half_kicked: Tensor<B, 2>, step_size: T) -> Tensor<B, 2>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

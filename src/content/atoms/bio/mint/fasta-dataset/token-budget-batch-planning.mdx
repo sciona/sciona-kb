@@ -1,0 +1,59 @@
+---
+fqdn: sciona.atoms.bio.mint.fasta_dataset.token_budget_batch_planning
+predicate_id: token_budget_batch_planning
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(dataset_state: DatasetState, toks_per_batch: int, extra_toks_per_seq: int = 0) -> list[list[int]]"
+informal_desc: Plan batches under a token budget.
+conceptual_summary: Length-constrained sequential packing.
+inputs:
+  - name: dataset_state
+    type_desc: DatasetState
+    constraints: Uses sequence_strs for length-aware batching.
+    required: true
+    default_value_repr: ""
+  - name: toks_per_batch
+    type_desc: int
+    constraints: Maximum token budget used by the greedy batching check.
+    required: true
+    default_value_repr: ""
+  - name: extra_toks_per_seq
+    type_desc: int
+    constraints: Per-sequence overhead added to each sequence length.
+    required: false
+    default_value_repr: "0"
+outputs:
+  - name: batch_indices
+    type_desc: list[list[int]]
+    constraints: Each inner list contains original dataset indices.
+    required: true
+    default_value_repr: ""
+concept_type: greedy
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: mint2026
+    citation: Primary mint paper cited by the upstream repository.
+  - title: repo_mint
+    citation: Upstream implementation is mapped to the vendored mint repository.
+title: Token_budget_batch_planning
+description: Plan batches under a token budget.
+---
+
+# Token_budget_batch_planning
+
+> Plan batches under a token budget.
+
+## Conceptual Summary
+
+Length-constrained sequential packing.
+
+## Type Signature
+
+```
+(dataset_state: DatasetState, toks_per_batch: int, extra_toks_per_seq: int = 0) -> list[list[int]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.mint.fasta_dataset.dataset_state_initialization
+predicate_id: dataset_state_initialization
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(sequence_labels: list[str], sequence_strs: list[str]) -> DatasetState"
+informal_desc: Build a sequence dataset state snapshot from aligned in-memory inputs.
+conceptual_summary: Aligned sequence-state constructor.
+inputs:
+  - name: sequence_labels
+    type_desc: list[str]
+    constraints: Sequence identifiers; length must match sequence_strs.
+    required: true
+    default_value_repr: ""
+  - name: sequence_strs
+    type_desc: list[str]
+    constraints: Biological sequence strings; one sequence per label.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: dataset_state
+    type_desc: DatasetState
+    constraints: Dictionary with copied sequence_labels and sequence_strs lists.
+    required: true
+    default_value_repr: ""
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: mint2026
+    citation: Primary mint paper cited by the upstream repository.
+  - title: repo_mint
+    citation: Upstream implementation is mapped to the vendored mint repository.
+title: Dataset_state_initialization
+description: Build a sequence dataset state snapshot from aligned in-memory inputs.
+---
+
+# Dataset_state_initialization
+
+> Build a sequence dataset state snapshot from aligned in-memory inputs.
+
+## Conceptual Summary
+
+Aligned sequence-state constructor.
+
+## Type Signature
+
+```
+(sequence_labels: list[str], sequence_strs: list[str]) -> DatasetState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

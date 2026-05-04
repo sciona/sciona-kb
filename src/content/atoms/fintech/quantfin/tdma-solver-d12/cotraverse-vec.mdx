@@ -1,0 +1,55 @@
+---
+fqdn: sciona.atoms.fintech.quantfin.tdma_solver_d12.cotraverse_vec
+predicate_id: cotraverse_vec
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(aggregator: Callable[[Sequence[float]], float], length: int, vectors: Sequence[Sequence[float]]) -> list[float]"
+informal_desc: Aggregate index-aligned slices across a container of vectors.
+conceptual_summary: Source-aligned Python equivalent of Quant.Math.Utilities.cotraverseVec.
+inputs:
+  - name: aggregator
+    type_desc: Callable[[Sequence[float]], float]
+    constraints: callable aggregation function returning a finite scalar
+    required: true
+    default_value_repr: ""
+  - name: length
+    type_desc: int
+    constraints: positive requested output length
+    required: true
+    default_value_repr: ""
+  - name: vectors
+    type_desc: Sequence[Sequence[float]]
+    constraints: non-empty vector container; each vector has at least length entries
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: result
+    type_desc: list[float]
+    constraints: finite aggregated vector with requested length
+concept_type: arithmetic
+verification_level: source_reviewed
+used_by_cdgs: []
+references:
+  - title: repo_quantfin
+    citation: "Python atom mirrors the vendored Haskell tdmaSolver contract: four coefficient/right-hand-side vectors and Thomas-algorithm forward/back substitution."
+title: Cotraverse_vec
+description: Aggregate index-aligned slices across a container of vectors.
+---
+
+# Cotraverse_vec
+
+> Aggregate index-aligned slices across a container of vectors.
+
+## Conceptual Summary
+
+Source-aligned Python equivalent of Quant.Math.Utilities.cotraverseVec.
+
+## Type Signature
+
+```
+(aggregator: Callable[[Sequence[float]], float], length: int, vectors: Sequence[Sequence[float]]) -> list[float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

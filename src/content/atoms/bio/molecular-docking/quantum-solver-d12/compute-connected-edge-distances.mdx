@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.compute_connected_edge_distances
+predicate_id: compute_connected_edge_distances
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(register_coord: dict/array of (x, y) tuples indexed by node id, graph: networkx.Graph) -> list of float"
+informal_desc: Iterates over all edges in the problem graph, retrieves the (x, y) coordinates of each endpoint from the register, and computes the Euclidean distance for every connected atom pair.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Compute_connected_edge_distances
+description: Iterates over all edges in the problem graph, retrieves the (x, y) coordinates of each endpoint from the register, and computes the Euclidean distance for ever…
+---
+
+# Compute_connected_edge_distances
+
+> Iterates over all edges in the problem graph, retrieves the (x, y) coordinates of each endpoint from the register, and computes the Euclidean distance for every connected atom pair.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(register_coord: dict/array of (x, y) tuples indexed by node id, graph: networkx.Graph) -> list of float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.robotics.pronto.backlash_filter.update_crossing_time_maximum
+predicate_id: update_crossing_time_maximum
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(state_in: BacklashFilterState, t_crossing_max_in: float) -> BacklashFilterState"
+informal_desc: Produce a new filter state with an updated maximum crossing time.
+conceptual_summary: "ImmutableStateScalarBoundUpdate. Applies a single-field substitution on an immutable state object: one designated scalar threshold field is overwritten with a provided finite scalar, while all other fields are preserved exactly. This is a deterministic state-transition operator that returns a new state instance rather than mutating the input. The transform changes only the selected parameter and leaves the structural schema invariant.. Applications: Control systems: updating a saturation or timeout bound in a controller parameter state without altering other controller coefficients., Distributed systems: replacing a node-level heartbeat deadline threshold in an immutable runtime configuration snapshot., Computational biology: updating a maximum iteration or convergence cutoff parameter in a simulation state object., Robotics/perception: revising an outlier-rejection threshold inside a filter state while preserving accumulated latent variables."
+inputs:
+  - name: state_in
+    type_desc: BacklashFilterState
+    constraints: Immutable input state.
+  - name: t_crossing_max_in
+    type_desc: float
+    constraints: Finite scalar, typically non-negative.
+outputs:
+  - name: state_out
+    type_desc: BacklashFilterState
+    constraints: Same as state_in, except t_crossing_max_ = t_crossing_max_in.
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Update_crossing_time_maximum
+description: Produce a new filter state with an updated maximum crossing time.
+---
+
+# Update_crossing_time_maximum
+
+> Produce a new filter state with an updated maximum crossing time.
+
+## Conceptual Summary
+
+ImmutableStateScalarBoundUpdate. Applies a single-field substitution on an immutable state object: one designated scalar threshold field is overwritten with a provided finite scalar, while all other fields are preserved exactly. This is a deterministic state-transition operator that returns a new state instance rather than mutating the input. The transform changes only the selected parameter and leaves the structural schema invariant.. Applications: Control systems: updating a saturation or timeout bound in a controller parameter state without altering other controller coefficients., Distributed systems: replacing a node-level heartbeat deadline threshold in an immutable runtime configuration snapshot., Computational biology: updating a maximum iteration or convergence cutoff parameter in a simulation state object., Robotics/perception: revising an outlier-rejection threshold inside a filter state while preserving accumulated latent variables.
+
+## Type Signature
+
+```
+(state_in: BacklashFilterState, t_crossing_max_in: float) -> BacklashFilterState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

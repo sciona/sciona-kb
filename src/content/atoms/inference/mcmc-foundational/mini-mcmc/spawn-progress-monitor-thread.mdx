@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.spawn_progress_monitor_thread
+predicate_id: spawn_progress_monitor_thread
+repo: sciona-atoms
+domain: inference
+type_signature: "(progress_receivers: Vec<Receiver<ChainStats>>, total_steps_per_chain: int) -> JoinHandle"
+informal_desc: Launches a background thread that aggregates ChainStats, displays multi-bar progress, and computes real-time diagnostics like average acceptance probability and R-hat.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS tree-building reference for recursive subtree endpoints, slice-valid candidate counts, U-turn continuation checks, divergence flags, and acceptance accumulation.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local callable returns compact NumPy trajectory bookkeeping rather than only a rightmost position.
+title: Spawn_progress_monitor_thread
+description: Launches a background thread that aggregates ChainStats, displays multi-bar progress, and computes real-time diagnostics like average acceptance probability an…
+---
+
+# Spawn_progress_monitor_thread
+
+> Launches a background thread that aggregates ChainStats, displays multi-bar progress, and computes real-time diagnostics like average acceptance probability and R-hat.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(progress_receivers: Vec<Receiver<ChainStats>>, total_steps_per_chain: int) -> JoinHandle
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

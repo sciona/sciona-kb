@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.fintech.institutional_quant_engine.almgren_chriss_v2.riskaversioninit
+predicate_id: riskaversioninit
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(risk_aversion: float — non-negative scalar (λ) penalizing variance relative to expected execution cost) -> float — validated scalar stored as immutable model parameter"
+informal_desc: Bootstraps the Almgren-Chriss model by storing the scalar risk-aversion parameter that governs the volatility-vs-impact trade-off in all subsequent trajectory computations.
+conceptual_summary: "ScalarTradeoffWeightInit. Accepts a single non-negative scalar that encodes the relative penalty weight between two competing optimization objectives, validates its domain constraint (≥ 0), and persists it as an immutable configuration constant for all downstream computations. This initializer acts as the seed of a parameterized cost functional, fixing the convex combination coefficient that continuously governs how strongly one loss term (e.g., variance, dispersion, uncertainty) is penalized relative to another (e.g., expected cost, throughput, fidelity). The stored constant functions as a Lagrange-multiplier-like hyperparameter that shifts the Pareto frontier traversal point across the feasible solution space.. Applications: Robotics motion planning: initializing a scalar stiffness-vs-energy-expenditure trade-off coefficient in a trajectory optimizer, where higher values penalize joint-torque variance more strongly relative to path length cost, shifting the robot's behavior from aggressive to smooth motion profiles, Bayesian neural network inference: seeding a precision hyperparameter (inverse variance weight) that governs the relative contribution of the KL-divergence regularization term versus the likelihood reconstruction loss in a variational autoencoder's ELBO objective, controlling posterior concentration, Structural engineering topology optimization: storing a compliance-vs-material-volume penalty scalar in a SIMP (Solid Isotropic Material with Penalization) solver, where the constant determines how aggressively mass distribution uncertainty is penalized relative to structural stiffness in each density-field update step, Epidemiological compartmental modeling: binding a non-negative scalar that weights intervention cost (economic disruption) against transmission-rate variance in a stochastic SIR/SEIR optimal-control formulation, fixing the risk-sensitivity level before integrating the Hamilton-Jacobi-Bellman equations forward in time"
+inputs:
+  - name: risk_aversion
+    type_desc: float
+    constraints: ≥ 0
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: risk_aversion
+    type_desc: float
+    constraints: ≥ 0
+    required: true
+    default_value_repr: ""
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: almgren2000
+    citation: Execution scheduling attribution.
+  - title: repo_institutional_quant_engine
+    citation: Primary repository attribution for Institutional-Quant-Engine atoms.
+title: Riskaversioninit
+description: Bootstraps the Almgren-Chriss model by storing the scalar risk-aversion parameter that governs the volatility-vs-impact trade-off in all subsequent trajectory …
+---
+
+# Riskaversioninit
+
+> Bootstraps the Almgren-Chriss model by storing the scalar risk-aversion parameter that governs the volatility-vs-impact trade-off in all subsequent trajectory computations.
+
+## Conceptual Summary
+
+ScalarTradeoffWeightInit. Accepts a single non-negative scalar that encodes the relative penalty weight between two competing optimization objectives, validates its domain constraint (≥ 0), and persists it as an immutable configuration constant for all downstream computations. This initializer acts as the seed of a parameterized cost functional, fixing the convex combination coefficient that continuously governs how strongly one loss term (e.g., variance, dispersion, uncertainty) is penalized relative to another (e.g., expected cost, throughput, fidelity). The stored constant functions as a Lagrange-multiplier-like hyperparameter that shifts the Pareto frontier traversal point across the feasible solution space.. Applications: Robotics motion planning: initializing a scalar stiffness-vs-energy-expenditure trade-off coefficient in a trajectory optimizer, where higher values penalize joint-torque variance more strongly relative to path length cost, shifting the robot's behavior from aggressive to smooth motion profiles, Bayesian neural network inference: seeding a precision hyperparameter (inverse variance weight) that governs the relative contribution of the KL-divergence regularization term versus the likelihood reconstruction loss in a variational autoencoder's ELBO objective, controlling posterior concentration, Structural engineering topology optimization: storing a compliance-vs-material-volume penalty scalar in a SIMP (Solid Isotropic Material with Penalization) solver, where the constant determines how aggressively mass distribution uncertainty is penalized relative to structural stiffness in each density-field update step, Epidemiological compartmental modeling: binding a non-negative scalar that weights intervention cost (economic disruption) against transmission-rate variance in a stochastic SIR/SEIR optimal-control formulation, fixing the risk-sensitivity level before integrating the Hamilton-Jacobi-Bellman equations forward in time
+
+## Type Signature
+
+```
+(risk_aversion: float — non-negative scalar (λ) penalizing variance relative to expected execution cost) -> float — validated scalar stored as immutable model parameter
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

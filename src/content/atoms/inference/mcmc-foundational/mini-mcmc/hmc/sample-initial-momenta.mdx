@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.sample_initial_momenta
+predicate_id: sample_initial_momenta
+repo: sciona-atoms
+domain: inference
+type_signature: "(n_chains: usize, dim: usize, kernel_static: object) -> Tensor<B,2>"
+informal_desc: Sample fresh Gaussian momenta for each chain and dimension.
+conceptual_summary: ""
+inputs:
+  - name: n_chains
+    type_desc: int
+    constraints: matches positions batch size
+  - name: dim
+    type_desc: int
+    constraints: matches positions feature size
+  - name: kernel_static
+    type_desc: object
+    constraints: provides tensor backend/device and RNG source
+outputs:
+  - name: momentum_0
+    type_desc: Tensor
+    constraints: shape [n_chains, dim], iid Normal(0,1)
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Sample_initial_momenta
+description: Sample fresh Gaussian momenta for each chain and dimension.
+---
+
+# Sample_initial_momenta
+
+> Sample fresh Gaussian momenta for each chain and dimension.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(n_chains: usize, dim: usize, kernel_static: object) -> Tensor<B,2>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

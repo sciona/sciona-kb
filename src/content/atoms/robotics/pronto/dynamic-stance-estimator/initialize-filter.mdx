@@ -1,0 +1,63 @@
+---
+fqdn: sciona.atoms.robotics.pronto.dynamic_stance_estimator.initialize_filter
+predicate_id: initialize_filter
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(initial_x: ndarray, initial_P: ndarray, A: ndarray, H: ndarray, Q: ndarray, R: ndarray) -> tuple[StateModelSpec, ModelParamsSpec]"
+informal_desc: Initializes the state-space model with prior state, covariance, and static model parameters.
+conceptual_summary: "InitializeLinearDynamicalSystem. Instantiates the parameters for a discrete-time linear dynamical system. This operation partitions the system's definition into two components: the initial conditions (a state vector and its associated uncertainty matrix) and the static operators that govern the system's evolution. The static operators define the deterministic state transition, the projection from state to measurement, and the covariance structures of both process and measurement noise.. Applications: Robotics: Initializing a filter to track a moving object's position and velocity from noisy sensor (e.g., radar) readings., Econometrics: Defining a model to estimate the latent 'true' value of a financial asset based on its fluctuating, noisy market price., Neuroscience: Setting up a model of a single neuron's membrane potential dynamics, relating the unobserved internal voltage to observable spike train data., Chemical Engineering: Establishing the initial parameters for a state-observer that estimates reactant concentrations within a continuously stirred-tank reactor from periodic, noisy sensor measurements."
+inputs:
+  - name: initial_x
+    type_desc: np.ndarray
+    constraints: Shape [2, 1]
+  - name: initial_P
+    type_desc: np.ndarray
+    constraints: Shape [2, 2]
+  - name: A
+    type_desc: np.ndarray
+    constraints: State transition matrix, shape [2, 2]
+  - name: H
+    type_desc: np.ndarray
+    constraints: Measurement matrix, shape [1, 2]
+  - name: Q
+    type_desc: np.ndarray
+    constraints: Process noise covariance, shape [2, 2]
+  - name: R
+    type_desc: np.ndarray
+    constraints: Measurement noise covariance, shape [1, 1]
+outputs:
+  - name: initial_state
+    type_desc: StateModelSpec
+    constraints: Contains initial x and P
+  - name: model_params
+    type_desc: ModelParamsSpec
+    constraints: Contains A, H, Q, R
+concept_type: prior_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Initialize_filter
+description: Initializes the state-space model with prior state, covariance, and static model parameters.
+---
+
+# Initialize_filter
+
+> Initializes the state-space model with prior state, covariance, and static model parameters.
+
+## Conceptual Summary
+
+InitializeLinearDynamicalSystem. Instantiates the parameters for a discrete-time linear dynamical system. This operation partitions the system's definition into two components: the initial conditions (a state vector and its associated uncertainty matrix) and the static operators that govern the system's evolution. The static operators define the deterministic state transition, the projection from state to measurement, and the covariance structures of both process and measurement noise.. Applications: Robotics: Initializing a filter to track a moving object's position and velocity from noisy sensor (e.g., radar) readings., Econometrics: Defining a model to estimate the latent 'true' value of a financial asset based on its fluctuating, noisy market price., Neuroscience: Setting up a model of a single neuron's membrane potential dynamics, relating the unobserved internal voltage to observable spike train data., Chemical Engineering: Establishing the initial parameters for a state-observer that estimates reactant concentrations within a continuously stirred-tank reactor from periodic, noisy sensor measurements.
+
+## Type Signature
+
+```
+(initial_x: ndarray, initial_P: ndarray, A: ndarray, H: ndarray, Q: ndarray, R: ndarray) -> tuple[StateModelSpec, ModelParamsSpec]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

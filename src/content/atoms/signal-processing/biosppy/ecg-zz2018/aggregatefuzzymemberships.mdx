@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.aggregatefuzzymemberships
+predicate_id: aggregatefuzzymemberships
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(evaluation_matrix_R: NDArray) -> str"
+informal_desc: Combines the fuzzy membership vectors using a weighted-average evaluation matrix to compute a final score (V), which is then mapped to a quality label.
+conceptual_summary: ""
+inputs:
+  - name: evaluation_matrix_R
+    type_desc: NDArray
+    constraints: A 4x3 matrix of fuzzy membership grades.
+outputs:
+  - name: fuzzy_quality_label
+    type_desc: str
+    constraints: Final quality classification.
+concept_type: posterior_update
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Aggregatefuzzymemberships
+description: Combines the fuzzy membership vectors using a weighted-average evaluation matrix to compute a final score (V), which is then mapped to a quality label.
+---
+
+# Aggregatefuzzymemberships
+
+> Combines the fuzzy membership vectors using a weighted-average evaluation matrix to compute a final score (V), which is then mapped to a quality label.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(evaluation_matrix_R: NDArray) -> str
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

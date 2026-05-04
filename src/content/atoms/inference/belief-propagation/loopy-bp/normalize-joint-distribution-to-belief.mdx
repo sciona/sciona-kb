@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.inference.belief_propagation.loopy_bp.normalize_joint_distribution_to_belief
+predicate_id: normalize_joint_distribution_to_belief
+repo: sciona-atoms
+domain: inference
+type_signature: "(joint_message: FactorMessage) -> NormalizedVector"
+informal_desc: Normalizes the combined query distribution so probabilities sum to 1, yielding the queried variable belief.
+conceptual_summary: ""
+inputs:
+  - name: joint_message
+    type_desc: FactorMessage
+    constraints: Distribution sum must be positive.
+outputs:
+  - name: belief
+    type_desc: NormalizedVector
+    constraints: Probability mass sums to 1.
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: murphy1999loopy
+    citation: Exact loopy belief propagation attribution.
+  - title: repo_belief_propagation
+    citation: Upstream implementation is mapped to the vendored Belief-Propagation repository.
+title: Normalize_joint_distribution_to_belief
+description: Normalizes the combined query distribution so probabilities sum to 1, yielding the queried variable belief.
+---
+
+# Normalize_joint_distribution_to_belief
+
+> Normalizes the combined query distribution so probabilities sum to 1, yielding the queried variable belief.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(joint_message: FactorMessage) -> NormalizedVector
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

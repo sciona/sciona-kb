@@ -1,0 +1,59 @@
+---
+fqdn: sciona.atoms.fintech.hftbacktest.validate_spread_to_c1_ratio
+predicate_id: validate_spread_to_c1_ratio
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(half_spread: float, c1: float, threshold: float) -> bool"
+informal_desc: Checks if the ratio of the half-spread to the c1 coefficient is below a specified threshold, optimizing the balance between execution probability and adverse selection risk.
+conceptual_summary: ""
+inputs:
+  - name: half_spread
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: c1
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: threshold
+    type_desc: float
+    constraints: The ratio threshold for the heuristic check
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: is_valid_ratio
+    type_desc: bool
+    constraints: True if the ratio is within the acceptable threshold, False otherwise
+    required: true
+    default_value_repr: ""
+concept_type: conditional_routing
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: gueant2013inventory
+    citation: Exact GLFT attribution.
+  - title: repo_hftbacktest
+    citation: Upstream implementation is mapped to the vendored hftbacktest repository.
+title: Validate_spread_to_c1_ratio
+description: Checks if the ratio of the half-spread to the c1 coefficient is below a specified threshold, optimizing the balance between execution probability and adverse s…
+---
+
+# Validate_spread_to_c1_ratio
+
+> Checks if the ratio of the half-spread to the c1 coefficient is below a specified threshold, optimizing the balance between execution probability and adverse selection risk.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(half_spread: float, c1: float, threshold: float) -> bool
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

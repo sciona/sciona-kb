@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.signal_processing.e2e_ppg.kazemi_wrapper_d12.normalizesignal
+predicate_id: normalizesignal
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(arr: numeric array) -> numeric array"
+informal_desc: Normalizes a raw array to a standard scale, producing a unit-normalized output suitable for downstream comparison or scoring.
+conceptual_summary: "MagnitudeInvariantVectorRescaling. Maps a finite, non-empty numeric vector from its native magnitude space into a standardized unit range by computing a global rescaling factor derived from the vector's own statistical or geometric properties (e.g., L2 norm, min-max span, or standard deviation). The transform is strictly algebraic and elementwise: each scalar component is divided by the same derived constant, preserving the internal ratio structure of the original sequence. The resulting vector occupies a canonical magnitude envelope, making it directly comparable to any other vector that has undergone the same normalization contract.. Applications: Computational neuroscience: rescaling multi-electrode spike-rate arrays from different subjects or sessions onto a common magnitude envelope before population-level decoding, eliminating between-subject gain differences without altering relative firing-rate ratios, Robotics / sensor fusion: standardizing heterogeneous inertial measurement unit (IMU) channel readings (accelerometer, gyroscope, magnetometer) that carry vastly different physical units and dynamic ranges before fusing them in a Kalman filter state vector, Natural language processing / embedding retrieval: projecting raw token frequency count vectors onto the unit hypersphere prior to cosine-similarity search, ensuring that document length does not dominate semantic distance measurements in a high-dimensional latent space, Materials science / spectroscopy: normalizing raw X-ray diffraction intensity profiles acquired under different beam-flux conditions to a common peak-height scale, enabling instrument-agnostic peak-position and relative-intensity comparison across experimental runs"
+inputs:
+  - name: arr
+    type_desc: ndarray
+    constraints: non-empty numeric vector
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: normalized_arr
+    type_desc: ndarray
+    constraints: same shape as input, values in [0, 1]
+    required: true
+    default_value_repr: ""
+concept_type: signal_filter
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kazemi2022ppg
+    citation: Exact E2E-PPG peak detection attribution.
+  - title: feli2023pipeline
+    citation: Primary E2E-PPG pipeline paper.
+  - title: repo_e2e_ppg
+    citation: Upstream implementation is mapped to the vendored E2E-PPG repository.
+title: Normalizesignal
+description: Normalizes a raw array to a standard scale, producing a unit-normalized output suitable for downstream comparison or scoring.
+---
+
+# Normalizesignal
+
+> Normalizes a raw array to a standard scale, producing a unit-normalized output suitable for downstream comparison or scoring.
+
+## Conceptual Summary
+
+MagnitudeInvariantVectorRescaling. Maps a finite, non-empty numeric vector from its native magnitude space into a standardized unit range by computing a global rescaling factor derived from the vector's own statistical or geometric properties (e.g., L2 norm, min-max span, or standard deviation). The transform is strictly algebraic and elementwise: each scalar component is divided by the same derived constant, preserving the internal ratio structure of the original sequence. The resulting vector occupies a canonical magnitude envelope, making it directly comparable to any other vector that has undergone the same normalization contract.. Applications: Computational neuroscience: rescaling multi-electrode spike-rate arrays from different subjects or sessions onto a common magnitude envelope before population-level decoding, eliminating between-subject gain differences without altering relative firing-rate ratios, Robotics / sensor fusion: standardizing heterogeneous inertial measurement unit (IMU) channel readings (accelerometer, gyroscope, magnetometer) that carry vastly different physical units and dynamic ranges before fusing them in a Kalman filter state vector, Natural language processing / embedding retrieval: projecting raw token frequency count vectors onto the unit hypersphere prior to cosine-similarity search, ensuring that document length does not dominate semantic distance measurements in a high-dimensional latent space, Materials science / spectroscopy: normalizing raw X-ray diffraction intensity profiles acquired under different beam-flux conditions to a common peak-height scale, enabling instrument-agnostic peak-position and relative-intensity comparison across experimental runs
+
+## Type Signature
+
+```
+(arr: numeric array) -> numeric array
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

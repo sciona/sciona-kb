@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.two_sigma_news_stock_1st
+title: "Two Sigma: Using News to Predict Stock Movements - 1st Place (2019) - Pipeline Template"
+description: "This template captures the ordered steps used by Two Sigma: Using News to Predict Stock Movements - 1st Place (2019): prepare the data, build task-specific rep…"
+problem_statement: "NLP Sentiment + Tabular Time Series solution template for Two Sigma: Using News to Predict Stock Movements - 1st Place (2019), modeled as a 5-stage deterministic pipeline: News aggregation, Market feature engineering, Future leak prevention, Feature concatenation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: "Two Sigma: Using News to Predict Stock Movements - 1st Place (2019)"
+placement: ""
+year: 0
+domain: tabular_text_regression
+paradigm: optimization
+family: tabular_text_regression
+tags:
+  - lightgbm
+  - sentiment
+  - tabular
+  - series
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: News aggregation creates the representation needed by Tree Modeling, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/two-sigma-financial-news/discussion/79207
+source_license: null
+---
+
+# Two Sigma: Using News to Predict Stock Movements - 1st Place (2019) - Pipeline Template
+
+## Problem
+
+NLP Sentiment + Tabular Time Series solution template for Two Sigma: Using News to Predict Stock Movements - 1st Place (2019), modeled as a 5-stage deterministic pipeline: News aggregation, Market feature engineering, Future leak prevention, Feature concatenation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Two Sigma: Using News to Predict Stock Movements - 1st Place (2019): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.two_sigma_news_stock_1st" readOnly={true} /> */}
+
+1. **News aggregation** -- This stage group daily news articles by financial asset, calculating mean sentiment, article volume, and novelty metrics (pandas).
+1. **Market feature engineering** -- This stage calculate rolling returns, MACD, and Bollinger Bands on the tabular market data (pandas/TA-Lib).
+1. **Future leak prevention** -- This stage strictly align market data and news data ensuring news arriving after 10 PM is assigned to the next trading day to prevent look-ahead bias.
+1. **Feature concatenation** -- This stage merge the aggregated NLP features and tabular technical indicators.
+1. **Tree Modeling** -- This stage train LightGBM models. To prevent models from learning specific eras, train 10 separate models sequentially through time (Walk-Forward Validation) and average the result.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: News aggregation creates the representation needed by Tree Modeling, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.two_sigma_news_stock_1st" label="Reproduce this solution in Sciona" /> */}

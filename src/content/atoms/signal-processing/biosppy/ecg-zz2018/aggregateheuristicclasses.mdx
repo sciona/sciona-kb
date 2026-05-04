@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.aggregateheuristicclasses
+predicate_id: aggregateheuristicclasses
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(class_matrix: NDArray) -> str"
+informal_desc: Aggregates the discrete classifications of the SQIs by counting classes to determine the final signal quality label ('Unacceptable', 'Excellent', 'Barely acceptable').
+conceptual_summary: ""
+inputs:
+  - name: class_matrix
+    type_desc: NDArray
+    constraints: An array of four integer class labels.
+outputs:
+  - name: heuristic_quality_label
+    type_desc: str
+    constraints: Final quality classification.
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Aggregateheuristicclasses
+description: Aggregates the discrete classifications of the SQIs by counting classes to determine the final signal quality label ('Unacceptable', 'Excellent', 'Barely accep…
+---
+
+# Aggregateheuristicclasses
+
+> Aggregates the discrete classifications of the SQIs by counting classes to determine the final signal quality label ('Unacceptable', 'Excellent', 'Barely acceptable').
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(class_matrix: NDArray) -> str
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

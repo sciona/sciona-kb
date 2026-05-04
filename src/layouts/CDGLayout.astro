@@ -1,0 +1,99 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/seo/Breadcrumbs.astro";
+import ApplicabilityPanel from "../components/content/ApplicabilityPanel.astro";
+import StageCard from "../components/content/StageCard.astro";
+import EdgeList from "../components/content/EdgeList.astro";
+import BindingStatusBadge from "../components/content/BindingStatusBadge.astro";
+import PlatformCTA from "../components/cta/PlatformCTA.astro";
+import GitHubEditLink from "../components/cta/GitHubEditLink.astro";
+
+interface Props {
+  cdg: CollectionEntry<"cdgs">;
+  contentPath: string;
+}
+
+const { cdg, contentPath } = Astro.props;
+const { data } = cdg;
+
+const breadcrumbs = [
+  { label: "Atlas", href: "/" },
+  { label: "CDGs", href: "/cdgs" },
+  { label: data.paradigm, href: `/paradigm/${data.paradigm}` },
+  { label: data.family, href: `/family/${data.family}` },
+  { label: data.name, href: Astro.url.pathname },
+];
+
+const bindingsMap = new Map(data.bindings.map((b) => [b.stage_id, b]));
+---
+
+<BaseLayout title={data.title} description={data.description}>
+  <div class="max-w-4xl mx-auto">
+    <Breadcrumbs segments={breadcrumbs} />
+    <GitHubEditLink contentPath={contentPath} />
+
+    <h1 class="text-3xl font-bold mt-4 mb-2">{data.name}</h1>
+    <p class="text-atlas-text-muted text-lg mb-4">{data.dejargonized_summary}</p>
+
+    <div class="flex flex-wrap gap-2 mb-6">
+      <a href={`/paradigm/${data.paradigm}`} class="px-2 py-1 text-xs rounded bg-atlas-accent/10 border border-atlas-accent/30 text-atlas-accent hover:bg-atlas-accent/20 transition-colors">{data.paradigm}</a>
+      <a href={`/family/${data.family}`} class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted hover:text-atlas-text transition-colors">{data.family}</a>
+      {data.binding_summary && (
+        <span class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted">
+          {data.binding_summary.bound_active}/{data.binding_summary.total_stages} stages bound
+        </span>
+      )}
+    </div>
+
+    {data.solution_metadata && (
+      <div class="bg-atlas-surface rounded-lg border border-atlas-border p-4 mb-6">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+          <div>
+            <span class="text-atlas-text-muted block">Competition</span>
+            <span class="font-medium">{data.solution_metadata.competition}</span>
+          </div>
+          <div>
+            <span class="text-atlas-text-muted block">Placement</span>
+            <span class="font-medium">{data.solution_metadata.placement}</span>
+          </div>
+          <div>
+            <span class="text-atlas-text-muted block">Year</span>
+            <span class="font-medium">{data.solution_metadata.year}</span>
+          </div>
+          <div>
+            <span class="text-atlas-text-muted block">Domain</span>
+            <span class="font-medium">{data.solution_metadata.problem_domain}</span>
+          </div>
+        </div>
+      </div>
+    )}
+
+    <ApplicabilityPanel applicability={data.applicability} />
+
+    <section class="mt-8">
+      <h2 class="text-xl font-semibold mb-4">Pipeline Stages</h2>
+      <div class="space-y-4">
+        {data.stages.map((stage) => {
+          const binding = bindingsMap.get(stage.stage_id);
+          return <StageCard stage={stage} binding={binding} />;
+        })}
+      </div>
+    </section>
+
+    {data.edges.length > 0 && (
+      <section class="mt-8">
+        <h2 class="text-xl font-semibold mb-4">Data Flow</h2>
+        <EdgeList edges={data.edges} />
+      </section>
+    )}
+
+    <article class="prose prose-invert max-w-none mt-8">
+      <slot />
+    </article>
+
+    <div class="mt-12">
+      <PlatformCTA cdgId={data.asset_id} label="Open and modify this CDG in Sciona" />
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,69 @@
+---
+cdg_asset_id: solution.kaggle.barachant_seizure_1st
+title: Melbourne Uni Seizure Prediction 1st Place -- Riemannian EEG Pipeline
+description: Split each EEG recording into short windows, extract four different kinds of features from each window (frequency power, statistical summaries, time-delay patt…
+problem_statement: Four parallel EEG feature extraction branches (relative log-power, classical statistics, autocorrelation covariance with tangent space projection, cross-frequency coherence with tangent space projection) each feeding XGBoost classifiers with segment-max aggregation, blended via rank-normalized prediction averaging.
+platform: kaggle
+competition_name: Melbourne University AES/MathWorks/NIH Seizure Prediction
+placement: 1st
+year: 2016
+domain: brain_computer_interface
+paradigm: signal_filter
+family: riemannian_bci
+tags:
+  - seizure_prediction
+  - riemannian_eeg
+  - tangent_space_eeg
+  - autocorrelation_covariance
+  - cross_frequency_coherence
+  - spd_manifold_classification
+  - covariance_matrix_features
+  - non_stationary_events
+  - multi_channel_neural_signal
+  - frechet_mean
+  - log_spaced_delays
+  - max_aggregation
+key_insight: Tangent space projection with sqrt(2) off-diagonal scaling IS the kernel trick for SPD manifolds — it preserves Riemannian distances as Euclidean distances, enabling any flat-space classifier (XGBoost, SVM, logistic regression) to work in curved matrix space without modification.
+failure_modes:
+  - "Stationary signals where seizure/event signatures are spread uniformly across all windows: max aggregation degrades to near-mean and loses no advantage"
+  - "Very short windows (<1 second at typical EEG rates): covariance matrices are rank-deficient and tangent space projection amplifies noise"
+  - "Label noise or ambiguous pre-ictal boundaries: max aggregation is sensitive to single noisy window predictions"
+source_url: https://github.com/alexandrebarachant/kaggle-seizure-prediction
+source_license: BSD-3-Clause
+---
+
+# Melbourne Uni Seizure Prediction 1st Place -- Riemannian EEG Pipeline
+
+## Problem
+
+Four parallel EEG feature extraction branches (relative log-power, classical statistics, autocorrelation covariance with tangent space projection, cross-frequency coherence with tangent space projection) each feeding XGBoost classifiers with segment-max aggregation, blended via rank-normalized prediction averaging.
+
+## Approach
+
+Split each EEG recording into short windows, extract four different kinds of features from each window (frequency power, statistical summaries, time-delay patterns projected from a curved mathematical space to a flat one, and frequency-coupling patterns similarly projected), train a separate tree-based classifier on each, take the most seizure-like window per recording, then blend all classifiers by ranking their predictions.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.barachant_seizure_1st" readOnly={true} /> */}
+
+1. **Segment Windower** -- Cut the long recording into short overlapping clips so each can be analyzed separately.
+1. **Autocorrelation Covariance Matrix** -- Create a matrix that captures how each EEG channel's signal at one time relates to itself at different time offsets (1, 2, 4, ... 64 samples apart), using logarithmic spacing to capture both fast and slow patterns.
+1. **Cross-Frequency Coherence Matrix** -- Measure how much each pair of frequency bands (e.g., fast brain waves vs slow brain waves) are synchronized within each electrode, producing a matrix that captures cross-frequency relationships relevant to seizures.
+1. **Riemannian Mean (SPD Manifold)** -- Find the 'center' of a set of matrices on a curved mathematical space, which serves as the reference point for projecting all matrices into a flat space where standard classifiers can work.
+1. **Tangent Space Projection** -- Flatten the curved-space matrices into ordinary number vectors that preserve the geometric distances, so standard machine learning algorithms (like XGBoost) can work on them directly.
+1. **Segment Max Aggregation** -- From all the short-window predictions within one long recording, take the highest seizure-likelihood score as the overall prediction, because seizure signs only appear briefly.
+1. **Ranked Prediction Blend** -- Convert each model's raw predictions into rankings (percentiles), then average the rankings -- this way models that output different scales of numbers can still be combined fairly.
+
+## Key Insight
+
+Tangent space projection with sqrt(2) off-diagonal scaling IS the kernel trick for SPD manifolds — it preserves Riemannian distances as Euclidean distances, enabling any flat-space classifier (XGBoost, SVM, logistic regression) to work in curved matrix space without modification.
+
+## Failure Modes
+
+- Stationary signals where seizure/event signatures are spread uniformly across all windows: max aggregation degrades to near-mean and loses no advantage
+- Very short windows (&lt;1 second at typical EEG rates): covariance matrices are rank-deficient and tangent space projection amplifies noise
+- Label noise or ambiguous pre-ictal boundaries: max aggregation is sensitive to single noisy window predictions
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.barachant_seizure_1st" label="Reproduce this solution in Sciona" /> */}

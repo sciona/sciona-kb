@@ -1,0 +1,74 @@
+---
+fqdn: sciona.atoms.fintech.institutional_quant_engine.avellaneda_stoikov_d12.marketmakerstateinit
+predicate_id: marketmakerstateinit
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(s0: float — initial mid-price of the asset, inventory: float — starting inventory position (signed)) -> tuple[float — absolute risk-aversion coefficient, float — market-depth / order-arrival rate parameter, float — current inventory position, float — current mid-price, float — asset price volatility]"
+informal_desc: Bootstraps the market-maker's immutable parameter state from a supplied initial mid-price and inventory position, materialising the five scalar fields — risk-aversion (gamma), market-depth (k), inventory (q), mid-price (s), and volatility (sigma) — that all downstream computations consume as pure inputs.
+conceptual_summary: "ImmutableParameterSpaceInitializer. Takes a minimal set of exogenous scalar seed values — one representing the current state of a measurable quantity and one representing a signed positional offset — and expands them into a fully-specified, frozen parameter manifold of five scalars that collectively define the operating envelope for all downstream computations. The transform acts as a pure injection: it maps a low-dimensional initialization tuple into a higher-dimensional configuration space, materializing both the supplied runtime values (current magnitude, signed position) and the hardcoded structural constants (sensitivity coefficient, arrival-rate parameter, dispersion coefficient) as a single immutable record. No computation is performed beyond assignment; the output is a static snapshot that serves as the canonical ground truth for all subsequent stateful operations.. Applications: Epidemiological modeling: initializing an SIR/SEIR compartmental model with a seed infection count (signed-position analog) and a baseline population contact rate (magnitude analog), materializing transmission rate (beta), recovery rate (gamma), initial susceptible population (S0), and variance of stochastic contact events — consumed by all downstream differential equation solvers, Robotics / motion planning: bootstrapping a PID or LQR controller's parameter record from an initial sensor reading (measured state magnitude) and a signed positional error offset, locking in the gain coefficients (proportional, derivative, integral), process-noise covariance, and reference setpoint as an immutable configuration consumed by every control-loop iteration, Quantum circuit simulation: constructing an immutable Hamiltonian parameter record from an initial observable expectation value and a signed spin-polarization offset, materializing coupling strength, decoherence rate, initial state amplitude, and energy dispersion constants that all gate-operation kernels reference as pure inputs, Structural engineering / finite element analysis: seeding an FEA node's material-property record from an initial stress magnitude and a signed strain offset, fixing Young's modulus (stiffness coefficient), Poisson's ratio (lateral-coupling parameter), current displacement vector, reference load magnitude, and material yield dispersion — forming the immutable per-element parameter block consumed by the global stiffness-matrix assembler"
+inputs:
+  - name: s0
+    type_desc: float
+    constraints: s0 > 0
+    required: true
+    default_value_repr: ""
+  - name: inventory
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: gamma
+    type_desc: float
+    constraints: gamma > 0
+    required: true
+    default_value_repr: ""
+  - name: k
+    type_desc: float
+    constraints: k > 0
+    required: true
+    default_value_repr: ""
+  - name: q
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: s
+    type_desc: float
+    constraints: s > 0
+    required: true
+    default_value_repr: ""
+  - name: sigma
+    type_desc: float
+    constraints: sigma > 0
+    required: true
+    default_value_repr: ""
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: avellaneda2008
+    citation: Market-making attribution.
+  - title: repo_institutional_quant_engine
+    citation: Primary repository attribution for Institutional-Quant-Engine atoms.
+title: Marketmakerstateinit
+description: Bootstraps the market-maker's immutable parameter state from a supplied initial mid-price and inventory position, materialising the five scalar fields — risk-a…
+---
+
+# Marketmakerstateinit
+
+> Bootstraps the market-maker's immutable parameter state from a supplied initial mid-price and inventory position, materialising the five scalar fields — risk-aversion (gamma), market-depth (k), inventory (q), mid-price (s), and volatility (sigma) — that all downstream computations consume as pure inputs.
+
+## Conceptual Summary
+
+ImmutableParameterSpaceInitializer. Takes a minimal set of exogenous scalar seed values — one representing the current state of a measurable quantity and one representing a signed positional offset — and expands them into a fully-specified, frozen parameter manifold of five scalars that collectively define the operating envelope for all downstream computations. The transform acts as a pure injection: it maps a low-dimensional initialization tuple into a higher-dimensional configuration space, materializing both the supplied runtime values (current magnitude, signed position) and the hardcoded structural constants (sensitivity coefficient, arrival-rate parameter, dispersion coefficient) as a single immutable record. No computation is performed beyond assignment; the output is a static snapshot that serves as the canonical ground truth for all subsequent stateful operations.. Applications: Epidemiological modeling: initializing an SIR/SEIR compartmental model with a seed infection count (signed-position analog) and a baseline population contact rate (magnitude analog), materializing transmission rate (beta), recovery rate (gamma), initial susceptible population (S0), and variance of stochastic contact events — consumed by all downstream differential equation solvers, Robotics / motion planning: bootstrapping a PID or LQR controller's parameter record from an initial sensor reading (measured state magnitude) and a signed positional error offset, locking in the gain coefficients (proportional, derivative, integral), process-noise covariance, and reference setpoint as an immutable configuration consumed by every control-loop iteration, Quantum circuit simulation: constructing an immutable Hamiltonian parameter record from an initial observable expectation value and a signed spin-polarization offset, materializing coupling strength, decoherence rate, initial state amplitude, and energy dispersion constants that all gate-operation kernels reference as pure inputs, Structural engineering / finite element analysis: seeding an FEA node's material-property record from an initial stress magnitude and a signed strain offset, fixing Young's modulus (stiffness coefficient), Poisson's ratio (lateral-coupling parameter), current displacement vector, reference load magnitude, and material yield dispersion — forming the immutable per-element parameter block consumed by the global stiffness-matrix assembler
+
+## Type Signature
+
+```
+(s0: float — initial mid-price of the asset, inventory: float — starting inventory position (signed)) -> tuple[float — absolute risk-aversion coefficient, float — market-depth / order-arrival rate parameter, float — current inventory position, float — current mid-price, float — asset price volatility]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

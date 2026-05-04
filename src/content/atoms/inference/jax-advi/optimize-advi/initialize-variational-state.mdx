@@ -1,0 +1,41 @@
+---
+fqdn: sciona.atoms.inference.jax_advi.optimize_advi.initialize_variational_state
+predicate_id: initialize_variational_state
+repo: sciona-atoms
+domain: inference
+type_signature: "(flat_theta_template: jnp.ndarray, var_param_inits: dict[str, tuple[float, float]], rng_state_after_objective_init: int | PRNGKey-like RNG state) -> tuple[np.ndarray, int | PRNGKey-like RNG state]"
+informal_desc: Samples initial mean-field variational parameters (means and log standard deviations) and flattens them for optimization.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kucukelbir2017advi
+    citation: Exact ADVI attribution for jax_advi atoms.
+  - title: titsias2014dsvb
+    citation: Complementary reparameterization-gradient VI attribution.
+  - title: repo_jax_advi
+    citation: Upstream implementation is mapped to the vendored jax_advi repository.
+title: Initialize_variational_state
+description: Samples initial mean-field variational parameters (means and log standard deviations) and flattens them for optimization.
+---
+
+# Initialize_variational_state
+
+> Samples initial mean-field variational parameters (means and log standard deviations) and flattens them for optimization.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(flat_theta_template: jnp.ndarray, var_param_inits: dict[str, tuple[float, float]], rng_state_after_objective_init: int | PRNGKey-like RNG state) -> tuple[np.ndarray, int | PRNGKey-like RNG state]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

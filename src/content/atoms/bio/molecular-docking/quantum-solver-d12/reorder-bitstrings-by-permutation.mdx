@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.reorder_bitstrings_by_permutation
+predicate_id: reorder_bitstrings_by_permutation
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(counts_mps_raw: dict[str, int], list_perm: list[int]) -> dict[str, int]"
+informal_desc: Applies the inverse of list_perm to every bitstring key returned by the MPS backend so that qubit indices correspond to the canonical problem ordering.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Reorder_bitstrings_by_permutation
+description: Applies the inverse of list_perm to every bitstring key returned by the MPS backend so that qubit indices correspond to the canonical problem ordering.
+---
+
+# Reorder_bitstrings_by_permutation
+
+> Applies the inverse of list_perm to every bitstring key returned by the MPS backend so that qubit indices correspond to the canonical problem ordering.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(counts_mps_raw: dict[str, int], list_perm: list[int]) -> dict[str, int]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

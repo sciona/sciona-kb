@@ -1,0 +1,60 @@
+---
+cdg_asset_id: solution.kaggle.ogb_wikikg90m_1st
+title: OGB Large-Scale Challenge - WikiKG90M - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by OGB Large-Scale Challenge - WikiKG90M - 1st Place (2021): prepare the data, build task-specific representation…"
+problem_statement: "Graph ML / Link Prediction solution template for OGB Large-Scale Challenge - WikiKG90M - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Language feature embedding, Relational embedding (TransE), Relational embedding (ComplEx), Candidate generation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: OGB Large-Scale Challenge - WikiKG90M - 1st Place (2021)
+placement: ""
+year: 0
+domain: graph_inference
+paradigm: graph_signal_processing
+family: graph_inference
+tags:
+  - faiss
+  - graph
+  - prediction
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Language feature embedding creates the representation needed by MLP Re-ranking, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://arxiv.org/abs/2109.00412
+source_license: null
+---
+
+# OGB Large-Scale Challenge - WikiKG90M - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+Graph ML / Link Prediction solution template for OGB Large-Scale Challenge - WikiKG90M - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Language feature embedding, Relational embedding (TransE), Relational embedding (ComplEx), Candidate generation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by OGB Large-Scale Challenge - WikiKG90M - 1st Place (2021): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.ogb_wikikg90m_1st" readOnly={true} /> */}
+
+1. **Language feature embedding** -- This stage process the text descriptions of all 90 million Wikipedia entities using a pre-trained RoBERTa model to output dense 768D text vectors (HuggingFace).
+1. **Relational embedding (TransE)** -- This stage train a TransE translation model over the Knowledge Graph triples (Head, Relation, Tail) using the text vectors as initialization weights (DGL-KE).
+1. **Relational embedding (ComplEx)** -- This stage train a ComplEx model in parallel to capture non-symmetric and inverse relation logic across the graph (DGL-KE).
+1. **Candidate generation** -- This stage perform a fast K-Nearest Neighbor query in the embedded graph space to retrieve the top 100 most likely target entities for a missing link (FAISS).
+1. **MLP Re-ranking** -- This stage concatenate the embeddings of the retrieved Head, Relation, and candidate Tail, passing them through an MLP to score and re-sort the final 100 choices (PyTorch).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Language feature embedding creates the representation needed by MLP Re-ranking, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.ogb_wikikg90m_1st" label="Reproduce this solution in Sciona" /> */}

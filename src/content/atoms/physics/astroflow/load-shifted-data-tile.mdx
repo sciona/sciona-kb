@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.physics.astroflow.load_shifted_data_tile
+predicate_id: load_shifted_data_tile
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(input_data: numpy.ndarray, delay_row: numpy.ndarray, time_downsample: int, total_downsampled_time: int, total_channels: int, tile_start_channel: int, tile_channel_height: int, tile_start_time: int, tile_time_width: int) -> numpy.ndarray"
+informal_desc: For a specific dispersion measure, time block, and channel chunk, this atom loads a tile of data from the input, applying the appropriate time delays for each frequency channel.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: astroflow2025
+    citation: Primary AstroFlow paper.
+  - title: repo_astroflow
+    citation: Upstream implementation is mapped to the vendored astroflow repository.
+title: Load_shifted_data_tile
+description: For a specific dispersion measure, time block, and channel chunk, this atom loads a tile of data from the input, applying the appropriate time delays for each …
+---
+
+# Load_shifted_data_tile
+
+> For a specific dispersion measure, time block, and channel chunk, this atom loads a tile of data from the input, applying the appropriate time delays for each frequency channel.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(input_data: numpy.ndarray, delay_row: numpy.ndarray, time_downsample: int, total_downsampled_time: int, total_channels: int, tile_start_channel: int, tile_channel_height: int, tile_start_time: int, tile_time_width: int) -> numpy.ndarray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

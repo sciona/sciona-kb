@@ -1,0 +1,59 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping_d12.emit_final_generation_result
+predicate_id: emit_final_generation_result
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(expanded_mapping_state: MappingState, is_valid: bool) -> tuple[MappingState, bool]"
+informal_desc: Package the expanded mapping state with validity status as the orchestration output contract.
+conceptual_summary: ""
+inputs:
+  - name: expanded_mapping_state
+    type_desc: MappingState
+    constraints: Candidate final state after greedy expansion.
+    required: true
+    default_value_repr: ""
+  - name: is_valid
+    type_desc: bool
+    constraints: Validation result from consistency check.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: final_mapping_state
+    type_desc: MappingState
+    constraints: Returned mapping state for downstream use.
+    required: true
+    default_value_repr: ""
+  - name: is_valid
+    type_desc: bool
+    constraints: Returned validity flag for caller-level decision.
+    required: true
+    default_value_repr: ""
+concept_type: conditional_routing
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Emit_final_generation_result
+description: Package the expanded mapping state with validity status as the orchestration output contract.
+---
+
+# Emit_final_generation_result
+
+> Package the expanded mapping state with validity status as the orchestration output contract.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(expanded_mapping_state: MappingState, is_valid: bool) -> tuple[MappingState, bool]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

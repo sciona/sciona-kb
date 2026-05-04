@@ -1,0 +1,43 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.longitudinal_dynamics.compute_aerodynamic_force
+predicate_id: compute_aerodynamic_force
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(velocity: float) -> float"
+informal_desc: Compute aerodynamic drag force from velocity.
+conceptual_summary: "signed_nonlinear_resistive_mapping. Transforms a signed scalar rate into a signed scalar opposing term whose magnitude increases with the rate magnitude (typically second-order in absolute value). The mapping is memoryless and applies an odd-symmetric dissipation law: zero input yields zero output, and reversing input sign reverses output sign while preserving magnitude profile.. Applications: Rotational system modeling: map angular velocity to opposing damping torque in actuator or flywheel simulations, Electromechanical modeling: map current or speed to counteracting loss term for energy dissipation estimation, Biomechanical dynamics: map joint segment velocity to passive resistive force in simplified limb models, Fluid transport networks: map signed flow rate to opposing pressure-drop term in reduced-order pipeline/channel models"
+inputs:
+  - name: velocity
+    type_desc: float
+    constraints: real-valued; sign convention consistent with model
+outputs:
+  - name: f_aero
+    type_desc: float
+    constraints: force in model units
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Compute_aerodynamic_force
+description: Compute aerodynamic drag force from velocity.
+---
+
+# Compute_aerodynamic_force
+
+> Compute aerodynamic drag force from velocity.
+
+## Conceptual Summary
+
+signed_nonlinear_resistive_mapping. Transforms a signed scalar rate into a signed scalar opposing term whose magnitude increases with the rate magnitude (typically second-order in absolute value). The mapping is memoryless and applies an odd-symmetric dissipation law: zero input yields zero output, and reversing input sign reverses output sign while preserving magnitude profile.. Applications: Rotational system modeling: map angular velocity to opposing damping torque in actuator or flywheel simulations, Electromechanical modeling: map current or speed to counteracting loss term for energy dissipation estimation, Biomechanical dynamics: map joint segment velocity to passive resistive force in simplified limb models, Fluid transport networks: map signed flow rate to opposing pressure-drop term in reduced-order pipeline/channel models
+
+## Type Signature
+
+```
+(velocity: float) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

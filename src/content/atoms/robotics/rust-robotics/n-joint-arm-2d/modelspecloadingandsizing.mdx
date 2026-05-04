@@ -1,0 +1,46 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.n_joint_arm_2d.modelspecloadingandsizing
+predicate_id: modelspecloadingandsizing
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(filename: str) -> tuple[ModelDSpec, float]"
+informal_desc: Loads serialized model data and exposes structural sizing metadata for downstream computation.
+conceptual_summary: "SerializedStructureIngestionAndComplexityRatioExtraction. Reads a serialized structured artifact from a valid filesystem path and deserializes it into a typed in-memory specification for computation. It then derives a normalized structural complexity metric by computing the ratio between discrete state cardinality and representational dimensionality. The operation maps persistent encoded data into both an executable structural object and a scalar size invariant.. Applications: Finite-element engineering: load a serialized solver/mesh specification and compute state-variable density per geometric dimension., Robotics autonomy: ingest a serialized transition-system model and compute state-cardinality per latent-coordinate dimension., Computational biology: parse a serialized hidden-state model and compute hidden-state count per observation-space dimension., Network science: load a serialized dynamical graph-process specification and compute process-state count per embedding dimension."
+inputs:
+  - name: filename
+    type_desc: str
+    constraints: valid readable model file path
+outputs:
+  - name: model_spec
+    type_desc: ModelDSpec
+    constraints: deserialized successfully
+  - name: state_dim_ratio
+    type_desc: float
+    constraints: num_states/num_dim ratio
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Modelspecloadingandsizing
+description: Loads serialized model data and exposes structural sizing metadata for downstream computation.
+---
+
+# Modelspecloadingandsizing
+
+> Loads serialized model data and exposes structural sizing metadata for downstream computation.
+
+## Conceptual Summary
+
+SerializedStructureIngestionAndComplexityRatioExtraction. Reads a serialized structured artifact from a valid filesystem path and deserializes it into a typed in-memory specification for computation. It then derives a normalized structural complexity metric by computing the ratio between discrete state cardinality and representational dimensionality. The operation maps persistent encoded data into both an executable structural object and a scalar size invariant.. Applications: Finite-element engineering: load a serialized solver/mesh specification and compute state-variable density per geometric dimension., Robotics autonomy: ingest a serialized transition-system model and compute state-cardinality per latent-coordinate dimension., Computational biology: parse a serialized hidden-state model and compute hidden-state count per observation-space dimension., Network science: load a serialized dynamical graph-process specification and compute process-state count per embedding dimension.
+
+## Type Signature
+
+```
+(filename: str) -> tuple[ModelDSpec, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

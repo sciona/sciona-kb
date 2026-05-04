@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.compute_acceptance_log_ratio
+predicate_id: compute_acceptance_log_ratio
+repo: sciona-atoms
+domain: inference
+type_signature: "(h_current: Tensor[n_chains], proposed_momenta: Tensor[n_chains, dim], logp_proposed: Tensor[n_chains]) -> tuple[Tensor[n_chains], Tensor[n_chains]]"
+informal_desc: Compute proposed Hamiltonian and per-chain Metropolis log acceptance ratio.
+conceptual_summary: ""
+inputs:
+  - name: h_current
+    type_desc: Tensor[n_chains]
+    constraints: From compute_current_hamiltonian.
+  - name: proposed_momenta
+    type_desc: Tensor[n_chains, dim]
+    constraints: From integrate_leapfrog_proposal.
+  - name: logp_proposed
+    type_desc: Tensor[n_chains]
+    constraints: From integrate_leapfrog_proposal.
+outputs:
+  - name: h_proposed
+    type_desc: Tensor[n_chains]
+    constraints: h_proposed = -logp_proposed + 0.5*sum_d(proposed_momenta^2).
+  - name: accept_log_ratio
+    type_desc: Tensor[n_chains]
+    constraints: accept_log_ratio = h_current - h_proposed.
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Compute_acceptance_log_ratio
+description: Compute proposed Hamiltonian and per-chain Metropolis log acceptance ratio.
+---
+
+# Compute_acceptance_log_ratio
+
+> Compute proposed Hamiltonian and per-chain Metropolis log acceptance ratio.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(h_current: Tensor[n_chains], proposed_momenta: Tensor[n_chains, dim], logp_proposed: Tensor[n_chains]) -> tuple[Tensor[n_chains], Tensor[n_chains]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

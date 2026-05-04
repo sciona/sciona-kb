@@ -1,0 +1,66 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.assemble_transition_result
+predicate_id: assemble_transition_result
+repo: sciona-atoms
+domain: inference
+type_signature: "(chain_state_in: StateModelSpec, positions_next: Tensor<B,2>, grad_summands: Tensor<B,2>, accept_mask: Tensor<B,1,Bool>, accept_logp: Tensor<B,1>, h_current: Tensor<B,1>, h_proposed: Tensor<B,1>) -> tuple[StateModelSpec, object]"
+informal_desc: Return the immutable next chain state and transition diagnostics.
+conceptual_summary: ""
+inputs:
+  - name: chain_state_in
+    type_desc: StateModelSpec
+    constraints: pre-step state
+  - name: positions_next
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+  - name: grad_summands
+    type_desc: Tensor
+    constraints: cached gradient half-step term
+  - name: accept_mask
+    type_desc: Tensor
+    constraints: shape [n_chains]
+  - name: accept_logp
+    type_desc: Tensor
+    constraints: shape [n_chains]
+  - name: h_current
+    type_desc: Tensor
+    constraints: shape [n_chains]
+  - name: h_proposed
+    type_desc: Tensor
+    constraints: shape [n_chains]
+outputs:
+  - name: chain_state_out
+    type_desc: StateModelSpec
+    constraints: same structure as input with updated positions and cached grad state
+  - name: transition_stats
+    type_desc: object
+    constraints: contains per-chain acceptance diagnostics
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Assemble_transition_result
+description: Return the immutable next chain state and transition diagnostics.
+---
+
+# Assemble_transition_result
+
+> Return the immutable next chain state and transition diagnostics.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(chain_state_in: StateModelSpec, positions_next: Tensor<B,2>, grad_summands: Tensor<B,2>, accept_mask: Tensor<B,1,Bool>, accept_logp: Tensor<B,1>, h_current: Tensor<B,1>, h_proposed: Tensor<B,1>) -> tuple[StateModelSpec, object]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.stack_chain_samples
+predicate_id: stack_chain_samples
+repo: sciona-atoms
+domain: inference
+type_signature: "(collected_samples: Vec<Tensor<B, 2>>) -> Tensor<B, 3>"
+informal_desc: Combines the list of 2D sample tensors from each chain into a single 3D tensor, with the first dimension representing the chain index.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS tree-building reference for recursive subtree endpoints, slice-valid candidate counts, U-turn continuation checks, divergence flags, and acceptance accumulation.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local callable returns compact NumPy trajectory bookkeeping rather than only a rightmost position.
+title: Stack_chain_samples
+description: Combines the list of 2D sample tensors from each chain into a single 3D tensor, with the first dimension representing the chain index.
+---
+
+# Stack_chain_samples
+
+> Combines the list of 2D sample tensors from each chain into a single 3D tensor, with the first dimension representing the chain index.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(collected_samples: Vec<Tensor<B, 2>>) -> Tensor<B, 3>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

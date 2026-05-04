@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.belief_propagation.loopy_bp.advance_state_via_loopy_message_passing
+predicate_id: advance_state_via_loopy_message_passing
+repo: sciona-atoms
+domain: inference
+type_signature: "(state_in: BPStateModelSpec{pgm, msg, msg_new, t}, target_iter: int) -> BPStateModelSpec{pgm, msg, msg_new, t}"
+informal_desc: "If `state_in.t < target_iter`, runs synchronous BP updates until `t == target_iter`: for each edge, computes both directed messages (variable->factor and factor->variable), normalizes each message, writes into `msg_new`, then commits `msg_new` into `msg` and increments `t`."
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: murphy1999loopy
+    citation: Exact loopy belief propagation attribution.
+  - title: repo_belief_propagation
+    citation: Upstream implementation is mapped to the vendored Belief-Propagation repository.
+title: Advance_state_via_loopy_message_passing
+description: "If `state_in.t < target_iter`, runs synchronous BP updates until `t == target_iter`: for each edge, computes both directed messages (variable->factor and facto…"
+---
+
+# Advance_state_via_loopy_message_passing
+
+> If `state_in.t &lt; target_iter`, runs synchronous BP updates until `t == target_iter`: for each edge, computes both directed messages (variable->factor and factor->variable), normalizes each message, writes into `msg_new`, then commits `msg_new` into `msg` and increments `t`.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(state_in: BPStateModelSpec{pgm, msg, msg_new, t}, target_iter: int) -> BPStateModelSpec{pgm, msg, msg_new, t}
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

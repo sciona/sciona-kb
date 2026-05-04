@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.compute_pulse_parameter_bounds
+predicate_id: compute_pulse_parameter_bounds
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(coord: dict[node_id, (float,float)], graph: NetworkX Graph) -> tuple[float, float]"
+informal_desc: Compute min/max inter-atomic interaction strengths from spatial coordinates and graph topology, then derive the detuning_maximum and amplitude_maximum pulse parameters.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Compute_pulse_parameter_bounds
+description: Compute min/max inter-atomic interaction strengths from spatial coordinates and graph topology, then derive the detuning_maximum and amplitude_maximum pulse pa…
+---
+
+# Compute_pulse_parameter_bounds
+
+> Compute min/max inter-atomic interaction strengths from spatial coordinates and graph topology, then derive the detuning_maximum and amplitude_maximum pulse parameters.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(coord: dict[node_id, (float,float)], graph: NetworkX Graph) -> tuple[float, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

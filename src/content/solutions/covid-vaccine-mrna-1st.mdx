@@ -1,0 +1,66 @@
+---
+cdg_asset_id: solution.kaggle.covid_vaccine_mrna_1st
+title: Stanford COVID Vaccine mRNA 1st Place — Per-Nucleotide Degradation Prediction
+description: Predict how fast each position in an RNA strand degrades by reading the sequence left-to-right and right-to-left with one model, while a second model reasons a…
+problem_statement: Dual-branch neural architecture combining bidirectional RNN on raw RNA sequences with GCN on secondary-structure adjacency matrices, fused at every sequence position and decoded with a linear head to predict per-nucleotide degradation rates.
+platform: kaggle
+competition_name: Stanford COVID Vaccine mRNA 1st Place — Per-Nucleotide Degradation Prediction
+placement: ""
+year: 0
+domain: structured_prediction
+paradigm: neural_network
+family: structured_prediction
+tags:
+  - rna_degradation_prediction
+  - graph_sequence_fusion
+  - bidirectional_rnn_gcn
+  - mrna_stability
+  - structured_prediction_rna
+  - per_position_regression
+  - dual_branch_architecture
+  - secondary_structure_adjacency
+  - sequence_structure_fusion
+  - bio_sequence_modeling
+key_insight: "RNA degradation is governed by both sequential context (neighboring nucleotides) and structural context (physically paired bases that may be distant in sequence). A single-modality model captures only one view. The dual-branch fusion forces complementary learning: the RNN captures sequential motifs while the GCN propagates information along base-pair edges, and their concatenation at every position gives the output head both views simultaneously."
+failure_modes:
+  - "Inaccurate secondary structure predictions: garbage adjacency matrices cause the GCN branch to inject noise rather than signal"
+  - "Very short sequences (<30 nt): insufficient context for the RNN and too few graph edges for meaningful GCN aggregation"
+  - "Sequences with no stable secondary structure (e.g., disordered regions): the GCN branch contributes nothing and the fusion becomes a bottleneck"
+source_url: ""
+source_license: null
+---
+
+# Stanford COVID Vaccine mRNA 1st Place — Per-Nucleotide Degradation Prediction
+
+## Problem
+
+Dual-branch neural architecture combining bidirectional RNN on raw RNA sequences with GCN on secondary-structure adjacency matrices, fused at every sequence position and decoded with a linear head to predict per-nucleotide degradation rates.
+
+## Approach
+
+Predict how fast each position in an RNA strand degrades by reading the sequence left-to-right and right-to-left with one model, while a second model reasons about which bases are physically paired, then merging both views before making the final prediction.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.covid_vaccine_mrna_1st" readOnly={true} /> */}
+
+1. **Secondary Structure Parsing** -- Use physics-based RNA folding software to predict which bases in the strand pair up, and store those pairings as a connectivity matrix.
+1. **Node Feature Generation** -- Build a feature vector for each position in the RNA describing what nucleotide it is and how strongly it pairs with other positions.
+1. **Sequence-to-Sequence Model** -- Read the RNA sequence forwards and backwards with a recurrent neural network to build a context-aware representation at each position.
+1. **Graph Neural Network** -- Use a graph neural network to learn representations based on which bases are physically paired together in the RNA's 3D structure.
+1. **Feature Fusion** -- Merge the sequence-reading model's output with the structure-reading model's output at each RNA position.
+1. **Output Head** -- A simple linear layer that converts the merged representation into the final degradation rate predictions for each position.
+
+## Key Insight
+
+RNA degradation is governed by both sequential context (neighboring nucleotides) and structural context (physically paired bases that may be distant in sequence). A single-modality model captures only one view. The dual-branch fusion forces complementary learning: the RNN captures sequential motifs while the GCN propagates information along base-pair edges, and their concatenation at every position gives the output head both views simultaneously.
+
+## Failure Modes
+
+- Inaccurate secondary structure predictions: garbage adjacency matrices cause the GCN branch to inject noise rather than signal
+- Very short sequences (&lt;30 nt): insufficient context for the RNN and too few graph edges for meaningful GCN aggregation
+- Sequences with no stable secondary structure (e.g., disordered regions): the GCN branch contributes nothing and the fusion becomes a bottleneck
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.covid_vaccine_mrna_1st" label="Reproduce this solution in Sciona" /> */}

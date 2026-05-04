@@ -1,0 +1,123 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.svm_proc.get_subject_results
+predicate_id: get_subject_results
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(results: Any, subject: Any, thresholds: Any, subjects: Any, subject_dict: Any, subject_idx: Any) -> Any"
+informal_desc: |-
+  Compute authentication and identification performance metrics for a
+  given subject.
+
+  Parameters
+  ----------
+  results : dict
+      Classification results.
+  subject : hashable
+      True subject label.
+  thresholds : array
+      Classifier thresholds.
+  subjects : list
+      Target subject classes.
+  subject_dict : bidict
+      Subject-label conversion dictionary.
+  subject_idx : list
+      Subject index.
+
+  Returns
+  -------
+  assessment : dict
+      Authentication and identification results.
+conceptual_summary: ""
+inputs:
+  - name: results
+    type_desc: dict[str, object]
+    constraints: valid dict[str, object]
+    required: true
+    default_value_repr: ""
+  - name: subject
+    type_desc: Hashable
+    constraints: valid Hashable
+    required: true
+    default_value_repr: ""
+  - name: thresholds
+    type_desc: NDArray[np.float64]
+    constraints: valid NDArray[np.float64]
+    required: true
+    default_value_repr: ""
+  - name: subjects
+    type_desc: Sequence[Hashable]
+    constraints: valid Sequence[Hashable]
+    required: true
+    default_value_repr: ""
+  - name: subject_dict
+    type_desc: bidict[Hashable, int]
+    constraints: valid bidict[Hashable, int]
+    required: true
+    default_value_repr: ""
+  - name: subject_idx
+    type_desc: Sequence[int]
+    constraints: valid Sequence[int]
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: result
+    type_desc: dict[str, object]
+    constraints: valid dict[str, object]
+    required: true
+    default_value_repr: ""
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Get_subject_results
+description: |-
+  Compute authentication and identification performance metrics for a
+  given subject.
+
+  Parameters
+  ----------
+  results : dict
+      Classification results.
+  subject : …
+---
+
+# Get_subject_results
+
+> Compute authentication and identification performance metrics for a
+given subject.
+
+Parameters
+----------
+results : dict
+    Classification results.
+subject : hashable
+    True subject label.
+thresholds : array
+    Classifier thresholds.
+subjects : list
+    Target subject classes.
+subject_dict : bidict
+    Subject-label conversion dictionary.
+subject_idx : list
+    Subject index.
+
+Returns
+-------
+assessment : dict
+    Authentication and identification results.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(results: Any, subject: Any, thresholds: Any, subjects: Any, subject_dict: Any, subject_idx: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

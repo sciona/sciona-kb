@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.physics.tempo_jl.tai2utc_d12.evaluate_and_refine_utc_estimate
+predicate_id: evaluate_and_refine_utc_estimate
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(u1: float, u2: float, a1: float, a2: float) -> tuple[float, float]"
+informal_desc: Iteratively refines the UTC estimate by calling utc_to_tai_leap_second_kernel on the current candidate, computing the TAI residual (a1-g1, a2-g2), and applying the correction to u2. Runs for two iterations to converge through any leap-second boundary.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: urban2013almanac
+    citation: Broad astronomical time-scale attribution.
+  - title: repo_tempo_jl
+    citation: Primary Tempo.jl software attribution.
+title: Evaluate_and_refine_utc_estimate
+description: Iteratively refines the UTC estimate by calling utc_to_tai_leap_second_kernel on the current candidate, computing the TAI residual (a1-g1, a2-g2), and applying…
+---
+
+# Evaluate_and_refine_utc_estimate
+
+> Iteratively refines the UTC estimate by calling utc_to_tai_leap_second_kernel on the current candidate, computing the TAI residual (a1-g1, a2-g2), and applying the correction to u2. Runs for two iterations to converge through any leap-second boundary.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(u1: float, u2: float, a1: float, a2: float) -> tuple[float, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

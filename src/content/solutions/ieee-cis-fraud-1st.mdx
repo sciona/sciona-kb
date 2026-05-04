@@ -1,0 +1,65 @@
+---
+cdg_asset_id: solution.kaggle.ieee_cis_fraud_1st
+title: IEEE-CIS Fraud Detection - 1st Place (2019) - Pipeline Template
+description: "This template captures the ordered steps used by IEEE-CIS Fraud Detection - 1st Place (2019): prepare the data, build task-specific representations, run the ma…"
+problem_statement: "Tabular Classification (Adversarial Validation / Time-split) solution template for IEEE-CIS Fraud Detection - 1st Place (2019), modeled as a 5-stage deterministic pipeline: Client-ID Reverse Engineering, Group K-Fold split, Target Encoding, Feature Aggregation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: IEEE-CIS Fraud Detection - 1st Place (2019)
+placement: ""
+year: 0
+domain: tabular_classification
+paradigm: optimization
+family: tabular_classification
+tags:
+  - xgboost
+  - catboost
+  - target_encoding
+  - tabular
+  - classification
+  - adversarial
+  - validation
+  - split
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Client-ID Reverse Engineering creates the representation needed by GBDT modeling, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/ieee-fraud-detection/discussion/111284
+source_license: null
+---
+
+# IEEE-CIS Fraud Detection - 1st Place (2019) - Pipeline Template
+
+## Problem
+
+Tabular Classification (Adversarial Validation / Time-split) solution template for IEEE-CIS Fraud Detection - 1st Place (2019), modeled as a 5-stage deterministic pipeline: Client-ID Reverse Engineering, Group K-Fold split, Target Encoding, Feature Aggregation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by IEEE-CIS Fraud Detection - 1st Place (2019): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.ieee_cis_fraud_1st" readOnly={true} /> */}
+
+1. **Client-ID Reverse Engineering** -- This stage mathematically combine anonymized hardware specs (D-columns) and time deltas to successfully reconstruct unique user IDs without explicit PII (pandas).
+1. **Group K-Fold split** -- This stage strictly split cross-validation by the generated User IDs and by Time, intentionally mimicking the train/test split to prevent overfitting (sklearn).
+1. **Target Encoding** -- This stage apply smoothed target encoding to high-cardinality categorical variables using only historical data relative to the current row (category_encoders).
+1. **Feature Aggregation** -- This stage calculate the rolling mean and standard deviation of transaction amounts per User ID over the last 30 days (pandas).
+1. **GBDT modeling** -- This stage train massive XGBoost and CatBoost models on the engineered features, optimizing for AUC.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Client-ID Reverse Engineering creates the representation needed by GBDT modeling, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.ieee_cis_fraud_1st" label="Reproduce this solution in Sciona" /> */}

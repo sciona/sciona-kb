@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.home_credit_default_1st
+title: Home Credit Default Risk - 1st Place (2018) - Pipeline Template
+description: "This template captures the ordered steps used by Home Credit Default Risk - 1st Place (2018): prepare the data, build task-specific representations, train or a…"
+problem_statement: "Tabular classification (Relational Databases) solution template for Home Credit Default Risk - 1st Place (2018), modeled as a 5-stage deterministic pipeline: Relational aggregation, Time-decay weighting, Feature selection, Null imputation, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Home Credit Default Risk - 1st Place (2018)
+placement: 1st
+year: 2018
+domain: tabular_classification
+paradigm: optimization
+family: tabular_classification
+tags:
+  - lightgbm
+  - xgboost
+  - rag
+  - tabular
+  - classification
+  - relational
+  - databases
+key_insight: "The load-bearing idea is the pipeline topology: Relational aggregation creates the representation needed by Ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/home-credit-default-risk/discussion/64821
+source_license: null
+---
+
+# Home Credit Default Risk - 1st Place (2018) - Pipeline Template
+
+## Problem
+
+Tabular classification (Relational Databases) solution template for Home Credit Default Risk - 1st Place (2018), modeled as a 5-stage deterministic pipeline: Relational aggregation, Time-decay weighting, Feature selection, Null imputation, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Home Credit Default Risk - 1st Place (2018): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.home_credit_default_1st" readOnly={true} /> */}
+
+1. **Relational aggregation** -- This stage write custom SQL-style groupby statements to aggregate historical credit bureau, previous application, and installment tables to the user level (pandas).
+1. **Time-decay weighting** -- This stage apply heavier weights to recent financial actions during aggregation (e.g., recent late payments penalize more than 5-year-old late payments) (pandas).
+1. **Feature selection** -- This stage train a massive LightGBM model with 2000+ features, computing SHAP values, and dropping the bottom 50% least important features (LightGBM/SHAP).
+1. **Null imputation** -- This stage replace NaN values with heavily negative out-of-bounds numbers to let tree models naturally group missing values (pandas).
+1. **Ensembling** -- This stage blend Ridge Regression, LightGBM, XGBoost, and Neural Network probabilities using rank-averaging.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Relational aggregation creates the representation needed by Ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.home_credit_default_1st" label="Reproduce this solution in Sciona" /> */}

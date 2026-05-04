@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.build_threshold_search_space
+predicate_id: build_threshold_search_space
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(validated_mat: np.ndarray (2D numeric)) -> tuple[float, np.ndarray (1D float)]"
+informal_desc: Compute matrix amplitude from absolute values and construct the truncation sweep used to explore candidate permutations.
+conceptual_summary: ""
+inputs:
+  - name: validated_mat
+    type_desc: np.ndarray
+    constraints: symmetric
+outputs:
+  - name: mat_amplitude
+    type_desc: float
+    constraints: ptp(abs(validated_mat).ravel())
+  - name: truncation_values
+    type_desc: np.ndarray
+    constraints: range [0.1, 1.0) with step 0.01
+concept_type: combinatorics
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Build_threshold_search_space
+description: Compute matrix amplitude from absolute values and construct the truncation sweep used to explore candidate permutations.
+---
+
+# Build_threshold_search_space
+
+> Compute matrix amplitude from absolute values and construct the truncation sweep used to explore candidate permutations.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(validated_mat: np.ndarray (2D numeric)) -> tuple[float, np.ndarray (1D float)]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

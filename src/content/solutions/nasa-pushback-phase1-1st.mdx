@@ -1,0 +1,58 @@
+---
+cdg_asset_id: solution.kaggle.nasa_pushback_phase1_1st
+title: NASA Airport Pushback Phase 1 - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by NASA Airport Pushback Phase 1 - 1st Place (2022): prepare the data, build task-specific representations, train…"
+problem_statement: "Tabular regression solution template for NASA Airport Pushback Phase 1 - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Data Ingestion, Entity Splitting, Parallel Modeling, Airline Sequencing, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: NASA Airport Pushback Phase 1 - 1st Place (2022)
+placement: 1st
+year: 2022
+domain: tabular_regression
+paradigm: optimization
+family: tabular_regression
+tags:
+  - catboost
+  - tabular
+  - regression
+key_insight: "The load-bearing idea is the pipeline topology: Data Ingestion creates the representation needed by Concatenation, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://github.com/drivendataorg/nasa-airport-pushback
+source_license: null
+---
+
+# NASA Airport Pushback Phase 1 - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+Tabular regression solution template for NASA Airport Pushback Phase 1 - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Data Ingestion, Entity Splitting, Parallel Modeling, Airline Sequencing, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by NASA Airport Pushback Phase 1 - 1st Place (2022): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.nasa_pushback_phase1_1st" readOnly={true} /> */}
+
+1. **Data Ingestion** -- This stage load public air traffic and terminal weather data into tabular dataframes (pandas).
+1. **Entity Splitting** -- This stage split the dataset categorically by individual airport rather than treating the data as a single monolithic block.
+1. **Parallel Modeling** -- This stage train an independent CatBoost regressor sequence dedicated specifically to each individual airport's telemetry (catboost).
+1. **Airline Sequencing** -- This stage within each airport model, train sub-models in strict sequence across the different operating airlines to capture sequential delays.
+1. **Concatenation** -- This stage re-concatenate the distinct airport and airline predictions into a single standardized submission file.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Data Ingestion creates the representation needed by Concatenation, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.nasa_pushback_phase1_1st" label="Reproduce this solution in Sciona" /> */}

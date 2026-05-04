@@ -1,0 +1,75 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.greedyassignfrontierplacements
+predicate_id: greedyassignfrontierplacements
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mapping_context: MappingContext, free_lattice_neighbors: Set[LatticeNode], prioritized_unplaced_nodes: List[GraphNode], already_placed_nodes: Set[GraphNode], mapping: Map[GraphNode,LatticeNode], unmapping: Map[LatticeNode,GraphNode], unexpanded_nodes: Set[GraphNode]) -> tuple[Map[GraphNode,LatticeNode], Map[LatticeNode,GraphNode], Set[GraphNode], Set[GraphNode], List[GraphNode]]"
+informal_desc: Greedily iterate free lattice neighbors and assign the first candidate node that passes both mapped-lattice-neighbor and mapped-graph-neighbor edge-consistency checks.
+conceptual_summary: ""
+inputs:
+  - name: mapping_context
+    type_desc: MappingContext
+    constraints: Provides graph and lattice adjacency queries.
+  - name: free_lattice_neighbors
+    type_desc: Set[LatticeNode]
+    constraints: Frontier lattice positions considered in iteration order.
+  - name: prioritized_unplaced_nodes
+    type_desc: List[GraphNode]
+    constraints: Candidate order for greedy placement.
+  - name: already_placed_nodes
+    type_desc: Set[GraphNode]
+    constraints: Tracks placement membership during extension.
+  - name: mapping
+    type_desc: Map[GraphNode,LatticeNode]
+    constraints: Current forward mapping state.
+  - name: unmapping
+    type_desc: Map[LatticeNode,GraphNode]
+    constraints: Current reverse mapping state.
+  - name: unexpanded_nodes
+    type_desc: Set[GraphNode]
+    constraints: Updated when a node is newly placed.
+outputs:
+  - name: updated_mapping
+    type_desc: Map[GraphNode,LatticeNode]
+    constraints: Includes newly accepted placements.
+  - name: updated_unmapping
+    type_desc: Map[LatticeNode,GraphNode]
+    constraints: Reverse map consistent with updated_mapping.
+  - name: updated_unexpanded_nodes
+    type_desc: Set[GraphNode]
+    constraints: Union of prior set and newly placed nodes.
+  - name: updated_already_placed_nodes
+    type_desc: Set[GraphNode]
+    constraints: Placement membership after greedy extension.
+  - name: remaining_unplaced_nodes
+    type_desc: List[GraphNode]
+    constraints: Candidates not placed after frontier sweep.
+concept_type: greedy
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Greedyassignfrontierplacements
+description: Greedily iterate free lattice neighbors and assign the first candidate node that passes both mapped-lattice-neighbor and mapped-graph-neighbor edge-consistency…
+---
+
+# Greedyassignfrontierplacements
+
+> Greedily iterate free lattice neighbors and assign the first candidate node that passes both mapped-lattice-neighbor and mapped-graph-neighbor edge-consistency checks.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mapping_context: MappingContext, free_lattice_neighbors: Set[LatticeNode], prioritized_unplaced_nodes: List[GraphNode], already_placed_nodes: Set[GraphNode], mapping: Map[GraphNode,LatticeNode], unmapping: Map[LatticeNode,GraphNode], unexpanded_nodes: Set[GraphNode]) -> tuple[Map[GraphNode,LatticeNode], Map[LatticeNode,GraphNode], Set[GraphNode], Set[GraphNode], List[GraphNode]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

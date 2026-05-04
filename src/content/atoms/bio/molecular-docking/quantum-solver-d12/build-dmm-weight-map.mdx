@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.build_dmm_weight_map
+predicate_id: build_dmm_weight_map
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(permuted_weights: list[float], detuning_maximum: float, amplitude_maximum: float, opt_reg: Register, reg: Register, list_perm: list[int]) -> tuple[dict, np.ndarray[float]]"
+informal_desc: Normalise permuted weights, compute the reversed (1 − w) DMM weight array, calculate the spread detuning from the minimum normalised weight, and package everything into the params dict ready for pulse scheduling.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Build_dmm_weight_map
+description: Normalise permuted weights, compute the reversed (1 − w) DMM weight array, calculate the spread detuning from the minimum normalised weight, and package everyt…
+---
+
+# Build_dmm_weight_map
+
+> Normalise permuted weights, compute the reversed (1 − w) DMM weight array, calculate the spread detuning from the minimum normalised weight, and package everything into the params dict ready for pulse scheduling.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(permuted_weights: list[float], detuning_maximum: float, amplitude_maximum: float, opt_reg: Register, reg: Register, list_perm: list[int]) -> tuple[dict, np.ndarray[float]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

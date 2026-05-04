@@ -1,0 +1,46 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.constructgeometrymodel
+predicate_id: constructgeometrymodel
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(length_front: float, length_rear: float) -> ModelSpec"
+informal_desc: Create an immutable vehicle geometry/state model from explicit axle-length parameters.
+conceptual_summary: "Immutable Asymmetric Offset Configuration. Constructs a canonical configuration object from two non-negative scalar offsets defined on opposite sides of a reference origin. The transform is a direct parameter-to-structure mapping with boundary validation, without optimization, recursion, or stochastic sampling. The resulting artifact is immutable, preserving the input values as fixed geometric/state invariants.. Applications: Robotics: instantiate a rigid-link kinematic segment model from proximal and distal link extents around a joint origin., Materials engineering: define an immutable cross-section descriptor from layer thicknesses on opposite sides of a neutral axis., Computational imaging: encode asymmetric sensor active-region margins (left/right or near/far) into a fixed calibration schema., Neuroscience modeling: represent asymmetric receptive-field spatial extents around a central reference point in a simulation state object."
+inputs:
+  - name: length_front
+    type_desc: float
+    constraints: ">= 0"
+  - name: length_rear
+    type_desc: float
+    constraints: ">= 0"
+outputs:
+  - name: model_spec
+    type_desc: ModelSpec
+    constraints: immutable geometry parameters
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Constructgeometrymodel
+description: Create an immutable vehicle geometry/state model from explicit axle-length parameters.
+---
+
+# Constructgeometrymodel
+
+> Create an immutable vehicle geometry/state model from explicit axle-length parameters.
+
+## Conceptual Summary
+
+Immutable Asymmetric Offset Configuration. Constructs a canonical configuration object from two non-negative scalar offsets defined on opposite sides of a reference origin. The transform is a direct parameter-to-structure mapping with boundary validation, without optimization, recursion, or stochastic sampling. The resulting artifact is immutable, preserving the input values as fixed geometric/state invariants.. Applications: Robotics: instantiate a rigid-link kinematic segment model from proximal and distal link extents around a joint origin., Materials engineering: define an immutable cross-section descriptor from layer thicknesses on opposite sides of a neutral axis., Computational imaging: encode asymmetric sensor active-region margins (left/right or near/far) into a fixed calibration schema., Neuroscience modeling: represent asymmetric receptive-field spatial extents around a central reference point in a simulation state object.
+
+## Type Signature
+
+```
+(length_front: float, length_rear: float) -> ModelSpec
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

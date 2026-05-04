@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.longitudinal_dynamics.linearize_dynamics
+predicate_id: linearize_dynamics
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(x: state vector, _u: input/control vector, _t: float) -> matrix"
+informal_desc: Compute Jacobian of system dynamics with respect to state.
+conceptual_summary: "Local Tangent Operator Computation. Evaluates a vector-valued transition function at a specific point and computes its partial derivatives with respect to the primary state coordinates. The result is a first-order linear operator that approximates how infinitesimal perturbations in the input state propagate to perturbations in the next state. This is a local sensitivity map on the tangent space of the original nonlinear transform.. Applications: Stability and sensitivity analysis of biochemical reaction-network models near an operating point, Linearized error propagation in aerospace guidance and navigation estimators, Small-signal analysis of electric power network dynamics around nominal conditions, Local behavior analysis of ecological interaction models near equilibrium states"
+inputs:
+  - name: x
+    type_desc: np.ndarray
+    constraints: shape must match model state dimension
+  - name: _u
+    type_desc: np.ndarray
+    constraints: shape must match input dimension; may be unused
+  - name: _t
+    type_desc: float
+    constraints: time scalar; may be unused
+outputs:
+  - name: jacobian
+    type_desc: np.ndarray
+    constraints: state_dim x state_dim
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Linearize_dynamics
+description: Compute Jacobian of system dynamics with respect to state.
+---
+
+# Linearize_dynamics
+
+> Compute Jacobian of system dynamics with respect to state.
+
+## Conceptual Summary
+
+Local Tangent Operator Computation. Evaluates a vector-valued transition function at a specific point and computes its partial derivatives with respect to the primary state coordinates. The result is a first-order linear operator that approximates how infinitesimal perturbations in the input state propagate to perturbations in the next state. This is a local sensitivity map on the tangent space of the original nonlinear transform.. Applications: Stability and sensitivity analysis of biochemical reaction-network models near an operating point, Linearized error propagation in aerospace guidance and navigation estimators, Small-signal analysis of electric power network dynamics around nominal conditions, Local behavior analysis of ecological interaction models near equilibrium states
+
+## Type Signature
+
+```
+(x: state vector, _u: input/control vector, _t: float) -> matrix
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

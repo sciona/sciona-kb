@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.rsna_cervical_spine_fast91_1st
+title: RSNA 2022 Cervical Spine Fracture Detection - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by RSNA 2022 Cervical Spine Fracture Detection - 1st Place (2022): prepare the data, build task-specific represen…"
+problem_statement: "3D Object Detection + Sequence Classification solution template for RSNA 2022 Cervical Spine Fracture Detection - 1st Place (2022), modeled as a 5-stage deterministic pipeline: 3D Crop/Registration, 2.5D Slice Extraction, Sequence Modeling (Bi-LSTM), Multi-task heads, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: RSNA 2022 Cervical Spine Fracture Detection - 1st Place (2022)
+placement: ""
+year: 0
+domain: object_detection_2d
+paradigm: loss_function
+family: object_detection_2d
+tags:
+  - lstm
+  - object
+  - detection
+  - sequence
+  - classification
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: 3D Crop/Registration creates the representation needed by Loss Weighting, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362607
+source_license: null
+---
+
+# RSNA 2022 Cervical Spine Fracture Detection - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+3D Object Detection + Sequence Classification solution template for RSNA 2022 Cervical Spine Fracture Detection - 1st Place (2022), modeled as a 5-stage deterministic pipeline: 3D Crop/Registration, 2.5D Slice Extraction, Sequence Modeling (Bi-LSTM), Multi-task heads, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by RSNA 2022 Cervical Spine Fracture Detection - 1st Place (2022): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.rsna_cervical_spine_fast91_1st" readOnly={true} /> */}
+
+1. **3D Crop/Registration** -- This stage train a 3D U-Net to locate the exact bounding box of the 7 cervical vertebrae, cropping the original CT scan to isolate the spine (MONAI).
+1. **2.5D Slice Extraction** -- This stage extract 3 consecutive slices (Z-axis) into a 3-channel RGB format and pass them through a 2D EfficientNet to extract 1D spatial embeddings (PyTorch).
+1. **Sequence Modeling (Bi-LSTM)** -- This stage feed the ordered Z-axis embeddings into a Bidirectional LSTM to allow the network to contextually link adjacent bone slices (PyTorch).
+1. **Multi-task heads** -- This stage attach 8 separate classification heads to the LSTM outputs (one predicting overall patient fracture, seven predicting fractures for specific C1-C7 vertebrae).
+1. **Loss Weighting** -- This stage apply the competition's exact custom weighting scheme natively in the Cross-Entropy loss function during training to optimize the metric directly.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: 3D Crop/Registration creates the representation needed by Loss Weighting, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.rsna_cervical_spine_fast91_1st" label="Reproduce this solution in Sciona" /> */}

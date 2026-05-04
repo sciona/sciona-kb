@@ -1,0 +1,46 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.assemblecontroljacobian
+predicate_id: assemblecontroljacobian
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(velocity_column: Vector<3>, steering_column: Vector<3>) -> Matrix<3x2>"
+informal_desc: Assemble control Jacobian B by concatenating velocity and steering sensitivity columns in control order.
+conceptual_summary: ""
+inputs:
+  - name: velocity_column
+    type_desc: np.ndarray
+    constraints: First control column.
+  - name: steering_column
+    type_desc: np.ndarray
+    constraints: Second control column.
+outputs:
+  - name: B
+    type_desc: np.ndarray
+    constraints: Columns correspond to [u0, u1].
+concept_type: sorting
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Assemblecontroljacobian
+description: Assemble control Jacobian B by concatenating velocity and steering sensitivity columns in control order.
+---
+
+# Assemblecontroljacobian
+
+> Assemble control Jacobian B by concatenating velocity and steering sensitivity columns in control order.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(velocity_column: Vector<3>, steering_column: Vector<3>) -> Matrix<3x2>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

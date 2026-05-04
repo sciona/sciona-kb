@@ -1,0 +1,63 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.collectpostburnintrajectory
+predicate_id: collectpostburnintrajectory
+repo: sciona-atoms
+domain: inference
+type_signature: "(hmc_state_burned_in: StateModelSpec, buffer_raw: Tensor[float; n_collect, n_chains, dim], n_collect: int, n_chains: int, dim: int) -> tuple[Tensor[float; n_collect, n_chains, dim], object, StateModelSpec]"
+informal_desc: Run n_collect HMC transitions, write each state into the collection buffer, and accumulate per-step trace metrics.
+conceptual_summary: ""
+inputs:
+  - name: hmc_state_burned_in
+    type_desc: StateModelSpec
+    constraints: starting state for collection
+  - name: buffer_raw
+    type_desc: Tensor[float; n_collect, n_chains, dim]
+    constraints: preallocated to full collection shape
+  - name: n_collect
+    type_desc: int
+    constraints: ">= 0"
+  - name: n_chains
+    type_desc: int
+    constraints: matches state geometry
+  - name: dim
+    type_desc: int
+    constraints: matches state geometry
+outputs:
+  - name: buffer_filled
+    type_desc: Tensor[float; n_collect, n_chains, dim]
+    constraints: row i contains positions after i-th collection transition
+  - name: trace_raw
+    type_desc: object
+    constraints: per-step diagnostics (e.g., accept-prob/rhat updates, warning events)
+  - name: hmc_state_out
+    type_desc: StateModelSpec
+    constraints: final state after burn-in + collection transitions
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Collectpostburnintrajectory
+description: Run n_collect HMC transitions, write each state into the collection buffer, and accumulate per-step trace metrics.
+---
+
+# Collectpostburnintrajectory
+
+> Run n_collect HMC transitions, write each state into the collection buffer, and accumulate per-step trace metrics.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(hmc_state_burned_in: StateModelSpec, buffer_raw: Tensor[float; n_collect, n_chains, dim], n_collect: int, n_chains: int, dim: int) -> tuple[Tensor[float; n_collect, n_chains, dim], object, StateModelSpec]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

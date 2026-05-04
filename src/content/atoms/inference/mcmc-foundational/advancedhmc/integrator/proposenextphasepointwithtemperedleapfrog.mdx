@@ -1,0 +1,59 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.integrator.proposenextphasepointwithtemperedleapfrog
+predicate_id: proposenextphasepointwithtemperedleapfrog
+repo: sciona-atoms
+domain: inference
+type_signature: "(lf: DefaultLeapfrog context, h: Hamiltonian, loop_state: {i, theta, r, value, gradient, z_current}, step_count: Int, epsilon: Step-size scalar/vector) -> {i, theta_next, r_next, value_next, gradient_next, z_candidate}"
+informal_desc: "Execute one leapfrog proposal: pre-temper momentum, half momentum update, full position update via dH/dr, second half momentum update via dH/dtheta, post-temper, then build a cached phase-point candidate."
+conceptual_summary: ""
+inputs:
+  - name: lf
+    type_desc: object
+    constraints: must support temper
+  - name: h
+    type_desc: Hamiltonian
+    constraints: must support dH/dr, dH/dtheta, and phasepoint construction
+  - name: loop_state
+    type_desc: object
+    constraints: contains current iteration index and state
+  - name: step_count
+    type_desc: Int
+    constraints: used by temper schedule
+  - name: epsilon
+    type_desc: float
+    constraints: broadcast-compatible with theta, r, gradient
+outputs:
+  - name: candidate_state
+    type_desc: object
+    constraints: z_candidate = phasepoint(h, theta_next, r_next; lpi=DualValue(value_next, gradient_next))
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for leapfrog Hamiltonian phase-point updates.
+  - title: advancedhmc2020
+    citation: Package paper for the AdvancedHMC.jl integrator family that this NumPy atom mirrors at a compact phase-point level.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper is a local NumPy implementation rather than a direct Julia object binding.
+title: Proposenextphasepointwithtemperedleapfrog
+description: "Execute one leapfrog proposal: pre-temper momentum, half momentum update, full position update via dH/dr, second half momentum update via dH/dtheta, post-tempe…"
+---
+
+# Proposenextphasepointwithtemperedleapfrog
+
+> Execute one leapfrog proposal: pre-temper momentum, half momentum update, full position update via dH/dr, second half momentum update via dH/dtheta, post-temper, then build a cached phase-point candidate.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(lf: DefaultLeapfrog context, h: Hamiltonian, loop_state: {i, theta, r, value, gradient, z_current}, step_count: Int, epsilon: Step-size scalar/vector) -> {i, theta_next, r_next, value_next, gradient_next, z_candidate}
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

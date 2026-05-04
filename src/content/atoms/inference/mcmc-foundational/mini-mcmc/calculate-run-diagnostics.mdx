@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.calculate_run_diagnostics
+predicate_id: calculate_run_diagnostics
+repo: sciona-atoms
+domain: inference
+type_signature: "(posterior_samples: Tensor<B, 3>) -> RunStats"
+informal_desc: Computes post-run diagnostic statistics, including the Gelman-Rubin convergence diagnostic (R-hat), from the final stacked posterior samples.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS tree-building reference for recursive subtree endpoints, slice-valid candidate counts, U-turn continuation checks, divergence flags, and acceptance accumulation.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local callable returns compact NumPy trajectory bookkeeping rather than only a rightmost position.
+title: Calculate_run_diagnostics
+description: Computes post-run diagnostic statistics, including the Gelman-Rubin convergence diagnostic (R-hat), from the final stacked posterior samples.
+---
+
+# Calculate_run_diagnostics
+
+> Computes post-run diagnostic statistics, including the Gelman-Rubin convergence diagnostic (R-hat), from the final stacked posterior samples.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(posterior_samples: Tensor<B, 3>) -> RunStats
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

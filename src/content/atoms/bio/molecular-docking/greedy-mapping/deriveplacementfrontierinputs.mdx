@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.deriveplacementfrontierinputs
+predicate_id: deriveplacementfrontierinputs
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(considered_nodes: List[GraphNode], mapping: Map[GraphNode,LatticeNode]) -> tuple[Set[GraphNode], List[GraphNode]]"
+informal_desc: Partition considered graph nodes into already-placed and currently-unplaced candidates to define the extension frontier.
+conceptual_summary: ""
+inputs:
+  - name: considered_nodes
+    type_desc: List[GraphNode]
+    constraints: Order is preserved for initial candidate order.
+  - name: mapping
+    type_desc: Map[GraphNode,LatticeNode]
+    constraints: Keys are currently placed graph nodes.
+outputs:
+  - name: already_placed_nodes
+    type_desc: Set[GraphNode]
+    constraints: Derived from mapping keys.
+  - name: unplaced_nodes
+    type_desc: List[GraphNode]
+    constraints: Subset of considered_nodes not in already_placed_nodes.
+concept_type: set_theory
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Deriveplacementfrontierinputs
+description: Partition considered graph nodes into already-placed and currently-unplaced candidates to define the extension frontier.
+---
+
+# Deriveplacementfrontierinputs
+
+> Partition considered graph nodes into already-placed and currently-unplaced candidates to define the extension frontier.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(considered_nodes: List[GraphNode], mapping: Map[GraphNode,LatticeNode]) -> tuple[Set[GraphNode], List[GraphNode]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

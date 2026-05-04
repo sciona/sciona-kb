@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.preparedifferentiablestateandfirsthalfkick
+predicate_id: preparedifferentiablestateandfirsthalfkick
+repo: sciona-atoms
+domain: inference
+type_signature: "(position_in: Tensor<B, 2>, momentum_in: Tensor<B, 2>, last_grad_summands: Tensor<B, 2>) -> tuple[Tensor<B, 2>, Tensor<B, 2>]"
+informal_desc: For one leapfrog iteration, re-enable AD tracking on position and apply the first half-step momentum update using the carried gradient summands from the previous state.
+conceptual_summary: ""
+inputs:
+  - name: position_in
+    type_desc: Tensor
+    constraints: Current position carry
+  - name: momentum_in
+    type_desc: Tensor
+    constraints: Current momentum carry
+  - name: last_grad_summands
+    type_desc: Tensor
+    constraints: Scaled gradient half-step from previous state
+outputs:
+  - name: position_ad
+    type_desc: Tensor
+    constraints: Detached and require_grad-enabled
+  - name: momentum_half_kicked
+    type_desc: Tensor
+    constraints: After first half-step kick
+concept_type: mcmc_proposal
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Preparedifferentiablestateandfirsthalfkick
+description: For one leapfrog iteration, re-enable AD tracking on position and apply the first half-step momentum update using the carried gradient summands from the previo…
+---
+
+# Preparedifferentiablestateandfirsthalfkick
+
+> For one leapfrog iteration, re-enable AD tracking on position and apply the first half-step momentum update using the carried gradient summands from the previous state.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(position_in: Tensor<B, 2>, momentum_in: Tensor<B, 2>, last_grad_summands: Tensor<B, 2>) -> tuple[Tensor<B, 2>, Tensor<B, 2>]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

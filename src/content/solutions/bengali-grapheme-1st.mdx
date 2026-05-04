@@ -1,0 +1,71 @@
+---
+cdg_asset_id: solution.kaggle.bengali_grapheme_1st
+title: Bengali.AI Handwritten Grapheme 1st Place — Multi-Head Classification with OHEM (2020)
+description: Classify handwritten Bengali characters by breaking them into three components (root shape, vowel mark, consonant mark), training a shared neural network with …
+problem_statement: Multi-task handwritten grapheme classification using SE-ResNeXt-50 with three classification heads (root, vowel, consonant), weighted multi-task loss, CutMix/MixUp/GridMask augmentation, online hard example mining, and soft voting ensemble.
+platform: kaggle
+competition_name: Bengali.AI Handwritten Grapheme 1st Place — Multi-Head Classification with OHEM (2020)
+placement: ""
+year: 0
+domain: multitask_image_classification
+paradigm: neural_network
+family: multitask_image_classification
+tags:
+  - multitask_learning
+  - handwriting_recognition
+  - grapheme_classification
+  - cutmix_mixup
+  - hard_example_mining
+  - multi_head_network
+  - se_resnext
+  - squeeze_excitation
+  - weighted_loss
+  - gridmask_augmentation
+  - soft_voting
+  - structured_label
+  - compositional_classification
+  - high_cardinality_classification
+  - ohem
+key_insight: The multi-head architecture with weighted loss aligns the training objective with the compositional structure of the label space. By sharing a backbone across sub-tasks, the model learns features that capture the common visual structure of the grapheme, while the per-head loss weighting (2:1:1) ensures the hardest sub-task (168-class root) receives proportionally more gradient signal. OHEM further sharpens this by dropping easy samples that contribute little to learning.
+failure_modes:
+  - "Sub-tasks with conflicting feature requirements: if the optimal features for one head hurt another head, the shared backbone learns a compromise that underperforms separate models"
+  - "Incorrect loss weighting: over-weighting a sub-task causes the backbone to specialize for it at the expense of others, reducing overall metric"
+  - "OHEM with too-aggressive top-k ratio: discarding too many samples per batch causes training instability and can miss learning signal from medium-difficulty examples"
+source_url: ""
+source_license: null
+---
+
+# Bengali.AI Handwritten Grapheme 1st Place — Multi-Head Classification with OHEM (2020)
+
+## Problem
+
+Multi-task handwritten grapheme classification using SE-ResNeXt-50 with three classification heads (root, vowel, consonant), weighted multi-task loss, CutMix/MixUp/GridMask augmentation, online hard example mining, and soft voting ensemble.
+
+## Approach
+
+Classify handwritten Bengali characters by breaking them into three components (root shape, vowel mark, consonant mark), training a shared neural network with three separate output heads, focusing training on the hardest examples, and averaging predictions across multiple models.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.bengali_grapheme_1st" readOnly={true} /> */}
+
+1. **Image Preprocessing** -- Flip the image colors, trim away empty borders around the handwriting, and resize to a standard size.
+1. **Heavy Augmentation** -- During training, randomly combine parts of different images, blend images together, or mask out grid patterns to force the network to learn from partial information and become more robust.
+1. **Multi-Head Backbone** -- A shared feature extractor (neural network backbone) processes each image once, then three separate classifiers each predict one component of the Bengali character.
+1. **Weighted Multi-Task Loss** -- Calculate how wrong each prediction head is, giving double importance to the root character component since it has the most classes and matters most for the competition score.
+1. **OHEM Training** -- During training, identify which examples the model gets most wrong and focus the learning updates on those hard cases, ignoring easy examples the model already handles well.
+1. **Soft Voting Ensemble** -- Run multiple independently trained models on each test image, average their confidence scores for each class, and pick the class with the highest average confidence.
+
+## Key Insight
+
+The multi-head architecture with weighted loss aligns the training objective with the compositional structure of the label space. By sharing a backbone across sub-tasks, the model learns features that capture the common visual structure of the grapheme, while the per-head loss weighting (2:1:1) ensures the hardest sub-task (168-class root) receives proportionally more gradient signal. OHEM further sharpens this by dropping easy samples that contribute little to learning.
+
+## Failure Modes
+
+- Sub-tasks with conflicting feature requirements: if the optimal features for one head hurt another head, the shared backbone learns a compromise that underperforms separate models
+- Incorrect loss weighting: over-weighting a sub-task causes the backbone to specialize for it at the expense of others, reducing overall metric
+- OHEM with too-aggressive top-k ratio: discarding too many samples per batch causes training instability and can miss learning signal from medium-difficulty examples
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.bengali_grapheme_1st" label="Reproduce this solution in Sciona" /> */}

@@ -1,0 +1,60 @@
+---
+fqdn: sciona.atoms.fintech.quantfin.tdma_solver_d12.tdma_solver
+predicate_id: tdma_solver
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(sub_diagonal: Sequence[float], diagonal: Sequence[float], super_diagonal: Sequence[float], rhs: Sequence[float]) -> list[float]"
+informal_desc: Solve a tridiagonal linear system with the Thomas algorithm.
+conceptual_summary: Source-aligned Python equivalent of Quant.Math.Utilities.tdmaSolver.
+inputs:
+  - name: sub_diagonal
+    type_desc: Sequence[float]
+    constraints: finite non-empty vector; same length as diagonal, super_diagonal, and rhs
+    required: true
+    default_value_repr: ""
+  - name: diagonal
+    type_desc: Sequence[float]
+    constraints: finite non-empty vector; same length as sub_diagonal, super_diagonal, and rhs
+    required: true
+    default_value_repr: ""
+  - name: super_diagonal
+    type_desc: Sequence[float]
+    constraints: finite non-empty vector; same length as sub_diagonal, diagonal, and rhs
+    required: true
+    default_value_repr: ""
+  - name: rhs
+    type_desc: Sequence[float]
+    constraints: finite non-empty vector; same length as sub_diagonal, diagonal, and super_diagonal
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: result
+    type_desc: list[float]
+    constraints: finite solution vector with length equal to diagonal
+concept_type: optimization
+verification_level: source_reviewed
+used_by_cdgs: []
+references:
+  - title: repo_quantfin
+    citation: "Python atom mirrors the vendored Haskell tdmaSolver contract: four coefficient/right-hand-side vectors and Thomas-algorithm forward/back substitution."
+title: Tdma_solver
+description: Solve a tridiagonal linear system with the Thomas algorithm.
+---
+
+# Tdma_solver
+
+> Solve a tridiagonal linear system with the Thomas algorithm.
+
+## Conceptual Summary
+
+Source-aligned Python equivalent of Quant.Math.Utilities.tdmaSolver.
+
+## Type Signature
+
+```
+(sub_diagonal: Sequence[float], diagonal: Sequence[float], super_diagonal: Sequence[float], rhs: Sequence[float]) -> list[float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

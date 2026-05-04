@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.n_joint_arm_2d.controlinputsynthesis
+predicate_id: controlinputsynthesis
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(_x: array-like, _x_dot: array-like, _t: float) -> array-like"
+informal_desc: Synthesizes control action from current state and derivative information.
+conceptual_summary: "State-Tangent-to-Input Projection. Computes a vector-valued input by applying a synthesis map to an instantaneous state vector, its first-order time derivative estimate, and a scalar temporal coordinate. The transform converts local phase-space information (position in state space plus tangent direction) into an admissible excitation vector for the governed dynamics. This is a causal per-step feedback projection that may be linear or nonlinear and may vary with time.. Applications: Trajectory stabilization in autonomous aerial navigation using state and rate estimates, Infusion-rate computation in physiological regulation models from concentration states and slopes, Coil-current command synthesis in electromagnetic plasma-shaping systems, Thermal actuator drive generation in semiconductor process chambers from temperature fields and gradients"
+inputs:
+  - name: _x
+    type_desc: np.ndarray
+    constraints: current state
+  - name: _x_dot
+    type_desc: np.ndarray
+    constraints: state derivative estimate
+  - name: _t
+    type_desc: float
+    constraints: time index
+outputs:
+  - name: u_cmd
+    type_desc: np.ndarray
+    constraints: control command compatible with dynamics input
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Controlinputsynthesis
+description: Synthesizes control action from current state and derivative information.
+---
+
+# Controlinputsynthesis
+
+> Synthesizes control action from current state and derivative information.
+
+## Conceptual Summary
+
+State-Tangent-to-Input Projection. Computes a vector-valued input by applying a synthesis map to an instantaneous state vector, its first-order time derivative estimate, and a scalar temporal coordinate. The transform converts local phase-space information (position in state space plus tangent direction) into an admissible excitation vector for the governed dynamics. This is a causal per-step feedback projection that may be linear or nonlinear and may vary with time.. Applications: Trajectory stabilization in autonomous aerial navigation using state and rate estimates, Infusion-rate computation in physiological regulation models from concentration states and slopes, Coil-current command synthesis in electromagnetic plasma-shaping systems, Thermal actuator drive generation in semiconductor process chambers from temperature fields and gradients
+
+## Type Signature
+
+```
+(_x: array-like, _x_dot: array-like, _t: float) -> array-like
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

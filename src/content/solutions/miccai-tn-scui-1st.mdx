@@ -1,0 +1,58 @@
+---
+cdg_asset_id: solution.kaggle.miccai_tn_scui_1st
+title: MICCAI TN-SCUI - 1st Place (2020) - Pipeline Template
+description: "This template captures the ordered steps used by MICCAI TN-SCUI - 1st Place (2020): prepare the data, build task-specific representations, train or apply the m…"
+problem_statement: "Semantic segmentation solution template for MICCAI TN-SCUI - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Data Loading, Image Normalization, Segmentation Training, TTA Inference, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: MICCAI TN-SCUI - 1st Place (2020)
+placement: 1st
+year: 2020
+domain: semantic_segmentation
+paradigm: optimization
+family: semantic_segmentation
+tags:
+  - binarization
+  - segmentation
+  - semantic
+key_insight: "The load-bearing idea is the pipeline topology: Data Loading creates the representation needed by Binarization, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://github.com/WAMAWAMA/TNSCUI2020-Seg-Rank1st
+source_license: null
+---
+
+# MICCAI TN-SCUI - 1st Place (2020) - Pipeline Template
+
+## Problem
+
+Semantic segmentation solution template for MICCAI TN-SCUI - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Data Loading, Image Normalization, Segmentation Training, TTA Inference, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by MICCAI TN-SCUI - 1st Place (2020): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.miccai_tn_scui_1st" readOnly={true} /> */}
+
+1. **Data Loading** -- This stage ingest single-target medical imagery specifically focused on thyroid nodules (PIL, numpy).
+1. **Image Normalization** -- This stage apply standard intensity normalization and min-max scaling to standardize the dynamic range of the ultrasound imagery.
+1. **Segmentation Training** -- This stage train an encoder-decoder architecture optimized heavily for single-target, high-contrast boundaries (torch).
+1. **TTA Inference** -- This stage apply deterministic flips and rotations during prediction to smooth out spatial variance.
+1. **Binarization** -- This stage threshold the continuous probability maps into strict binary output masks.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Data Loading creates the representation needed by Binarization, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.miccai_tn_scui_1st" label="Reproduce this solution in Sciona" /> */}

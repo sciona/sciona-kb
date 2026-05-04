@@ -1,0 +1,63 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.apply_metropolis_accept_reject
+predicate_id: apply_metropolis_accept_reject
+repo: sciona-atoms
+domain: inference
+type_signature: "(h_current: Tensor<B,1>, h_proposed: Tensor<B,1>, ln_u: Tensor<B,1>, positions_current: Tensor<B,2>, proposed_positions: Tensor<B,2>) -> tuple[Tensor<B,2>, Tensor<B,1,Bool>, Tensor<B,1>]"
+informal_desc: Compute acceptance log-ratio, build mask, and select accepted proposed positions against current positions.
+conceptual_summary: ""
+inputs:
+  - name: h_current
+    type_desc: Tensor
+    constraints: shape [n_chains]
+  - name: h_proposed
+    type_desc: Tensor
+    constraints: shape [n_chains]
+  - name: ln_u
+    type_desc: Tensor
+    constraints: shape [n_chains]
+  - name: positions_current
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+  - name: proposed_positions
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+outputs:
+  - name: positions_next
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+  - name: accept_mask
+    type_desc: Tensor
+    constraints: shape [n_chains]
+  - name: accept_logp
+    type_desc: Tensor
+    constraints: shape [n_chains], equals h_current - h_proposed
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Apply_metropolis_accept_reject
+description: Compute acceptance log-ratio, build mask, and select accepted proposed positions against current positions.
+---
+
+# Apply_metropolis_accept_reject
+
+> Compute acceptance log-ratio, build mask, and select accepted proposed positions against current positions.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(h_current: Tensor<B,1>, h_proposed: Tensor<B,1>, ln_u: Tensor<B,1>, positions_current: Tensor<B,2>, proposed_positions: Tensor<B,2>) -> tuple[Tensor<B,2>, Tensor<B,1,Bool>, Tensor<B,1>]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

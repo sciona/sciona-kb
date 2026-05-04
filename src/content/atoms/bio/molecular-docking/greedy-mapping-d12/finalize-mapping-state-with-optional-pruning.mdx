@@ -1,0 +1,69 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping_d12.finalize_mapping_state_with_optional_pruning
+predicate_id: finalize_mapping_state_with_optional_pruning
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mapping_state_extended: MappingState, remaining_unplaced_nodes: Collection[NodeId], remove_invalid_placement_nodes: bool, scored_nodes: Collection[ScoredNode]) -> tuple[MappingState, Collection[ScoredNode]]"
+informal_desc: Apply optional invalid-node pruning as a pure state transform and return final mapping state while forwarding scored nodes.
+conceptual_summary: ""
+inputs:
+  - name: mapping_state_extended
+    type_desc: MappingState
+    constraints: Post-placement state.
+    required: true
+    default_value_repr: ""
+  - name: remaining_unplaced_nodes
+    type_desc: Collection[NodeId]
+    constraints: Nodes eligible for pruning when enabled.
+    required: true
+    default_value_repr: ""
+  - name: remove_invalid_placement_nodes
+    type_desc: bool
+    constraints: If true, output state reflects graph-with-removed-nodes; if false, graph unchanged.
+    required: true
+    default_value_repr: ""
+  - name: scored_nodes
+    type_desc: Collection[ScoredNode]
+    constraints: Pass-through from scoring stage.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: mapping_state_out
+    type_desc: MappingState
+    constraints: Final immutable state including any pruning effect.
+    required: true
+    default_value_repr: ""
+  - name: scored_nodes_out
+    type_desc: Collection[ScoredNode]
+    constraints: Same logical payload as scored_nodes input.
+    required: true
+    default_value_repr: ""
+concept_type: conditional_routing
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Finalize_mapping_state_with_optional_pruning
+description: Apply optional invalid-node pruning as a pure state transform and return final mapping state while forwarding scored nodes.
+---
+
+# Finalize_mapping_state_with_optional_pruning
+
+> Apply optional invalid-node pruning as a pure state transform and return final mapping state while forwarding scored nodes.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mapping_state_extended: MappingState, remaining_unplaced_nodes: Collection[NodeId], remove_invalid_placement_nodes: bool, scored_nodes: Collection[ScoredNode]) -> tuple[MappingState, Collection[ScoredNode]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

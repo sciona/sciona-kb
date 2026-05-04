@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.compute_simulation_timeline
+predicate_id: compute_simulation_timeline
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(seq: pulser.Sequence, dt: int) -> tuple[int, list[float], float]"
+informal_desc: Derives the discrete time grid (dt, seq_duration, eval_times, final_time) shared by the state-vector and EMU-MPS backends from the sequence duration.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Compute_simulation_timeline
+description: Derives the discrete time grid (dt, seq_duration, eval_times, final_time) shared by the state-vector and EMU-MPS backends from the sequence duration.
+---
+
+# Compute_simulation_timeline
+
+> Derives the discrete time grid (dt, seq_duration, eval_times, final_time) shared by the state-vector and EMU-MPS backends from the sequence duration.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(seq: pulser.Sequence, dt: int) -> tuple[int, list[float], float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.vqa_v2_1st
+title: Visual Question Answering (VQA) v2 - 1st Place (2017) - Pipeline Template
+description: "This template captures the ordered steps used by Visual Question Answering (VQA) v2 - 1st Place (2017): prepare the data, build task-specific representations, …"
+problem_statement: "Multi-modal Classification (Image + Text) solution template for Visual Question Answering (VQA) v2 - 1st Place (2017), modeled as a 5-stage deterministic pipeline: Bottom-up Image extraction, Top-down Text embedding, Attention alignment, Feature fusion, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Visual Question Answering (VQA) v2 - 1st Place (2017)
+placement: ""
+year: 0
+domain: multimodal_classification
+paradigm: neural_network
+family: multimodal_classification
+tags:
+  - multi
+  - modal
+  - classification
+  - image
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Bottom-up Image extraction creates the representation needed by Vocabulary mapping, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://arxiv.org/abs/1708.02711
+source_license: null
+---
+
+# Visual Question Answering (VQA) v2 - 1st Place (2017) - Pipeline Template
+
+## Problem
+
+Multi-modal Classification (Image + Text) solution template for Visual Question Answering (VQA) v2 - 1st Place (2017), modeled as a 5-stage deterministic pipeline: Bottom-up Image extraction, Top-down Text embedding, Attention alignment, Feature fusion, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Visual Question Answering (VQA) v2 - 1st Place (2017): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.vqa_v2_1st" readOnly={true} /> */}
+
+1. **Bottom-up Image extraction** -- This stage process images through a Faster R-CNN object detector, strictly extracting the specific ROI (Region of Interest) pooled features for the top 36 detected objects, ignoring the background entirely (Caffe/PyTorch).
+1. **Top-down Text embedding** -- This stage process the text question through a GRU (Gated Recurrent Unit) to generate a dense sentence vector.
+1. **Attention alignment** -- This stage calculate a soft attention mechanism connecting the text vector to each of the 36 isolated image object vectors (PyTorch).
+1. **Feature fusion** -- This stage utilize a Multi-modal Factorized Bilinear (MFB) pooling layer to mathematically merge the attended image features and text features (PyTorch).
+1. **Vocabulary mapping** -- This stage output a multi-class softmax probability over the top 3,000 most common answers in the training set.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Bottom-up Image extraction creates the representation needed by Vocabulary mapping, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.vqa_v2_1st" label="Reproduce this solution in Sciona" /> */}

@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.robotics.pronto.blip_filter.peak_correction
+predicate_id: peak_correction
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(filtered: np.ndarray, rpeaks: np.ndarray) -> np.ndarray"
+informal_desc: Correct R-peak locations to the nearest local maximum within a tolerance window.
+conceptual_summary: "Local Extremum Refinement. Refines a set of discrete indices by shifting each point to the location of the maximum value within a localized search window of a corresponding 1D numerical series. This operation improves the precision of event markers by aligning them with the nearest local optima, effectively correcting for initial estimation errors.. Applications: Astronomy: Pinpointing the exact centroid of a star from a noisy telescopic image by refining an initial approximate detection to the pixel of maximum luminosity., Genomics: Adjusting the predicted location of a transcription factor binding site in a ChIP-seq dataset to the specific base pair with the highest read-count peak., Materials Science: Identifying the precise point of material failure in stress-strain data by moving from a general region of interest to the exact data point of maximum stress before a drop., Financial Analysis: Correcting the timestamp of a detected stock price peak in high-frequency data to the precise millisecond of the local maximum before a reversal."
+inputs:
+  - name: filtered
+    type_desc: np.ndarray
+    constraints: filtered ECG signal
+  - name: rpeaks
+    type_desc: np.ndarray
+    constraints: initial R-peak indices
+outputs:
+  - name: rpeaks_corrected
+    type_desc: np.ndarray
+    constraints: corrected R-peak indices
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Peak_correction
+description: Correct R-peak locations to the nearest local maximum within a tolerance window.
+---
+
+# Peak_correction
+
+> Correct R-peak locations to the nearest local maximum within a tolerance window.
+
+## Conceptual Summary
+
+Local Extremum Refinement. Refines a set of discrete indices by shifting each point to the location of the maximum value within a localized search window of a corresponding 1D numerical series. This operation improves the precision of event markers by aligning them with the nearest local optima, effectively correcting for initial estimation errors.. Applications: Astronomy: Pinpointing the exact centroid of a star from a noisy telescopic image by refining an initial approximate detection to the pixel of maximum luminosity., Genomics: Adjusting the predicted location of a transcription factor binding site in a ChIP-seq dataset to the specific base pair with the highest read-count peak., Materials Science: Identifying the precise point of material failure in stress-strain data by moving from a general region of interest to the exact data point of maximum stress before a drop., Financial Analysis: Correcting the timestamp of a detected stock price peak in high-frequency data to the precise millisecond of the local maximum before a reversal.
+
+## Type Signature
+
+```
+(filtered: np.ndarray, rpeaks: np.ndarray) -> np.ndarray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

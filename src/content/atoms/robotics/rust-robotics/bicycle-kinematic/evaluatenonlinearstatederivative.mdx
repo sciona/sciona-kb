@@ -1,0 +1,52 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.evaluatenonlinearstatederivative
+predicate_id: evaluatenonlinearstatederivative
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(u: ControlVector (na::SVector<f64, 2>), sideslip: f64, effective_heading: f64, wheelbase: f64) -> StateDerivativeVector (na::SVector<f64, 3>)"
+informal_desc: Evaluate planar position and yaw derivatives using speed, steering, sideslip, and wheelbase.
+conceptual_summary: ""
+inputs:
+  - name: u
+    type_desc: np.ndarray
+    constraints: u[0] is longitudinal speed.
+  - name: sideslip
+    type_desc: float
+    constraints: isinstance(x, (int, float))
+  - name: effective_heading
+    type_desc: float
+    constraints: isinstance(x, (int, float))
+  - name: wheelbase
+    type_desc: float
+    constraints: Non-zero.
+outputs:
+  - name: x_dot
+    type_desc: np.ndarray
+    constraints: Ordered as [pos_x_dot, pos_y_dot, yaw_dot].
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Evaluatenonlinearstatederivative
+description: Evaluate planar position and yaw derivatives using speed, steering, sideslip, and wheelbase.
+---
+
+# Evaluatenonlinearstatederivative
+
+> Evaluate planar position and yaw derivatives using speed, steering, sideslip, and wheelbase.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(u: ControlVector (na::SVector<f64, 2>), sideslip: f64, effective_heading: f64, wheelbase: f64) -> StateDerivativeVector (na::SVector<f64, 3>)
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

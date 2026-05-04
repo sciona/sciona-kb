@@ -1,0 +1,66 @@
+---
+cdg_asset_id: solution.kaggle.instacart_basket_1st
+title: Instacart Market Basket Analysis 1st Place — F1-Optimal Reorder Set Prediction
+description: Predict which grocery products a customer will reorder by first estimating the probability of each product being reordered using gradient boosting, then using …
+problem_statement: Two-stage pipeline computing rich user-product interaction features fed into a LightGBM reorder-probability model, followed by an exact dynamic programming algorithm (Faron's kernel) to select the product subset maximizing expected F1 score.
+platform: kaggle
+competition_name: Instacart Market Basket Analysis - 1st Place (2017)
+placement: 1st
+year: 2017
+domain: set_prediction
+paradigm: optimization
+family: set_prediction
+tags:
+  - market_basket_prediction
+  - reorder_probability
+  - f1_maximization
+  - set_selection_dp
+  - grocery_recommendation
+  - optimal_subset_selection
+  - expected_f1_optimization
+  - user_product_interaction_features
+  - candidate_generation_reranking
+  - lightgbm_binary_classification
+  - threshold_free_set_prediction
+key_insight: Faron's F1 maximization DP is the critical innovation. Given per-item reorder probabilities from any classifier, naive thresholding (select all items with p > 0.5) is suboptimal for F1 because the optimal threshold depends on the number of true positives, which is unknown. The DP algorithm exactly computes the expected F1 for every possible subset size and selects the subset that maximizes it, turning an intractable combinatorial problem into an O(n^2) computation under the independence assumption.
+failure_modes:
+  - "Poorly calibrated probabilities: the DP assumes input probabilities reflect true reorder likelihood — miscalibrated scores produce suboptimal subsets"
+  - "Strong item-item dependencies (e.g., buying milk implies buying cereal): the independence assumption breaks down and the DP may select redundant or incomplete sets"
+  - "Very large candidate sets (>500 items per user): the O(n^2) DP becomes slow, though this is rare in practice"
+source_url: https://www.kaggle.com/c/instacart-market-basket-analysis/discussion/38100
+source_license: null
+---
+
+# Instacart Market Basket Analysis 1st Place — F1-Optimal Reorder Set Prediction
+
+## Problem
+
+Two-stage pipeline computing rich user-product interaction features fed into a LightGBM reorder-probability model, followed by an exact dynamic programming algorithm (Faron's kernel) to select the product subset maximizing expected F1 score.
+
+## Approach
+
+Predict which grocery products a customer will reorder by first estimating the probability of each product being reordered using gradient boosting, then using a clever algorithm to pick the exact set of products that maximizes the F1 scoring metric.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.instacart_basket_1st" readOnly={true} /> */}
+
+1. **User-Product Aggregation** -- Calculate statistics about each customer's purchasing history for every product they have bought: how often they reorder it, which days they buy it, and how long between orders.
+1. **Candidate Generation** -- Only consider products the customer has bought before as potential reorders — do not predict completely new products.
+1. **Feature Merging** -- Combine all the different types of statistics (about the customer, the product, and the customer-product relationship) into one table for the model to use.
+1. **Reorder Probability Model** -- Use gradient-boosted decision trees to estimate how likely each product is to be reordered by the customer.
+1. **F1 Maximization DP** -- Use a mathematical algorithm to pick the best set of products to predict for each customer, optimizing for the F1 score rather than just picking all products above a threshold.
+
+## Key Insight
+
+Faron's F1 maximization DP is the critical innovation. Given per-item reorder probabilities from any classifier, naive thresholding (select all items with p > 0.5) is suboptimal for F1 because the optimal threshold depends on the number of true positives, which is unknown. The DP algorithm exactly computes the expected F1 for every possible subset size and selects the subset that maximizes it, turning an intractable combinatorial problem into an O(n^2) computation under the independence assumption.
+
+## Failure Modes
+
+- Poorly calibrated probabilities: the DP assumes input probabilities reflect true reorder likelihood — miscalibrated scores produce suboptimal subsets
+- Strong item-item dependencies (e.g., buying milk implies buying cereal): the independence assumption breaks down and the DP may select redundant or incomplete sets
+- Very large candidate sets (>500 items per user): the O(n^2) DP becomes slow, though this is rare in practice
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.instacart_basket_1st" label="Reproduce this solution in Sciona" /> */}

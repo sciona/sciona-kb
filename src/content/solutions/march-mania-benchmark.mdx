@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.march_mania_benchmark
+title: March Machine Learning Mania - High Tier Benchmark Topology - Pipeline Template
+description: "This template captures the ordered steps used by March Machine Learning Mania - High Tier Benchmark Topology: prepare the data, build task-specific representat…"
+problem_statement: "Sports Analytics (Graph Centrality / Elo) solution template for March Machine Learning Mania - High Tier Benchmark Topology, modeled as a 5-stage deterministic pipeline: Season aggregation, Graph centralities, Elo Ratings, Pairwise concatenation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: March Machine Learning Mania - High Tier Benchmark Topology
+placement: ""
+year: 0
+domain: tabular_classification
+paradigm: graph_signal_processing
+family: tabular_classification
+tags:
+  - xgboost
+  - sports
+  - analytics
+  - graph
+  - centrality
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Season aggregation creates the representation needed by Logistic Regression, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/
+source_license: null
+---
+
+# March Machine Learning Mania - High Tier Benchmark Topology - Pipeline Template
+
+## Problem
+
+Sports Analytics (Graph Centrality / Elo) solution template for March Machine Learning Mania - High Tier Benchmark Topology, modeled as a 5-stage deterministic pipeline: Season aggregation, Graph centralities, Elo Ratings, Pairwise concatenation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by March Machine Learning Mania - High Tier Benchmark Topology: prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.march_mania_benchmark" readOnly={true} /> */}
+
+1. **Season aggregation** -- This stage aggregate regular-season box scores into team-level offensive and defensive efficiency metrics (points per possession, turnover rate) (pandas).
+1. **Graph centralities** -- This stage construct a directed graph where nodes are teams and edges are games won/lost. Calculate PageRank to determine true strength-of-schedule (NetworkX).
+1. **Elo Ratings** -- This stage simulate the regular season chronologically to generate continuous Elo ratings for all teams entering the tournament (custom Python).
+1. **Pairwise concatenation** -- This stage for every possible tournament matchup, concatenate Team A features with Team B features, alongside the difference between their features (pandas).
+1. **Logistic Regression** -- This stage train a calibrated Logistic Regression model (or XGBoost with log-loss objective) to strictly output the probability that Team A beats Team B.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Season aggregation creates the representation needed by Logistic Regression, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.march_mania_benchmark" label="Reproduce this solution in Sciona" /> */}

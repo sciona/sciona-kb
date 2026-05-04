@@ -1,0 +1,52 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.linearizedynamicsatoperatingpoint
+predicate_id: linearizedynamicsatoperatingpoint
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(model_spec: ModelSpec, x: StateVector (na::SVector<f64, 3>), u: ControlVector (na::SVector<f64, 2>), _t: f64) -> (na::SMatrix<f64, 3, 3>, na::SMatrix<f64, 3, 2>)"
+informal_desc: Compute local Jacobian matrices with respect to state and control at (x, u).
+conceptual_summary: ""
+inputs:
+  - name: model_spec
+    type_desc: ModelSpec
+    constraints: Must expose calculate_a(x,u) and calculate_b(x,u).
+  - name: x
+    type_desc: np.ndarray
+    constraints: ndim >= 1
+  - name: u
+    type_desc: np.ndarray
+    constraints: ndim >= 1
+  - name: _t
+    type_desc: float
+    constraints: Interface parameter; unused in current implementation.
+outputs:
+  - name: jacobian
+    type_desc: tuple[np.ndarray, np.ndarray]
+    constraints: Tuple of (A, B) Jacobian blocks.
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Linearizedynamicsatoperatingpoint
+description: Compute local Jacobian matrices with respect to state and control at (x, u).
+---
+
+# Linearizedynamicsatoperatingpoint
+
+> Compute local Jacobian matrices with respect to state and control at (x, u).
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(model_spec: ModelSpec, x: StateVector (na::SVector<f64, 3>), u: ControlVector (na::SVector<f64, 2>), _t: f64) -> (na::SMatrix<f64, 3, 3>, na::SMatrix<f64, 3, 2>)
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.birdclef_edge_device_2021
+title: BirdCLEF (Edge Device Track) - High-Tier Solution (2021) - Pipeline Template
+description: "This template captures the ordered steps used by BirdCLEF (Edge Device Track) - High-Tier Solution (2021): prepare the data, build task-specific representation…"
+problem_statement: "Edge ML / Audio Classification (Constrained) solution template for BirdCLEF (Edge Device Track) - High-Tier Solution (2021), modeled as a 5-stage deterministic pipeline: Audio feature extraction, Teacher Model Training, Student Model Training (Distillation), TFLite Conversion, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: BirdCLEF (Edge Device Track) - High-Tier Solution (2021)
+placement: ""
+year: 0
+domain: audio_classification
+paradigm: signal_transform
+family: audio_classification
+tags:
+  - tflite
+  - edge_ml
+  - audio
+  - classification
+  - constrained
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Audio feature extraction creates the representation needed by On-device Thresholding, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/birdclef-2021/discussion/243456
+source_license: null
+---
+
+# BirdCLEF (Edge Device Track) - High-Tier Solution (2021) - Pipeline Template
+
+## Problem
+
+Edge ML / Audio Classification (Constrained) solution template for BirdCLEF (Edge Device Track) - High-Tier Solution (2021), modeled as a 5-stage deterministic pipeline: Audio feature extraction, Teacher Model Training, Student Model Training (Distillation), TFLite Conversion, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by BirdCLEF (Edge Device Track) - High-Tier Solution (2021): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.birdclef_edge_device_2021" readOnly={true} /> */}
+
+1. **Audio feature extraction** -- This stage generate standard Mel Spectrograms from continuous audio files (librosa).
+1. **Teacher Model Training** -- This stage train a massive, high-accuracy ResNeSt-50 model on the spectrograms without any hardware constraints (PyTorch).
+1. **Student Model Training (Distillation)** -- This stage train a micro MobileNetV3 architecture using the soft probability labels output by the Teacher model rather than the hard ground-truth labels (PyTorch).
+1. **TFLite Conversion** -- This stage convert the trained PyTorch MobileNetV3 into an ONNX format, then strictly quantize it to INT8 precision using TensorFlow Lite to ensure sub-50ms inference times (ONNX/TFLite).
+1. **On-device Thresholding** -- This stage implement fixed threshold bounds inside the TFLite wrapper to filter predictions before final return.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Audio feature extraction creates the representation needed by On-device Thresholding, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.birdclef_edge_device_2021" label="Reproduce this solution in Sciona" /> */}

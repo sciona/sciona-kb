@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.evaluate_current_logp_and_halfstep_gradient
+predicate_id: evaluate_current_logp_and_halfstep_gradient
+repo: sciona-atoms
+domain: inference
+type_signature: "(positions_current: Tensor<B,2>, kernel_static: object) -> tuple[Tensor<B,1>, Tensor<B,2>]"
+informal_desc: Evaluate current unnormalized log-density and compute the half-step gradient summands used by leapfrog.
+conceptual_summary: ""
+inputs:
+  - name: positions_current
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+  - name: kernel_static
+    type_desc: object
+    constraints: contains target.unnorm_logp_batch and step_size
+outputs:
+  - name: logp_current
+    type_desc: Tensor
+    constraints: shape [n_chains]
+  - name: grad_summands
+    type_desc: Tensor
+    constraints: shape [n_chains, dim], equals 0.5*step_size*grad(logp_current)
+concept_type: oracle_gradient
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Evaluate_current_logp_and_halfstep_gradient
+description: Evaluate current unnormalized log-density and compute the half-step gradient summands used by leapfrog.
+---
+
+# Evaluate_current_logp_and_halfstep_gradient
+
+> Evaluate current unnormalized log-density and compute the half-step gradient summands used by leapfrog.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(positions_current: Tensor<B,2>, kernel_static: object) -> tuple[Tensor<B,1>, Tensor<B,2>]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

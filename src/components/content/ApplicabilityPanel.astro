@@ -1,0 +1,76 @@
+---
+interface Applicability {
+  use_when: string[];
+  do_not_use_when: string[];
+  key_insight: string;
+  critical_stages: string[];
+  swappable_stages: Record<string, string>;
+  scaling_notes: string;
+  failure_modes: string[];
+}
+
+interface Props {
+  applicability: Applicability;
+}
+
+const { applicability: a } = Astro.props;
+---
+
+<div class="space-y-4">
+  {a.key_insight && (
+    <div class="bg-atlas-accent/5 border border-atlas-accent/20 rounded-lg p-4">
+      <p class="text-sm font-medium text-atlas-accent mb-1">Key Insight</p>
+      <p class="text-atlas-text text-sm">{a.key_insight}</p>
+    </div>
+  )}
+
+  <div class="grid sm:grid-cols-2 gap-4">
+    {a.use_when.length > 0 && (
+      <div class="bg-atlas-surface rounded-lg border border-atlas-border p-4">
+        <h3 class="text-sm font-medium text-atlas-green mb-2">Use When</h3>
+        <ul class="space-y-1">
+          {a.use_when.map((cond) => (
+            <li class="flex gap-2 text-sm text-atlas-text-muted">
+              <span class="text-atlas-green shrink-0">+</span>
+              <span>{cond}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {a.do_not_use_when.length > 0 && (
+      <div class="bg-atlas-surface rounded-lg border border-atlas-border p-4">
+        <h3 class="text-sm font-medium text-atlas-red mb-2">Do Not Use When</h3>
+        <ul class="space-y-1">
+          {a.do_not_use_when.map((cond) => (
+            <li class="flex gap-2 text-sm text-atlas-text-muted">
+              <span class="text-atlas-red shrink-0">-</span>
+              <span>{cond}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
+
+  {a.failure_modes.length > 0 && (
+    <div class="bg-atlas-surface rounded-lg border border-atlas-border p-4">
+      <h3 class="text-sm font-medium text-atlas-yellow mb-2">Failure Modes</h3>
+      <ul class="space-y-1">
+        {a.failure_modes.map((fm) => (
+          <li class="flex gap-2 text-sm text-atlas-text-muted">
+            <span class="text-atlas-yellow shrink-0">!</span>
+            <span>{fm}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {a.scaling_notes && (
+    <p class="text-sm text-atlas-text-muted">
+      <span class="font-medium text-atlas-text">Scaling:</span> {a.scaling_notes}
+    </p>
+  )}
+</div>

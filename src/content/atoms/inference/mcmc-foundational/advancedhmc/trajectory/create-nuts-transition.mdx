@@ -1,0 +1,52 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.trajectory.create_nuts_transition
+predicate_id: create_nuts_transition
+repo: sciona-atoms
+domain: inference
+type_signature: "(final_zcand: PhasePoint, transition_stats: dict) -> Transition"
+informal_desc: Packages the final selected state and the computed statistics into a transition object, representing the result of one NUTS step.
+conceptual_summary: ""
+inputs:
+  - name: final_zcand
+    type_desc: PhasePoint
+    constraints: The accepted next state.
+  - name: transition_stats
+    type_desc: dict
+    constraints: The statistics associated with the transition.
+outputs:
+  - name: next_transition
+    type_desc: Transition
+    constraints: The final transition object.
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for doubling trajectory trees and No-U-Turn termination.
+  - title: advancedhmc2020
+    citation: Package paper for AdvancedHMC.jl trajectory construction.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper returns compact NumPy leaves rather than Julia BinaryTree objects.
+  - title: neal2011hmc
+    citation: Canonical HMC reference for Hamiltonian dynamics and Metropolis-style energy diagnostics used by NUTS.
+title: Create_nuts_transition
+description: Packages the final selected state and the computed statistics into a transition object, representing the result of one NUTS step.
+---
+
+# Create_nuts_transition
+
+> Packages the final selected state and the computed statistics into a transition object, representing the result of one NUTS step.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(final_zcand: PhasePoint, transition_stats: dict) -> Transition
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

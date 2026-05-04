@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.kthohr_mcmc.aees.evaluatetargetlogkernelpair
+predicate_id: evaluatetargetlogkernelpair
+repo: sciona-atoms
+domain: inference
+type_signature: "(target_log_kernel: callable (ColVec_t, void*) -> fp_t, target_data: void*, X_new: ColVec_t, X_prev: ColVec_t) -> tuple[fp_t, fp_t]"
+informal_desc: Evaluate target log-kernel at proposal and current states.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kou2006equi
+    citation: Source-shaped AEES local Metropolis step attribution.
+  - title: repo_mcmc
+    citation: Upstream implementation is mapped to the vendored mcmc repository.
+title: Evaluatetargetlogkernelpair
+description: Evaluate target log-kernel at proposal and current states.
+---
+
+# Evaluatetargetlogkernelpair
+
+> Evaluate target log-kernel at proposal and current states.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(target_log_kernel: callable (ColVec_t, void*) -> fp_t, target_data: void*, X_new: ColVec_t, X_prev: ColVec_t) -> tuple[fp_t, fp_t]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,47 @@
+---
+interface Edge {
+  source_stage_id: string;
+  target_stage_id: string;
+  output_name: string;
+  input_name: string;
+  data_kind: string;
+  loss_class: string;
+}
+
+interface Props {
+  edges: Edge[];
+}
+
+const { edges } = Astro.props;
+
+const lossColors: Record<string, string> = {
+  preserving: "text-atlas-green",
+  lossy_allowed: "text-atlas-yellow",
+  irreversible: "text-atlas-red",
+};
+---
+
+<div class="overflow-x-auto">
+  <table class="w-full text-sm border border-atlas-border rounded-lg overflow-hidden">
+    <thead class="bg-atlas-surface-2">
+      <tr>
+        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">From</th>
+        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">To</th>
+        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Data</th>
+        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Kind</th>
+        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Loss</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-atlas-border">
+      {edges.map((edge) => (
+        <tr class="hover:bg-atlas-surface/50">
+          <td class="px-3 py-2 font-mono text-xs">{edge.source_stage_id}</td>
+          <td class="px-3 py-2 font-mono text-xs">{edge.target_stage_id}</td>
+          <td class="px-3 py-2 font-mono text-xs text-atlas-accent">{edge.output_name}</td>
+          <td class="px-3 py-2 text-atlas-text-muted">{edge.data_kind}</td>
+          <td class:list={["px-3 py-2", lossColors[edge.loss_class] ?? "text-atlas-text-muted"]}>{edge.loss_class}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,46 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.computesideslipangle
+predicate_id: computesideslipangle
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(model_spec: ModelSpec, road_wheel_angle: float) -> float"
+informal_desc: Compute sideslip from steering input and vehicle geometry as a pure kinematic transform.
+conceptual_summary: "Kinematic Deflection-to-Drift Angle Projection. Maps a single control deflection angle and fixed rigid-body geometry parameters to an instantaneous orientation offset angle using a closed-form trigonometric relation. The transform is purely kinematic (no forces, no integration over time): it projects local actuator deflection into global trajectory-direction deviation relative to a body-aligned reference axis. Zero input deflection yields zero output offset, and output sign follows input sign under symmetric parameterization.. Applications: Planar mobile robotics: convert steering-joint deflection and platform geometry into trajectory-heading offset for path tracking., Aerospace guidance: map control-surface deflection and airframe geometry to instantaneous flight-path angular deviation in simplified kinematic models., Catheter/continuum-tool navigation: translate proximal angular actuation and segment geometry into tip-direction offset estimates., Computer graphics/animation kinematics: derive motion-direction offset from joint rotation and rig geometry for procedural locomotion."
+inputs:
+  - name: model_spec
+    type_desc: ModelSpec
+    constraints: immutable geometry parameters
+  - name: road_wheel_angle
+    type_desc: float
+    constraints: steering angle in radians
+outputs:
+  - name: sideslip_angle
+    type_desc: float
+    constraints: kinematic slip angle in radians
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Computesideslipangle
+description: Compute sideslip from steering input and vehicle geometry as a pure kinematic transform.
+---
+
+# Computesideslipangle
+
+> Compute sideslip from steering input and vehicle geometry as a pure kinematic transform.
+
+## Conceptual Summary
+
+Kinematic Deflection-to-Drift Angle Projection. Maps a single control deflection angle and fixed rigid-body geometry parameters to an instantaneous orientation offset angle using a closed-form trigonometric relation. The transform is purely kinematic (no forces, no integration over time): it projects local actuator deflection into global trajectory-direction deviation relative to a body-aligned reference axis. Zero input deflection yields zero output offset, and output sign follows input sign under symmetric parameterization.. Applications: Planar mobile robotics: convert steering-joint deflection and platform geometry into trajectory-heading offset for path tracking., Aerospace guidance: map control-surface deflection and airframe geometry to instantaneous flight-path angular deviation in simplified kinematic models., Catheter/continuum-tool navigation: translate proximal angular actuation and segment geometry into tip-direction offset estimates., Computer graphics/animation kinematics: derive motion-direction offset from joint rotation and rig geometry for procedural locomotion.
+
+## Type Signature
+
+```
+(model_spec: ModelSpec, road_wheel_angle: float) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

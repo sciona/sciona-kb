@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.recomputegradienthalfkickcontribution
+predicate_id: recomputegradienthalfkickcontribution
+repo: sciona-atoms
+domain: inference
+type_signature: "(position_advanced: Tensor<B, 2>, log_prob_oracle: callable, step_size: T) -> tuple[Tensor<B, 1>, Tensor<B, 2>]"
+informal_desc: Evaluate target log-probability at the advanced position, backpropagate to obtain gradient, and scale it into the next half-step momentum contribution.
+conceptual_summary: ""
+inputs:
+  - name: position_advanced
+    type_desc: Tensor
+    constraints: AD-enabled post-drift position
+  - name: log_prob_oracle
+    type_desc: Callable
+    constraints: Computes unnormalized batch log-probability
+  - name: step_size
+    type_desc: float
+    constraints: Leapfrog integration step size
+outputs:
+  - name: logp_step
+    type_desc: Tensor
+    constraints: Log-probability at advanced position
+  - name: grad_summands
+    type_desc: Tensor
+    constraints: Gradient scaled by step_size * 0.5
+concept_type: oracle_gradient
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Recomputegradienthalfkickcontribution
+description: Evaluate target log-probability at the advanced position, backpropagate to obtain gradient, and scale it into the next half-step momentum contribution.
+---
+
+# Recomputegradienthalfkickcontribution
+
+> Evaluate target log-probability at the advanced position, backpropagate to obtain gradient, and scale it into the next half-step momentum contribution.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(position_advanced: Tensor<B, 2>, log_prob_oracle: callable, step_size: T) -> tuple[Tensor<B, 1>, Tensor<B, 2>]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

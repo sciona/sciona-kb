@@ -1,0 +1,64 @@
+---
+cdg_asset_id: solution.kaggle.lux_ai_season1_1st
+title: Lux AI Season 1 - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by Lux AI Season 1 - 1st Place (2021): prepare the data, build task-specific representations, run the main modeli…"
+problem_statement: "Reinforcement Learning / Agent Systems solution template for Lux AI Season 1 - 1st Place (2021), modeled as a 5-stage deterministic pipeline: State spatialization, Action space definition, Behavioral Cloning (Imitation Learning), RL Fine-tuning, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Lux AI Season 1 - 1st Place (2021)
+placement: ""
+year: 0
+domain: reinforcement_learning
+paradigm: optimization
+family: reinforcement_learning
+tags:
+  - reinforcement_learning
+  - ppo
+  - behavioral_cloning
+  - reinforcement
+  - learning
+  - agent
+  - systems
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: State spatialization creates the representation needed by Heuristic Override, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/lux-ai-2021/discussion/293671
+source_license: null
+---
+
+# Lux AI Season 1 - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+Reinforcement Learning / Agent Systems solution template for Lux AI Season 1 - 1st Place (2021), modeled as a 5-stage deterministic pipeline: State spatialization, Action space definition, Behavioral Cloning (Imitation Learning), RL Fine-tuning, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Lux AI Season 1 - 1st Place (2021): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.lux_ai_season1_1st" readOnly={true} /> */}
+
+1. **State spatialization** -- This stage convert the discrete grid-based game state into a massive 3D multi-channel image tensor representing resources, units, and cooldowns (numpy).
+1. **Action space definition** -- This stage map the complex, multi-unit action space into a flat, predictable array of categorical logits.
+1. **Behavioral Cloning (Imitation Learning)** -- This stage train a U-Net architecture on the game replays of top-tier bot matches to accurately predict expert moves (PyTorch).
+1. **RL Fine-tuning** -- This stage initialize a PPO (Proximal Policy Optimization) agent with the U-Net weights and run self-play simulated matches to optimize the policy beyond human baselines (Stable Baselines 3 / Ray RLlib).
+1. **Heuristic Override** -- This stage intercept RL actions during inference and strictly enforce hard-coded rules for edge cases (e.g., forcing units to build a city if they are about to die at night) (Python).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: State spatialization creates the representation needed by Heuristic Override, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.lux_ai_season1_1st" label="Reproduce this solution in Sciona" /> */}

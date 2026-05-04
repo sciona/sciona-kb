@@ -1,0 +1,41 @@
+---
+fqdn: sciona.atoms.signal_processing.e2e_ppg.kazemi_wrapper_d12.filter_nonpositive_peaks
+predicate_id: filter_nonpositive_peaks
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(deduped_indices: list of int, raw_signal: numpy.ndarray) -> numpy.ndarray"
+informal_desc: Removes any peak indices whose corresponding raw signal value is less than or equal to zero, retaining only physiologically valid (positive-amplitude) peaks.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kazemi2022ppg
+    citation: Exact E2E-PPG peak detection attribution.
+  - title: feli2023pipeline
+    citation: Primary E2E-PPG pipeline paper.
+  - title: repo_e2e_ppg
+    citation: Upstream implementation is mapped to the vendored E2E-PPG repository.
+title: Filter_nonpositive_peaks
+description: Removes any peak indices whose corresponding raw signal value is less than or equal to zero, retaining only physiologically valid (positive-amplitude) peaks.
+---
+
+# Filter_nonpositive_peaks
+
+> Removes any peak indices whose corresponding raw signal value is less than or equal to zero, retaining only physiologically valid (positive-amplitude) peaks.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(deduped_indices: list of int, raw_signal: numpy.ndarray) -> numpy.ndarray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

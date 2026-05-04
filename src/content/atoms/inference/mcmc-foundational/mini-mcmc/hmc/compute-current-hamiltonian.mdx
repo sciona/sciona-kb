@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.compute_current_hamiltonian
+predicate_id: compute_current_hamiltonian
+repo: sciona-atoms
+domain: inference
+type_signature: "(momentum_0: Tensor<B,2>, logp_current: Tensor<B,1>) -> tuple[Tensor<B,1>, Tensor<B,1>]"
+informal_desc: Compute kinetic energy from sampled momenta and form current Hamiltonian H = -logp + KE.
+conceptual_summary: ""
+inputs:
+  - name: momentum_0
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+  - name: logp_current
+    type_desc: Tensor
+    constraints: shape [n_chains]
+outputs:
+  - name: ke_current
+    type_desc: Tensor
+    constraints: shape [n_chains], 0.5*sum_d p_d^2
+  - name: h_current
+    type_desc: Tensor
+    constraints: shape [n_chains]
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Compute_current_hamiltonian
+description: Compute kinetic energy from sampled momenta and form current Hamiltonian H = -logp + KE.
+---
+
+# Compute_current_hamiltonian
+
+> Compute kinetic energy from sampled momenta and form current Hamiltonian H = -logp + KE.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(momentum_0: Tensor<B,2>, logp_current: Tensor<B,1>) -> tuple[Tensor<B,1>, Tensor<B,1>]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

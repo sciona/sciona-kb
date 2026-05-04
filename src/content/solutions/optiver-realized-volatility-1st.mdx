@@ -1,0 +1,64 @@
+---
+cdg_asset_id: solution.kaggle.optiver_realized_volatility_1st
+title: Optiver Realized Volatility Prediction - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by Optiver Realized Volatility Prediction - 1st Place (2021): prepare the data, build task-specific representatio…"
+problem_statement: "Financial Time Series (High-Frequency Limit Order Book) solution template for Optiver Realized Volatility Prediction - 1st Place (2021), modeled as a 5-stage deterministic pipeline: LOB parsing, Time-bucketing, Feature clustering, Cross-sectional aggregation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Optiver Realized Volatility Prediction - 1st Place (2021)
+placement: ""
+year: 0
+domain: time_series_forecasting
+paradigm: loss_function
+family: time_series_forecasting
+tags:
+  - lightgbm
+  - limit_order_book
+  - financial
+  - series
+  - frequency
+  - limit
+  - order
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: LOB parsing creates the representation needed by Custom Objective GBDT, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274970
+source_license: null
+---
+
+# Optiver Realized Volatility Prediction - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+Financial Time Series (High-Frequency Limit Order Book) solution template for Optiver Realized Volatility Prediction - 1st Place (2021), modeled as a 5-stage deterministic pipeline: LOB parsing, Time-bucketing, Feature clustering, Cross-sectional aggregation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Optiver Realized Volatility Prediction - 1st Place (2021): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.optiver_realized_volatility_1st" readOnly={true} /> */}
+
+1. **LOB parsing** -- This stage compute the Weighted Average Price (WAP) and log returns continuously across the raw bid/ask tick data (pandas).
+1. **Time-bucketing** -- This stage aggregate the tick-level data into fixed historical time windows (e.g., last 600 seconds, 300 seconds, 100 seconds) computing realized volatility per bucket (numpy).
+1. **Feature clustering** -- This stage cluster different financial stocks based on their historical volatility correlations to create "market sector" proxy features (scikit-learn KMeans).
+1. **Cross-sectional aggregation** -- This stage compute the mean volatility of the entire market at each specific time bucket to contextualize individual stock movements (pandas).
+1. **Custom Objective GBDT** -- This stage train LightGBM models utilizing a custom Root Mean Square Percentage Error (RMSPE) loss function directly aligning with the competition metric (LightGBM).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: LOB parsing creates the representation needed by Custom Objective GBDT, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.optiver_realized_volatility_1st" label="Reproduce this solution in Sciona" /> */}

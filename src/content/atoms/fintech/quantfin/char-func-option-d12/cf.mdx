@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.fintech.quantfin.char_func_option_d12.cf
+predicate_id: cf
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(charFuncMart: Any, fg: Any, model: Any, tmat: Any, x: Any) -> Any"
+informal_desc: ""
+conceptual_summary: ""
+inputs:
+  - name: charFuncMart
+    type_desc: Callable[[QuantfinContext, QuantfinContext, float], Callable[[complex], complex]]
+    constraints: martingale-corrected characteristic-function builder
+  - name: fg
+    type_desc: Mapping[str, float | complex | str | bool]
+    constraints: forward-generator context
+  - name: model
+    type_desc: Mapping[str, float | complex | str | bool]
+    constraints: pricing-model context
+  - name: tmat
+    type_desc: float
+    constraints: positive time to maturity
+  - name: x
+    type_desc: complex
+    constraints: complex frequency
+outputs:
+  - name: cf_x
+    type_desc: complex
+    constraints: finite complex scalar
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: heston1993
+    citation: Characteristic-function option pricing attribution.
+  - title: repo_quantfin
+    citation: Upstream implementation is mapped to the vendored quantfin repository.
+title: Cf
+description: ""
+---
+
+# Cf
+
+> 
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(charFuncMart: Any, fg: Any, model: Any, tmat: Any, x: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

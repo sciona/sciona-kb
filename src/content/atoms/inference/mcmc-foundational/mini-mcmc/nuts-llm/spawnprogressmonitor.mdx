@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.nuts_llm.spawnprogressmonitor
+predicate_id: spawnprogressmonitor
+repo: sciona-atoms
+domain: inference
+type_signature: "(stats_receivers: Vec<Receiver<ChainStats>>, n_collect: usize, n_discard: usize) -> JoinHandle<()>"
+informal_desc: Start a monitor task that consumes chain stats, updates per-chain/global progress state, computes acceptance and rhat summaries, and exits when all chains finish.
+conceptual_summary: ""
+inputs:
+  - name: stats_receivers
+    type_desc: object
+    constraints: all channels correspond to active chains
+  - name: n_collect
+    type_desc: int
+    constraints: ">= 0"
+  - name: n_discard
+    type_desc: int
+    constraints: ">= 0"
+outputs:
+  - name: progress_handle
+    type_desc: object
+    constraints: joinable after worker completion
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for initializing target log-density state, gradient information, acceptance target, and explicit stochastic state before transition building.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a local state initializer and not a full NUTS transition implementation.
+title: Spawnprogressmonitor
+description: Start a monitor task that consumes chain stats, updates per-chain/global progress state, computes acceptance and rhat summaries, and exits when all chains fini…
+---
+
+# Spawnprogressmonitor
+
+> Start a monitor task that consumes chain stats, updates per-chain/global progress state, computes acceptance and rhat summaries, and exits when all chains finish.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(stats_receivers: Vec<Receiver<ChainStats>>, n_collect: usize, n_discard: usize) -> JoinHandle<()>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

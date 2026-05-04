@@ -1,0 +1,84 @@
+---
+fqdn: sciona.atoms.fintech.hftbacktest.update_glft_coefficients
+predicate_id: update_glft_coefficients
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(last_c1: float, last_c2: float, xi: float, gamma: float, delta: float, A: float, k: float) -> tuple[float, float]"
+informal_desc: Updates the GLFT model coefficients based on market parameters and the previous state. This embodies the core state transition.
+conceptual_summary: "iterative_coupled_scalar_update. Calculates the subsequent state of a 2-dimensional system from its preceding state. The transformation is a deterministic function of the two previous state components and a set of scalar control parameters, modeling a single step in a discrete-time evolution.. Applications: Simulating predator-prey population dynamics, where the two state variables represent the populations of two interacting species., Modeling the concentration of two chemical species in a reaction network over a discrete time step., Updating the position and velocity of a simulated physical object in a 2D physics engine, subject to forces defined by the control parameters., Evolving the activation level and fatigue state of a neuron in a computational neuroscience model."
+inputs:
+  - name: last_c1
+    type_desc: float
+    constraints: The previous state of the 'c1' coefficient.
+    required: true
+    default_value_repr: ""
+  - name: last_c2
+    type_desc: float
+    constraints: The previous state of the 'c2' coefficient.
+    required: true
+    default_value_repr: ""
+  - name: xi
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: gamma
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: delta
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: A
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: k
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: next_c1
+    type_desc: float
+    constraints: The updated state of the 'c1' coefficient.
+    required: true
+    default_value_repr: ""
+  - name: next_c2
+    type_desc: float
+    constraints: The updated state of the 'c2' coefficient.
+    required: true
+    default_value_repr: ""
+concept_type: algebra
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: gueant2013inventory
+    citation: Exact GLFT attribution.
+  - title: repo_hftbacktest
+    citation: Upstream implementation is mapped to the vendored hftbacktest repository.
+title: Update_glft_coefficients
+description: Updates the GLFT model coefficients based on market parameters and the previous state. This embodies the core state transition.
+---
+
+# Update_glft_coefficients
+
+> Updates the GLFT model coefficients based on market parameters and the previous state. This embodies the core state transition.
+
+## Conceptual Summary
+
+iterative_coupled_scalar_update. Calculates the subsequent state of a 2-dimensional system from its preceding state. The transformation is a deterministic function of the two previous state components and a set of scalar control parameters, modeling a single step in a discrete-time evolution.. Applications: Simulating predator-prey population dynamics, where the two state variables represent the populations of two interacting species., Modeling the concentration of two chemical species in a reaction network over a discrete time step., Updating the position and velocity of a simulated physical object in a 2D physics engine, subject to forces defined by the control parameters., Evolving the activation level and fatigue state of a neuron in a computational neuroscience model.
+
+## Type Signature
+
+```
+(last_c1: float, last_c2: float, xi: float, gamma: float, delta: float, A: float, k: float) -> tuple[float, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

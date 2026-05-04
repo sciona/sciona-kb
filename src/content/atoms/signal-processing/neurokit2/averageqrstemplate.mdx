@@ -1,0 +1,61 @@
+---
+fqdn: sciona.atoms.signal_processing.neurokit2.averageqrstemplate
+predicate_id: averageqrstemplate
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(ecg_cleaned: array-like, rpeaks: array-like, sampling_rate: numeric) -> array"
+informal_desc: Computes averaged QRS complex template by aligning and averaging heartbeat waveforms around R-peaks
+conceptual_summary: "Landmark-Aligned Ensemble Waveform Averaging. Extracts a prototypical pattern from a repetitive signal by windowing segments around predefined landmarks, aligning them temporally to a common reference frame, and computing the pointwise mean across all instances. This reduces noise and variability to isolate the stable, recurring structure while discarding transient or uncorrelated components.. Applications: Seismology: Generate station-specific earthquake waveform templates by averaging seismic traces aligned to P-wave or S-wave arrival times for matched filter detection, Neuroscience: Construct spike waveform templates for extracellular neural recordings by aligning and averaging action potentials at their peaks for multi-unit spike sorting, Astronomy: Create standard supernova or variable star light curve templates by time-aligning and averaging multiple observations at peak luminosity or phase markers, Industrial vibration analysis: Build reference vibration signatures for rotating machinery by averaging acceleration waveforms aligned to shaft rotation markers for anomaly detection"
+inputs:
+  - name: ecg_cleaned
+    type_desc: ndarray
+    constraints: cleaned ECG signal
+    required: true
+    default_value_repr: ""
+  - name: rpeaks
+    type_desc: ndarray | None
+    constraints: R-peak indices
+    required: false
+    default_value_repr: None
+  - name: sampling_rate
+    type_desc: int | float
+    constraints: "> 0"
+    required: false
+    default_value_repr: "1000"
+outputs:
+  - name: qrs_template
+    type_desc: ndarray
+    constraints: same length as the cleaned ECG signal
+    required: true
+    default_value_repr: ""
+concept_type: signal_transform
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neurokit2021
+    citation: Preferred NeuroKit2 citation.
+  - title: repo_neurokit2
+    citation: Upstream implementation is mapped to the vendored NeuroKit2 repository.
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+title: Averageqrstemplate
+description: Computes averaged QRS complex template by aligning and averaging heartbeat waveforms around R-peaks
+---
+
+# Averageqrstemplate
+
+> Computes averaged QRS complex template by aligning and averaging heartbeat waveforms around R-peaks
+
+## Conceptual Summary
+
+Landmark-Aligned Ensemble Waveform Averaging. Extracts a prototypical pattern from a repetitive signal by windowing segments around predefined landmarks, aligning them temporally to a common reference frame, and computing the pointwise mean across all instances. This reduces noise and variability to isolate the stable, recurring structure while discarding transient or uncorrelated components.. Applications: Seismology: Generate station-specific earthquake waveform templates by averaging seismic traces aligned to P-wave or S-wave arrival times for matched filter detection, Neuroscience: Construct spike waveform templates for extracellular neural recordings by aligning and averaging action potentials at their peaks for multi-unit spike sorting, Astronomy: Create standard supernova or variable star light curve templates by time-aligning and averaging multiple observations at peak luminosity or phase markers, Industrial vibration analysis: Build reference vibration signatures for rotating machinery by averaging acceleration waveforms aligned to shaft rotation markers for anomaly detection
+
+## Type Signature
+
+```
+(ecg_cleaned: array-like, rpeaks: array-like, sampling_rate: numeric) -> array
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

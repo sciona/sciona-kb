@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.jane_street_market_prediction_1st
+title: Jane Street Market Prediction - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by Jane Street Market Prediction - 1st Place (2021): prepare the data, build task-specific representations, train…"
+problem_statement: "Online/streaming prediction (Financial Tabular) solution template for Jane Street Market Prediction - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Streaming imputation, Action space mapping, Feature dimensionality reduction, Multi-head MLP, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Jane Street Market Prediction - 1st Place (2021)
+placement: 1st
+year: 2021
+domain: structured_prediction
+paradigm: loss_function
+family: structured_prediction
+tags:
+  - autoencoder
+  - online
+  - streaming
+  - prediction
+  - financial
+  - tabular
+key_insight: "The load-bearing idea is the pipeline topology: Streaming imputation creates the representation needed by Streaming inference, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/jane-street-market-prediction/discussion/224348
+source_license: null
+---
+
+# Jane Street Market Prediction - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+Online/streaming prediction (Financial Tabular) solution template for Jane Street Market Prediction - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Streaming imputation, Action space mapping, Feature dimensionality reduction, Multi-head MLP, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Jane Street Market Prediction - 1st Place (2021): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.jane_street_market_prediction_1st" readOnly={true} /> */}
+
+1. **Streaming imputation** -- This stage maintain a rolling state of previous row values to apply forward-filling for missing data dynamically (numpy).
+1. **Action space mapping** -- This stage convert the single utility target into 5 distinct binary targets based on different time horizons.
+1. **Feature dimensionality reduction** -- This stage train a custom autoencoder to project 130 features into a compressed space, then concatenate with original features (PyTorch).
+1. **Multi-head MLP** -- This stage train a deep MLP with bottleneck layers and a custom utility-based loss function on the concatenated features (PyTorch).
+1. **Streaming inference** -- This stage ingest data row-by-row via the competition API, update state arrays, and predict the binary action.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Streaming imputation creates the representation needed by Streaming inference, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.jane_street_market_prediction_1st" label="Reproduce this solution in Sciona" /> */}

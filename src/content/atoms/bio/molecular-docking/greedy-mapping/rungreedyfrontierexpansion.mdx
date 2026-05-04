@@ -1,0 +1,60 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.rungreedyfrontierexpansion
+predicate_id: rungreedyfrontierexpansion
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mapping_context: MappingContext, initialized_mapping_state: MappingState, current_node: NodeId, current_lattice_node: NodeId, remove_invalid_placement_nodes: bool, rank_nodes: bool) -> MappingState"
+informal_desc: Iteratively consume unexpanded nodes, derive free lattice neighbors and graph neighbors, invoke greedy extension, and advance cursor until no frontier nodes remain.
+conceptual_summary: ""
+inputs:
+  - name: mapping_context
+    type_desc: MappingContext
+    constraints: Provides graph, lattice, and extend_mapping_with_nodes helper
+  - name: initialized_mapping_state
+    type_desc: MappingState
+    constraints: Must contain a valid seed placement
+  - name: current_node
+    type_desc: NodeId
+    constraints: Initial expansion cursor
+  - name: current_lattice_node
+    type_desc: NodeId
+    constraints: Initial lattice cursor aligned with current_node
+  - name: remove_invalid_placement_nodes
+    type_desc: bool
+    constraints: Controls candidate pruning policy
+  - name: rank_nodes
+    type_desc: bool
+    constraints: Controls heuristic ranking during greedy placement
+outputs:
+  - name: extended_mapping_state
+    type_desc: MappingState
+    constraints: Frontier exhausted; mapping/unmapping updated after all greedy expansions
+concept_type: greedy
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Rungreedyfrontierexpansion
+description: Iteratively consume unexpanded nodes, derive free lattice neighbors and graph neighbors, invoke greedy extension, and advance cursor until no frontier nodes re…
+---
+
+# Rungreedyfrontierexpansion
+
+> Iteratively consume unexpanded nodes, derive free lattice neighbors and graph neighbors, invoke greedy extension, and advance cursor until no frontier nodes remain.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mapping_context: MappingContext, initialized_mapping_state: MappingState, current_node: NodeId, current_lattice_node: NodeId, remove_invalid_placement_nodes: bool, rank_nodes: bool) -> MappingState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

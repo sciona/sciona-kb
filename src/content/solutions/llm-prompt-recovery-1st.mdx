@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.llm_prompt_recovery_1st
+title: LLM Prompt Recovery - 1st Place (2024) - Pipeline Template
+description: "This template captures the ordered steps used by LLM Prompt Recovery - 1st Place (2024): prepare the data, build task-specific representations, run the main mo…"
+problem_statement: "Inverse NLP / Cosine Similarity solution template for LLM Prompt Recovery - 1st Place (2024), modeled as a 5-stage deterministic pipeline: Synthetic data generation, Embedding extraction, Delta vector calculation, Prompt retrieval, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: LLM Prompt Recovery - 1st Place (2024)
+placement: ""
+year: 0
+domain: nlp_retrieval
+paradigm: external_tool
+family: nlp_retrieval
+tags:
+  - faiss
+  - transformer
+  - inverse
+  - cosine
+  - similarity
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Synthetic data generation creates the representation needed by Selection, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494406
+source_license: null
+---
+
+# LLM Prompt Recovery - 1st Place (2024) - Pipeline Template
+
+## Problem
+
+Inverse NLP / Cosine Similarity solution template for LLM Prompt Recovery - 1st Place (2024), modeled as a 5-stage deterministic pipeline: Synthetic data generation, Embedding extraction, Delta vector calculation, Prompt retrieval, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by LLM Prompt Recovery - 1st Place (2024): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.llm_prompt_recovery_1st" readOnly={true} /> */}
+
+1. **Synthetic data generation** -- This stage use local LLMs (Mistral) to generate thousands of "original text -> rewritten text -> prompt used" triplets (vLLM).
+1. **Embedding extraction** -- This stage pass the "original text" and the "rewritten text" through a high-quality sentence-transformer (e.g., MiniLM / BGE) to extract dense vectors (HuggingFace).
+1. **Delta vector calculation** -- This stage subtract the original vector from the rewritten vector to isolate the mathematical "direction" of the prompt transformation (numpy).
+1. **Prompt retrieval** -- This stage embed a massive database of thousands of known prompts, and calculate the Cosine Similarity between the "delta vector" and the known prompts (FAISS/sklearn).
+1. **Selection** -- This stage return the string of the prompt with the highest cosine similarity to the vector delta.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Synthetic data generation creates the representation needed by Selection, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.llm_prompt_recovery_1st" label="Reproduce this solution in Sciona" /> */}

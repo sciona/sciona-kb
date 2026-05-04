@@ -1,0 +1,60 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.rundiscardphase
+predicate_id: rundiscardphase
+repo: sciona-atoms
+domain: inference
+type_signature: "(n_discard: int, chain_state_0: HMCState, kernel_spec: StateModelSpec, prng_key_state: PRNGKey/RNG state) -> tuple[HMCState, PRNGKey/RNG state, array/dict]"
+informal_desc: Apply the transition kernel for burn-in/discard steps while threading chain state and RNG state.
+conceptual_summary: ""
+inputs:
+  - name: n_discard
+    type_desc: int
+    constraints: ">= 0"
+  - name: chain_state_0
+    type_desc: HMCState
+    constraints: x is not None
+  - name: kernel_spec
+    type_desc: StateModelSpec
+    constraints: contains transition kernel
+  - name: prng_key_state
+    type_desc: np.ndarray
+    constraints: x is not None
+outputs:
+  - name: chain_state_burned
+    type_desc: HMCState
+    constraints: post-discard state
+  - name: prng_key_burned
+    type_desc: np.ndarray
+    constraints: advanced by n_discard transitions
+  - name: discard_events
+    type_desc: object
+    constraints: optional diagnostics from discard phase
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Rundiscardphase
+description: Apply the transition kernel for burn-in/discard steps while threading chain state and RNG state.
+---
+
+# Rundiscardphase
+
+> Apply the transition kernel for burn-in/discard steps while threading chain state and RNG state.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(n_discard: int, chain_state_0: HMCState, kernel_spec: StateModelSpec, prng_key_state: PRNGKey/RNG state) -> tuple[HMCState, PRNGKey/RNG state, array/dict]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

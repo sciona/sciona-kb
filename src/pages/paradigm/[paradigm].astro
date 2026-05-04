@@ -1,0 +1,38 @@
+---
+import CatalogLayout from "../../layouts/CatalogLayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const cdgs = await getCollection("cdgs");
+  const paradigms = [...new Set(cdgs.map((c) => c.data.paradigm))];
+  return paradigms.map((paradigm) => ({
+    params: { paradigm },
+    props: {
+      paradigm,
+      items: cdgs
+        .filter((c) => c.data.paradigm === paradigm)
+        .map((c) => ({
+          slug: c.id,
+          href: `/cdgs/${c.id}`,
+          title: c.data.name,
+          description: c.data.dejargonized_summary || c.data.summary,
+          tags: [c.data.family, ...c.data.variant_hints.slice(0, 3)],
+        })),
+    },
+  }));
+}
+
+const { paradigm, items } = Astro.props;
+const label = paradigm.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+---
+
+<CatalogLayout
+  title={`${label} CDGs`}
+  description={`${items.length} algorithmic pipelines using the ${label} paradigm.`}
+  items={items}
+  breadcrumbs={[
+    { label: "Atlas", href: "/" },
+    { label: "Paradigms", href: "/cdgs" },
+    { label: label, href: `/paradigm/${paradigm}` },
+  ]}
+/>

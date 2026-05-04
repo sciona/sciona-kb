@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.fintech.institutional_quant_engine.queue_estimator.initializeorderstate
+predicate_id: initializeorderstate
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(my_order_id: string, my_qty: float, orders_ahead: float) -> OrderState"
+informal_desc: Initializes the state of a new order within the queue, capturing its initial quantity and the volume of orders ahead of it.
+conceptual_summary: "InitializePrioritizedEntity. Instantiates a state record for a new entity entering a sequenced or prioritized system. The transform captures the entity's intrinsic scalar magnitude and the cumulative magnitude of all entities preceding it, packaging these values into an initial state vector with a default status flag.. Applications: In particle physics simulations, initializing a new particle's state with its energy and the cumulative energy of prior particles in a detector event., In epidemiology, seeding a new infection case with its initial viral load and the total number of existing cases in the population to model its spread potential., In network engineering, creating a record for a new data packet in a buffer, noting its size and the total size of packets ahead of it for Quality-of-Service (QoS) latency calculations."
+inputs:
+  - name: my_order_id
+    type_desc: str
+    constraints: Unique identifier for the order.
+  - name: my_qty
+    type_desc: float
+    constraints: Initial quantity of the order.
+  - name: orders_ahead
+    type_desc: float
+    constraints: Initial quantity of orders in the queue ahead of this one.
+outputs:
+  - name: initial_order_state
+    type_desc: OrderState
+    constraints: A data structure representing the initial state, containing my_qty, orders_ahead, and is_filled status.
+concept_type: prior_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: cont2014ofi
+    citation: Order-book event and displayed-queue consumption attribution.
+  - title: repo_institutional_quant_engine
+    citation: Primary repository attribution for Institutional-Quant-Engine atoms.
+title: Initializeorderstate
+description: Initializes the state of a new order within the queue, capturing its initial quantity and the volume of orders ahead of it.
+---
+
+# Initializeorderstate
+
+> Initializes the state of a new order within the queue, capturing its initial quantity and the volume of orders ahead of it.
+
+## Conceptual Summary
+
+InitializePrioritizedEntity. Instantiates a state record for a new entity entering a sequenced or prioritized system. The transform captures the entity's intrinsic scalar magnitude and the cumulative magnitude of all entities preceding it, packaging these values into an initial state vector with a default status flag.. Applications: In particle physics simulations, initializing a new particle's state with its energy and the cumulative energy of prior particles in a detector event., In epidemiology, seeding a new infection case with its initial viral load and the total number of existing cases in the population to model its spread potential., In network engineering, creating a record for a new data packet in a buffer, noting its size and the total size of packets ahead of it for Quality-of-Service (QoS) latency calculations.
+
+## Type Signature
+
+```
+(my_order_id: string, my_qty: float, orders_ahead: float) -> OrderState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

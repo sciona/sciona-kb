@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.otto_group_product_1st
+title: Otto Group Product Classification - 1st Place (2015) - Pipeline Template
+description: "This template captures the ordered steps used by Otto Group Product Classification - 1st Place (2015): prepare the data, build task-specific representations, t…"
+problem_statement: "Multi-label classification solution template for Otto Group Product Classification - 1st Place (2015), modeled as a 6-stage deterministic pipeline: Numerical Engineering, Interaction Features, Stratification, Base Modeling, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Otto Group Product Classification - 1st Place (2015)
+placement: 1st
+year: 2015
+domain: multilabel_tabular
+paradigm: optimization
+family: multilabel_tabular
+tags:
+  - lightgbm
+  - xgboost
+  - multi
+  - label
+  - classification
+key_insight: "The load-bearing idea is the pipeline topology: Numerical Engineering creates the representation needed by Final Ensemble, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/discussions/general/583830
+source_license: null
+---
+
+# Otto Group Product Classification - 1st Place (2015) - Pipeline Template
+
+## Problem
+
+Multi-label classification solution template for Otto Group Product Classification - 1st Place (2015), modeled as a 6-stage deterministic pipeline: Numerical Engineering, Interaction Features, Stratification, Base Modeling, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Otto Group Product Classification - 1st Place (2015): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.otto_group_product_1st" readOnly={true} /> */}
+
+1. **Numerical Engineering** -- This stage scale the base data and generate Gaussian Mixture Model (GMM) clustering assignments as entirely new synthetic features (sklearn.mixture).
+1. **Interaction Features** -- This stage create hard-coded ratios, mathematical products, and statistical measures combining the original categorical and numerical columns (pandas).
+1. **Stratification** -- This stage execute a Repeated Multilabel Stratified K-Fold cross-validation strategy specifically designed to perfectly preserve class distributions across all folds (iterative-stratification).
+1. **Base Modeling** -- This stage train XGBoost and LightGBM models wrapped inside a MultiOutputClassifier to handle the diverse label space (sklearn.multioutput, xgboost, lightgbm).
+1. **Level-2 Meta-Modeling** -- This stage extract the Out-of-Fold probabilities from the GBDTs and use them to train secondary Neural Networks and AdaBoost models (torch, sklearn.ensemble).
+1. **Final Ensemble** -- This stage blend the Level-2 meta-predictions utilizing a carefully weighted geometric and arithmetic mean.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Numerical Engineering creates the representation needed by Final Ensemble, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.otto_group_product_1st" label="Reproduce this solution in Sciona" /> */}

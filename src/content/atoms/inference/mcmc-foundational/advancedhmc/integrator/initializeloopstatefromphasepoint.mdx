@@ -1,0 +1,56 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.integrator.initializeloopstatefromphasepoint
+predicate_id: initializeloopstatefromphasepoint
+repo: sciona-atoms
+domain: inference
+type_signature: "(z: PhasePoint P, step_count: Int, collect_full_trajectory: Bool) -> tuple[{i::Int, theta, r, value, gradient, z_current}, Nothing | Vector{P}]"
+informal_desc: Extract phase-point coordinates and cached log-density terms, then initialize loop state and optional trajectory buffer.
+conceptual_summary: ""
+inputs:
+  - name: z
+    type_desc: object
+    constraints: must contain theta, r, and z.lpi with value and gradient
+  - name: step_count
+    type_desc: Int
+    constraints: nonnegative
+  - name: collect_full_trajectory
+    type_desc: Bool
+    constraints: isinstance(x, bool)
+outputs:
+  - name: loop_state
+    type_desc: object
+    constraints: initialized with i = 1 and values from z
+  - name: trajectory_accum
+    type_desc: Optional[np.ndarray]
+    constraints: if collecting, preallocated capacity/length for step_count
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for leapfrog Hamiltonian phase-point updates.
+  - title: advancedhmc2020
+    citation: Package paper for the AdvancedHMC.jl integrator family that this NumPy atom mirrors at a compact phase-point level.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper is a local NumPy implementation rather than a direct Julia object binding.
+title: Initializeloopstatefromphasepoint
+description: Extract phase-point coordinates and cached log-density terms, then initialize loop state and optional trajectory buffer.
+---
+
+# Initializeloopstatefromphasepoint
+
+> Extract phase-point coordinates and cached log-density terms, then initialize loop state and optional trajectory buffer.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(z: PhasePoint P, step_count: Int, collect_full_trajectory: Bool) -> tuple[{i::Int, theta, r, value, gradient, z_current}, Nothing | Vector{P}]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

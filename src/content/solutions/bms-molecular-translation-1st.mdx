@@ -1,0 +1,63 @@
+---
+cdg_asset_id: solution.kaggle.bms_molecular_translation_1st
+title: BMS - Molecular Translation - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by BMS - Molecular Translation - 1st Place (2021): prepare the data, build task-specific representations, train o…"
+problem_statement: "Image-to-Sequence (OCR/Translation) solution template for BMS - Molecular Translation - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Image preprocessing, CNN Encoder, Transformer Decoder, Decoding, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: BMS - Molecular Translation - 1st Place (2021)
+placement: 1st
+year: 2021
+domain: image_to_sequence
+paradigm: neural_network
+family: image_to_sequence
+tags:
+  - transformer
+  - cnn
+  - efficientnet
+  - rag
+  - beam_search
+  - image
+  - sequence
+  - translation
+key_insight: "The load-bearing idea is the pipeline topology: Image preprocessing creates the representation needed by Ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/bms-molecular-translation/discussion/243844
+source_license: null
+---
+
+# BMS - Molecular Translation - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+Image-to-Sequence (OCR/Translation) solution template for BMS - Molecular Translation - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Image preprocessing, CNN Encoder, Transformer Decoder, Decoding, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by BMS - Molecular Translation - 1st Place (2021): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.bms_molecular_translation_1st" readOnly={true} /> */}
+
+1. **Image preprocessing** -- This stage invert colors, pad images to specific aspect ratios, and apply rotation augmentations (OpenCV/Albumentations).
+1. **CNN Encoder** -- This stage pass the image through a CNN backbone (EfficientNet/Swin Transformer) to extract a 2D spatial feature grid (PyTorch).
+1. **Transformer Decoder** -- This stage process the spatial features using an autoregressive Transformer decoder predicting InChI sequence tokens one by one (PyTorch).
+1. **Decoding** -- This stage use Beam Search (width 5) to generate the most probable chemical string sequences (custom script).
+1. **Ensembling** -- This stage average sequence probabilities at each decoding step across multiple model checkpoints.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Image preprocessing creates the representation needed by Ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.bms_molecular_translation_1st" label="Reproduce this solution in Sciona" /> */}

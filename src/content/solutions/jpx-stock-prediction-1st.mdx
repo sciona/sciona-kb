@@ -1,0 +1,63 @@
+---
+cdg_asset_id: solution.kaggle.jpx_stock_prediction_1st
+title: JPX Tokyo Stock Exchange Prediction - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by JPX Tokyo Stock Exchange Prediction - 1st Place (2022): prepare the data, build task-specific representations,…"
+problem_statement: "Financial Tabular (Rank / Sharpe Ratio Optimization) solution template for JPX Tokyo Stock Exchange Prediction - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Target normalization, Technical features, Factor modeling, Rank transformation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: JPX Tokyo Stock Exchange Prediction - 1st Place (2022)
+placement: ""
+year: 0
+domain: tabular_regression
+paradigm: optimization
+family: tabular_regression
+tags:
+  - lightgbm
+  - financial
+  - tabular
+  - sharpe
+  - ratio
+  - optimization
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Target normalization creates the representation needed by Sharpe Ratio smoothing, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/335602
+source_license: null
+---
+
+# JPX Tokyo Stock Exchange Prediction - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+Financial Tabular (Rank / Sharpe Ratio Optimization) solution template for JPX Tokyo Stock Exchange Prediction - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Target normalization, Technical features, Factor modeling, Rank transformation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by JPX Tokyo Stock Exchange Prediction - 1st Place (2022): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.jpx_stock_prediction_1st" readOnly={true} /> */}
+
+1. **Target normalization** -- This stage adjust the raw target (future return) by subtracting the market-wide index return to isolate the alpha of individual stocks (pandas).
+1. **Technical features** -- This stage calculate standard financial indicators (moving averages, volatility, RSI) over multiple windows (pandas/TA-Lib).
+1. **Factor modeling** -- This stage train LightGBM regressors to predict the continuous adjusted return.
+1. **Rank transformation** -- This stage ignore the absolute values of the predictions, immediately converting the regression outputs into a strictly ranked integer list [1 to 2000] for all stocks on a given day (scipy.stats.rankdata).
+1. **Sharpe Ratio smoothing** -- This stage apply an Exponential Moving Average (EMA) to the daily predictions over time to prevent the model from rapidly flipping ranks, which directly maximizes the Sharpe Ratio evaluation metric.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Target normalization creates the representation needed by Sharpe Ratio smoothing, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.jpx_stock_prediction_1st" label="Reproduce this solution in Sciona" /> */}

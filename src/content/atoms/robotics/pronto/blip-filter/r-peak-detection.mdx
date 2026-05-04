@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.robotics.pronto.blip_filter.r_peak_detection
+predicate_id: r_peak_detection
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(filtered: np.ndarray) -> np.ndarray"
+informal_desc: Detect R-peak locations in the filtered ECG signal using the Hamilton segmenter algorithm.
+conceptual_summary: "adaptive_threshold_peak_detector_1d. Identifies indices of prominent, positive-going local maxima within a 1D numerical sequence. The process involves calculating a rolling first-order difference to detect sharp increases, followed by an adaptive thresholding mechanism. This threshold is dynamically updated based on the amplitudes of previously identified peaks, allowing the detector to adjust to variations in the signal's baseline and noise levels.. Applications: Geophysics: Detecting the arrival times of seismic P-waves or S-waves from seismograph sensor data., Astrophysics: Identifying transient events like pulsars or fast radio bursts in time-series data from radio telescopes., Materials Science: Pinpointing fracture or acoustic emission events in sensor readings during stress testing of materials., Financial Engineering: Detecting sudden volume spikes in high-frequency trading data to signal significant market events."
+inputs:
+  - name: filtered
+    type_desc: np.ndarray
+    constraints: filtered ECG signal
+outputs:
+  - name: rpeaks
+    type_desc: np.ndarray
+    constraints: R-peak sample indices
+concept_type: clustering
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: R_peak_detection
+description: Detect R-peak locations in the filtered ECG signal using the Hamilton segmenter algorithm.
+---
+
+# R_peak_detection
+
+> Detect R-peak locations in the filtered ECG signal using the Hamilton segmenter algorithm.
+
+## Conceptual Summary
+
+adaptive_threshold_peak_detector_1d. Identifies indices of prominent, positive-going local maxima within a 1D numerical sequence. The process involves calculating a rolling first-order difference to detect sharp increases, followed by an adaptive thresholding mechanism. This threshold is dynamically updated based on the amplitudes of previously identified peaks, allowing the detector to adjust to variations in the signal's baseline and noise levels.. Applications: Geophysics: Detecting the arrival times of seismic P-waves or S-waves from seismograph sensor data., Astrophysics: Identifying transient events like pulsars or fast radio bursts in time-series data from radio telescopes., Materials Science: Pinpointing fracture or acoustic emission events in sensor readings during stress testing of materials., Financial Engineering: Detecting sudden volume spikes in high-frequency trading data to signal significant market events.
+
+## Type Signature
+
+```
+(filtered: np.ndarray) -> np.ndarray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

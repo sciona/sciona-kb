@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.fintech.institutional_quant_engine.avellaneda_stoikov.computeinventoryadjustedquotes
+predicate_id: computeinventoryadjustedquotes
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(state_model: StateModelSpec {gamma: float, k: float, q: float, s: float, sigma: float}) -> QuotePair {bid: float, ask: float}"
+informal_desc: Deterministically compute market quotes from the current immutable state without mutating persistent values.
+conceptual_summary: "Deterministic State-to-Ordered-Boundary Projection. Transforms an immutable 5-scalar state vector into a 2-scalar ordered boundary pair using a closed-form arithmetic mapping. The mapping computes a central reference value from baseline and signed imbalance terms, then applies a width/offset term driven by dispersion and sensitivity parameters to produce lower and upper bounds. No persistent state is modified, so identical inputs always yield identical outputs.. Applications: Autonomous control: compute lower/upper actuator command limits from current system offset, gain parameters, and noise scale., Clinical decision support: derive asymmetric intervention thresholds around a physiological baseline using uncertainty and patient-state imbalance., Distributed systems: generate dynamic lower/upper throttling bounds from queue imbalance, latency variance, and tuning coefficients., Materials process engineering: set real-time acceptable process-window bounds from measured drift, volatility, and risk tolerance parameters."
+inputs:
+  - name: state_model
+    type_desc: object
+    constraints: Read-only input state.
+outputs:
+  - name: quotes
+    type_desc: object
+    constraints: Pure arithmetic output derived from state_model.
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: avellaneda2008
+    citation: Market-making attribution.
+  - title: repo_institutional_quant_engine
+    citation: Primary repository attribution for Institutional-Quant-Engine atoms.
+title: Computeinventoryadjustedquotes
+description: Deterministically compute market quotes from the current immutable state without mutating persistent values.
+---
+
+# Computeinventoryadjustedquotes
+
+> Deterministically compute market quotes from the current immutable state without mutating persistent values.
+
+## Conceptual Summary
+
+Deterministic State-to-Ordered-Boundary Projection. Transforms an immutable 5-scalar state vector into a 2-scalar ordered boundary pair using a closed-form arithmetic mapping. The mapping computes a central reference value from baseline and signed imbalance terms, then applies a width/offset term driven by dispersion and sensitivity parameters to produce lower and upper bounds. No persistent state is modified, so identical inputs always yield identical outputs.. Applications: Autonomous control: compute lower/upper actuator command limits from current system offset, gain parameters, and noise scale., Clinical decision support: derive asymmetric intervention thresholds around a physiological baseline using uncertainty and patient-state imbalance., Distributed systems: generate dynamic lower/upper throttling bounds from queue imbalance, latency variance, and tuning coefficients., Materials process engineering: set real-time acceptable process-window bounds from measured drift, volatility, and risk tolerance parameters.
+
+## Type Signature
+
+```
+(state_model: StateModelSpec {gamma: float, k: float, q: float, s: float, sigma: float}) -> QuotePair {bid: float, ask: float}
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,41 @@
+---
+fqdn: sciona.atoms.inference.jax_advi.optimize_advi.optimize_variational_objective
+predicate_id: optimize_variational_objective
+repo: sciona-atoms
+domain: inference
+type_signature: "(objective_fun: callable, init_var_params_flat: np.ndarray, opt_method: str, verbose: bool) -> optimizer result object"
+informal_desc: Chooses optimizer backend by method name and minimizes the stochastic objective over flattened variational parameters.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kucukelbir2017advi
+    citation: Exact ADVI attribution for jax_advi atoms.
+  - title: titsias2014dsvb
+    citation: Complementary reparameterization-gradient VI attribution.
+  - title: repo_jax_advi
+    citation: Upstream implementation is mapped to the vendored jax_advi repository.
+title: Optimize_variational_objective
+description: Chooses optimizer backend by method name and minimizes the stochastic objective over flattened variational parameters.
+---
+
+# Optimize_variational_objective
+
+> Chooses optimizer backend by method name and minimizes the stochastic objective over flattened variational parameters.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(objective_fun: callable, init_var_params_flat: np.ndarray, opt_method: str, verbose: bool) -> optimizer result object
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

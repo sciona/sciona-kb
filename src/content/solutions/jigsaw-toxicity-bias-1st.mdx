@@ -1,0 +1,67 @@
+---
+cdg_asset_id: solution.kaggle.jigsaw_toxicity_bias_1st
+title: Jigsaw Unintended Bias in Toxicity Classification 1st Place — Bias-Aware Transformer Ensemble
+description: Detect toxic comments while being fair across demographic groups by training multiple large language models with a custom loss function that pays extra attenti…
+problem_statement: Multi-transformer ensemble (BERT, XLNet, RoBERTa) with demographic-weighted BCE loss and multisample dropout, producing bias-aware toxicity probabilities through weighted averaging of model predictions.
+platform: kaggle
+competition_name: Jigsaw Unintended Bias in Toxicity Classification 1st Place — Bias-Aware Transformer Ensemble
+placement: ""
+year: 0
+domain: nlp_fairness
+paradigm: neural_network
+family: nlp_fairness
+tags:
+  - toxicity_classification
+  - bias_mitigation
+  - transformer_ensemble
+  - demographic_fairness
+  - multisample_dropout
+  - identity_weighted_loss
+  - annotation_bias_correction
+  - bert_xlnet_roberta
+  - fairness_aware_training
+  - demographic_weighted_bce
+  - content_moderation
+key_insight: "Demographic-weighted BCE explicitly prevents the model from learning that certain identity terms correlate with toxicity labels due to annotation bias. Without this correction, the model learns a spurious shortcut: 'comment mentions a demographic group' -> 'probably toxic,' because annotators disproportionately labeled identity-mentioning comments as toxic. The weighted loss upweights identity-mentioning samples during training, forcing the model to find the actual toxic signal rather than relying on the identity-toxicity correlation baked into the labels."
+failure_modes:
+  - "Identity columns are noisy or incomplete: the weighting scheme amplifies errors on mislabeled identity samples, hurting rather than helping fairness"
+  - "Annotation bias pattern differs from training data: if the test-set bias structure is different from training, the learned weights may not transfer"
+  - Over-weighting identity samples causes the model to under-perform on non-identity samples, reducing overall AUC while improving subgroup metrics
+source_url: https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/discussion/100661
+source_license: null
+---
+
+# Jigsaw Unintended Bias in Toxicity Classification 1st Place — Bias-Aware Transformer Ensemble
+
+## Problem
+
+Multi-transformer ensemble (BERT, XLNet, RoBERTa) with demographic-weighted BCE loss and multisample dropout, producing bias-aware toxicity probabilities through weighted averaging of model predictions.
+
+## Approach
+
+Detect toxic comments while being fair across demographic groups by training multiple large language models with a custom loss function that pays extra attention to comments mentioning specific identities, applying a trick with multiple dropout masks to stabilize predictions, and averaging the results.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.jigsaw_toxicity_bias_1st" readOnly={true} /> */}
+
+1. **Text Cleaning** -- Clean up the comment text by removing web links, fixing typos, and separating punctuation so the models can read it more easily.
+1. **Multi-Tokenization** -- Convert each comment into three different numeric representations, one for each transformer model, since each model uses a different way of breaking text into tokens.
+1. **Sequence Bucketing** -- Sort comments by length and batch similar-length ones together so less time is wasted processing padding tokens.
+1. **Demographic-Weighted BCE** -- Modify the training loss so that mistakes on comments mentioning demographic groups are penalized more heavily, encouraging the model to be equally accurate for all groups.
+1. **Multisample Dropout** -- Instead of dropping random neurons once, drop them several different ways and average the results, making predictions more stable and reliable.
+1. **Model Ensembling** -- Combine the predictions from all three language models by taking a weighted average to get the final toxicity score.
+
+## Key Insight
+
+Demographic-weighted BCE explicitly prevents the model from learning that certain identity terms correlate with toxicity labels due to annotation bias. Without this correction, the model learns a spurious shortcut: 'comment mentions a demographic group' -> 'probably toxic,' because annotators disproportionately labeled identity-mentioning comments as toxic. The weighted loss upweights identity-mentioning samples during training, forcing the model to find the actual toxic signal rather than relying on the identity-toxicity correlation baked into the labels.
+
+## Failure Modes
+
+- Identity columns are noisy or incomplete: the weighting scheme amplifies errors on mislabeled identity samples, hurting rather than helping fairness
+- Annotation bias pattern differs from training data: if the test-set bias structure is different from training, the learned weights may not transfer
+- Over-weighting identity samples causes the model to under-perform on non-identity samples, reducing overall AUC while improving subgroup metrics
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.jigsaw_toxicity_bias_1st" label="Reproduce this solution in Sciona" /> */}

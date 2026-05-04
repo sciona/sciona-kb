@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.robotics.pronto.dynamic_stance_estimator.predict_step
+predicate_id: predict_step
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(current_state: StateModelSpec, model_params: ModelParamsSpec, dt: float) -> StateModelSpec"
+informal_desc: Predicts the next state and covariance based on the state transition model (prediction step of Kalman filter).
+conceptual_summary: "LinearStateProjectionWithNoise. Projects a system's current state vector and its associated uncertainty (covariance) forward by one discrete step. The projection uses a linear transformation for the state vector and a congruent transformation for the covariance matrix, with an added noise term to model intrinsic system unpredictability.. Applications: Economic Forecasting: Projecting a vector of key economic indicators (e.g., inflation, unemployment) and their inter-dependencies into the next fiscal quarter using a linearized macroeconomic model., Neural Population Dynamics: Estimating the future activity state and firing rate covariance of a group of neurons based on a linear model of synaptic connections and intrinsic neural noise., Climate Modeling: Predicting a vector of atmospheric variables (temperature, pressure) for a specific grid cell at a future time point, propagating the current estimate and its uncertainty forward with a linearized atmospheric model., Supply Chain Management: Forecasting inventory levels for multiple products and their variance based on a linear model of consumption rates, lead times, and demand volatility."
+inputs:
+  - name: current_state
+    type_desc: StateModelSpec
+    constraints: Current state (x, P)
+  - name: model_params
+    type_desc: ModelParamsSpec
+    constraints: Contains A, Q
+  - name: dt
+    type_desc: float
+    constraints: Time step
+outputs:
+  - name: predicted_state
+    type_desc: StateModelSpec
+    constraints: Predicted state (x_prior, P_prior)
+concept_type: sequential_filter
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Predict_step
+description: Predicts the next state and covariance based on the state transition model (prediction step of Kalman filter).
+---
+
+# Predict_step
+
+> Predicts the next state and covariance based on the state transition model (prediction step of Kalman filter).
+
+## Conceptual Summary
+
+LinearStateProjectionWithNoise. Projects a system's current state vector and its associated uncertainty (covariance) forward by one discrete step. The projection uses a linear transformation for the state vector and a congruent transformation for the covariance matrix, with an added noise term to model intrinsic system unpredictability.. Applications: Economic Forecasting: Projecting a vector of key economic indicators (e.g., inflation, unemployment) and their inter-dependencies into the next fiscal quarter using a linearized macroeconomic model., Neural Population Dynamics: Estimating the future activity state and firing rate covariance of a group of neurons based on a linear model of synaptic connections and intrinsic neural noise., Climate Modeling: Predicting a vector of atmospheric variables (temperature, pressure) for a specific grid cell at a future time point, propagating the current estimate and its uncertainty forward with a linearized atmospheric model., Supply Chain Management: Forecasting inventory levels for multiple products and their variance based on a linear model of consumption rates, lead times, and demand volatility.
+
+## Type Signature
+
+```
+(current_state: StateModelSpec, model_params: ModelParamsSpec, dt: float) -> StateModelSpec
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

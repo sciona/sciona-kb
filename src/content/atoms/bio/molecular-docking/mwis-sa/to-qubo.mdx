@@ -1,0 +1,83 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.mwis_sa.to_qubo
+predicate_id: to_qubo
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(graph: Any, penalty: Any) -> np.ndarray"
+informal_desc: |-
+  Convert a MISInstance to a qubo matrix.
+
+  QUBO formulation:
+  Minimize:
+      Q(x) = -∑_{i ∈ V} w_i x_i  +  λ ∑_{(i, j) ∈ E} x_i x_j
+
+  Args:
+      penalty (float, optional): Penalty factor. Defaults to None.
+
+  Raises:
+      ValueError: When penalty is strictly inferior to 2 x max(weight).
+
+  Returns:
+      np.ndarray: The QUBO matrix formulation of MIS.
+conceptual_summary: ""
+inputs:
+  - name: graph
+    type_desc: Any
+    constraints: x is not None
+  - name: penalty
+    type_desc: Any
+    constraints: x is not None
+outputs:
+  - name: result
+    type_desc: np.ndarray
+    constraints: ndim >= 1
+concept_type: optimization
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: To_qubo
+description: |-
+  Convert a MISInstance to a qubo matrix.
+
+  QUBO formulation:
+  Minimize:
+      Q(x) = -∑_{i ∈ V} w_i x_i  +  λ ∑_{(i, j) ∈ E} x_i x_j
+
+  Args:
+      penalty (float, opti…
+---
+
+# To_qubo
+
+> Convert a MISInstance to a qubo matrix.
+
+QUBO formulation:
+Minimize:
+    Q(x) = -∑_&#123;i ∈ V&#125; w_i x_i  +  λ ∑_&#123;(i, j) ∈ E&#125; x_i x_j
+
+Args:
+    penalty (float, optional): Penalty factor. Defaults to None.
+
+Raises:
+    ValueError: When penalty is strictly inferior to 2 x max(weight).
+
+Returns:
+    np.ndarray: The QUBO matrix formulation of MIS.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(graph: Any, penalty: Any) -> np.ndarray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

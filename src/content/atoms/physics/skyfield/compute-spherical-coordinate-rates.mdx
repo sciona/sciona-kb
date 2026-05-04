@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.physics.skyfield.compute_spherical_coordinate_rates
+predicate_id: compute_spherical_coordinate_rates
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(r: numpy.ndarray, v: numpy.ndarray) -> tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]"
+informal_desc: Computes the rate of change of spherical coordinates (e.g., range, right ascension, declination) from Cartesian position and velocity vectors.
+conceptual_summary: "map_cartesian_rates_to_spherical_rates. Projects a rate of change (velocity) vector from a 3D Cartesian coordinate system to a spherical coordinate system. Given a point's position and its instantaneous velocity in (x, y, z), this function calculates the corresponding instantaneous rates of change for the point's radial distance, azimuthal angle, and polar angle.. Applications: In robotics, to calculate the necessary joint velocities of a spherical manipulator to track a target with a known Cartesian velocity., In geophysics, to determine the rate of change in latitude, longitude, and altitude of a weather balloon or drifting sensor from its velocity vector relative to the Earth's center., In computer graphics, to update the orientation and distance of an orbital camera that is programmatically following a moving object., In biomechanics, to analyze the angular velocity of a limb joint (e.g., shoulder or hip) based on the 3D velocity of the hand or foot."
+inputs:
+  - name: r
+    type_desc: array-like
+    constraints: Cartesian position vector(s).
+    required: true
+    default_value_repr: ""
+  - name: v
+    type_desc: array-like
+    constraints: Cartesian velocity vector(s).
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: spherical_rates
+    type_desc: tuple
+    constraints: A tuple containing the rates of change for range, right ascension, and declination.
+    required: true
+    default_value_repr: ""
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: skyfield2019ascl
+    citation: Preferred Skyfield citation.
+  - title: repo_skyfield
+    citation: Upstream implementation is mapped to the vendored skyfield repository.
+title: Compute_spherical_coordinate_rates
+description: Computes the rate of change of spherical coordinates (e.g., range, right ascension, declination) from Cartesian position and velocity vectors.
+---
+
+# Compute_spherical_coordinate_rates
+
+> Computes the rate of change of spherical coordinates (e.g., range, right ascension, declination) from Cartesian position and velocity vectors.
+
+## Conceptual Summary
+
+map_cartesian_rates_to_spherical_rates. Projects a rate of change (velocity) vector from a 3D Cartesian coordinate system to a spherical coordinate system. Given a point's position and its instantaneous velocity in (x, y, z), this function calculates the corresponding instantaneous rates of change for the point's radial distance, azimuthal angle, and polar angle.. Applications: In robotics, to calculate the necessary joint velocities of a spherical manipulator to track a target with a known Cartesian velocity., In geophysics, to determine the rate of change in latitude, longitude, and altitude of a weather balloon or drifting sensor from its velocity vector relative to the Earth's center., In computer graphics, to update the orientation and distance of an orbital camera that is programmatically following a moving object., In biomechanics, to analyze the angular velocity of a limb joint (e.g., shoulder or hip) based on the 3D velocity of the hand or foot.
+
+## Type Signature
+
+```
+(r: numpy.ndarray, v: numpy.ndarray) -> tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

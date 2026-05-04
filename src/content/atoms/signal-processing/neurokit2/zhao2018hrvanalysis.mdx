@@ -1,0 +1,71 @@
+---
+fqdn: sciona.atoms.signal_processing.neurokit2.zhao2018hrvanalysis
+predicate_id: zhao2018hrvanalysis
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(ecg_cleaned: array-like, rpeaks: array-like, sampling_rate: numeric, window: numeric or tuple, mode: string) -> dict or array"
+informal_desc: Applies Zhao et al. 2018 method to analyze heart rate variability from ECG signals using windowed processing
+conceptual_summary: "windowed_inter_event_variability_extractor. Converts a 1D continuous signal and a sequence of discrete event markers into a set of statistical variability features by first computing inter-event temporal intervals, then applying windowed segmentation and extracting distributional moments, frequency-domain characteristics, and entropy measures within each segment. This is a dimensionality-reducing lossy transform from a time-indexed event sequence to a compact feature vector characterizing temporal regularity/irregularity.. Applications: Seismology: Characterize earthquake clustering patterns by analyzing variability in inter-event times between seismic events within moving time windows to distinguish Poissonian from correlated seismicity., Network traffic engineering: Detect congestion, DDoS attacks, or protocol anomalies by computing variability features from packet or connection inter-arrival times over sliding windows., Manufacturing quality control: Monitor machine health by tracking variability in cycle completion intervals or defect occurrence times, flagging increased irregularity as early wear indicators., Neuroscience: Classify neuronal firing patterns (bursting vs. regular spiking) by extracting inter-spike interval variability features from electrophysiology recordings in sliding temporal windows."
+inputs:
+  - name: ecg_cleaned
+    type_desc: ndarray
+    constraints: cleaned ECG signal
+    required: true
+    default_value_repr: ""
+  - name: rpeaks
+    type_desc: ndarray | None
+    constraints: R-peak indices
+    required: false
+    default_value_repr: None
+  - name: sampling_rate
+    type_desc: int | float
+    constraints: "> 0"
+    required: false
+    default_value_repr: "1000"
+  - name: window
+    type_desc: int | float | tuple
+    constraints: window specification
+    required: false
+    default_value_repr: "1024"
+  - name: mode
+    type_desc: str
+    constraints: quality mode
+    required: false
+    default_value_repr: "'simple'"
+outputs:
+  - name: quality_label
+    type_desc: str
+    constraints: quality verdict string
+    required: true
+    default_value_repr: ""
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neurokit2021
+    citation: Preferred NeuroKit2 citation.
+  - title: repo_neurokit2
+    citation: Upstream implementation is mapped to the vendored NeuroKit2 repository.
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+title: Zhao2018hrvanalysis
+description: Applies Zhao et al. 2018 method to analyze heart rate variability from ECG signals using windowed processing
+---
+
+# Zhao2018hrvanalysis
+
+> Applies Zhao et al. 2018 method to analyze heart rate variability from ECG signals using windowed processing
+
+## Conceptual Summary
+
+windowed_inter_event_variability_extractor. Converts a 1D continuous signal and a sequence of discrete event markers into a set of statistical variability features by first computing inter-event temporal intervals, then applying windowed segmentation and extracting distributional moments, frequency-domain characteristics, and entropy measures within each segment. This is a dimensionality-reducing lossy transform from a time-indexed event sequence to a compact feature vector characterizing temporal regularity/irregularity.. Applications: Seismology: Characterize earthquake clustering patterns by analyzing variability in inter-event times between seismic events within moving time windows to distinguish Poissonian from correlated seismicity., Network traffic engineering: Detect congestion, DDoS attacks, or protocol anomalies by computing variability features from packet or connection inter-arrival times over sliding windows., Manufacturing quality control: Monitor machine health by tracking variability in cycle completion intervals or defect occurrence times, flagging increased irregularity as early wear indicators., Neuroscience: Classify neuronal firing patterns (bursting vs. regular spiking) by extracting inter-spike interval variability features from electrophysiology recordings in sliding temporal windows.
+
+## Type Signature
+
+```
+(ecg_cleaned: array-like, rpeaks: array-like, sampling_rate: numeric, window: numeric or tuple, mode: string) -> dict or array
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

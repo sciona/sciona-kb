@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.robotics.pronto.blip_filter.template_extraction
+predicate_id: template_extraction
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(filtered: np.ndarray, rpeaks: np.ndarray) -> tuple[np.ndarray, np.ndarray]"
+informal_desc: Extract individual heartbeat waveform templates around each R-peak with configurable before/after windows.
+conceptual_summary: "Event-Triggered Signal Epoching. Segments a 1D numerical series into a collection of fixed-length subsequences (epochs). Each subsequence is centered around a corresponding index provided in a separate list of 'event' markers. This operation effectively transforms a continuous signal into a stacked 2D array of discrete, event-aligned segments, while filtering out event markers that are too close to the signal's boundaries to form a complete epoch.. Applications: Geophysics: Extracting seismic P-wave and S-wave arrival waveforms from a continuous seismogram based on automatically detected arrival times., Finance: Isolating asset price fluctuations from a time-series immediately following discrete market events, such as earnings announcements or policy changes., Neuroscience: Aligning and averaging Event-Related Potentials (ERPs) from continuous EEG data, time-locked to the onset of external stimuli., Astrophysics: Segmenting light curve data from a star around periodic transit events (e.g., exoplanet transits or pulsar signals) to stack and enhance signal-to-noise ratio."
+inputs:
+  - name: filtered
+    type_desc: np.ndarray
+    constraints: filtered ECG signal
+  - name: rpeaks
+    type_desc: np.ndarray
+    constraints: corrected R-peak indices
+outputs:
+  - name: templates
+    type_desc: np.ndarray
+    constraints: 2D array of heartbeat templates
+  - name: rpeaks_final
+    type_desc: np.ndarray
+    constraints: final R-peak indices after template extraction
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Template_extraction
+description: Extract individual heartbeat waveform templates around each R-peak with configurable before/after windows.
+---
+
+# Template_extraction
+
+> Extract individual heartbeat waveform templates around each R-peak with configurable before/after windows.
+
+## Conceptual Summary
+
+Event-Triggered Signal Epoching. Segments a 1D numerical series into a collection of fixed-length subsequences (epochs). Each subsequence is centered around a corresponding index provided in a separate list of 'event' markers. This operation effectively transforms a continuous signal into a stacked 2D array of discrete, event-aligned segments, while filtering out event markers that are too close to the signal's boundaries to form a complete epoch.. Applications: Geophysics: Extracting seismic P-wave and S-wave arrival waveforms from a continuous seismogram based on automatically detected arrival times., Finance: Isolating asset price fluctuations from a time-series immediately following discrete market events, such as earnings announcements or policy changes., Neuroscience: Aligning and averaging Event-Related Potentials (ERPs) from continuous EEG data, time-locked to the onset of external stimuli., Astrophysics: Segmenting light curve data from a star around periodic transit events (e.g., exoplanet transits or pulsar signals) to stack and enhance signal-to-noise ratio.
+
+## Type Signature
+
+```
+(filtered: np.ndarray, rpeaks: np.ndarray) -> tuple[np.ndarray, np.ndarray]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

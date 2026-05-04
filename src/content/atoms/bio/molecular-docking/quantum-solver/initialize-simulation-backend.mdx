@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.initialize_simulation_backend
+predicate_id: initialize_simulation_backend
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(adiabatic_sequence: Sequence, backend_flags: Dict) -> Union[QutipEmulator, SVBackend, MPSBackend]"
+informal_desc: Initializes and configures the appropriate quantum simulation backend (QuTip, State Vector, or MPS) for the given pulse sequence, based on runtime flags. This involves setting up backend-specific configurations like time steps, observables, and log levels.
+conceptual_summary: ""
+inputs:
+  - name: adiabatic_sequence
+    type_desc: Sequence
+    constraints: isinstance(x, (list, tuple))
+  - name: backend_flags
+    type_desc: Dict
+    constraints: Contains boolean flags like 'run_qutip', 'run_sv', 'run_emu_mps'.
+outputs:
+  - name: configured_simulator
+    type_desc: Union[QutipEmulator, SVBackend, MPSBackend]
+    constraints: The initialized simulator object ready for execution.
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Initialize_simulation_backend
+description: Initializes and configures the appropriate quantum simulation backend (QuTip, State Vector, or MPS) for the given pulse sequence, based on runtime flags. This …
+---
+
+# Initialize_simulation_backend
+
+> Initializes and configures the appropriate quantum simulation backend (QuTip, State Vector, or MPS) for the given pulse sequence, based on runtime flags. This involves setting up backend-specific configurations like time steps, observables, and log levels.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(adiabatic_sequence: Sequence, backend_flags: Dict) -> Union[QutipEmulator, SVBackend, MPSBackend]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

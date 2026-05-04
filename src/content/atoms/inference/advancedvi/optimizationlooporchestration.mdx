@@ -1,0 +1,41 @@
+---
+fqdn: sciona.atoms.inference.advancedvi.optimizationlooporchestration
+predicate_id: optimizationlooporchestration
+repo: sciona-atoms
+domain: inference
+type_signature: "(algorithm: callable | algorithm identifier, max_iter: int, prob: objective/problem specification, q_init: initial parameter/state object, rng_state_in: numpy.random.Generator state (explicit immutable input)) -> tuple[optimized parameter/state object, iteration diagnostics/history, numpy.random.Generator state]"
+informal_desc: Runs the selected optimization algorithm for a bounded number of iterations on the provided objective/problem using an initial state.
+conceptual_summary: "Bounded Iterative State-Update Orchestrator. Applies a user-supplied state transition rule repeatedly to an initial state under a finite iteration budget, with each step evaluated against a formal objective specification. The process composes local updates into a trajectory through a parameter/state space and returns the terminal state together with the full diagnostic path. If stochastic updates are used, pseudo-random generator state is treated as an explicit input/output state variable to preserve reproducibility.. Applications: Calibrating constitutive parameters in computational materials simulations via repeated residual-minimizing updates, Refining control policy parameters in robotic trajectory optimization under kinematic and dynamic constraints, Tuning hyperparameters or latent variables in medical image reconstruction pipelines to minimize reconstruction error metrics, Estimating reaction-network rate constants in systems biology by iteratively reducing mismatch between simulated and observed temporal signals"
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kucukelbir2017advi
+    citation: Broad ADVI/VI attribution for AdvancedVI atoms.
+  - title: repo_advancedvi_jl
+    citation: Upstream implementation is mapped to the vendored AdvancedVI.jl repository.
+  - title: titsias2014dsvb
+    citation: Reparameterization-gradient VI attribution.
+title: Optimizationlooporchestration
+description: Runs the selected optimization algorithm for a bounded number of iterations on the provided objective/problem using an initial state.
+---
+
+# Optimizationlooporchestration
+
+> Runs the selected optimization algorithm for a bounded number of iterations on the provided objective/problem using an initial state.
+
+## Conceptual Summary
+
+Bounded Iterative State-Update Orchestrator. Applies a user-supplied state transition rule repeatedly to an initial state under a finite iteration budget, with each step evaluated against a formal objective specification. The process composes local updates into a trajectory through a parameter/state space and returns the terminal state together with the full diagnostic path. If stochastic updates are used, pseudo-random generator state is treated as an explicit input/output state variable to preserve reproducibility.. Applications: Calibrating constitutive parameters in computational materials simulations via repeated residual-minimizing updates, Refining control policy parameters in robotic trajectory optimization under kinematic and dynamic constraints, Tuning hyperparameters or latent variables in medical image reconstruction pipelines to minimize reconstruction error metrics, Estimating reaction-network rate constants in systems biology by iteratively reducing mismatch between simulated and observed temporal signals
+
+## Type Signature
+
+```
+(algorithm: callable | algorithm identifier, max_iter: int, prob: objective/problem specification, q_init: initial parameter/state object, rng_state_in: numpy.random.Generator state (explicit immutable input)) -> tuple[optimized parameter/state object, iteration diagnostics/history, numpy.random.Generator state]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

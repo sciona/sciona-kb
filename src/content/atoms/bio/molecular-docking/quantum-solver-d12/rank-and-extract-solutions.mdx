@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.rank_and_extract_solutions
+predicate_id: rank_and_extract_solutions
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(count_dist: dict[str, int], reg: Register, num_sol: int) -> tuple[list[set | str], dict[str, int]]"
+informal_desc: Sort the raw count distribution by descending frequency, then call process_quantum_solution to decode the top-num_sol bitstrings into MWIS node-set solutions.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Rank_and_extract_solutions
+description: Sort the raw count distribution by descending frequency, then call process_quantum_solution to decode the top-num_sol bitstrings into MWIS node-set solutions.
+---
+
+# Rank_and_extract_solutions
+
+> Sort the raw count distribution by descending frequency, then call process_quantum_solution to decode the top-num_sol bitstrings into MWIS node-set solutions.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(count_dist: dict[str, int], reg: Register, num_sol: int) -> tuple[list[set | str], dict[str, int]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

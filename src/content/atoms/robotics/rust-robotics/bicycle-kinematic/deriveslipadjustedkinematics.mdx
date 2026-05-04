@@ -1,0 +1,55 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.deriveslipadjustedkinematics
+predicate_id: deriveslipadjustedkinematics
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(model_spec: ModelSpec, x: StateVector (na::SVector<f64, 3>), u: ControlVector (na::SVector<f64, 2>)) -> tuple[f64, f64, f64]"
+informal_desc: Compute sideslip from steering and derive shared geometric terms for the bicycle-model dynamics.
+conceptual_summary: ""
+inputs:
+  - name: model_spec
+    type_desc: ModelSpec
+    constraints: Must expose calculate_sideslip(steering) and get_wheelbase().
+  - name: x
+    type_desc: np.ndarray
+    constraints: x[2] is yaw angle in radians.
+  - name: u
+    type_desc: np.ndarray
+    constraints: u[1] is steering/road wheel angle in radians.
+outputs:
+  - name: sideslip
+    type_desc: float
+    constraints: Slip angle in radians.
+  - name: effective_heading
+    type_desc: float
+    constraints: Computed as yaw + sideslip.
+  - name: wheelbase
+    type_desc: float
+    constraints: Positive vehicle wheelbase.
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Deriveslipadjustedkinematics
+description: Compute sideslip from steering and derive shared geometric terms for the bicycle-model dynamics.
+---
+
+# Deriveslipadjustedkinematics
+
+> Compute sideslip from steering and derive shared geometric terms for the bicycle-model dynamics.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(model_spec: ModelSpec, x: StateVector (na::SVector<f64, 3>), u: ControlVector (na::SVector<f64, 2>)) -> tuple[f64, f64, f64]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

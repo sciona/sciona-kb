@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.nuts_llm.joinprogressmonitor
+predicate_id: joinprogressmonitor
+repo: sciona-atoms
+domain: inference
+type_signature: "(progress_handle: JoinHandle<()>) -> Result<(), Box<dyn Any + Send>>"
+informal_desc: Wait for the monitor task to finish and produce a join status used for optional error reporting.
+conceptual_summary: ""
+inputs:
+  - name: progress_handle
+    type_desc: object
+    constraints: valid spawned handle
+outputs:
+  - name: monitor_join_status
+    type_desc: object
+    constraints: Err indicates monitor panic
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for initializing target log-density state, gradient information, acceptance target, and explicit stochastic state before transition building.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a local state initializer and not a full NUTS transition implementation.
+title: Joinprogressmonitor
+description: Wait for the monitor task to finish and produce a join status used for optional error reporting.
+---
+
+# Joinprogressmonitor
+
+> Wait for the monitor task to finish and produce a join status used for optional error reporting.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(progress_handle: JoinHandle<()>) -> Result<(), Box<dyn Any + Send>>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

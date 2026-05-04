@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.build_interaction_graph.resolve_interaction_distance_threshold
+predicate_id: resolve_interaction_distance_threshold
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(interaction_distance: float | None, INTERACTION_DISTANCE_EPSILON: float) -> float"
+informal_desc: Determine the effective interaction-distance tolerance by replacing a missing input threshold with the configured epsilon default.
+conceptual_summary: ""
+inputs:
+  - name: interaction_distance
+    type_desc: Optional[float]
+    constraints: If None, must be replaced with default epsilon
+  - name: INTERACTION_DISTANCE_EPSILON
+    type_desc: float
+    constraints: Positive fallback threshold
+outputs:
+  - name: effective_interaction_distance
+    type_desc: float
+    constraints: Always non-None
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Resolve_interaction_distance_threshold
+description: Determine the effective interaction-distance tolerance by replacing a missing input threshold with the configured epsilon default.
+---
+
+# Resolve_interaction_distance_threshold
+
+> Determine the effective interaction-distance tolerance by replacing a missing input threshold with the configured epsilon default.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(interaction_distance: float | None, INTERACTION_DISTANCE_EPSILON: float) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

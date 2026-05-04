@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping.prioritizeunplacednodes
+predicate_id: prioritizeunplacednodes
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(unplaced_nodes: List[GraphNode], ranking_scores: Map[GraphNode,Tuple[float,float]], rank_nodes: bool) -> List[GraphNode]"
+informal_desc: Choose candidate traversal order by sorting on heuristic ranking scores when enabled, otherwise keep original order.
+conceptual_summary: ""
+inputs:
+  - name: unplaced_nodes
+    type_desc: List[GraphNode]
+    constraints: Base candidate order.
+  - name: ranking_scores
+    type_desc: Map[GraphNode,Tuple[float,float]]
+    constraints: Used only when rank_nodes is true.
+  - name: rank_nodes
+    type_desc: bool
+    constraints: Gate for ranking behavior.
+outputs:
+  - name: prioritized_unplaced_nodes
+    type_desc: List[GraphNode]
+    constraints: Sorted descending by ranking_scores when rank_nodes=true.
+concept_type: sorting
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Prioritizeunplacednodes
+description: Choose candidate traversal order by sorting on heuristic ranking scores when enabled, otherwise keep original order.
+---
+
+# Prioritizeunplacednodes
+
+> Choose candidate traversal order by sorting on heuristic ranking scores when enabled, otherwise keep original order.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(unplaced_nodes: List[GraphNode], ranking_scores: Map[GraphNode,Tuple[float,float]], rank_nodes: bool) -> List[GraphNode]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

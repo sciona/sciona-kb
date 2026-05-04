@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.initializehmckernelstate
+predicate_id: initializehmckernelstate
+repo: sciona-atoms
+domain: inference
+type_signature: "(target: callable oracle, initial_positions: vector/tensor, step_size: float, n_leapfrog: int) -> tuple[StateModelSpec, HMCState]"
+informal_desc: Construct immutable HMC kernel/state specification from target log-density, initial latent position, and integrator hyperparameters. Includes explicit latent state, cached log-probability/gradient slots, and mass-matrix assumptions.
+conceptual_summary: "Immutable Hamiltonian Transition State Initializer. Builds a fixed transition specification and an initial latent-state record for a deterministic, gradient-informed dynamical sampler. The transform maps a differentiable scalar field oracle, an initial coordinate vector, and integration hyperparameters into a normalized state object with explicit coordinates, deferred momentum storage, and cache slots for scalar-field value and first derivative. It also materializes metric assumptions as immutable metadata so downstream updates use a consistent geometry.. Applications: Initializing trajectory-based inference for inverse-parameter estimation in systems biology ODE/PDE models, Bootstrapping constrained latent-state exploration in robot dynamics calibration with differentiable simulators, Setting up gradient-driven posterior traversal for geophysical tomography parameter fields, Preparing high-dimensional probabilistic state evolution in computational materials microstructure reconstruction"
+inputs:
+  - name: target
+    type_desc: Callable
+    constraints: pure log_prob/gradient-capable density oracle
+  - name: initial_positions
+    type_desc: np.ndarray
+    constraints: finite numeric latent state
+  - name: step_size
+    type_desc: float
+    constraints: step_size > 0
+  - name: n_leapfrog
+    type_desc: int
+    constraints: n_leapfrog >= 1
+outputs:
+  - name: kernel_spec
+    type_desc: StateModelSpec
+    constraints: contains step_size, n_leapfrog, mass_matrix (explicit, immutable)
+  - name: chain_state_0
+    type_desc: HMCState
+    constraints: contains position, logp_current, gradient, momenta placeholder, trace init
+concept_type: log_prob
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Initializehmckernelstate
+description: Construct immutable HMC kernel/state specification from target log-density, initial latent position, and integrator hyperparameters. Includes explicit latent s…
+---
+
+# Initializehmckernelstate
+
+> Construct immutable HMC kernel/state specification from target log-density, initial latent position, and integrator hyperparameters. Includes explicit latent state, cached log-probability/gradient slots, and mass-matrix assumptions.
+
+## Conceptual Summary
+
+Immutable Hamiltonian Transition State Initializer. Builds a fixed transition specification and an initial latent-state record for a deterministic, gradient-informed dynamical sampler. The transform maps a differentiable scalar field oracle, an initial coordinate vector, and integration hyperparameters into a normalized state object with explicit coordinates, deferred momentum storage, and cache slots for scalar-field value and first derivative. It also materializes metric assumptions as immutable metadata so downstream updates use a consistent geometry.. Applications: Initializing trajectory-based inference for inverse-parameter estimation in systems biology ODE/PDE models, Bootstrapping constrained latent-state exploration in robot dynamics calibration with differentiable simulators, Setting up gradient-driven posterior traversal for geophysical tomography parameter fields, Preparing high-dimensional probabilistic state evolution in computational materials microstructure reconstruction
+
+## Type Signature
+
+```
+(target: callable oracle, initial_positions: vector/tensor, step_size: float, n_leapfrog: int) -> tuple[StateModelSpec, HMCState]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

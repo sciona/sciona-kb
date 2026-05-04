@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.compose_pulse_sequence
+predicate_id: compose_pulse_sequence
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(register: Pulser Register, rydberg_pulse: Pulser Pulse, detuning_map: Pulser DetuningMap, dmm_waveform: ConstantWaveform, channel_name: str, dmm_channel_name: str) -> Pulser Sequence"
+informal_desc: Initialises a Pulser Sequence on the mock device, declares and configures the global Rydberg and DMM channels, then appends the Rydberg pulse and DMM detuning waveform to produce the complete, immutable adiabatic pulse schedule.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Compose_pulse_sequence
+description: Initialises a Pulser Sequence on the mock device, declares and configures the global Rydberg and DMM channels, then appends the Rydberg pulse and DMM detuning …
+---
+
+# Compose_pulse_sequence
+
+> Initialises a Pulser Sequence on the mock device, declares and configures the global Rydberg and DMM channels, then appends the Rydberg pulse and DMM detuning waveform to produce the complete, immutable adiabatic pulse schedule.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(register: Pulser Register, rydberg_pulse: Pulser Pulse, detuning_map: Pulser DetuningMap, dmm_waveform: ConstantWaveform, channel_name: str, dmm_channel_name: str) -> Pulser Sequence
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

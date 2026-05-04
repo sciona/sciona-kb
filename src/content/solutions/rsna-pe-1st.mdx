@@ -1,0 +1,63 @@
+---
+cdg_asset_id: solution.kaggle.rsna_pe_1st
+title: RSNA STR Pulmonary Embolism Detection - 1st Place (2020) - Pipeline Template
+description: "This template captures the ordered steps used by RSNA STR Pulmonary Embolism Detection - 1st Place (2020): prepare the data, build task-specific representation…"
+problem_statement: "Multi-task learning / Sequence classification (Medical) solution template for RSNA STR Pulmonary Embolism Detection - 1st Place (2020), modeled as a 5-stage deterministic pipeline: DICOM windowing, Spatial feature extraction, Sequence modeling, Multi-head output, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: RSNA STR Pulmonary Embolism Detection - 1st Place (2020)
+placement: 1st
+year: 2020
+domain: structured_prediction
+paradigm: neural_network
+family: structured_prediction
+tags:
+  - cnn
+  - lstm
+  - efficientnet
+  - multi
+  - learning
+  - sequence
+  - classification
+  - medical
+key_insight: "The load-bearing idea is the pipeline topology: DICOM windowing creates the representation needed by Post-processing logic, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/rsna-str-pulmonary-embolism-detection/discussion/193101
+source_license: null
+---
+
+# RSNA STR Pulmonary Embolism Detection - 1st Place (2020) - Pipeline Template
+
+## Problem
+
+Multi-task learning / Sequence classification (Medical) solution template for RSNA STR Pulmonary Embolism Detection - 1st Place (2020), modeled as a 5-stage deterministic pipeline: DICOM windowing, Spatial feature extraction, Sequence modeling, Multi-head output, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by RSNA STR Pulmonary Embolism Detection - 1st Place (2020): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.rsna_pe_1st" readOnly={true} /> */}
+
+1. **DICOM windowing** -- This stage convert CT scan slices to 3-channel PNGs mapping different medical windows (lung, mediastinal, PE) to RGB channels (pydicom).
+1. **Spatial feature extraction** -- This stage pass every CT slice through a 2D CNN (EfficientNet/ResNeXt) to extract embeddings (PyTorch).
+1. **Sequence modeling** -- This stage pass the ordered sequence of embeddings from a single patient through a Bidirectional LSTM (PyTorch).
+1. **Multi-head output** -- This stage project the LSTM hidden states to 9 distinct classification heads (slice-level PE, study-level severity, etc.).
+1. **Post-processing logic** -- This stage apply rigid competition logic rules to the probabilities to ensure no contradictory predictions (e.g., cannot have severe PE if no PE exists) (numpy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: DICOM windowing creates the representation needed by Post-processing logic, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.rsna_pe_1st" label="Reproduce this solution in Sciona" /> */}

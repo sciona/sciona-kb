@@ -1,0 +1,69 @@
+---
+cdg_asset_id: solution.kaggle.feedback_prize_writing_1st
+title: Feedback Prize — Evaluating Student Writing 1st Place — NLP Span Detection via DeBERTa Token Tagging
+description: Break long essays into overlapping chunks, train a model to label each word as the beginning, inside, or outside of a discourse element, then merge overlapping…
+problem_statement: Token-level B-I-O span detection on long student essays using sliding-window DeBERTa-v3 models with character-to-token offset mapping, text-adapted Weighted Box Fusion for multi-seed span merging, and minimum-length class filtering.
+platform: kaggle
+competition_name: Feedback Prize — Evaluating Student Writing 1st Place — NLP Span Detection via DeBERTa Token Tagging
+placement: ""
+year: 0
+domain: nlp_span_detection
+paradigm: neural_network
+family: nlp_span_detection
+tags:
+  - token_classification_span
+  - bio_tagging
+  - sliding_window_nlp
+  - discourse_element_detection
+  - long_document_ner
+  - deberta_token_tagging
+  - weighted_box_fusion_text
+  - multi_seed_ensemble
+  - character_offset_alignment
+  - long_document_chunking
+  - per_class_length_filtering
+key_insight: "Text-adapted Weighted Box Fusion is the critical ensembling innovation: by treating character-offset spans as 1D bounding boxes and computing IoU as character overlap ratio, it merges multi-seed span predictions into high-confidence consensus spans. This is far more effective than majority voting on token labels because it resolves boundary disagreements smoothly rather than discretely."
+failure_modes:
+  - "Short documents where sliding window creates only one chunk: multi-seed WBF provides no benefit over simple argmax decoding"
+  - "Highly nested or overlapping span annotations: B-I-O tagging cannot represent nested structures, requiring a different formulation (e.g., span enumeration)"
+  - "Extremely long documents (>10K tokens): quadratic cost of pairwise IoU computation in text WBF becomes prohibitive"
+  - "Classes with highly variable span lengths: fixed per-class minimum length thresholds may not generalize across datasets"
+source_url: ""
+source_license: null
+---
+
+# Feedback Prize — Evaluating Student Writing 1st Place — NLP Span Detection via DeBERTa Token Tagging
+
+## Problem
+
+Token-level B-I-O span detection on long student essays using sliding-window DeBERTa-v3 models with character-to-token offset mapping, text-adapted Weighted Box Fusion for multi-seed span merging, and minimum-length class filtering.
+
+## Approach
+
+Break long essays into overlapping chunks, train a model to label each word as the beginning, inside, or outside of a discourse element, then merge overlapping predictions from multiple models and discard unreasonably short spans.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.feedback_prize_writing_1st" readOnly={true} /> */}
+
+1. **Sliding Window Tokenization** -- Break long essays into overlapping pieces small enough for the model to process, using the model's own text splitter.
+1. **Character to Token Offset Mapping** -- Convert the human annotations (which mark character positions) into per-token labels that the model can learn from.
+1. **Sequence Tagging Training** -- Fine-tune a large language model to predict for each word whether it begins, continues, or is outside a discourse element.
+1. **Span Extraction** -- Convert the model's per-word predictions back into contiguous text spans with start and end positions in the original essay.
+1. **Text Weighted Box Fusion** -- Combine predictions from multiple models by merging overlapping spans into a single best span, weighted by each model's confidence.
+1. **Length Constraint Filtering** -- Remove predictions that are unreasonably short for their type, since real discourse elements like thesis statements or evidence spans require a minimum number of words.
+
+## Key Insight
+
+Text-adapted Weighted Box Fusion is the critical ensembling innovation: by treating character-offset spans as 1D bounding boxes and computing IoU as character overlap ratio, it merges multi-seed span predictions into high-confidence consensus spans. This is far more effective than majority voting on token labels because it resolves boundary disagreements smoothly rather than discretely.
+
+## Failure Modes
+
+- Short documents where sliding window creates only one chunk: multi-seed WBF provides no benefit over simple argmax decoding
+- Highly nested or overlapping span annotations: B-I-O tagging cannot represent nested structures, requiring a different formulation (e.g., span enumeration)
+- Extremely long documents (>10K tokens): quadratic cost of pairwise IoU computation in text WBF becomes prohibitive
+- Classes with highly variable span lengths: fixed per-class minimum length thresholds may not generalize across datasets
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.feedback_prize_writing_1st" label="Reproduce this solution in Sciona" /> */}

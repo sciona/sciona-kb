@@ -1,0 +1,71 @@
+---
+cdg_asset_id: solution.kaggle.vsb_power_line_1st
+title: VSB Power Line Fault Detection 1st Place — Signal Processing + Hybrid Model Blend
+description: Detect electrical faults in power lines by cleaning up noisy voltage signals, finding discharge spikes, and combining a tree-based model on spike statistics wi…
+problem_statement: Binary fault detection from high-frequency power line signals using wavelet denoising, peak detection feature engineering, and a weighted blend of LightGBM on handcrafted features with 1D CNN+LSTM on raw denoised signals.
+platform: kaggle
+competition_name: VSB Power Line Fault Detection 1st Place
+placement: ""
+year: 0
+domain: signal_classification
+paradigm: signal_transform
+family: signal_classification
+tags:
+  - fault_detection
+  - power_line_monitoring
+  - wavelet_denoising
+  - peak_detection
+  - hybrid_model_blend
+  - signal_to_matrix
+  - 1d_to_2d_transform
+  - corona_discharge
+  - high_frequency_signal
+  - dwt_thresholding
+  - transient_event_detection
+  - spectrogram_like
+  - domain_feature_engineering
+  - cnn_lstm_hybrid
+key_insight: Transforming 1D high-frequency signals into 2D matrices (spectrogram-like representations) allows image-based deep learning models to detect spatial patterns in the frequency-time domain that 1D models miss. The wavelet denoising is critical because corona discharge events are transient and time-localized — DWT preserves their temporal structure while FFT-based methods would smear them. The hybrid blend of handcrafted peak features with end-to-end neural features captures both known physics and unknown patterns.
+failure_modes:
+  - "Wavelet threshold too aggressive: discharge events are removed along with noise, destroying the signal"
+  - "Signal has no periodic structure: the 1D-to-2D reshape produces a meaningless matrix when there are no repeating cycles to align as rows"
+  - "Class imbalance is extreme and discharge events are very rare: peak detection misses subtle events and the neural model overfits to the majority class"
+source_url: https://www.kaggle.com/c/vsb-power-line-fault-detection/discussion/86619
+source_license: null
+---
+
+# VSB Power Line Fault Detection 1st Place — Signal Processing + Hybrid Model Blend
+
+## Problem
+
+Binary fault detection from high-frequency power line signals using wavelet denoising, peak detection feature engineering, and a weighted blend of LightGBM on handcrafted features with 1D CNN+LSTM on raw denoised signals.
+
+## Approach
+
+Detect electrical faults in power lines by cleaning up noisy voltage signals, finding discharge spikes, and combining a tree-based model on spike statistics with a neural network on the cleaned raw signal.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.vsb_power_line_1st" readOnly={true} /> */}
+
+1. **Wavelet Denoising** -- Clean up the noisy voltage signal by decomposing it into frequency layers and removing the noise, keeping only the meaningful discharge patterns.
+1. **Peak Detection** -- Find the sharp spikes in the cleaned signal that indicate electrical discharge events.
+1. **Peak Feature Extraction** -- Calculate summary statistics about the spikes (how tall, how wide, how many) and overall signal properties to describe each measurement as a set of numbers.
+1. **Signal to Matrix Transform** -- Chop the long signal into equal-length segments and stack them as rows to create a 2D image-like representation.
+1. **Tabular Model** -- Train a tree-based model on the hand-designed spike statistics to predict whether a fault is present.
+1. **Deep Learning Model** -- Train a neural network that reads the cleaned signal directly, using convolutional layers to find local patterns and recurrent layers to understand long-range structure.
+1. **Weighted Blend** -- Combine the tree model and neural network predictions using a weighted average for a more reliable final answer.
+
+## Key Insight
+
+Transforming 1D high-frequency signals into 2D matrices (spectrogram-like representations) allows image-based deep learning models to detect spatial patterns in the frequency-time domain that 1D models miss. The wavelet denoising is critical because corona discharge events are transient and time-localized — DWT preserves their temporal structure while FFT-based methods would smear them. The hybrid blend of handcrafted peak features with end-to-end neural features captures both known physics and unknown patterns.
+
+## Failure Modes
+
+- Wavelet threshold too aggressive: discharge events are removed along with noise, destroying the signal
+- Signal has no periodic structure: the 1D-to-2D reshape produces a meaningless matrix when there are no repeating cycles to align as rows
+- Class imbalance is extreme and discharge events are very rare: peak detection misses subtle events and the neural model overfits to the majority class
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.vsb_power_line_1st" label="Reproduce this solution in Sciona" /> */}

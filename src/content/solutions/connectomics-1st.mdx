@@ -1,0 +1,70 @@
+---
+cdg_asset_id: solution.kaggle.connectomics_1st
+title: Connectomics 1st Place — Graph Inference from Calcium Fluorescence
+description: Figure out which neurons are connected by looking at when they fire together, after removing spurious correlations caused by whole-brain activity bursts, and a…
+problem_statement: Unsupervised neural circuit reconstruction from calcium fluorescence time series via rank-reduced precision matrices with global burst deconfounding and hyperparameter-free threshold ensembling.
+platform: kaggle
+competition_name: Kaggle Connectomics
+placement: 1st
+year: 2014
+domain: graph_inference
+paradigm: graph_signal_processing
+family: graph_inference
+tags:
+  - connectome_inference
+  - calcium_imaging_graph
+  - partial_correlation_network
+  - precision_matrix_graph
+  - multivariate_time_series_graph_inference
+  - global_burst_confound
+  - threshold_ensembling
+  - unsupervised_graph_discovery
+  - dense_time_series
+  - correlated_noise_suppression
+  - hyperparameter_free
+key_insight: Burst deconfounding via nonlinear reweighting (x+1)^(1+1/S) suppresses global activity artifacts before precision matrix estimation. Dense threshold ensembling integrates out the threshold hyperparameter, equivalent to Bayesian model averaging under a uniform prior.
+failure_modes:
+  - "Non-stationary time series where correlation structure changes over time: the single precision matrix averages over regimes"
+  - "Networks with hub nodes that participate in many bursts: reweighting may suppress genuine hub connections along with confounds"
+  - "Very sparse firing (most timesteps are zero for most neurons): covariance estimation is noisy even with threshold ensembling"
+source_url: https://github.com/asutera/kaggle-connectomics
+source_license: BSD-3-Clause
+---
+
+# Connectomics 1st Place — Graph Inference from Calcium Fluorescence
+
+## Problem
+
+Unsupervised neural circuit reconstruction from calcium fluorescence time series via rank-reduced precision matrices with global burst deconfounding and hyperparameter-free threshold ensembling.
+
+## Approach
+
+Figure out which neurons are connected by looking at when they fire together, after removing spurious correlations caused by whole-brain activity bursts, and averaging over many sensitivity settings instead of picking one.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.connectomics_1st" readOnly={true} /> */}
+
+1. **Calcium Lowpass Filter** -- Smooth the raw fluorescence signal to suppress single-frame noise, using several different smoothing windows that will be combined later.
+1. **First Difference** -- Subtract each time step from the previous one to find moments when the signal increases rapidly.
+1. **Fluorescence Hard Threshold** -- Discard small changes and keep only the sharp upward spikes that likely represent actual neural firing events.
+1. **Global Activity Sample Reweighting** -- When many neurons fire at once (a network-wide burst), reduce the influence of those time steps because the co-firing is due to the burst, not direct connections. Amplify time steps where only a few neurons are active.
+1. **PCA Precision Matrix** -- Compute which neurons are partially correlated (connected) by inverting the covariance matrix, using PCA to throw away the noisiest 20% of variation first so the inversion is stable.
+1. **Score Matrix Normalization** -- Remove self-connection scores and rescale everything to a 0-to-1 range.
+1. **Threshold Sweep Ensemble** -- Instead of guessing the best sensitivity setting, try 120 different settings and average all the results, which reliably outperforms picking any single one.
+1. **Temporal Precedence Directivity** -- Detect which direction connections go by looking for a specific pattern: if neuron i fires at time t, neuron j should show a specific-sized increase at time t+1 if i connects to j.
+1. **Weighted Score Combination** -- Blend the main connection-strength scores with a tiny amount of direction information to break ties.
+
+## Key Insight
+
+Burst deconfounding via nonlinear reweighting (x+1)^(1+1/S) suppresses global activity artifacts before precision matrix estimation. Dense threshold ensembling integrates out the threshold hyperparameter, equivalent to Bayesian model averaging under a uniform prior.
+
+## Failure Modes
+
+- Non-stationary time series where correlation structure changes over time: the single precision matrix averages over regimes
+- Networks with hub nodes that participate in many bursts: reweighting may suppress genuine hub connections along with confounds
+- Very sparse firing (most timesteps are zero for most neurons): covariance estimation is noisy even with threshold ensembling
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.connectomics_1st" label="Reproduce this solution in Sciona" /> */}

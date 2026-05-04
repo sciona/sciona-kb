@@ -1,0 +1,52 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.infercontrolfromstaterate
+predicate_id: infercontrolfromstaterate
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(model_spec: ModelSpec, x: StateVector (na::SVector<f64, 3>), _x_dot: StateDerivativeVector (na::SVector<f64, 3>), _t: f64) -> ControlVector (na::SVector<f64, 2>)"
+informal_desc: Map current state and desired state derivative to inferred control via inverse dynamics interface.
+conceptual_summary: ""
+inputs:
+  - name: model_spec
+    type_desc: ModelSpec
+    constraints: Must expose calculate_input(x, x_dot, t).
+  - name: x
+    type_desc: np.ndarray
+    constraints: ndim >= 1
+  - name: _x_dot
+    type_desc: np.ndarray
+    constraints: Desired/observed derivative used for inversion.
+  - name: _t
+    type_desc: float
+    constraints: Interface parameter; currently unused by placeholder.
+outputs:
+  - name: u_inferred
+    type_desc: np.ndarray
+    constraints: Currently unimplemented in source (todo!).
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Infercontrolfromstaterate
+description: Map current state and desired state derivative to inferred control via inverse dynamics interface.
+---
+
+# Infercontrolfromstaterate
+
+> Map current state and desired state derivative to inferred control via inverse dynamics interface.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(model_spec: ModelSpec, x: StateVector (na::SVector<f64, 3>), _x_dot: StateDerivativeVector (na::SVector<f64, 3>), _t: f64) -> ControlVector (na::SVector<f64, 2>)
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

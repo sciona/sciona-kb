@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.nuts_llm.initializenutsstate
+predicate_id: initializenutsstate
+repo: sciona-atoms
+domain: inference
+type_signature: "(target: Callable oracle: position -> log_prob, initial_positions: Array[float], target_accept_p: float, seed: int) -> tuple[StateModelSpec{position, momentum, mass_matrix, trace}, PRNGKey]"
+informal_desc: Build immutable NUTS state from the target log-density, initial position, acceptance target, and explicit RNG key state.
+conceptual_summary: "Deterministic Stochastic-State Constructor. Constructs an immutable initialization record for a gradient-informed stochastic transition process from a pure scalar-field oracle, an initial coordinate vector, a control scalar, and an integer seed. The seed is transformed into an explicit pseudorandom generator state so all randomness is externally threaded and reproducible. The output bundles primary coordinates with auxiliary kinetic/metric and trace containers needed for subsequent state transitions without hidden mutation.. Applications: Initializing reproducible latent-state exploration in high-dimensional inverse problems for medical imaging reconstruction, Bootstrapping stochastic trajectory search for molecular conformation landscapes in computational chemistry, Setting up probabilistic parameter-space traversal for aerodynamic model calibration in aerospace engineering, Creating explicit random-state simulation seeds and immutable transition records for uncertainty quantification in power-grid dynamics"
+inputs:
+  - name: target
+    type_desc: Callable
+    constraints: Pure/stateless likelihood or log-density evaluator
+  - name: initial_positions
+    type_desc: Array[float]
+    constraints: Valid support of target distribution
+  - name: target_accept_p
+    type_desc: float
+    constraints: 0 < target_accept_p < 1
+  - name: seed
+    type_desc: int
+    constraints: Used to derive deterministic PRNGKey/RNG state
+outputs:
+  - name: nuts_state
+    type_desc: object
+    constraints: Immutable state object; no hidden mutation
+  - name: rng_key
+    type_desc: PRNGKey
+    constraints: Explicit stochastic state threaded across calls
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for initializing target log-density state, gradient information, acceptance target, and explicit stochastic state before transition building.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a local state initializer and not a full NUTS transition implementation.
+title: Initializenutsstate
+description: Build immutable NUTS state from the target log-density, initial position, acceptance target, and explicit RNG key state.
+---
+
+# Initializenutsstate
+
+> Build immutable NUTS state from the target log-density, initial position, acceptance target, and explicit RNG key state.
+
+## Conceptual Summary
+
+Deterministic Stochastic-State Constructor. Constructs an immutable initialization record for a gradient-informed stochastic transition process from a pure scalar-field oracle, an initial coordinate vector, a control scalar, and an integer seed. The seed is transformed into an explicit pseudorandom generator state so all randomness is externally threaded and reproducible. The output bundles primary coordinates with auxiliary kinetic/metric and trace containers needed for subsequent state transitions without hidden mutation.. Applications: Initializing reproducible latent-state exploration in high-dimensional inverse problems for medical imaging reconstruction, Bootstrapping stochastic trajectory search for molecular conformation landscapes in computational chemistry, Setting up probabilistic parameter-space traversal for aerodynamic model calibration in aerospace engineering, Creating explicit random-state simulation seeds and immutable transition records for uncertainty quantification in power-grid dynamics
+
+## Type Signature
+
+```
+(target: Callable oracle: position -> log_prob, initial_positions: Array[float], target_accept_p: float, seed: int) -> tuple[StateModelSpec{position, momentum, mass_matrix, trace}, PRNGKey]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.dstl_satellite_features_1st
+title: Dstl Satellite Imagery Feature Detection - 1st Place (2017) - Pipeline Template
+description: "This template captures the ordered steps used by Dstl Satellite Imagery Feature Detection - 1st Place (2017): prepare the data, build task-specific representat…"
+problem_statement: "Geospatial / Polygon generation solution template for Dstl Satellite Imagery Feature Detection - 1st Place (2017), modeled as a 5-stage deterministic pipeline: Vector rasterization, Multi-resolution concatenation, U-Net Segmentation, Conditional Random Fields (CRF), and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Dstl Satellite Imagery Feature Detection - 1st Place (2017)
+placement: ""
+year: 0
+domain: geospatial_segmentation
+paradigm: neural_network
+family: geospatial_segmentation
+tags:
+  - segmentation
+  - geospatial
+  - polygon
+  - generation
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Vector rasterization creates the representation needed by Vectorization, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/dstl-satellite-imagery-feature-detection/discussion/29487
+source_license: null
+---
+
+# Dstl Satellite Imagery Feature Detection - 1st Place (2017) - Pipeline Template
+
+## Problem
+
+Geospatial / Polygon generation solution template for Dstl Satellite Imagery Feature Detection - 1st Place (2017), modeled as a 5-stage deterministic pipeline: Vector rasterization, Multi-resolution concatenation, U-Net Segmentation, Conditional Random Fields (CRF), and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Dstl Satellite Imagery Feature Detection - 1st Place (2017): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.dstl_satellite_features_1st" readOnly={true} /> */}
+
+1. **Vector rasterization** -- This stage convert the provided WKT polygon strings into dense binary masks mapping perfectly to the GeoTIFF coordinates (OpenCV/GDAL).
+1. **Multi-resolution concatenation** -- This stage upsample the 16-band multispectral low-resolution images to match the high-resolution panchromatic images, concatenating them into a unified tensor (scipy).
+1. **U-Net Segmentation** -- This stage train an ensemble of deep U-Nets to predict probability masks for 10 distinct terrain classes (Keras).
+1. **Conditional Random Fields (CRF)** -- This stage apply dense CRFs to the output masks to strictly snap the blurry segmentation predictions to the sharp visible edges of the original image (pydensecrf).
+1. **Vectorization** -- This stage execute contour finding algorithms to trace the CRF masks, applying Douglas-Peucker simplification to output clean multi-polygons (Shapely/OpenCV).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Vector rasterization creates the representation needed by Vectorization, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.dstl_satellite_features_1st" label="Reproduce this solution in Sciona" /> */}

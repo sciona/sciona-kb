@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.physics.astroflow.calculate_tile_channel_height
+predicate_id: calculate_tile_channel_height
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(shared_mem_size: int, block_dim_x: int, total_channels: int) -> int"
+informal_desc: Calculates the number of frequency channels to process in a single tile, based on the simulated shared memory size and the width of the time block.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: astroflow2025
+    citation: Primary AstroFlow paper.
+  - title: repo_astroflow
+    citation: Upstream implementation is mapped to the vendored astroflow repository.
+title: Calculate_tile_channel_height
+description: Calculates the number of frequency channels to process in a single tile, based on the simulated shared memory size and the width of the time block.
+---
+
+# Calculate_tile_channel_height
+
+> Calculates the number of frequency channels to process in a single tile, based on the simulated shared memory size and the width of the time block.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(shared_mem_size: int, block_dim_x: int, total_channels: int) -> int
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

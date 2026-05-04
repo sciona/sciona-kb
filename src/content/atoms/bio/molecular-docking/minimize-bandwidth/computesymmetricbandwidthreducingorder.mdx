@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.computesymmetricbandwidthreducingorder
+predicate_id: computesymmetricbandwidthreducingorder
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(sparse_matrix: CSR sparse matrix) -> 1D integer permutation array"
+informal_desc: Run reverse Cuthill-McKee in symmetric mode on the sparse matrix and materialize the permutation as a NumPy array.
+conceptual_summary: ""
+inputs:
+  - name: sparse_matrix
+    type_desc: object
+    constraints: Represents a symmetric graph structure
+outputs:
+  - name: reordered_matrix
+    type_desc: np.ndarray
+    constraints: Permutation of row/column indices for reduced bandwidth
+concept_type: graph_optimization
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Computesymmetricbandwidthreducingorder
+description: Run reverse Cuthill-McKee in symmetric mode on the sparse matrix and materialize the permutation as a NumPy array.
+---
+
+# Computesymmetricbandwidthreducingorder
+
+> Run reverse Cuthill-McKee in symmetric mode on the sparse matrix and materialize the permutation as a NumPy array.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(sparse_matrix: CSR sparse matrix) -> 1D integer permutation array
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

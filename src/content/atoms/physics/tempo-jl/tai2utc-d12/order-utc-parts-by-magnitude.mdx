@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.physics.tempo_jl.tai2utc_d12.order_utc_parts_by_magnitude
+predicate_id: order_utc_parts_by_magnitude
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(utc1: float, utc2: float) -> tuple[float, float, bool]"
+informal_desc: Determines which of the two UTC Julian date parts has greater absolute magnitude and promotes both to a common numeric type, placing the larger-magnitude part first (u1) and the smaller part second (u2) to maximize floating-point precision in subsequent arithmetic.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: urban2013almanac
+    citation: Broad astronomical time-scale attribution.
+  - title: repo_tempo_jl
+    citation: Primary Tempo.jl software attribution.
+title: Order_utc_parts_by_magnitude
+description: Determines which of the two UTC Julian date parts has greater absolute magnitude and promotes both to a common numeric type, placing the larger-magnitude part …
+---
+
+# Order_utc_parts_by_magnitude
+
+> Determines which of the two UTC Julian date parts has greater absolute magnitude and promotes both to a common numeric type, placing the larger-magnitude part first (u1) and the smaller part second (u2) to maximize floating-point precision in subsequent arithmetic.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(utc1: float, utc2: float) -> tuple[float, float, bool]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

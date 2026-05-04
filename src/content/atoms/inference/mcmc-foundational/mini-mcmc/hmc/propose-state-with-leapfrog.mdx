@@ -1,0 +1,60 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.propose_state_with_leapfrog
+predicate_id: propose_state_with_leapfrog
+repo: sciona-atoms
+domain: inference
+type_signature: "(positions_current: Tensor<B,2>, momentum_0: Tensor<B,2>, grad_summands: Tensor<B,2>, kernel_static: object) -> tuple[Tensor<B,2>, Tensor<B,2>, Tensor<B,1>]"
+informal_desc: Run leapfrog integration from current positions and sampled momenta to obtain proposed state and proposed log-density.
+conceptual_summary: ""
+inputs:
+  - name: positions_current
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+  - name: momentum_0
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+  - name: grad_summands
+    type_desc: Tensor
+    constraints: half-step gradient term needed by integrator state
+  - name: kernel_static
+    type_desc: object
+    constraints: contains leapfrog hyperparameters and target model
+outputs:
+  - name: proposed_positions
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+  - name: proposed_momenta
+    type_desc: Tensor
+    constraints: shape [n_chains, dim]
+  - name: logp_proposed
+    type_desc: Tensor
+    constraints: shape [n_chains]
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Propose_state_with_leapfrog
+description: Run leapfrog integration from current positions and sampled momenta to obtain proposed state and proposed log-density.
+---
+
+# Propose_state_with_leapfrog
+
+> Run leapfrog integration from current positions and sampled momenta to obtain proposed state and proposed log-density.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(positions_current: Tensor<B,2>, momentum_0: Tensor<B,2>, grad_summands: Tensor<B,2>, kernel_static: object) -> tuple[Tensor<B,2>, Tensor<B,2>, Tensor<B,1>]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

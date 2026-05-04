@@ -1,0 +1,39 @@
+---
+interface Segment {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  segments: Segment[];
+}
+
+const { segments } = Astro.props;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: segments.map((s, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: s.label,
+    item: new URL(s.href, Astro.site ?? "https://atlas.sciona.dev").href,
+  })),
+};
+---
+
+<nav aria-label="Breadcrumb" class="text-sm text-atlas-text-muted mb-2">
+  <ol class="flex flex-wrap items-center gap-1">
+    {segments.map((s, i) => (
+      <li class="flex items-center gap-1">
+        {i > 0 && <span class="text-atlas-border">/</span>}
+        {i === segments.length - 1 ? (
+          <span class="text-atlas-text">{s.label}</span>
+        ) : (
+          <a href={s.href} class="hover:text-atlas-accent transition-colors">{s.label}</a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

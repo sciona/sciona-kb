@@ -1,0 +1,62 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.online_filter_codex.filterstateinit
+predicate_id: filterstateinit
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(b: array-like of numerator coefficients, a: array-like of denominator coefficients) -> tuple[normalized numerator coefficient array, normalized denominator coefficient array, initial delay-line state vector, shape (max(len(a),len(b))-1,)]"
+informal_desc: Initializes the IIR/FIR filter by storing numerator (b) and denominator (a) coefficients and bootstrapping the delay-line state vector (zi) to zeros. reset() is an integral part of this initialization stage and can also be re-invoked to flush the delay line between signals.
+conceptual_summary: "RecurrenceKernelStateBootstrap. Accepts two coefficient arrays defining the feedforward and feedback gains of a linear recurrence relation, normalizes them relative to a lead scalar, and allocates a zero-initialized memory buffer whose length equals one less than the maximum order of the recurrence. This buffer encodes the 'history' required by the recurrence at any future evaluation step, and can be flushed back to the zero state to sever dependency on prior inputs, effectively resetting the system to a memoryless condition.. Applications: Control Systems Engineering: Initializing the internal state registers of a discrete-time PID or state-space controller before a simulation episode begins, ensuring the integrator and differentiator accumulators carry no stale history across independent plant trials., Computational Neuroscience: Bootstrapping the synaptic weight-delay buffer of a leaky integrate-and-fire neuron model at the onset of a stimulus epoch, where the recurrence coefficients encode membrane time constants and the state vector holds the membrane potential history over the refractory window., Digital Communications / Signal Chain DSP: Preparing the tap-weight and feedback registers of a decision-feedback equalizer (DFE) or adaptive lattice predictor before processing a new transmission burst, with the reset mechanism providing clean separation between independent data frames., Geophysical Simulation: Initializing the recursive accumulator of an autoregressive earth-layer reflection model (e.g., used in seismic deconvolution), where feedforward and feedback coefficient arrays encode layer impedance contrasts and the state vector must be zeroed between independent shot gathers."
+inputs:
+  - name: b
+    type_desc: np.ndarray
+    constraints: 1-D coefficient array, len >= 1
+    required: true
+    default_value_repr: ""
+  - name: a
+    type_desc: np.ndarray
+    constraints: 1-D coefficient array, len >= 1, a[0] != 0
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: b
+    type_desc: np.ndarray
+    constraints: normalized numerator coefficients
+    required: true
+    default_value_repr: ""
+  - name: a
+    type_desc: np.ndarray
+    constraints: normalized denominator coefficients
+    required: true
+    default_value_repr: ""
+  - name: state
+    type_desc: FilterState
+    constraints: contains b, a, and optional zi
+    required: true
+    default_value_repr: ""
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Filterstateinit
+description: Initializes the IIR/FIR filter by storing numerator (b) and denominator (a) coefficients and bootstrapping the delay-line state vector (zi) to zeros. reset() i…
+---
+
+# Filterstateinit
+
+> Initializes the IIR/FIR filter by storing numerator (b) and denominator (a) coefficients and bootstrapping the delay-line state vector (zi) to zeros. reset() is an integral part of this initialization stage and can also be re-invoked to flush the delay line between signals.
+
+## Conceptual Summary
+
+RecurrenceKernelStateBootstrap. Accepts two coefficient arrays defining the feedforward and feedback gains of a linear recurrence relation, normalizes them relative to a lead scalar, and allocates a zero-initialized memory buffer whose length equals one less than the maximum order of the recurrence. This buffer encodes the 'history' required by the recurrence at any future evaluation step, and can be flushed back to the zero state to sever dependency on prior inputs, effectively resetting the system to a memoryless condition.. Applications: Control Systems Engineering: Initializing the internal state registers of a discrete-time PID or state-space controller before a simulation episode begins, ensuring the integrator and differentiator accumulators carry no stale history across independent plant trials., Computational Neuroscience: Bootstrapping the synaptic weight-delay buffer of a leaky integrate-and-fire neuron model at the onset of a stimulus epoch, where the recurrence coefficients encode membrane time constants and the state vector holds the membrane potential history over the refractory window., Digital Communications / Signal Chain DSP: Preparing the tap-weight and feedback registers of a decision-feedback equalizer (DFE) or adaptive lattice predictor before processing a new transmission burst, with the reset mechanism providing clean separation between independent data frames., Geophysical Simulation: Initializing the recursive accumulator of an autoregressive earth-layer reflection model (e.g., used in seismic deconvolution), where feedforward and feedback coefficient arrays encode layer impedance contrasts and the state vector must be zeroed between independent shot gathers.
+
+## Type Signature
+
+```
+(b: array-like of numerator coefficients, a: array-like of denominator coefficients) -> tuple[normalized numerator coefficient array, normalized denominator coefficient array, initial delay-line state vector, shape (max(len(a),len(b))-1,)]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

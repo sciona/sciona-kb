@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.inference.belief_propagation.loopy_bp.compose_joint_query_distribution
+predicate_id: compose_joint_query_distribution
+repo: sciona-atoms
+domain: inference
+type_signature: "(incoming_messages: List[FactorMessage]) -> FactorMessage"
+informal_desc: Combines all incoming factor->variable messages into a single unnormalized belief factor using joint multiplication.
+conceptual_summary: ""
+inputs:
+  - name: incoming_messages
+    type_desc: List[FactorMessage]
+    constraints: All messages must be over the query variable domain.
+outputs:
+  - name: joint_message
+    type_desc: FactorMessage
+    constraints: Unnormalized combined distribution.
+concept_type: marginal_computation
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: murphy1999loopy
+    citation: Exact loopy belief propagation attribution.
+  - title: repo_belief_propagation
+    citation: Upstream implementation is mapped to the vendored Belief-Propagation repository.
+title: Compose_joint_query_distribution
+description: Combines all incoming factor->variable messages into a single unnormalized belief factor using joint multiplication.
+---
+
+# Compose_joint_query_distribution
+
+> Combines all incoming factor->variable messages into a single unnormalized belief factor using joint multiplication.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(incoming_messages: List[FactorMessage]) -> FactorMessage
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

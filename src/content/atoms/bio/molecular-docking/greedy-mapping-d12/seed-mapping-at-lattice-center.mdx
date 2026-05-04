@@ -1,0 +1,64 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping_d12.seed_mapping_at_lattice_center
+predicate_id: seed_mapping_at_lattice_center
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(problem_context: GreedyMappingContext, starting_node: NodeId, mapping_state_in: MappingState) -> tuple[MappingState, NodeId]"
+informal_desc: Compute the lattice start position from lattice size and return a new mapping state with the starting graph node placed and marked unexpanded.
+conceptual_summary: ""
+inputs:
+  - name: problem_context
+    type_desc: GreedyMappingContext
+    constraints: Must expose lattice with node count.
+    required: true
+    default_value_repr: ""
+  - name: starting_node
+    type_desc: NodeId
+    constraints: Graph node to place first.
+    required: true
+    default_value_repr: ""
+  - name: mapping_state_in
+    type_desc: MappingState
+    constraints: Immutable input state containing mapping, unmapping, unexpanded_nodes, frontier.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: mapping_state_seeded
+    type_desc: MappingState
+    constraints: Same as input state, but with starting_node placed and added to unexpanded_nodes.
+    required: true
+    default_value_repr: ""
+  - name: starting_lattice_node
+    type_desc: NodeId
+    constraints: Computed as center-biased lattice index.
+    required: true
+    default_value_repr: ""
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Seed_mapping_at_lattice_center
+description: Compute the lattice start position from lattice size and return a new mapping state with the starting graph node placed and marked unexpanded.
+---
+
+# Seed_mapping_at_lattice_center
+
+> Compute the lattice start position from lattice size and return a new mapping state with the starting graph node placed and marked unexpanded.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(problem_context: GreedyMappingContext, starting_node: NodeId, mapping_state_in: MappingState) -> tuple[MappingState, NodeId]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

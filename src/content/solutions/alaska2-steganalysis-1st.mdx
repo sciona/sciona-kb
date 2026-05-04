@@ -1,0 +1,70 @@
+---
+cdg_asset_id: solution.kaggle.alaska2_steganalysis_1st
+title: ALASKA2 Image Steganalysis 1st Place — JPEG Forensics via DCT-Aware CNNs (2020)
+description: Detect hidden messages in JPEG photos by extracting the raw compressed data (DCT coefficients and color channels) instead of the normal image pixels, feeding t…
+problem_statement: Steganography detection pipeline that bypasses standard JPEG decompression by directly parsing DCT coefficients and YCbCr channels, stacking them into 6-channel inputs for EfficientNet/MixNet backbones with dihedral TTA and fold ensembling.
+platform: kaggle
+competition_name: ALASKA2 Image Steganalysis 1st Place — JPEG Forensics via DCT-Aware CNNs (2020)
+placement: ""
+year: 0
+domain: image_forensics
+paradigm: neural_network
+family: image_forensics
+tags:
+  - steganalysis
+  - jpeg_forensics
+  - dct_features
+  - image_classification
+  - tta_ensemble
+  - cross_validation_ensemble
+  - frequency_domain_analysis
+  - ycbcr_color_space
+  - jpeg_artifact_preservation
+  - binary_forensics
+  - compression_domain
+  - dihedral_augmentation
+  - multi_backbone_ensemble
+  - steganography_detection
+key_insight: Reading DCT coefficients directly from JPEG files (bypassing standard decompression) preserves the subtle statistical artifacts that steganography introduces in the frequency domain. Standard pixel-space loading through PIL/OpenCV applies dequantization, IDCT, chroma upsampling, and color clipping — each step destroys part of the forensic signal. The dual RGB+YCbCr 6-channel representation gives the network access to both perceptual and compression-domain features.
+failure_modes:
+  - "Non-JPEG inputs: the entire DCT-parsing pipeline is inapplicable to PNG/TIFF/raw formats, producing no useful signal"
+  - "Heavily re-compressed JPEGs: multiple rounds of JPEG compression introduce quantization noise that masks the steganographic signal"
+  - "Very high JPEG quality factors (>98): DCT coefficients are nearly unquantized, reducing the statistical footprint of embedding algorithms"
+source_url: ""
+source_license: null
+---
+
+# ALASKA2 Image Steganalysis 1st Place — JPEG Forensics via DCT-Aware CNNs (2020)
+
+## Problem
+
+Steganography detection pipeline that bypasses standard JPEG decompression by directly parsing DCT coefficients and YCbCr channels, stacking them into 6-channel inputs for EfficientNet/MixNet backbones with dihedral TTA and fold ensembling.
+
+## Approach
+
+Detect hidden messages in JPEG photos by extracting the raw compressed data (DCT coefficients and color channels) instead of the normal image pixels, feeding this richer representation into neural networks, and averaging predictions across image rotations and multiple training runs.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.alaska2_steganalysis_1st" readOnly={true} /> */}
+
+1. **DCT Coefficient Parsing** -- Read the compressed data directly from JPEG files instead of opening them normally, because hidden messages are embedded in the compressed data and would be harder to detect after normal decompression.
+1. **Spatial Decompression** -- Convert the compressed frequency data back into pixel values using a custom method that preserves subtle details that standard image viewers would discard.
+1. **Feature Stacking** -- Combine the pixel colors and the raw color-space channels into a single 6-layer image that gives the neural network more information to detect tampering.
+1. **Model Training** -- Train image classification neural networks to distinguish clean images from images containing hidden messages, using both backbone architectures across multiple training splits.
+1. **TTA Inference** -- Predict on each image in its original orientation plus rotated and flipped versions, then average the predictions to get a more reliable answer.
+1. **Fold Ensembling** -- Average the predictions from all the different models (trained on different data splits and with different architectures) to get a single final prediction per image.
+
+## Key Insight
+
+Reading DCT coefficients directly from JPEG files (bypassing standard decompression) preserves the subtle statistical artifacts that steganography introduces in the frequency domain. Standard pixel-space loading through PIL/OpenCV applies dequantization, IDCT, chroma upsampling, and color clipping — each step destroys part of the forensic signal. The dual RGB+YCbCr 6-channel representation gives the network access to both perceptual and compression-domain features.
+
+## Failure Modes
+
+- Non-JPEG inputs: the entire DCT-parsing pipeline is inapplicable to PNG/TIFF/raw formats, producing no useful signal
+- Heavily re-compressed JPEGs: multiple rounds of JPEG compression introduce quantization noise that masks the steganographic signal
+- Very high JPEG quality factors (>98): DCT coefficients are nearly unquantized, reducing the statistical footprint of embedding algorithms
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.alaska2_steganalysis_1st" label="Reproduce this solution in Sciona" /> */}

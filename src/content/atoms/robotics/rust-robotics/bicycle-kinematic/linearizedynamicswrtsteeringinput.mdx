@@ -1,0 +1,52 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.linearizedynamicswrtsteeringinput
+predicate_id: linearizedynamicswrtsteeringinput
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(model_spec: ModelSpec, u: ControlVector<2>, yaw_plus_sideslip: f64, wheelbase_total: f64) -> Vector<3>"
+informal_desc: Compute the steering-input sensitivity column (df/du1), including sideslip derivative propagation and yaw-rate derivative rational term.
+conceptual_summary: ""
+inputs:
+  - name: model_spec
+    type_desc: ModelSpec
+    constraints: Provides rear-length and wheelbase-related constants.
+  - name: u
+    type_desc: np.ndarray
+    constraints: Requires cos(u[1]) != 0 and finite tan(u[1]).
+  - name: yaw_plus_sideslip
+    type_desc: float
+    constraints: Finite.
+  - name: wheelbase_total
+    type_desc: float
+    constraints: Non-zero.
+outputs:
+  - name: steering_column
+    type_desc: np.ndarray
+    constraints: Ordered as [df0/du1, df1/du1, df2/du1].
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Linearizedynamicswrtsteeringinput
+description: Compute the steering-input sensitivity column (df/du1), including sideslip derivative propagation and yaw-rate derivative rational term.
+---
+
+# Linearizedynamicswrtsteeringinput
+
+> Compute the steering-input sensitivity column (df/du1), including sideslip derivative propagation and yaw-rate derivative rational term.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(model_spec: ModelSpec, u: ControlVector<2>, yaw_plus_sideslip: f64, wheelbase_total: f64) -> Vector<3>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,66 @@
+---
+cdg_asset_id: solution.kaggle.severstal_steel_1st
+title: Severstal Steel Defect Detection 1st Place — Classifier-Gated Segmentation with Area Thresholding
+description: Detect steel defects by first using a classifier to decide if an image has any defect at all, then applying detailed segmentation models only to images likely …
+problem_statement: Multi-label semantic segmentation pipeline using a ResNet classifier to filter negative images, FPN and U-Net segmentation models with EfficientNet backbones on positive images only, two-stage conditional inference routing, and area-based postprocessing to remove spurious small predictions.
+platform: kaggle
+competition_name: Severstal Steel Defect Detection 1st Place — Classifier-Gated Segmentation with Area Thresholding
+placement: ""
+year: 0
+domain: semantic_segmentation
+paradigm: neural_network
+family: semantic_segmentation
+tags:
+  - classifier_gated_segmentation
+  - fpn_unet_ensemble
+  - efficientnet_backbone
+  - conditional_inference
+  - area_thresholding
+  - highly_imbalanced
+  - mostly_negative_images
+  - multi_class_segmentation
+  - industrial_defect_detection
+  - high_resolution_images
+  - manufacturing
+key_insight: "The classifier gate exploits a base-rate asymmetry: when most images are defect-free, segmentation models produce false positives on surface textures and noise that are hard to suppress with pixel-level thresholds alone. By routing known-negative images to an empty mask, the pipeline converts a pixel-level precision problem into a much easier image-level binary classification problem. The area thresholding then handles the residual false positives on positive images, which are predominantly small isolated clusters that real defects never produce."
+failure_modes:
+  - "Classifier recall drop: if the classifier misses defective images (false negatives), those defects are irrecoverably lost — the segmentation model never sees them"
+  - "Tile boundary artifacts: defects spanning tile boundaries may be split into two sub-threshold fragments, both removed by area thresholding"
+  - "Class-specific threshold sensitivity: optimal area and probability thresholds differ significantly across defect types — using a single global threshold degrades performance on minority defect classes"
+source_url: https://www.kaggle.com/c/severstal-steel-defect-detection/discussion/114331
+source_license: null
+---
+
+# Severstal Steel Defect Detection 1st Place — Classifier-Gated Segmentation with Area Thresholding
+
+## Problem
+
+Multi-label semantic segmentation pipeline using a ResNet classifier to filter negative images, FPN and U-Net segmentation models with EfficientNet backbones on positive images only, two-stage conditional inference routing, and area-based postprocessing to remove spurious small predictions.
+
+## Approach
+
+Detect steel defects by first using a classifier to decide if an image has any defect at all, then applying detailed segmentation models only to images likely containing defects, and finally removing tiny predicted regions that are probably noise.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.severstal_steel_1st" readOnly={true} /> */}
+
+1. **Tile Preprocessing** -- Cut large steel images into smaller overlapping patches and apply random flips to create more training examples that fit in GPU memory.
+1. **Classifier Filtering** -- Train a simple yes/no classifier to quickly decide if a steel image has any defect at all. Clean images get an empty output immediately without running the slower segmentation models.
+1. **Segmentation Models** -- Train two types of pixel-level prediction models, both using EfficientNet as a feature extractor, only on images known to contain defects.
+1. **Multistage Inference** -- A two-step decision process: first check if there is any defect, and only if yes, run the detailed segmentation to find exactly where the defects are.
+1. **Postprocessing** -- Clean up the predictions by removing tiny predicted defect regions that are almost certainly noise, and converting probability scores into final yes/no defect masks.
+
+## Key Insight
+
+The classifier gate exploits a base-rate asymmetry: when most images are defect-free, segmentation models produce false positives on surface textures and noise that are hard to suppress with pixel-level thresholds alone. By routing known-negative images to an empty mask, the pipeline converts a pixel-level precision problem into a much easier image-level binary classification problem. The area thresholding then handles the residual false positives on positive images, which are predominantly small isolated clusters that real defects never produce.
+
+## Failure Modes
+
+- Classifier recall drop: if the classifier misses defective images (false negatives), those defects are irrecoverably lost — the segmentation model never sees them
+- Tile boundary artifacts: defects spanning tile boundaries may be split into two sub-threshold fragments, both removed by area thresholding
+- Class-specific threshold sensitivity: optimal area and probability thresholds differ significantly across defect types — using a single global threshold degrades performance on minority defect classes
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.severstal_steel_1st" label="Reproduce this solution in Sciona" /> */}

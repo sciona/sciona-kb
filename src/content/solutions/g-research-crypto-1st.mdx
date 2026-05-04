@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.g_research_crypto_1st
+title: G-Research Crypto Forecasting - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by G-Research Crypto Forecasting - 1st Place (2022): prepare the data, build task-specific representations, train…"
+problem_statement: "Financial Time Series / Multi-asset regression solution template for G-Research Crypto Forecasting - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Data alignment, Cross-asset features, Target neutralization, Group K-Fold training, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: G-Research Crypto Forecasting - 1st Place (2022)
+placement: 1st
+year: 2022
+domain: time_series_classification
+paradigm: optimization
+family: time_series_classification
+tags:
+  - lightgbm
+  - financial
+  - series
+  - multi
+  - asset
+  - regression
+key_insight: "The load-bearing idea is the pipeline topology: Data alignment creates the representation needed by Post-processing, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/323380
+source_license: null
+---
+
+# G-Research Crypto Forecasting - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+Financial Time Series / Multi-asset regression solution template for G-Research Crypto Forecasting - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Data alignment, Cross-asset features, Target neutralization, Group K-Fold training, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by G-Research Crypto Forecasting - 1st Place (2022): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.g_research_crypto_1st" readOnly={true} /> */}
+
+1. **Data alignment** -- This stage join the 14 different crypto assets along the exact timestamp index, imputing missing minutes with forward-fill (pandas).
+1. **Cross-asset features** -- This stage compute the ratio of every asset's volume/price relative to Bitcoin to capture broad market momentum (pandas).
+1. **Target neutralization** -- This stage orthogonalize the training target against the general market movement so the model learns relative performance, not market direction (scipy/numpy).
+1. **Group K-Fold training** -- This stage split data by time chunks and train LightGBM models independently per asset, plus one unified model across all assets.
+1. **Post-processing** -- This stage apply the reverse mathematical transformation to un-neutralize the predictions before final submission.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Data alignment creates the representation needed by Post-processing, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.g_research_crypto_1st" label="Reproduce this solution in Sciona" /> */}

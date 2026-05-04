@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.robotics.pronto.backlash_filter.update_alpha_parameter
+predicate_id: update_alpha_parameter
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(state_in: BacklashFilterState, alpha_in: float) -> BacklashFilterState"
+informal_desc: Produce a new filter state with an updated alpha parameter.
+conceptual_summary: "Immutable Scalar Parameter Replacement. Constructs a new composite state object by copying all components from an input state and substituting exactly one designated scalar coefficient with a provided finite value. The transform is a single-step deterministic state transition that preserves structural identity and all non-target fields. No numerical propagation, re-estimation, or iterative optimization is performed.. Applications: Control systems: update a gain coefficient in a controller configuration snapshot while preserving all other tuning parameters, Machine learning infrastructure: replace one regularization or smoothing hyperparameter in a model configuration object without retraining, Computational physics: modify a single simulation constant in an experiment state descriptor for parameter sweep runs, Signal processing pipelines: swap one attenuation/weight coefficient in a processing-state struct while keeping all buffers and metadata fixed"
+inputs:
+  - name: state_in
+    type_desc: BacklashFilterState
+    constraints: Immutable input state.
+  - name: alpha_in
+    type_desc: float
+    constraints: Finite scalar.
+outputs:
+  - name: state_out
+    type_desc: BacklashFilterState
+    constraints: Same as state_in, except alpha_ = alpha_in.
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Update_alpha_parameter
+description: Produce a new filter state with an updated alpha parameter.
+---
+
+# Update_alpha_parameter
+
+> Produce a new filter state with an updated alpha parameter.
+
+## Conceptual Summary
+
+Immutable Scalar Parameter Replacement. Constructs a new composite state object by copying all components from an input state and substituting exactly one designated scalar coefficient with a provided finite value. The transform is a single-step deterministic state transition that preserves structural identity and all non-target fields. No numerical propagation, re-estimation, or iterative optimization is performed.. Applications: Control systems: update a gain coefficient in a controller configuration snapshot while preserving all other tuning parameters, Machine learning infrastructure: replace one regularization or smoothing hyperparameter in a model configuration object without retraining, Computational physics: modify a single simulation constant in an experiment state descriptor for parameter sweep runs, Signal processing pipelines: swap one attenuation/weight coefficient in a processing-state struct while keeping all buffers and metadata fixed
+
+## Type Signature
+
+```
+(state_in: BacklashFilterState, alpha_in: float) -> BacklashFilterState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

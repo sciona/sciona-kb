@@ -1,0 +1,70 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.trajectory.initialize_nuts_state
+predicate_id: initialize_nuts_state
+repo: sciona-atoms
+domain: inference
+type_signature: "(z0: PhasePoint, h: Hamiltonian, τ: Trajectory, rng: AbstractRNG) -> tuple[Real, BinaryTree, AbstractTrajectorySampler, Termination, PhasePoint]"
+informal_desc: Initializes the state for a NUTS transition, including the initial energy, the root of the trajectory tree, the trajectory sampler, and termination criteria.
+conceptual_summary: ""
+inputs:
+  - name: z0
+    type_desc: PhasePoint
+    constraints: Initial point in phase space.
+  - name: h
+    type_desc: Hamiltonian
+    constraints: Defines the system's energy.
+  - name: τ
+    type_desc: Trajectory
+    constraints: Contains integrator and termination criterion.
+  - name: rng
+    type_desc: AbstractRNG
+    constraints: Random number generator.
+outputs:
+  - name: H0
+    type_desc: Real
+    constraints: Initial Hamiltonian energy.
+  - name: initial_tree
+    type_desc: BinaryTree
+    constraints: The initial state of the trajectory tree.
+  - name: initial_sampler
+    type_desc: AbstractTrajectorySampler
+    constraints: The initial state of the trajectory sampler.
+  - name: initial_termination
+    type_desc: Termination
+    constraints: Initial termination status.
+  - name: initial_zcand
+    type_desc: PhasePoint
+    constraints: Initial candidate state.
+concept_type: prior_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for doubling trajectory trees and No-U-Turn termination.
+  - title: advancedhmc2020
+    citation: Package paper for AdvancedHMC.jl trajectory construction.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper returns compact NumPy leaves rather than Julia BinaryTree objects.
+  - title: neal2011hmc
+    citation: Canonical HMC reference for Hamiltonian dynamics and Metropolis-style energy diagnostics used by NUTS.
+title: Initialize_nuts_state
+description: Initializes the state for a NUTS transition, including the initial energy, the root of the trajectory tree, the trajectory sampler, and termination criteria.
+---
+
+# Initialize_nuts_state
+
+> Initializes the state for a NUTS transition, including the initial energy, the root of the trajectory tree, the trajectory sampler, and termination criteria.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(z0: PhasePoint, h: Hamiltonian, τ: Trajectory, rng: AbstractRNG) -> tuple[Real, BinaryTree, AbstractTrajectorySampler, Termination, PhasePoint]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

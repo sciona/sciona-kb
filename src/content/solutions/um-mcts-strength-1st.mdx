@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.um_mcts_strength_1st
+title: UM Game Playing Strength of MCTS - 1st Place (2024) - Pipeline Template
+description: "This template captures the ordered steps used by UM Game Playing Strength of MCTS - 1st Place (2024): prepare the data, build task-specific representations, tr…"
+problem_statement: "Tabular regression solution template for UM Game Playing Strength of MCTS - 1st Place (2024), modeled as a 6-stage deterministic pipeline: Feature Augmentation, Target Smoothing, Quantile Regression Training (Lower), Quantile Regression Training (Upper), and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: UM Game Playing Strength of MCTS - 1st Place (2024)
+placement: 1st
+year: 2024
+domain: tabular_regression
+paradigm: loss_function
+family: tabular_regression
+tags:
+  - lightgbm
+  - xgboost
+  - quantile_loss
+  - tabular
+  - regression
+key_insight: "The load-bearing idea is the pipeline topology: Feature Augmentation creates the representation needed by 8/0.2 weighting schema (numpy)., so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/writeups/james-day-1st-place-solution
+source_license: null
+---
+
+# UM Game Playing Strength of MCTS - 1st Place (2024) - Pipeline Template
+
+## Problem
+
+Tabular regression solution template for UM Game Playing Strength of MCTS - 1st Place (2024), modeled as a 6-stage deterministic pipeline: Feature Augmentation, Target Smoothing, Quantile Regression Training (Lower), Quantile Regression Training (Upper), and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by UM Game Playing Strength of MCTS - 1st Place (2024): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.um_mcts_strength_1st" readOnly={true} /> */}
+
+1. **Feature Augmentation** -- This stage recompute all non-deterministic search tree features 10 distinct times and sample directly from non-held-out runs. This topological stage intentionally injects structural noise into the training rows to combat overfitting (pandas, numpy).
+1. **Target Smoothing** -- This stage recompute the competition's target labels 5 times to estimate a significantly cleaner, lower-variance "real" target value.
+1. **Quantile Regression Training (Lower)** -- This stage train a regressor explicitly targeted toward the negative (-1) direction utilizing a strict quantile loss function (alpha=0.2) (lightgbm or xgboost).
+1. **Quantile Regression Training (Upper)** -- This stage train an independent regressor targeted toward the positive (+1) direction using an inverse quantile loss (alpha=0.8).
+1. **Directional Ensembling** -- This stage blend the initial negative predictions heavily with the alpha=0.2 model and positive predictions with the alpha=0.8 model using a fixed.
+1. **8/0.2 weighting schema (numpy).** -- This stage 8/0.2 weighting schema (numpy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Feature Augmentation creates the representation needed by 8/0.2 weighting schema (numpy)., so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.um_mcts_strength_1st" label="Reproduce this solution in Sciona" /> */}

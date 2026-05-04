@@ -1,0 +1,91 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.svm_proc.majority_rule
+predicate_id: majority_rule
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(labels: Any, random: Any) -> Any"
+informal_desc: |-
+  Determine the most frequent class label.
+
+  Parameters
+  ----------
+  labels : array, list
+      List of clas labels.
+  random : bool, optional
+      If True, will choose randomly in case of tied classes, otherwise the
+      first element is chosen.
+
+  Returns
+  -------
+      decision : object
+          Consensus decision.
+      count : int
+          Number of elements of the consensus decision.
+conceptual_summary: ""
+inputs:
+  - name: labels
+    type_desc: NDArray | Sequence[object]
+    constraints: valid NDArray | Sequence[object]
+    required: true
+    default_value_repr: ""
+  - name: random
+    type_desc: bool
+    constraints: valid bool
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: result
+    type_desc: tuple[object, object]
+    constraints: valid tuple[object, object]
+    required: true
+    default_value_repr: ""
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Majority_rule
+description: |-
+  Determine the most frequent class label.
+
+  Parameters
+  ----------
+  labels : array, list
+      List of clas labels.
+  random : bool, optional
+      If True, will choose …
+---
+
+# Majority_rule
+
+> Determine the most frequent class label.
+
+Parameters
+----------
+labels : array, list
+    List of clas labels.
+random : bool, optional
+    If True, will choose randomly in case of tied classes, otherwise the
+    first element is chosen.
+
+Returns
+-------
+    decision : object
+        Consensus decision.
+    count : int
+        Number of elements of the consensus decision.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(labels: Any, random: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.physics.tempo_jl.tai2utc_d12.restore_original_split_order_for_tai
+predicate_id: restore_original_split_order_for_tai
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(u1: float, a2: float, big1: bool) -> tuple[float, float]"
+informal_desc: "Promotes u1 and a2 to a common type and restores the original caller-specified split order: if the first input utc1 was the larger part (big1=true), tai1=u1 and tai2=a2; otherwise tai1=a2 and tai2=u1."
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: urban2013almanac
+    citation: Broad astronomical time-scale attribution.
+  - title: repo_tempo_jl
+    citation: Primary Tempo.jl software attribution.
+title: Restore_original_split_order_for_tai
+description: "Promotes u1 and a2 to a common type and restores the original caller-specified split order: if the first input utc1 was the larger part (big1=true), tai1=u1 an…"
+---
+
+# Restore_original_split_order_for_tai
+
+> Promotes u1 and a2 to a common type and restores the original caller-specified split order: if the first input utc1 was the larger part (big1=true), tai1=u1 and tai2=a2; otherwise tai1=a2 and tai2=u1.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(u1: float, a2: float, big1: bool) -> tuple[float, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.enforcethresholdsparsity
+predicate_id: enforcethresholdsparsity
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mat: 2D numeric matrix, threshold: numeric scalar) -> 2D numeric matrix"
+informal_desc: Create a thresholded copy of the input matrix where all entries below the threshold are set to zero, preserving the original input matrix.
+conceptual_summary: ""
+inputs:
+  - name: mat
+    type_desc: np.ndarray
+    constraints: Square, symmetric expected by downstream ordering step
+  - name: threshold
+    type_desc: float
+    constraints: Values strictly below this are zeroed
+outputs:
+  - name: thresholded_matrix
+    type_desc: np.ndarray
+    constraints: Same shape as mat; entries < threshold replaced with 0
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Enforcethresholdsparsity
+description: Create a thresholded copy of the input matrix where all entries below the threshold are set to zero, preserving the original input matrix.
+---
+
+# Enforcethresholdsparsity
+
+> Create a thresholded copy of the input matrix where all entries below the threshold are set to zero, preserving the original input matrix.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mat: 2D numeric matrix, threshold: numeric scalar) -> 2D numeric matrix
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,53 @@
+---
+fqdn: sciona.atoms.signal_processing.e2e_ppg.reconstruction.generate_noise_candidate_patch
+predicate_id: generate_noise_candidate_patch
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(generator_input: torch.FloatTensor, generator: callable/model, device: str|torch.device) -> np.ndarray"
+informal_desc: Run generator on prepared batch and extract one reconstructed candidate patch.
+conceptual_summary: ""
+inputs:
+  - name: generator_input
+    type_desc: Tensor
+    constraints: batched input tensor
+  - name: generator
+    type_desc: Callable
+    constraints: returns (rec_test, aux)
+  - name: device
+    type_desc: str
+    constraints: valid compute device
+outputs:
+  - name: noise_candidate
+    type_desc: np.ndarray
+    constraints: 1D generated patch from first batch item
+concept_type: probabilistic_oracle
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: wang2022ppg
+    citation: Exact E2E-PPG reconstruction attribution.
+  - title: feli2023pipeline
+    citation: Primary E2E-PPG pipeline paper.
+  - title: repo_e2e_ppg
+    citation: Upstream implementation is mapped to the vendored E2E-PPG repository.
+title: Generate_noise_candidate_patch
+description: Run generator on prepared batch and extract one reconstructed candidate patch.
+---
+
+# Generate_noise_candidate_patch
+
+> Run generator on prepared batch and extract one reconstructed candidate patch.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(generator_input: torch.FloatTensor, generator: callable/model, device: str|torch.device) -> np.ndarray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

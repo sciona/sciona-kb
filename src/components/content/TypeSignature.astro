@@ -1,0 +1,11 @@
+---
+interface Props {
+  signature: string;
+}
+
+const { signature } = Astro.props;
+---
+
+<div class="bg-atlas-surface rounded-lg border border-atlas-border p-4 font-mono text-sm overflow-x-auto">
+  <code class="text-atlas-accent whitespace-pre-wrap break-all">{signature}</code>
+</div>

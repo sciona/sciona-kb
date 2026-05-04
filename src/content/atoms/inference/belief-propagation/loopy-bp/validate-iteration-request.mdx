@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.inference.belief_propagation.loopy_bp.validate_iteration_request
+predicate_id: validate_iteration_request
+repo: sciona-atoms
+domain: inference
+type_signature: "(state_in: BPStateModelSpec{pgm, msg, msg_new, t}, num_iter: int) -> int"
+informal_desc: Checks that the requested iteration count is not behind the current state (`state_in.t <= num_iter`) and emits the validated target iteration.
+conceptual_summary: ""
+inputs:
+  - name: state_in
+    type_desc: object
+    constraints: Must contain current iteration counter `t`.
+  - name: num_iter
+    type_desc: int
+    constraints: Requested iteration index.
+outputs:
+  - name: target_iter
+    type_desc: int
+    constraints: Defined only when `state_in.t <= num_iter`; otherwise this step yields an invalid-request error.
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: murphy1999loopy
+    citation: Exact loopy belief propagation attribution.
+  - title: repo_belief_propagation
+    citation: Upstream implementation is mapped to the vendored Belief-Propagation repository.
+title: Validate_iteration_request
+description: Checks that the requested iteration count is not behind the current state (`state_in.t <= num_iter`) and emits the validated target iteration.
+---
+
+# Validate_iteration_request
+
+> Checks that the requested iteration count is not behind the current state (`state_in.t &lt;= num_iter`) and emits the validated target iteration.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(state_in: BPStateModelSpec{pgm, msg, msg_new, t}, num_iter: int) -> int
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

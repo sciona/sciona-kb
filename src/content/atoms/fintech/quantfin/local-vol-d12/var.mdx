@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.fintech.quantfin.local_vol_d12.var
+predicate_id: var
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(s: Any, t: Any, t': Any, v: Any, vs: Any) -> Any"
+informal_desc: ""
+conceptual_summary: ""
+inputs:
+  - name: s
+    type_desc: float
+    constraints: positive strike
+  - name: t
+    type_desc: float
+    constraints: non-negative time
+  - name: t_prime
+    type_desc: float
+    constraints: non-negative time-from-zero
+  - name: v
+    type_desc: float
+    constraints: implied volatility
+  - name: vs
+    type_desc: Mapping[str, float | complex | str | bool]
+    constraints: volatility-surface context
+outputs:
+  - name: variance
+    type_desc: float
+    constraints: non-negative scalar
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: gatheral2006
+    citation: Local-volatility / vol-surface attribution.
+  - title: repo_quantfin
+    citation: Upstream implementation is mapped to the vendored quantfin repository.
+title: Var
+description: ""
+---
+
+# Var
+
+> 
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(s: Any, t: Any, t': Any, v: Any, vs: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

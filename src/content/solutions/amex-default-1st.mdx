@@ -1,0 +1,63 @@
+---
+cdg_asset_id: solution.kaggle.amex_default_1st
+title: American Express - Default Prediction - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by American Express - Default Prediction - 1st Place (2022): prepare the data, build task-specific representation…"
+problem_statement: "Tabular classification (Panel data / Time series) solution template for American Express - Default Prediction - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Memory optimization, Time series aggregation, Difference features, Model training, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: American Express - Default Prediction - 1st Place (2022)
+placement: 1st
+year: 2022
+domain: time_series_classification
+paradigm: optimization
+family: time_series_classification
+tags:
+  - lightgbm
+  - xgboost
+  - catboost
+  - rag
+  - tabular
+  - classification
+  - panel
+  - series
+key_insight: "The load-bearing idea is the pipeline topology: Memory optimization creates the representation needed by Blending, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/amex-default-prediction/discussion/349780
+source_license: null
+---
+
+# American Express - Default Prediction - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+Tabular classification (Panel data / Time series) solution template for American Express - Default Prediction - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Memory optimization, Time series aggregation, Difference features, Model training, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by American Express - Default Prediction - 1st Place (2022): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.amex_default_1st" readOnly={true} /> */}
+
+1. **Memory optimization** -- This stage downcast float64 data to float16 and int8 formats to handle massive data size (pandas/numpy).
+1. **Time series aggregation** -- This stage group customer statement histories to calculate mean, std, min, max, and last-value features per column (pandas).
+1. **Difference features** -- This stage calculate the delta between the last statement and the second-to-last statement to capture momentum (pandas).
+1. **Model training** -- This stage train LightGBM, XGBoost, and CatBoost models on the flattened 1000+ feature array.
+1. **Blending** -- This stage compute a weighted rank average of predictions across the tree-based models (scipy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Memory optimization creates the representation needed by Blending, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.amex_default_1st" label="Reproduce this solution in Sciona" /> */}

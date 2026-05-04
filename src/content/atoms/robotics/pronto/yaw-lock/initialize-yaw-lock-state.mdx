@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.robotics.pronto.yaw_lock.initialize_yaw_lock_state
+predicate_id: initialize_yaw_lock_state
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: () -> YawLockState
+informal_desc: Create the initial immutable YawLockState container for all persistent fields (parameters, standing flag, joint state, standing links).
+conceptual_summary: "Deterministic Immutable State Seed Constructor. This operation performs a zero-argument construction that maps an empty input set to a fully specified persistent state container. It allocates a schema-complete record containing initialized numeric parameters, boolean mode indicators, identifier slots, and paired structural references. The output is immutable, providing a reproducible initial condition for subsequent state-transition operations.. Applications: Initializing a distributed-systems replica metadata state before consensus-driven updates., Creating the baseline latent-state object for a computational biology sequence-tracking pipeline prior to iterative inference., Seeding a digital-twin simulation entity with immutable starting parameters and paired boundary constraints., Bootstrapping a closed-loop control module in industrial automation with a reproducible initial state vector."
+inputs:
+  - name: config
+    type_desc: object
+    constraints: x is not None
+outputs:
+  - name: yaw_lock_state
+    type_desc: YawLockState
+    constraints: "Deterministic persistent state object with fields: correction_period, yaw_slip_detect, yaw_slip_threshold_degrees, yaw_slip_disable_period, is_robot_standing, joint_name, joint_position, joint_angles_init, left_standing_link, right_standing_link."
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Initialize_yaw_lock_state
+description: Create the initial immutable YawLockState container for all persistent fields (parameters, standing flag, joint state, standing links).
+---
+
+# Initialize_yaw_lock_state
+
+> Create the initial immutable YawLockState container for all persistent fields (parameters, standing flag, joint state, standing links).
+
+## Conceptual Summary
+
+Deterministic Immutable State Seed Constructor. This operation performs a zero-argument construction that maps an empty input set to a fully specified persistent state container. It allocates a schema-complete record containing initialized numeric parameters, boolean mode indicators, identifier slots, and paired structural references. The output is immutable, providing a reproducible initial condition for subsequent state-transition operations.. Applications: Initializing a distributed-systems replica metadata state before consensus-driven updates., Creating the baseline latent-state object for a computational biology sequence-tracking pipeline prior to iterative inference., Seeding a digital-twin simulation entity with immutable starting parameters and paired boundary constraints., Bootstrapping a closed-loop control module in industrial automation with a reproducible initial state vector.
+
+## Type Signature
+
+```
+() -> YawLockState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

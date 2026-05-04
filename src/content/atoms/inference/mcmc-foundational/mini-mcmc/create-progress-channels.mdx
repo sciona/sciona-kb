@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.create_progress_channels
+predicate_id: create_progress_channels
+repo: sciona-atoms
+domain: inference
+type_signature: "(num_chains: int) -> tuple[Vec<Sender<ChainStats>>, Vec<Receiver<ChainStats>>]"
+informal_desc: Initializes sender/receiver pairs for each MCMC chain to communicate progress statistics.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS tree-building reference for recursive subtree endpoints, slice-valid candidate counts, U-turn continuation checks, divergence flags, and acceptance accumulation.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local callable returns compact NumPy trajectory bookkeeping rather than only a rightmost position.
+title: Create_progress_channels
+description: Initializes sender/receiver pairs for each MCMC chain to communicate progress statistics.
+---
+
+# Create_progress_channels
+
+> Initializes sender/receiver pairs for each MCMC chain to communicate progress statistics.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(num_chains: int) -> tuple[Vec<Sender<ChainStats>>, Vec<Receiver<ChainStats>>]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.physics.jFOF.topological_loss_computation
+predicate_id: topological_loss_computation
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(key: jax.random.PRNGKey, logits: Array, pos32: Array, nbr_idx: Array, b: Array, max_iters: int, tau: float) -> Scalar"
+informal_desc: Computes a topological loss using logits, positional data, and neighborhood indices. The process is stochastic and controlled by a random key.
+conceptual_summary: "spatial_consistency_loss. Computes a scalar discrepancy score between a set of categorical assignments and their corresponding locations in a geometric space. The function iteratively compares the similarity of categorical data (represented by log-probability vectors) against the spatial proximity defined by a neighborhood graph, producing a loss value that is high when spatially close elements have dissimilar categories.. Applications: In computational biology, to enforce that amino acids in a predicted protein structure have physically plausible spatial arrangements based on their sequential neighbors., In computer vision, to regularize an image segmentation model by ensuring that pixels assigned to the same object class are spatially contiguous., In materials science, to simulate crystallization by penalizing atomic configurations where the local arrangement of atom types violates the expected lattice structure., In natural language processing, ensuring that documents with similar topic models are placed near each other in a low-dimensional visualization embedding."
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: huchra1982fof
+    citation: Friends-of-friends clustering attribution.
+  - title: repo_jfof
+    citation: Upstream implementation is mapped to the vendored jFOF repository.
+title: Topological_loss_computation
+description: Computes a topological loss using logits, positional data, and neighborhood indices. The process is stochastic and controlled by a random key.
+---
+
+# Topological_loss_computation
+
+> Computes a topological loss using logits, positional data, and neighborhood indices. The process is stochastic and controlled by a random key.
+
+## Conceptual Summary
+
+spatial_consistency_loss. Computes a scalar discrepancy score between a set of categorical assignments and their corresponding locations in a geometric space. The function iteratively compares the similarity of categorical data (represented by log-probability vectors) against the spatial proximity defined by a neighborhood graph, producing a loss value that is high when spatially close elements have dissimilar categories.. Applications: In computational biology, to enforce that amino acids in a predicted protein structure have physically plausible spatial arrangements based on their sequential neighbors., In computer vision, to regularize an image segmentation model by ensuring that pixels assigned to the same object class are spatially contiguous., In materials science, to simulate crystallization by penalizing atomic configurations where the local arrangement of atom types violates the expected lattice structure., In natural language processing, ensuring that documents with similar topic models are placed near each other in a low-dimensional visualization embedding.
+
+## Type Signature
+
+```
+(key: jax.random.PRNGKey, logits: Array, pos32: Array, nbr_idx: Array, b: Array, max_iters: int, tau: float) -> Scalar
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

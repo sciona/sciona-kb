@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.physics.tempo_jl.tai2utc_d12.spread_leap_second_into_fractional_day
+predicate_id: spread_leap_second_into_fractional_day
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(fd: float, delta_t0: float, delta_t24: float) -> float"
+informal_desc: Detects a leap-second jump by comparing today's and tomorrow's TAI-UTC offsets and distributes any difference uniformly across the preceding day by adjusting the fractional day fd. This smears the leap second into the 86400 seconds of the current day.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: urban2013almanac
+    citation: Broad astronomical time-scale attribution.
+  - title: repo_tempo_jl
+    citation: Primary Tempo.jl software attribution.
+title: Spread_leap_second_into_fractional_day
+description: Detects a leap-second jump by comparing today's and tomorrow's TAI-UTC offsets and distributes any difference uniformly across the preceding day by adjusting t…
+---
+
+# Spread_leap_second_into_fractional_day
+
+> Detects a leap-second jump by comparing today's and tomorrow's TAI-UTC offsets and distributes any difference uniformly across the preceding day by adjusting the fractional day fd. This smears the leap second into the 86400 seconds of the current day.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(fd: float, delta_t0: float, delta_t24: float) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

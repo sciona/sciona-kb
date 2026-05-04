@@ -1,0 +1,68 @@
+---
+cdg_asset_id: solution.kaggle.lyft_motion_1st
+title: Lyft Motion Prediction 1st Place — Multi-Modal Trajectory Forecasting from BEV Rasterization
+description: Predict where nearby cars will drive by converting road maps and vehicle histories into overhead images, feeding them through image-recognition neural networks…
+problem_statement: Multi-modal trajectory prediction from bird's-eye-view rasterized scene representations using EfficientNet/ResNet backbones with a custom 3-mode prediction head trained via negative log-likelihood loss.
+platform: kaggle
+competition_name: Lyft Motion Prediction 1st Place — Multi-Modal Trajectory Forecasting from BEV Rasterization
+placement: ""
+year: 0
+domain: trajectory_prediction
+paradigm: neural_network
+family: trajectory_prediction
+tags:
+  - motion_prediction
+  - autonomous_driving
+  - bev_rasterization
+  - multimodal_trajectory
+  - ego_vehicle_forecasting
+  - heterogeneous_input_fusion
+  - multi_mode_output
+  - nll_loss
+  - winner_take_all_loss
+  - channel_stacking
+  - vector_to_raster
+  - imagenet_transfer
+key_insight: BEV rasterization converts heterogeneous inputs (vector maps, agent histories, ego pose) into a uniform image tensor where standard CNNs work out of the box. The multi-modal NLL loss handles the inherent multi-modality of future trajectories — the car could turn left OR right — by only penalizing the closest mode, preventing the mode-averaging problem that plagues single-output regression.
+failure_modes:
+  - "Sparse scenes with few agents: the rasterized image is mostly empty, wasting CNN capacity on blank pixels"
+  - "Very long prediction horizons (>10s): BEV rasterization captures a fixed spatial window; distant future states may fall outside the rasterized region"
+  - "High-speed scenarios where small angular errors compound: the 3-mode output may not cover the true trajectory if modes are too spread out or too clustered"
+source_url: ""
+source_license: null
+---
+
+# Lyft Motion Prediction 1st Place — Multi-Modal Trajectory Forecasting from BEV Rasterization
+
+## Problem
+
+Multi-modal trajectory prediction from bird's-eye-view rasterized scene representations using EfficientNet/ResNet backbones with a custom 3-mode prediction head trained via negative log-likelihood loss.
+
+## Approach
+
+Predict where nearby cars will drive by converting road maps and vehicle histories into overhead images, feeding them through image-recognition neural networks that output three possible future paths with confidence scores.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.lyft_motion_1st" readOnly={true} /> */}
+
+1. **BEV Rasterization** -- Draw an overhead picture of the road, nearby cars, and the ego vehicle's past path, encoding each element as a separate color channel in an image.
+1. **Temporal Stacking** -- Layer overhead images from several consecutive time steps on top of each other so the network can see how things have been moving.
+1. **CNN Backbone** -- Run the layered overhead image through a powerful image-recognition network to extract meaningful spatial features.
+1. **Multimodal Prediction Head** -- A final layer that produces three candidate future paths for the vehicle along with how likely each path is.
+1. **Multimodal NLL Loss** -- A training objective that rewards the model for making at least one of its three predictions close to reality and for being confident about the right one.
+1. **Trajectory Ensembling** -- Combine predictions from multiple trained models by averaging their best guesses to get a more reliable final prediction.
+
+## Key Insight
+
+BEV rasterization converts heterogeneous inputs (vector maps, agent histories, ego pose) into a uniform image tensor where standard CNNs work out of the box. The multi-modal NLL loss handles the inherent multi-modality of future trajectories — the car could turn left OR right — by only penalizing the closest mode, preventing the mode-averaging problem that plagues single-output regression.
+
+## Failure Modes
+
+- Sparse scenes with few agents: the rasterized image is mostly empty, wasting CNN capacity on blank pixels
+- Very long prediction horizons (>10s): BEV rasterization captures a fixed spatial window; distant future states may fall outside the rasterized region
+- High-speed scenarios where small angular errors compound: the 3-mode output may not cover the true trajectory if modes are too spread out or too clustered
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.lyft_motion_1st" label="Reproduce this solution in Sciona" /> */}

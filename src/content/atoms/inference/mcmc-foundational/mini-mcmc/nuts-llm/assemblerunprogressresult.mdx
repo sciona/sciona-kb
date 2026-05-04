@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.nuts_llm.assemblerunprogressresult
+predicate_id: assemblerunprogressresult
+repo: sciona-atoms
+domain: inference
+type_signature: "(sample_tensor: Tensor<B, 3>, run_stats: RunStats, monitor_join_status: Result<(), Box<dyn Any + Send>>) -> Result<(Tensor<B, 3>, RunStats), Box<dyn Error>>"
+informal_desc: Construct the final success result containing stacked samples and derived run statistics.
+conceptual_summary: ""
+inputs:
+  - name: sample_tensor
+    type_desc: Tensor
+    constraints: already stacked
+  - name: run_stats
+    type_desc: RunStats
+    constraints: computed from sample_tensor
+  - name: monitor_join_status
+    type_desc: object
+    constraints: used only for optional logging; does not alter success path
+outputs:
+  - name: run_result
+    type_desc: object
+    constraints: returns Ok(sample_tensor, run_stats)
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for initializing target log-density state, gradient information, acceptance target, and explicit stochastic state before transition building.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a local state initializer and not a full NUTS transition implementation.
+title: Assemblerunprogressresult
+description: Construct the final success result containing stacked samples and derived run statistics.
+---
+
+# Assemblerunprogressresult
+
+> Construct the final success result containing stacked samples and derived run statistics.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(sample_tensor: Tensor<B, 3>, run_stats: RunStats, monitor_join_status: Result<(), Box<dyn Any + Send>>) -> Result<(Tensor<B, 3>, RunStats), Box<dyn Error>>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

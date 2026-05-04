@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.physics.skyfield.calculate_vector_angle
+predicate_id: calculate_vector_angle
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(u: numpy.ndarray, v: numpy.ndarray) -> float"
+informal_desc: Computes the angle between two vectors.
+conceptual_summary: "angular_separation. Quantifies the rotational difference between two ordered, n-dimensional numerical sequences. The operation projects two vectors onto a shared 2D plane and measures the angle between them, effectively reducing their relational information to a single scalar representing their relative orientation.. Applications: In natural language processing, measuring the semantic similarity between two documents represented as high-dimensional word embeddings, where a smaller angle implies a closer conceptual relationship., In bioinformatics, calculating the dihedral angles between planes formed by bonded atoms in a protein backbone to determine its secondary structure., In computer vision and robotics, determining the orientation difference between a camera's view vector and a target object's normal vector to guide navigation or manipulation., In financial analysis, assessing the correlation drift between two time-series of asset returns by treating them as vectors in a high-dimensional space."
+inputs:
+  - name: u
+    type_desc: array-like
+    constraints: First vector.
+    required: true
+    default_value_repr: ""
+  - name: v
+    type_desc: array-like
+    constraints: Second vector.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: angle
+    type_desc: float
+    constraints: The angle in radians.
+    required: true
+    default_value_repr: ""
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: skyfield2019ascl
+    citation: Preferred Skyfield citation.
+  - title: repo_skyfield
+    citation: Upstream implementation is mapped to the vendored skyfield repository.
+title: Calculate_vector_angle
+description: Computes the angle between two vectors.
+---
+
+# Calculate_vector_angle
+
+> Computes the angle between two vectors.
+
+## Conceptual Summary
+
+angular_separation. Quantifies the rotational difference between two ordered, n-dimensional numerical sequences. The operation projects two vectors onto a shared 2D plane and measures the angle between them, effectively reducing their relational information to a single scalar representing their relative orientation.. Applications: In natural language processing, measuring the semantic similarity between two documents represented as high-dimensional word embeddings, where a smaller angle implies a closer conceptual relationship., In bioinformatics, calculating the dihedral angles between planes formed by bonded atoms in a protein backbone to determine its secondary structure., In computer vision and robotics, determining the orientation difference between a camera's view vector and a target object's normal vector to guide navigation or manipulation., In financial analysis, assessing the correlation drift between two time-series of asset returns by treating them as vectors in a high-dimensional space.
+
+## Type Signature
+
+```
+(u: numpy.ndarray, v: numpy.ndarray) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

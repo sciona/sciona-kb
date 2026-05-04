@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.infer_chain_geometry
+predicate_id: infer_chain_geometry
+repo: sciona-atoms
+domain: inference
+type_signature: "(state_in.positions: Tensor[n_chains, dim]) -> tuple[usize, usize]"
+informal_desc: Read the position tensor shape to determine batch size and latent dimension for this transition.
+conceptual_summary: ""
+inputs:
+  - name: state_in.positions
+    type_desc: Tensor[n_chains, dim]
+    constraints: Rank-2; first axis is chain axis.
+outputs:
+  - name: n_chains
+    type_desc: int
+    constraints: n_chains > 0
+  - name: dim
+    type_desc: int
+    constraints: dim > 0
+concept_type: dimensionality_reduction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Infer_chain_geometry
+description: Read the position tensor shape to determine batch size and latent dimension for this transition.
+---
+
+# Infer_chain_geometry
+
+> Read the position tensor shape to determine batch size and latent dimension for this transition.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(state_in.positions: Tensor[n_chains, dim]) -> tuple[usize, usize]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

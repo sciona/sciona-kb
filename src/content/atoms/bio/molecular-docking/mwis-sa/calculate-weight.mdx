@@ -1,0 +1,59 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.mwis_sa.calculate_weight
+predicate_id: calculate_weight
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(graph: Any, node_list: Any) -> float"
+informal_desc: |-
+  Calculates the total weight of a given list of nodes in the graph.
+
+  :param node_list: List of nodes.
+  :return: Total weight of the nodes.
+conceptual_summary: ""
+inputs:
+  - name: graph
+    type_desc: Any
+    constraints: x is not None
+  - name: node_list
+    type_desc: Any
+    constraints: x is not None
+outputs:
+  - name: result
+    type_desc: float
+    constraints: isinstance(x, (int, float))
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Calculate_weight
+description: |-
+  Calculates the total weight of a given list of nodes in the graph.
+
+  :param node_list: List of nodes.
+  :return: Total weight of the nodes.
+---
+
+# Calculate_weight
+
+> Calculates the total weight of a given list of nodes in the graph.
+
+:param node_list: List of nodes.
+:return: Total weight of the nodes.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(graph: Any, node_list: Any) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

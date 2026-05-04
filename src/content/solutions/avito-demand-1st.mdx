@@ -1,0 +1,64 @@
+---
+cdg_asset_id: solution.kaggle.avito_demand_1st
+title: Avito Demand Prediction - 1st Place (2018) - Pipeline Template
+description: "This template captures the ordered steps used by Avito Demand Prediction - 1st Place (2018): prepare the data, build task-specific representations, run the mai…"
+problem_statement: "Multi-modal Regression (Tabular + Text + Image) solution template for Avito Demand Prediction - 1st Place (2018), modeled as a 6-stage deterministic pipeline: Image feature extraction, Text feature extraction, Tabular encoding, Concatenation & LightGBM, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Avito Demand Prediction - 1st Place (2018)
+placement: ""
+year: 0
+domain: multimodal_regression
+paradigm: neural_network
+family: multimodal_regression
+tags:
+  - lightgbm
+  - multi
+  - modal
+  - regression
+  - tabular
+  - image
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Image feature extraction creates the representation needed by Final Blend, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/avito-demand-prediction/discussion/60059
+source_license: null
+---
+
+# Avito Demand Prediction - 1st Place (2018) - Pipeline Template
+
+## Problem
+
+Multi-modal Regression (Tabular + Text + Image) solution template for Avito Demand Prediction - 1st Place (2018), modeled as a 6-stage deterministic pipeline: Image feature extraction, Text feature extraction, Tabular encoding, Concatenation & LightGBM, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Avito Demand Prediction - 1st Place (2018): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.avito_demand_1st" readOnly={true} /> */}
+
+1. **Image feature extraction** -- This stage pass ad images through a pre-trained VGG16/ResNet50 backbone to extract the penultimate fully-connected layer embeddings (Keras).
+1. **Text feature extraction** -- This stage apply TF-IDF for basic word counts and FastText embeddings for semantic meaning on the ad descriptions and titles (sklearn / Gensim).
+1. **Tabular encoding** -- This stage apply target-encoding to high-cardinality categorical variables (city, category) using multi-fold splits to prevent target leakage (pandas/category_encoders).
+1. **Concatenation & LightGBM** -- This stage stack the image embeddings, text TF-IDF vectors, and tabular features into a massive sparse matrix and feed into LightGBM regressors.
+1. **Multi-modal RNN architecture** -- This stage train a parallel Neural Network feeding the FastText embeddings through an RNN, concatenating with image/tabular dense layers, and predicting the target directly (PyTorch).
+1. **Final Blend** -- This stage weight the LightGBM and Neural Network predictions (scipy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Image feature extraction creates the representation needed by Final Blend, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.avito_demand_1st" label="Reproduce this solution in Sciona" /> */}

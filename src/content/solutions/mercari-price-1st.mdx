@@ -1,0 +1,72 @@
+---
+cdg_asset_id: solution.kaggle.mercari_price_1st
+title: Mercari Price Suggestion 1st Place — Sparse Feature Regression with Factorization Machines and Neural Text Model
+description: Predict product prices by converting item names, descriptions, brands, and categories into sparse numerical features, training a factorization machine for feat…
+problem_statement: Product price prediction from text and categorical features using CountVectorizer/TF-IDF text vectorization, sparse one-hot categorical encoding, FTRL-trained Factorization Machines on the sparse feature matrix, a 1D CNN neural text model, and weighted ensemble averaging with Ridge Regression.
+platform: kaggle
+competition_name: Mercari Price Suggestion 1st Place — Sparse Feature Regression with Factorization Machines and Neural Text Model
+placement: ""
+year: 0
+domain: tabular_text_regression
+paradigm: optimization
+family: tabular_text_regression
+tags:
+  - sparse_feature_regression
+  - factorization_machine
+  - text_price_regression
+  - ftrl_optimization
+  - cnn_text_regression
+  - countvectorizer_tfidf
+  - one_hot_sparse_encoding
+  - pairwise_feature_interactions
+  - online_learning
+  - log_price_regression
+  - ridge_regression
+  - high_cardinality_categorical
+  - hierarchical_category
+  - wordbatch_fm_ftrl
+key_insight: FM_FTRL learns pairwise feature interactions implicitly from an ultra-sparse combined text+categorical matrix without ever materializing the dense interaction space. This is critical because the interaction between brand and category (e.g., 'Nike' x 'Shoes' vs 'Nike' x 'T-Shirts') is highly predictive of price, but explicit interaction features would create an intractably large matrix. The FTRL online optimizer handles this sparsity natively, converging in a single pass over the data.
+failure_modes:
+  - "Low-cardinality categorical features: FM interaction terms add little value when there are few unique categories, and a simple GBM would suffice"
+  - "Short text fields with small vocabulary: sparse text matrices become extremely sparse with few non-zero entries, giving FM insufficient signal for interaction learning"
+  - "Non-linear target relationships: FM captures only pairwise interactions — higher-order interactions require deeper models or explicit polynomial features"
+  - "Distribution shift in text vocabulary: CountVectorizer vocabulary is fixed at training time, so novel words in test data are ignored entirely"
+source_url: ""
+source_license: null
+---
+
+# Mercari Price Suggestion 1st Place — Sparse Feature Regression with Factorization Machines and Neural Text Model
+
+## Problem
+
+Product price prediction from text and categorical features using CountVectorizer/TF-IDF text vectorization, sparse one-hot categorical encoding, FTRL-trained Factorization Machines on the sparse feature matrix, a 1D CNN neural text model, and weighted ensemble averaging with Ridge Regression.
+
+## Approach
+
+Predict product prices by converting item names, descriptions, brands, and categories into sparse numerical features, training a factorization machine for feature interactions, a neural network for text understanding, and averaging their predictions.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.mercari_price_1st" readOnly={true} /> */}
+
+1. **Text Vectorization** -- Convert product names and descriptions into sparse numerical matrices by counting word occurrences and weighting by how rare each word is.
+1. **Categorical Encoding** -- Convert brand and category labels into sparse binary columns where each unique value gets its own column.
+1. **Sparse Concatenation** -- Combine the text and categorical sparse matrices side by side into one large sparse matrix.
+1. **Online FM Model** -- Train a model that learns how pairs of features interact (e.g., brand X category affects price differently than either alone), using an efficient online learning algorithm that handles sparse data well.
+1. **Neural Text Model** -- Train a neural network that reads text sequences through convolutional filters while simultaneously processing tabular features through a separate branch.
+1. **Weighted Ensemble** -- Combine predictions from three different models using fixed weights to produce a more accurate final prediction.
+
+## Key Insight
+
+FM_FTRL learns pairwise feature interactions implicitly from an ultra-sparse combined text+categorical matrix without ever materializing the dense interaction space. This is critical because the interaction between brand and category (e.g., 'Nike' x 'Shoes' vs 'Nike' x 'T-Shirts') is highly predictive of price, but explicit interaction features would create an intractably large matrix. The FTRL online optimizer handles this sparsity natively, converging in a single pass over the data.
+
+## Failure Modes
+
+- Low-cardinality categorical features: FM interaction terms add little value when there are few unique categories, and a simple GBM would suffice
+- Short text fields with small vocabulary: sparse text matrices become extremely sparse with few non-zero entries, giving FM insufficient signal for interaction learning
+- Non-linear target relationships: FM captures only pairwise interactions — higher-order interactions require deeper models or explicit polynomial features
+- Distribution shift in text vocabulary: CountVectorizer vocabulary is fixed at training time, so novel words in test data are ignored entirely
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.mercari_price_1st" label="Reproduce this solution in Sciona" /> */}

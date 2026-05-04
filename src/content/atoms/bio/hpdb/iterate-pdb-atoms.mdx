@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.bio.hpdb.iterate_pdb_atoms
+predicate_id: iterate_pdb_atoms
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(element: Optional[str]) -> Iterator[Atom]"
+informal_desc: Iterates over all atoms in the PDB structure, optionally filtering by a specific chemical element.
+conceptual_summary: "filtered_collection_iterator. Sequentially traverses a structured collection of records, yielding a stateful iterator over the entire set. An optional filtering parameter allows for the selective retrieval of records where a specific categorical attribute matches a given value. This provides a memory-efficient mechanism for processing either the entire dataset or a specific subset without loading the full collection into memory.. Applications: In computer graphics, iterating through all nodes in a scene graph, with an option to filter for nodes of a certain type, like 'light', 'mesh', or 'camera'., In social network analysis, streaming through a dataset of user profiles, selectively yielding only users who match a specific demographic attribute (e.g., city or listed interest)., In financial data processing, scanning a large ledger of transactions and yielding only those associated with a particular transaction type or currency., In astronomical surveys, iterating through a catalog of celestial objects and filtering to return only objects of a specific class, such as 'galaxy' or 'quasar'."
+inputs:
+  - name: pdb_element
+    type_desc: Atom | Residue | Chain | Model | Structure
+    constraints: Root object for recursive traversal.
+    required: true
+    default_value_repr: ""
+  - name: chemical_element
+    type_desc: str | None
+    constraints: Optional case-insensitive atom element symbol filter.
+    required: false
+    default_value_repr: None
+outputs:
+  - name: result
+    type_desc: tuple[Atom, ...]
+    constraints: Atom records reached from the root and matching the optional element filter.
+    required: true
+    default_value_repr: ""
+concept_type: bio_structure_traversal
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_hpdb
+    citation: Implements the recursive atom traversal modeled by hPDBIterable.iter_atoms, with an explicit optional element filter.
+  - title: berman2000pdb
+    citation: Provides Protein Data Bank context for the hierarchy being traversed.
+title: Iterate_pdb_atoms
+description: Iterates over all atoms in the PDB structure, optionally filtering by a specific chemical element.
+---
+
+# Iterate_pdb_atoms
+
+> Iterates over all atoms in the PDB structure, optionally filtering by a specific chemical element.
+
+## Conceptual Summary
+
+filtered_collection_iterator. Sequentially traverses a structured collection of records, yielding a stateful iterator over the entire set. An optional filtering parameter allows for the selective retrieval of records where a specific categorical attribute matches a given value. This provides a memory-efficient mechanism for processing either the entire dataset or a specific subset without loading the full collection into memory.. Applications: In computer graphics, iterating through all nodes in a scene graph, with an option to filter for nodes of a certain type, like 'light', 'mesh', or 'camera'., In social network analysis, streaming through a dataset of user profiles, selectively yielding only users who match a specific demographic attribute (e.g., city or listed interest)., In financial data processing, scanning a large ledger of transactions and yielding only those associated with a particular transaction type or currency., In astronomical surveys, iterating through a catalog of celestial objects and filtering to return only objects of a specific class, such as 'galaxy' or 'quasar'.
+
+## Type Signature
+
+```
+(element: Optional[str]) -> Iterator[Atom]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

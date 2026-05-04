@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.validate_symmetric_input
+predicate_id: validate_symmetric_input
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(mat: np.ndarray (2D numeric)) -> np.ndarray (2D numeric)"
+informal_desc: Verify the input matrix is symmetric within tolerance and fail fast if the precondition is violated.
+conceptual_summary: ""
+inputs:
+  - name: mat
+    type_desc: np.ndarray
+    constraints: square; expected symmetric
+outputs:
+  - name: validated_mat
+    type_desc: np.ndarray
+    constraints: symmetric within atol=1e-8
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Validate_symmetric_input
+description: Verify the input matrix is symmetric within tolerance and fail fast if the precondition is violated.
+---
+
+# Validate_symmetric_input
+
+> Verify the input matrix is symmetric within tolerance and fail fast if the precondition is violated.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(mat: np.ndarray (2D numeric)) -> np.ndarray (2D numeric)
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

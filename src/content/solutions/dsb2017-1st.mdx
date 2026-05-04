@@ -1,0 +1,71 @@
+---
+cdg_asset_id: solution.kaggle.dsb2017_1st
+title: DSB2017 1st Place — Lung Cancer Detection from CT Scans
+description: Find suspicious lumps in a 3D lung scan, crop and classify each one, then combine the per-lump cancer probabilities into a single patient-level prediction usin…
+problem_statement: "Detect-then-classify pipeline for lung cancer prediction from 3D CT volumes: a coordinate-aware 3D U-Net detects nodule candidates, proposals are sampled stochastically, per-nodule features are extracted and classified, then patient-level probability is computed via noisy-OR pooling with a learned baseline for missed detections."
+platform: kaggle
+competition_name: Data Science Bowl 2017
+placement: 1st
+year: 2017
+domain: medical_imaging_3d
+paradigm: neural_network
+family: medical_imaging_3d
+tags:
+  - detect_then_classify
+  - multi_instance_learning
+  - noisy_or_aggregation
+  - 3d_medical_detection
+  - lung_cancer_screening
+  - learned_baseline_leak
+  - coordinate_aware_convolution
+  - volumetric_tiling
+  - hard_negative_mining
+  - proposal_sampling
+  - patient_level_aggregation
+key_insight: Noisy-OR with a learned baseline (initialized at sigmoid(-30) ~ 0) correctly models the case where ZERO detected nodules are cancerous but cancer exists in an undetected region. The baseline acts as a learned 'leak' probability that the detector missed something, starting near zero so the model initially relies on detected nodules and learns to increase the leak only if the detector systematically misses cancerous cases.
+failure_modes:
+  - "Datasets where most cancers are detected by the detector: the learned baseline stays near zero and provides no benefit over simple max pooling"
+  - "Very small nodules (<3mm) that the 3D U-Net cannot resolve at 1mm isotropic spacing: detector recall drops and the baseline leak cannot compensate for systematic detector blindness"
+  - "Multi-cancer patients where cancer probabilities are NOT independent: noisy-OR assumes independence, which breaks for correlated multi-focal disease"
+source_url: https://github.com/lfz/DSB2017
+source_license: MIT
+---
+
+# DSB2017 1st Place — Lung Cancer Detection from CT Scans
+
+## Problem
+
+Detect-then-classify pipeline for lung cancer prediction from 3D CT volumes: a coordinate-aware 3D U-Net detects nodule candidates, proposals are sampled stochastically, per-nodule features are extracted and classified, then patient-level probability is computed via noisy-OR pooling with a learned baseline for missed detections.
+
+## Approach
+
+Find suspicious lumps in a 3D lung scan, crop and classify each one, then combine the per-lump cancer probabilities into a single patient-level prediction using a formula that accounts for the detector possibly missing some lumps entirely.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.dsb2017_1st" readOnly={true} /> */}
+
+1. **Lung Mask with Bone Removal** -- Isolate the lungs from the surrounding bone and tissue so the detector only looks at lung tissue.
+1. **3D Volume Split-Combine with Margin** -- Break the big scan into overlapping smaller cubes that fit in GPU memory, process each one, and stitch the results back together.
+1. **Coordinate-Aware 3D U-Net** -- A neural network that looks at 3D image patches and knows WHERE in the body each patch came from, which helps because nodule likelihood depends on anatomical location.
+1. **3D Anchor Label Mapping with IoU Dilation** -- Decide which anchor boxes match real nodules and which are negatives, with a buffer zone around each real nodule where uncertain anchors are ignored.
+1. **Online Hard Negative Mining (3D)** -- During training, focus on the hardest negative examples (background regions the detector is most confused about) rather than easy ones.
+1. **Size-Aware Nodule Oversampling** -- Show the network more examples of large nodules because they need to be seen from many different angles.
+1. **Softmax Temperature Proposal Sampling** -- Instead of always picking the most confident detections, randomly sample from the top detections with probabilities based on confidence, adding diversity during training.
+1. **Center Feature Extraction (3D)** -- Grab only the center of each detected region's features, rather than averaging over the whole region, to get the purest signal about the nodule itself.
+1. **Noisy-OR Pooling with Learned Baseline** -- Combine all per-nodule cancer probabilities into one patient probability, with a safety term that accounts for the possibility that the detector missed a cancerous nodule entirely.
+1. **Miss Penalty Loss** -- During training, heavily penalize the model when it assigns very low cancer probability to a known cancerous nodule — a safety mechanism to prevent the model from being too dismissive.
+
+## Key Insight
+
+Noisy-OR with a learned baseline (initialized at sigmoid(-30) ~ 0) correctly models the case where ZERO detected nodules are cancerous but cancer exists in an undetected region. The baseline acts as a learned 'leak' probability that the detector missed something, starting near zero so the model initially relies on detected nodules and learns to increase the leak only if the detector systematically misses cancerous cases.
+
+## Failure Modes
+
+- Datasets where most cancers are detected by the detector: the learned baseline stays near zero and provides no benefit over simple max pooling
+- Very small nodules (&lt;3mm) that the 3D U-Net cannot resolve at 1mm isotropic spacing: detector recall drops and the baseline leak cannot compensate for systematic detector blindness
+- Multi-cancer patients where cancer probabilities are NOT independent: noisy-OR assumes independence, which breaks for correlated multi-focal disease
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.dsb2017_1st" label="Reproduce this solution in Sciona" /> */}

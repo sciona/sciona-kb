@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.buildsparsegraphview
+predicate_id: buildsparsegraphview
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(thresholded_matrix: 2D numeric matrix) -> CSR sparse matrix"
+informal_desc: Convert the thresholded dense matrix into a CSR sparse representation suitable for graph-based bandwidth reduction.
+conceptual_summary: ""
+inputs:
+  - name: thresholded_matrix
+    type_desc: np.ndarray
+    constraints: Numeric matrix; typically sparse after thresholding
+outputs:
+  - name: sparse_matrix
+    type_desc: object
+    constraints: Equivalent numeric structure to thresholded_matrix
+concept_type: graph_optimization
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Buildsparsegraphview
+description: Convert the thresholded dense matrix into a CSR sparse representation suitable for graph-based bandwidth reduction.
+---
+
+# Buildsparsegraphview
+
+> Convert the thresholded dense matrix into a CSR sparse representation suitable for graph-based bandwidth reduction.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(thresholded_matrix: 2D numeric matrix) -> CSR sparse matrix
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

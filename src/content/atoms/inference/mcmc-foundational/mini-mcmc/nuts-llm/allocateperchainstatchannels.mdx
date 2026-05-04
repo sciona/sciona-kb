@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.nuts_llm.allocateperchainstatchannels
+predicate_id: allocateperchainstatchannels
+repo: sciona-atoms
+domain: inference
+type_signature: "(chain_count: usize) -> tuple[Vec<Receiver<ChainStats>>, Vec<Sender<ChainStats>>]"
+informal_desc: Create one sender/receiver channel pair per chain so each worker can stream progress snapshots independently.
+conceptual_summary: ""
+inputs:
+  - name: chain_count
+    type_desc: int
+    constraints: ">= 1"
+outputs:
+  - name: stats_receivers
+    type_desc: object
+    constraints: length == chain_count
+  - name: stats_senders
+    type_desc: object
+    constraints: length == chain_count
+concept_type: message_passing
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for initializing target log-density state, gradient information, acceptance target, and explicit stochastic state before transition building.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a local state initializer and not a full NUTS transition implementation.
+title: Allocateperchainstatchannels
+description: Create one sender/receiver channel pair per chain so each worker can stream progress snapshots independently.
+---
+
+# Allocateperchainstatchannels
+
+> Create one sender/receiver channel pair per chain so each worker can stream progress snapshots independently.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(chain_count: usize) -> tuple[Vec<Receiver<ChainStats>>, Vec<Sender<ChainStats>>]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,41 @@
+---
+fqdn: sciona.atoms.inference.advancedvi.evaluate_log_probability_density
+predicate_id: evaluate_log_probability_density
+repo: sciona-atoms
+domain: inference
+type_signature: "(q: Unknown, z: Unknown) -> float"
+informal_desc: Computes the log-probability density function (logpdf) for given inputs 'q' and 'z'. This is a stateless operation, likely corresponding to a specific probability distribution.
+conceptual_summary: "evaluate_logarithmic_potential. Maps a point in an N-dimensional state space to a scalar value. This value represents the logarithmic potential (or likelihood) of that state, according to a predefined but implicit mathematical function. This transformation is often used to convert multiplicative scoring systems into additive ones, improving numerical stability.. Applications: In computational physics, calculating the potential energy of a particle configuration in a force field (e.g., Lennard-Jones potential), where systems evolve towards states of minimum energy., In information theory, computing the 'surprisal' or information content of a specific event or message given a probabilistic model. A higher log-probability corresponds to a less surprising event., In geospatial analysis, modeling the suitability of a geographic location for a purpose (e.g., crop growth) based on various input factors (elevation, soil type), where the output represents a composite suitability score."
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: kucukelbir2017advi
+    citation: Broad ADVI/VI attribution for AdvancedVI atoms.
+  - title: repo_advancedvi_jl
+    citation: Upstream implementation is mapped to the vendored AdvancedVI.jl repository.
+  - title: titsias2014dsvb
+    citation: Reparameterization-gradient VI attribution.
+title: Evaluate_log_probability_density
+description: Computes the log-probability density function (logpdf) for given inputs 'q' and 'z'. This is a stateless operation, likely corresponding to a specific probabil…
+---
+
+# Evaluate_log_probability_density
+
+> Computes the log-probability density function (logpdf) for given inputs 'q' and 'z'. This is a stateless operation, likely corresponding to a specific probability distribution.
+
+## Conceptual Summary
+
+evaluate_logarithmic_potential. Maps a point in an N-dimensional state space to a scalar value. This value represents the logarithmic potential (or likelihood) of that state, according to a predefined but implicit mathematical function. This transformation is often used to convert multiplicative scoring systems into additive ones, improving numerical stability.. Applications: In computational physics, calculating the potential energy of a particle configuration in a force field (e.g., Lennard-Jones potential), where systems evolve towards states of minimum energy., In information theory, computing the 'surprisal' or information content of a specific event or message given a probabilistic model. A higher log-probability corresponds to a less surprising event., In geospatial analysis, modeling the suitability of a geographic location for a purpose (e.g., crop growth) based on various input factors (elevation, soil type), where the output represents a composite suitability score.
+
+## Type Signature
+
+```
+(q: Unknown, z: Unknown) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,62 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.mwis_sa.is_independent_set
+predicate_id: is_independent_set
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(graph: Any, subset: Any) -> bool"
+informal_desc: |-
+  Checks if the given subset of nodes is an independent set in the graph.
+
+  :param graph: The input graph.
+  :param subset: The list of nodes to check.
+  :return: True if the subset is an independent set, False otherwise.
+conceptual_summary: ""
+inputs:
+  - name: graph
+    type_desc: Any
+    constraints: x is not None
+  - name: subset
+    type_desc: Any
+    constraints: x is not None
+outputs:
+  - name: result
+    type_desc: bool
+    constraints: isinstance(x, bool)
+concept_type: combinatorics
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Is_independent_set
+description: |-
+  Checks if the given subset of nodes is an independent set in the graph.
+
+  :param graph: The input graph.
+  :param subset: The list of nodes to check.
+  :return: Tru…
+---
+
+# Is_independent_set
+
+> Checks if the given subset of nodes is an independent set in the graph.
+
+:param graph: The input graph.
+:param subset: The list of nodes to check.
+:return: True if the subset is an independent set, False otherwise.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(graph: Any, subset: Any) -> bool
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

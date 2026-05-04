@@ -1,0 +1,72 @@
+---
+fqdn: sciona.atoms.robotics.pronto.torque_adjustment.apply_torque_adjustment
+predicate_id: apply_torque_adjustment
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(names: Sequence[str], positions: Sequence[float], efforts: Sequence[float], joints_to_filter: Sequence[str], filter_gains: Sequence[float], max_adjustment: float = 0.1) -> list[float]"
+informal_desc: Apply Pronto's effort-over-gain joint-position correction.
+conceptual_summary: Source-aligned Python equivalent of EstimateTools::TorqueAdjustment::processSample.
+inputs:
+  - name: names
+    type_desc: Sequence[str]
+    constraints: joint names aligned with positions and efforts
+    required: true
+    default_value_repr: ""
+  - name: positions
+    type_desc: Sequence[float]
+    constraints: finite joint positions aligned with names
+    required: true
+    default_value_repr: ""
+  - name: efforts
+    type_desc: Sequence[float]
+    constraints: finite joint efforts aligned with names
+    required: true
+    default_value_repr: ""
+  - name: joints_to_filter
+    type_desc: Sequence[str]
+    constraints: configured joint names to adjust
+    required: true
+    default_value_repr: ""
+  - name: filter_gains
+    type_desc: Sequence[float]
+    constraints: gains aligned with joints_to_filter
+    required: true
+    default_value_repr: ""
+  - name: max_adjustment
+    type_desc: float
+    constraints: positive finite clamp magnitude
+    required: false
+    default_value_repr: "0.1"
+outputs:
+  - name: result
+    type_desc: list[float]
+    constraints: finite adjusted joint positions preserving input order
+concept_type: custom
+verification_level: source_reviewed
+used_by_cdgs: []
+references:
+  - title: repo_pronto
+    citation: "Python atom mirrors the vendored Pronto torque adjustment source: locate configured joints, skip non-normal gains, subtract effort/gain corrections, and clamp correction magnitude to 0.1 by default."
+  - title: camurri2020pronto
+    citation: Pronto software paper provides project-level context for the upstream robotics estimator repository.
+title: Apply_torque_adjustment
+description: Apply Pronto's effort-over-gain joint-position correction.
+---
+
+# Apply_torque_adjustment
+
+> Apply Pronto's effort-over-gain joint-position correction.
+
+## Conceptual Summary
+
+Source-aligned Python equivalent of EstimateTools::TorqueAdjustment::processSample.
+
+## Type Signature
+
+```
+(names: Sequence[str], positions: Sequence[float], efforts: Sequence[float], joints_to_filter: Sequence[str], filter_gains: Sequence[float], max_adjustment: float = 0.1) -> list[float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.calculate_power_ratio
+predicate_id: calculate_power_ratio
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(numerator_power: float, denominator_power: float, mode: str) -> float"
+informal_desc: Calculates the final SQI score from the numerator and denominator power values, applying the specified adjustment mode.
+conceptual_summary: ""
+inputs:
+  - name: numerator_power
+    type_desc: float
+    constraints: Power calculated for the numerator's frequency band.
+  - name: denominator_power
+    type_desc: float
+    constraints: Power calculated for the denominator's frequency band. Must be non-zero.
+  - name: mode
+    type_desc: str
+    constraints: Must be 'simple' for a direct ratio or 'bas' for an inverted ratio (1 - ratio).
+outputs:
+  - name: fSQI_score
+    type_desc: float
+    constraints: The resulting frequency-based Signal Quality Index.
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Calculate_power_ratio
+description: Calculates the final SQI score from the numerator and denominator power values, applying the specified adjustment mode.
+---
+
+# Calculate_power_ratio
+
+> Calculates the final SQI score from the numerator and denominator power values, applying the specified adjustment mode.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(numerator_power: float, denominator_power: float, mode: str) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

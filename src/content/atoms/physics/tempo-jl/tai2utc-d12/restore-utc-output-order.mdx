@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.physics.tempo_jl.tai2utc_d12.restore_utc_output_order
+predicate_id: restore_utc_output_order
+repo: sciona-atoms-physics
+domain: physics
+type_signature: "(u1: float, u2: float, big1: bool) -> tuple[float, float]"
+informal_desc: Restores the UTC result to match the original input ordering of tai1/tai2, swapping u1 and u2 if the smaller TAI part was originally first, and type-promotes the pair for consistent return types.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: urban2013almanac
+    citation: Broad astronomical time-scale attribution.
+  - title: repo_tempo_jl
+    citation: Primary Tempo.jl software attribution.
+title: Restore_utc_output_order
+description: Restores the UTC result to match the original input ordering of tai1/tai2, swapping u1 and u2 if the smaller TAI part was originally first, and type-promotes t…
+---
+
+# Restore_utc_output_order
+
+> Restores the UTC result to match the original input ordering of tai1/tai2, swapping u1 and u2 if the smaller TAI part was originally first, and type-promotes the pair for consistent return types.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(u1: float, u2: float, big1: bool) -> tuple[float, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.nuts_llm.runchainsinscopedparallel
+predicate_id: runchainsinscopedparallel
+repo: sciona-atoms
+domain: inference
+type_signature: "(chains: Vec<Chain<B>>, stats_senders: Vec<Sender<ChainStats>>, n_collect: usize, n_discard: usize) -> Vec<Tensor<B, 2>>"
+informal_desc: Execute each chain in a scoped thread, forwarding progress through its sender, and collect one 2D sample tensor per chain.
+conceptual_summary: ""
+inputs:
+  - name: chains
+    type_desc: object
+    constraints: mutable access required
+  - name: stats_senders
+    type_desc: object
+    constraints: one sender per chain
+  - name: n_collect
+    type_desc: int
+    constraints: ">= 0"
+  - name: n_discard
+    type_desc: int
+    constraints: ">= 0"
+outputs:
+  - name: chain_samples
+    type_desc: list[Tensor]
+    constraints: length == number of chains
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for initializing target log-density state, gradient information, acceptance target, and explicit stochastic state before transition building.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a local state initializer and not a full NUTS transition implementation.
+title: Runchainsinscopedparallel
+description: Execute each chain in a scoped thread, forwarding progress through its sender, and collect one 2D sample tensor per chain.
+---
+
+# Runchainsinscopedparallel
+
+> Execute each chain in a scoped thread, forwarding progress through its sender, and collect one 2D sample tensor per chain.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(chains: Vec<Chain<B>>, stats_senders: Vec<Sender<ChainStats>>, n_collect: usize, n_discard: usize) -> Vec<Tensor<B, 2>>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

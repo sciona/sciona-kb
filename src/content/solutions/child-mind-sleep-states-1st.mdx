@@ -1,0 +1,60 @@
+---
+cdg_asset_id: solution.kaggle.child_mind_sleep_states_1st
+title: Child Mind Institute - Detect Sleep States - 1st Place (2023) - Pipeline Template
+description: "This template captures the ordered steps used by Child Mind Institute - Detect Sleep States - 1st Place (2023): prepare the data, build task-specific represent…"
+problem_statement: "1D Time Series Segmentation solution template for Child Mind Institute - Detect Sleep States - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Time-series unrolling, Rolling statistics, 1D U-Net Segmentation, Transformer Smoothing, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Child Mind Institute - Detect Sleep States - 1st Place (2023)
+placement: ""
+year: 0
+domain: semantic_segmentation
+paradigm: neural_network
+family: semantic_segmentation
+tags:
+  - transformer
+  - segmentation
+  - series
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Time-series unrolling creates the representation needed by Peak finding, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459604
+source_license: null
+---
+
+# Child Mind Institute - Detect Sleep States - 1st Place (2023) - Pipeline Template
+
+## Problem
+
+1D Time Series Segmentation solution template for Child Mind Institute - Detect Sleep States - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Time-series unrolling, Rolling statistics, 1D U-Net Segmentation, Transformer Smoothing, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Child Mind Institute - Detect Sleep States - 1st Place (2023): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.child_mind_sleep_states_1st" readOnly={true} /> */}
+
+1. **Time-series unrolling** -- This stage load millions of continuous accelerometer readings (angle, magnitude) efficiently via Parquet (polars).
+1. **Rolling statistics** -- This stage compute rolling mean, variance, and difference across 1-minute, 5-minute, and 30-minute intervals (polars).
+1. **1D U-Net Segmentation** -- This stage treat the sequence exactly like a 1D image; pass it through a 1D U-Net backbone to output a probability per minute of "awake" vs "asleep" (PyTorch).
+1. **Transformer Smoothing** -- This stage pass the U-Net embeddings through a Transformer layer to capture long-range daily circadian rhythms (PyTorch).
+1. **Peak finding** -- This stage run SciPy's find_peaks on the derivative of the probability output to locate the exact discrete minute the user transitioned states (scipy.signal).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Time-series unrolling creates the representation needed by Peak finding, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.child_mind_sleep_states_1st" label="Reproduce this solution in Sciona" /> */}

@@ -1,0 +1,71 @@
+---
+fqdn: sciona.atoms.signal_processing.e2e_ppg.reconstruction.finalize_output_rate_and_partition_groups
+predicate_id: finalize_output_rate_and_partition_groups
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(ppg_working: np.ndarray, clean_indices_flat_effective: list[int], noisy_indices_grouped_effective: list[list[int]], resampling_flag: bool, sampling_rate_working: int, sampling_rate_original: int|null, resampling_rate: float|null) -> tuple[np.ndarray, list[list[int]], list[list[int]]]"
+informal_desc: Return signal and partitions at original sampling rate when needed, and ensure clean/noisy indices are grouped into consecutive segments.
+conceptual_summary: ""
+inputs:
+  - name: ppg_working
+    type_desc: np.ndarray
+    constraints: Selected working-rate signal
+  - name: clean_indices_flat_effective
+    type_desc: list[int]
+    constraints: Flat clean indices at working rate
+  - name: noisy_indices_grouped_effective
+    type_desc: list[list[int]]
+    constraints: Noisy groups at working rate
+  - name: resampling_flag
+    type_desc: bool
+    constraints: Whether to map back to original rate
+  - name: sampling_rate_working
+    type_desc: int
+    constraints: Current rate before final mapping
+  - name: sampling_rate_original
+    type_desc: Optional[int]
+    constraints: Required when resampling_flag is True
+  - name: resampling_rate
+    type_desc: Optional[float]
+    constraints: Index mapping ratio when returning to original rate
+outputs:
+  - name: ppg_signal
+    type_desc: np.ndarray
+    constraints: Final output signal at original or working rate
+  - name: clean_indices
+    type_desc: list[list[int]]
+    constraints: Grouped clean index segments
+  - name: noisy_indices
+    type_desc: list[list[int]]
+    constraints: Grouped noisy index segments
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: wang2022ppg
+    citation: Exact E2E-PPG reconstruction attribution.
+  - title: feli2023pipeline
+    citation: Primary E2E-PPG pipeline paper.
+  - title: repo_e2e_ppg
+    citation: Upstream implementation is mapped to the vendored E2E-PPG repository.
+title: Finalize_output_rate_and_partition_groups
+description: Return signal and partitions at original sampling rate when needed, and ensure clean/noisy indices are grouped into consecutive segments.
+---
+
+# Finalize_output_rate_and_partition_groups
+
+> Return signal and partitions at original sampling rate when needed, and ensure clean/noisy indices are grouped into consecutive segments.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(ppg_working: np.ndarray, clean_indices_flat_effective: list[int], noisy_indices_grouped_effective: list[list[int]], resampling_flag: bool, sampling_rate_working: int, sampling_rate_original: int|null, resampling_rate: float|null) -> tuple[np.ndarray, list[list[int]], list[list[int]]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

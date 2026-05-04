@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.nfl_health_and_safety_helmet_assignment_1st
+title: NFL Health & Safety - Helmet Assignment - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by NFL Health & Safety - Helmet Assignment - 1st Place (2021): prepare the data, build task-specific representati…"
+problem_statement: "Object tracking / 2D-to-3D registration solution template for NFL Health & Safety - Helmet Assignment - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Object detection, Temporal tracking, Sensor data alignment, Bipartite matching, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: NFL Health & Safety - Helmet Assignment - 1st Place (2021)
+placement: 1st
+year: 2021
+domain: structured_prediction
+paradigm: neural_network
+family: structured_prediction
+tags:
+  - cnn
+  - yolov5
+  - rag
+  - object
+  - tracking
+  - registration
+key_insight: "The load-bearing idea is the pipeline topology: Object detection creates the representation needed by Post-processing, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/nfl-health-and-safety-helmet-assignment/discussion/284910
+source_license: null
+---
+
+# NFL Health & Safety - Helmet Assignment - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+Object tracking / 2D-to-3D registration solution template for NFL Health & Safety - Helmet Assignment - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Object detection, Temporal tracking, Sensor data alignment, Bipartite matching, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by NFL Health & Safety - Helmet Assignment - 1st Place (2021): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.nfl_health_and_safety_helmet_assignment_1st" readOnly={true} /> */}
+
+1. **Object detection** -- This stage run YOLOv5 to detect all helmets in the video frames (Ultralytics).
+1. **Temporal tracking** -- This stage link bounding boxes across frames using DeepSORT based on intersection-over-union (IoU) and CNN embeddings.
+1. **Sensor data alignment** -- This stage project tabular player sensor data (RFID x/y coordinates) onto the 2D camera view using camera calibration matrices (OpenCV).
+1. **Bipartite matching** -- This stage map tracked helmet clusters to projected player RFID clusters using Iterative Closest Point (ICP) and the Hungarian algorithm (scipy.optimize.linear_sum_assignment).
+1. **Post-processing** -- This stage fix fragmented tracks and impute missing player assignments via forward-fill.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Object detection creates the representation needed by Post-processing, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.nfl_health_and_safety_helmet_assignment_1st" label="Reproduce this solution in Sciona" /> */}

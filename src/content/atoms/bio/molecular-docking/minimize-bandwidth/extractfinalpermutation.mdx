@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.minimize_bandwidth.extractfinalpermutation
+predicate_id: extractfinalpermutation
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(terminal_state: object) -> list[int]"
+informal_desc: Return the accumulated permutation from the terminal state as the function result.
+conceptual_summary: ""
+inputs:
+  - name: terminal_state
+    type_desc: object
+    constraints: State after greedy loop termination
+outputs:
+  - name: acc_permutation
+    type_desc: list[int]
+    constraints: Final accumulated row/column reordering permutation
+concept_type: combinatorics
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Extractfinalpermutation
+description: Return the accumulated permutation from the terminal state as the function result.
+---
+
+# Extractfinalpermutation
+
+> Return the accumulated permutation from the terminal state as the function result.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(terminal_state: object) -> list[int]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

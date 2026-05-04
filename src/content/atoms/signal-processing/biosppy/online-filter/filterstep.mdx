@@ -1,0 +1,57 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.online_filter.filterstep
+predicate_id: filterstep
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(signal: 1-D array of input samples for the current chunk, b: numerator coefficient array, a: denominator coefficient array, zi: delay-line state vector (state_in), shape (max(len(a),len(b))-1,)) -> tuple[1-D array of filtered output samples, same length as input signal, updated delay-line state vector (state_out) to be threaded into the next FilterStep call]"
+informal_desc: Applies the online IIR/FIR filter to an incoming signal chunk using the current delay-line state. Consumes zi as immutable state-in and produces a new zi as state-out, enabling stateless composition across successive calls for true online (sample-by-sample or block) filtering.
+conceptual_summary: "ImmutableStatefulRationalLinearSequenceTransform. Applies a causal, rational linear transform — defined by a numerator and denominator polynomial coefficient pair — to a finite chunk of a scalar sequence, consuming an immutable delay-line memory vector that encodes the system's dependence on past inputs and outputs. The transform advances the internal memory by exactly the length of the input chunk and emits an output sequence of identical length, with the updated memory vector returned as a new, independent value rather than a mutation. This enables pure-functional, chunk-by-chunk composition of an infinite streaming computation by threading state-out into state-in across successive invocations.. Applications: Control systems engineering: applying a discretized PID or lead-lag compensator transfer function to a real-time sensor measurement stream, where each control loop tick is one chunk and the delay-line state preserves integrator/differentiator memory across ticks, Econometrics / time-series analysis: implementing an ARMA(p, q) model step to recursively produce one-step-ahead conditional expectations from an incoming block of observations, threading the lag-vector state across rolling estimation windows, Computational neuroscience: simulating the dendritic low-pass integration of a synaptic conductance waveform in a leaky integrate-and-fire neuron, where each chunk is a simulation time-step block and the state vector encodes the membrane potential history, Geophysics / seismology: applying a causal Butterworth or Chebyshev bandpass transform to continuous seismometer recordings ingested in fixed-size telemetry packets, preserving phase continuity across packet boundaries via the immutable state thread"
+inputs:
+  - name: signal
+    type_desc: np.ndarray
+    constraints: 1-D numeric signal chunk
+    required: true
+    default_value_repr: ""
+  - name: state
+    type_desc: FilterState
+    constraints: contains filter coefficients and prior zi
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: filtered_signal
+    type_desc: np.ndarray
+    constraints: same shape as signal
+    required: true
+    default_value_repr: ""
+  - name: state_out
+    type_desc: FilterState
+    constraints: updated state with advanced zi
+    required: true
+    default_value_repr: ""
+concept_type: signal_filter
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Filterstep
+description: Applies the online IIR/FIR filter to an incoming signal chunk using the current delay-line state. Consumes zi as immutable state-in and produces a new zi as st…
+---
+
+# Filterstep
+
+> Applies the online IIR/FIR filter to an incoming signal chunk using the current delay-line state. Consumes zi as immutable state-in and produces a new zi as state-out, enabling stateless composition across successive calls for true online (sample-by-sample or block) filtering.
+
+## Conceptual Summary
+
+ImmutableStatefulRationalLinearSequenceTransform. Applies a causal, rational linear transform — defined by a numerator and denominator polynomial coefficient pair — to a finite chunk of a scalar sequence, consuming an immutable delay-line memory vector that encodes the system's dependence on past inputs and outputs. The transform advances the internal memory by exactly the length of the input chunk and emits an output sequence of identical length, with the updated memory vector returned as a new, independent value rather than a mutation. This enables pure-functional, chunk-by-chunk composition of an infinite streaming computation by threading state-out into state-in across successive invocations.. Applications: Control systems engineering: applying a discretized PID or lead-lag compensator transfer function to a real-time sensor measurement stream, where each control loop tick is one chunk and the delay-line state preserves integrator/differentiator memory across ticks, Econometrics / time-series analysis: implementing an ARMA(p, q) model step to recursively produce one-step-ahead conditional expectations from an incoming block of observations, threading the lag-vector state across rolling estimation windows, Computational neuroscience: simulating the dendritic low-pass integration of a synaptic conductance waveform in a leaky integrate-and-fire neuron, where each chunk is a simulation time-step block and the state vector encodes the membrane potential history, Geophysics / seismology: applying a causal Butterworth or Chebyshev bandpass transform to continuous seismometer recordings ingested in fixed-size telemetry packets, preserving phase continuity across packet boundaries via the immutable state thread
+
+## Type Signature
+
+```
+(signal: 1-D array of input samples for the current chunk, b: numerator coefficient array, a: denominator coefficient array, zi: delay-line state vector (state_in), shape (max(len(a),len(b))-1,)) -> tuple[1-D array of filtered output samples, same length as input signal, updated delay-line state vector (state_out) to be threaded into the next FilterStep call]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

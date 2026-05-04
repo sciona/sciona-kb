@@ -1,0 +1,38 @@
+---
+interface IOSpec {
+  name: string;
+  type_desc: string;
+  constraints: string;
+  required: boolean;
+}
+
+interface Props {
+  specs: IOSpec[];
+  direction: "input" | "output";
+}
+
+const { specs, direction } = Astro.props;
+---
+
+<div class="overflow-x-auto">
+  <table class="w-full text-sm border border-atlas-border rounded-lg overflow-hidden">
+    <thead class="bg-atlas-surface-2">
+      <tr>
+        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Name</th>
+        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Type</th>
+        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Constraints</th>
+        <th class="text-center px-3 py-2 text-atlas-text-muted font-medium">Req</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-atlas-border">
+      {specs.map((spec) => (
+        <tr class="hover:bg-atlas-surface/50">
+          <td class="px-3 py-2 font-mono text-atlas-accent">{spec.name}</td>
+          <td class="px-3 py-2 font-mono text-xs">{spec.type_desc}</td>
+          <td class="px-3 py-2 text-atlas-text-muted">{spec.constraints}</td>
+          <td class="px-3 py-2 text-center">{spec.required ? "Y" : "N"}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

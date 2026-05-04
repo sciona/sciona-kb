@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.allocatecollectionbuffer
+predicate_id: allocatecollectionbuffer
+repo: sciona-atoms
+domain: inference
+type_signature: "(n_collect: int, n_chains: int, dim: int) -> Tensor[float; n_collect, n_chains, dim]"
+informal_desc: Create an empty collection tensor to hold all post-burn-in states before final layout conversion.
+conceptual_summary: ""
+inputs:
+  - name: n_collect
+    type_desc: int
+    constraints: ">= 0"
+  - name: n_chains
+    type_desc: int
+    constraints: ">= 1"
+  - name: dim
+    type_desc: int
+    constraints: ">= 1"
+outputs:
+  - name: buffer_raw
+    type_desc: Tensor[float; n_collect, n_chains, dim]
+    constraints: uninitialized/empty values to be filled stepwise
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Allocatecollectionbuffer
+description: Create an empty collection tensor to hold all post-burn-in states before final layout conversion.
+---
+
+# Allocatecollectionbuffer
+
+> Create an empty collection tensor to hold all post-burn-in states before final layout conversion.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(n_collect: int, n_chains: int, dim: int) -> Tensor[float; n_collect, n_chains, dim]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

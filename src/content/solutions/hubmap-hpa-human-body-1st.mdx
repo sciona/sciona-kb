@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.hubmap_hpa_human_body_1st
+title: HuBMAP + HPA - Hacking the Human Body - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by HuBMAP + HPA - Hacking the Human Body - 1st Place (2022): prepare the data, build task-specific representation…"
+problem_statement: "Multi-organ Segmentation (Domain Translation) solution template for HuBMAP + HPA - Hacking the Human Body - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Stain Translation, Pseudo-labeling, Multi-organ Backbone, Organ-specific thresholds, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: HuBMAP + HPA - Hacking the Human Body - 1st Place (2022)
+placement: ""
+year: 0
+domain: semantic_segmentation
+paradigm: neural_network
+family: semantic_segmentation
+tags:
+  - segmentation
+  - multi
+  - organ
+  - domain
+  - translation
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Stain Translation creates the representation needed by Contour smoothing, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/352994
+source_license: null
+---
+
+# HuBMAP + HPA - Hacking the Human Body - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+Multi-organ Segmentation (Domain Translation) solution template for HuBMAP + HPA - Hacking the Human Body - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Stain Translation, Pseudo-labeling, Multi-organ Backbone, Organ-specific thresholds, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by HuBMAP + HPA - Hacking the Human Body - 1st Place (2022): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.hubmap_hpa_human_body_1st" readOnly={true} /> */}
+
+1. **Stain Translation** -- This stage use CycleGAN to strictly translate the color profiles of the HPA dataset (immunofluorescence) to perfectly match the color profiles of the HuBMAP dataset (PAS stain) (PyTorch).
+1. **Pseudo-labeling** -- This stage use models trained on HuBMAP to generate masks for the translated HPA images, creating a massive new supervised dataset.
+1. **Multi-organ Backbone** -- This stage train a U-Net / CoatNet architecture to segment all 5 organs simultaneously, rather than training 5 separate models (segmentation_models_pytorch).
+1. **Organ-specific thresholds** -- This stage run an optimization loop to find the perfect pixel-probability cutoff threshold independently for each organ type (e.g., lungs vs kidneys) (scipy).
+1. **Contour smoothing** -- This stage apply morphological closing and small-hole filling to the binary masks to ensure biologically coherent outputs (OpenCV).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Stain Translation creates the representation needed by Contour smoothing, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.hubmap_hpa_human_body_1st" label="Reproduce this solution in Sciona" /> */}

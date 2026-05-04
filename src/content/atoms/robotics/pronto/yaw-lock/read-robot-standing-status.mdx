@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.robotics.pronto.yaw_lock.read_robot_standing_status
+predicate_id: read_robot_standing_status
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(state_in: YawLockState) -> bool"
+informal_desc: Read current robot standing status from immutable state without mutation.
+conceptual_summary: "Immutable Binary State Flag Projection. Selects a single Boolean attribute from an immutable structured state and emits it as a scalar observation. The operation performs a read-only projection from a composite state space to a one-dimensional binary codomain. No state transition, mutation, or recomputation occurs during extraction.. Applications: Distributed systems: read a node-liveness flag from an immutable cluster snapshot, Computational biology pipelines: read a quality-control pass/fail bit from a sample metadata object, Industrial automation: read a machine-ready indicator from a digital twin state vector, Networking: read a session-established flag from an immutable protocol state record"
+inputs:
+  - name: state_in
+    type_desc: YawLockState
+    constraints: Immutable input state.
+outputs:
+  - name: is_robot_standing
+    type_desc: bool
+    constraints: isinstance(x, bool)
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Read_robot_standing_status
+description: Read current robot standing status from immutable state without mutation.
+---
+
+# Read_robot_standing_status
+
+> Read current robot standing status from immutable state without mutation.
+
+## Conceptual Summary
+
+Immutable Binary State Flag Projection. Selects a single Boolean attribute from an immutable structured state and emits it as a scalar observation. The operation performs a read-only projection from a composite state space to a one-dimensional binary codomain. No state transition, mutation, or recomputation occurs during extraction.. Applications: Distributed systems: read a node-liveness flag from an immutable cluster snapshot, Computational biology pipelines: read a quality-control pass/fail bit from a sample metadata object, Industrial automation: read a machine-ready indicator from a digital twin state vector, Networking: read a session-established flag from an immutable protocol state record
+
+## Type Signature
+
+```
+(state_in: YawLockState) -> bool
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

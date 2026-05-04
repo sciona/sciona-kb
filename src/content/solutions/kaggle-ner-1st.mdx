@@ -1,0 +1,58 @@
+---
+cdg_asset_id: solution.kaggle.kaggle_ner_1st
+title: Kaggle Feature Engineering / NER - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by Kaggle Feature Engineering / NER - 1st Place (2022): prepare the data, build task-specific representations, tr…"
+problem_statement: "NLP Text Classification / NER solution template for Kaggle Feature Engineering / NER - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Sequence Tokenization, QA Reformulation, QA Softmax Head, Span Prediction, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Kaggle Feature Engineering / NER - 1st Place (2022)
+placement: 1st
+year: 2022
+domain: nlp_span_detection
+paradigm: neural_network
+family: nlp_span_detection
+tags:
+  - transformer
+  - segmentation
+  - classification
+key_insight: "The load-bearing idea is the pipeline topology: Sequence Tokenization creates the representation needed by Decoding, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/cdeotte/writeups
+source_license: null
+---
+
+# Kaggle Feature Engineering / NER - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+NLP Text Classification / NER solution template for Kaggle Feature Engineering / NER - 1st Place (2022), modeled as a 5-stage deterministic pipeline: Sequence Tokenization, QA Reformulation, QA Softmax Head, Span Prediction, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Kaggle Feature Engineering / NER - 1st Place (2022): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.kaggle_ner_1st" readOnly={true} /> */}
+
+1. **Sequence Tokenization** -- This stage tokenize raw text data and generate corresponding index offsets (transformers.AutoTokenizer).
+1. **QA Reformulation** -- This stage reformat the standard NER data arrays entirely into a Question-Answering structure, guaranteeing one absolute "onset" tag and one "wakeup" tag per continuous train sequence.
+1. **QA Softmax Head** -- This stage instead of utilizing a standard BertForTokenClassification module (which acts as an NLP analog to image segmentation), structurally attach a BertForQuestionAnswering head (the NLP analog to bounding-box object detection) to the core transformer backbone (transformers, torch.nn).
+1. **Span Prediction** -- This stage train the reformulated model to predict explicit start and end logit spans across the sequence rather than classifying every individual token sequentially.
+1. **Decoding** -- This stage convert the predicted start/end probabilistic indices back to highly accurate text spans utilizing the saved offsets (numpy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Sequence Tokenization creates the representation needed by Decoding, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.kaggle_ner_1st" label="Reproduce this solution in Sciona" /> */}

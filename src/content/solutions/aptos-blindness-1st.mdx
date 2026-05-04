@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.aptos_blindness_1st
+title: APTOS 2019 Blindness Detection - 1st Place (2019) - Pipeline Template
+description: "This template captures the ordered steps used by APTOS 2019 Blindness Detection - 1st Place (2019): prepare the data, build task-specific representations, run …"
+problem_statement: "Ordinal Classification (Medical Imaging) solution template for APTOS 2019 Blindness Detection - 1st Place (2019), modeled as a 5-stage deterministic pipeline: Image standardization, CNN Backbone, Quadratic Weighted Kappa (QWK) Loss, Pre-training & Fine-tuning, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: APTOS 2019 Blindness Detection - 1st Place (2019)
+placement: ""
+year: 0
+domain: medical_detection_2d
+paradigm: loss_function
+family: medical_detection_2d
+tags:
+  - ordinal
+  - classification
+  - medical
+  - imaging
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Image standardization creates the representation needed by Threshold Calibration, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/aptos2019-blindness-detection/discussion/108065
+source_license: null
+---
+
+# APTOS 2019 Blindness Detection - 1st Place (2019) - Pipeline Template
+
+## Problem
+
+Ordinal Classification (Medical Imaging) solution template for APTOS 2019 Blindness Detection - 1st Place (2019), modeled as a 5-stage deterministic pipeline: Image standardization, CNN Backbone, Quadratic Weighted Kappa (QWK) Loss, Pre-training & Fine-tuning, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by APTOS 2019 Blindness Detection - 1st Place (2019): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.aptos_blindness_1st" readOnly={true} /> */}
+
+1. **Image standardization** -- This stage apply Ben Graham's preprocessing method: crop to the circular retina, subtract local median color to highlight blood vessels, and resize (OpenCV).
+1. **CNN Backbone** -- This stage train EfficientNet and SE-ResNeXt architectures initialized with ImageNet weights (PyTorch).
+1. **Quadratic Weighted Kappa (QWK) Loss** -- This stage optimize the network using a smooth QWK loss function, heavily penalizing off-by-2 errors (e.g., predicting 0 when truth is 4) more than off-by-1 errors (custom PyTorch loss).
+1. **Pre-training & Fine-tuning** -- This stage pre-train the model on massive public datasets from past 2015 competitions, then strictly fine-tune only the last 2 layers on the smaller 2019 competition dataset.
+1. **Threshold Calibration** -- This stage use Nelder-Mead optimization to perfectly tune the decision boundaries between classes [0, 1, 2, 3, 4] to maximize the QWK metric.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Image standardization creates the representation needed by Threshold Calibration, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.aptos_blindness_1st" label="Reproduce this solution in Sciona" /> */}

@@ -1,0 +1,68 @@
+---
+cdg_asset_id: solution.kaggle.rsna_pneumonia_1st
+title: RSNA Pneumonia Detection 1st Place — Dual-Detector Box Ensemble
+description: Find pneumonia in chest X-rays by running two different object detection models (RetinaNet and Mask R-CNN) on the same images, removing duplicate detections wi…
+problem_statement: Two-detector pipeline combining RetinaNet (ResNet-50) and Mask R-CNN (ResNet-101) trained on augmented chest X-rays converted from DICOM, with per-model NMS followed by cross-model IoU-based box ensemble voting.
+platform: kaggle
+competition_name: RSNA Pneumonia Detection 1st Place — Dual-Detector Box Ensemble
+placement: ""
+year: 0
+domain: medical_detection_2d
+paradigm: neural_network
+family: medical_detection_2d
+tags:
+  - pneumonia_detection
+  - chest_xray_detection
+  - retinanet_maskrcnn_ensemble
+  - medical_object_detection
+  - dicom_processing
+  - dual_detector_ensemble
+  - iou_box_voting
+  - focal_loss
+  - single_stage_two_stage_fusion
+  - nms_box_ensemble
+  - medical_imaging_2d
+  - conservative_augmentation
+key_insight: "Single-stage detectors (RetinaNet) and two-stage detectors (Mask R-CNN) make systematically different errors: RetinaNet is faster but produces more false positives on ambiguous regions, while Mask R-CNN is more precise but may miss subtle findings. The IoU-based box ensemble exploits this complementarity — detections agreed upon by both models receive boosted confidence, while single-model detections are penalized, effectively using inter-model agreement as a proxy for detection reliability."
+failure_modes:
+  - "Both detectors make the same systematic error (e.g., both miss small opacities): the ensemble cannot recover from shared failure modes"
+  - "Aggressive augmentation: medical images have specific physical properties and over-augmentation creates unrealistic training samples that hurt generalization"
+  - "Incorrect DICOM windowing: wrong window/level settings destroy diagnostic contrast, causing both detectors to fail on the same images"
+source_url: https://www.kaggle.com/c/rsna-pneumonia-detection-challenge/discussion/70421
+source_license: null
+---
+
+# RSNA Pneumonia Detection 1st Place — Dual-Detector Box Ensemble
+
+## Problem
+
+Two-detector pipeline combining RetinaNet (ResNet-50) and Mask R-CNN (ResNet-101) trained on augmented chest X-rays converted from DICOM, with per-model NMS followed by cross-model IoU-based box ensemble voting.
+
+## Approach
+
+Find pneumonia in chest X-rays by running two different object detection models (RetinaNet and Mask R-CNN) on the same images, removing duplicate detections within each model, then merging their bounding boxes based on how much they overlap.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.rsna_pneumonia_1st" readOnly={true} /> */}
+
+1. **DICOM Extraction** -- Convert the raw medical image files from their specialized hospital format into standard image files that the detection models can process.
+1. **X-ray Augmentation** -- Create variations of each X-ray by slightly rotating, zooming, and adjusting brightness so the models learn to handle natural variation in how X-rays are taken.
+1. **RetinaNet Detector** -- Train a fast object detection model using a special loss function that focuses on hard-to-detect cases, producing bounding boxes around suspected pneumonia regions.
+1. **Mask R-CNN Detector** -- Train a second, more thorough object detection model that first proposes candidate regions then classifies them, providing a complementary set of detections.
+1. **NMS Postprocessing** -- When a model detects the same pneumonia region multiple times with slightly different boxes, keep only the most confident one and discard the rest.
+1. **Box Ensemble** -- Combine the detections from both models: if both models found a pneumonia region in the same spot, merge them into one high-confidence box; if only one model found it, keep it at lower confidence.
+
+## Key Insight
+
+Single-stage detectors (RetinaNet) and two-stage detectors (Mask R-CNN) make systematically different errors: RetinaNet is faster but produces more false positives on ambiguous regions, while Mask R-CNN is more precise but may miss subtle findings. The IoU-based box ensemble exploits this complementarity — detections agreed upon by both models receive boosted confidence, while single-model detections are penalized, effectively using inter-model agreement as a proxy for detection reliability.
+
+## Failure Modes
+
+- Both detectors make the same systematic error (e.g., both miss small opacities): the ensemble cannot recover from shared failure modes
+- Aggressive augmentation: medical images have specific physical properties and over-augmentation creates unrealistic training samples that hurt generalization
+- Incorrect DICOM windowing: wrong window/level settings destroy diagnostic contrast, causing both detectors to fail on the same images
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.rsna_pneumonia_1st" label="Reproduce this solution in Sciona" /> */}

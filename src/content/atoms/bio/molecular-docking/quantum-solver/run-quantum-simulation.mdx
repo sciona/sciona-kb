@@ -1,0 +1,45 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.run_quantum_simulation
+predicate_id: run_quantum_simulation
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(configured_simulator: Union[QutipEmulator, SVBackend, MPSBackend]) -> SimulationResults"
+informal_desc: Executes the simulation on the configured backend to produce raw results, which may include final state vectors or bitstring measurements over time.
+conceptual_summary: ""
+inputs:
+  - name: configured_simulator
+    type_desc: Union[QutipEmulator, SVBackend, MPSBackend]
+    constraints: x is not None
+outputs:
+  - name: raw_simulation_results
+    type_desc: SimulationResults
+    constraints: Backend-specific results object containing state vectors or measurement data.
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Run_quantum_simulation
+description: Executes the simulation on the configured backend to produce raw results, which may include final state vectors or bitstring measurements over time.
+---
+
+# Run_quantum_simulation
+
+> Executes the simulation on the configured backend to produce raw results, which may include final state vectors or bitstring measurements over time.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(configured_simulator: Union[QutipEmulator, SVBackend, MPSBackend]) -> SimulationResults
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

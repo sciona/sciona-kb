@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver.decodesolutions
+predicate_id: decodesolutions
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(measurement_counts: Dict, initial_register: Register, num_solutions_to_find: int) -> List[List[int]]"
+informal_desc: Processes the raw measurement counts from the simulation, sorting them by probability and converting the most frequent results into valid Maximum-Weight Independent Set (MWIS) solutions.
+conceptual_summary: ""
+inputs:
+  - name: measurement_counts
+    type_desc: Dict
+    constraints: Mapping of quantum states to their counts.
+  - name: initial_register
+    type_desc: Register
+    constraints: Used to map qubit indices back to node IDs.
+  - name: num_solutions_to_find
+    type_desc: int
+    constraints: The desired number of MWIS solutions.
+outputs:
+  - name: mwis_solutions
+    type_desc: List[List[int]]
+    constraints: A list of the top MWIS solutions found.
+concept_type: sorting
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Decodesolutions
+description: Processes the raw measurement counts from the simulation, sorting them by probability and converting the most frequent results into valid Maximum-Weight Indepe…
+---
+
+# Decodesolutions
+
+> Processes the raw measurement counts from the simulation, sorting them by probability and converting the most frequent results into valid Maximum-Weight Independent Set (MWIS) solutions.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(measurement_counts: Dict, initial_register: Register, num_solutions_to_find: int) -> List[List[int]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

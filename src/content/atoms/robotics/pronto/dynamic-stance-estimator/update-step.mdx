@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.robotics.pronto.dynamic_stance_estimator.update_step
+predicate_id: update_step
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(predicted_state: StateModelSpec, model_params: ModelParamsSpec, z: ndarray) -> StateModelSpec"
+informal_desc: Updates the state and covariance based on a new measurement (update step of Kalman filter).
+conceptual_summary: "BeliefCorrectionFromObservation. Combines a probabilistic state estimate (a mean vector and a covariance matrix) with a new observation to produce a refined, maximum-likelihood state estimate. It computes the discrepancy between the observation and the state's predicted projection into the observation space. This discrepancy, weighted by the relative uncertainties of the state estimate and the observation model, is used to adjust the initial state, yielding a posterior estimate with optimally reduced uncertainty.. Applications: Economics: Estimating the 'true' daily volatility of a financial asset by treating the noisy daily squared returns as measurements of an underlying stochastic volatility process., Neuroscience: Tracking the firing rate of a neuron in real-time, where the prior belief about the rate is updated based on discrete spike train observations, which act as noisy measurements., Climate Science: Assimilating satellite temperature readings (measurements) into a numerical weather prediction model, where the model's grid-point forecasts (predicted state) are corrected to better match the real-world data."
+inputs:
+  - name: predicted_state
+    type_desc: StateModelSpec
+    constraints: Predicted state (x_prior, P_prior)
+  - name: model_params
+    type_desc: ModelParamsSpec
+    constraints: Contains H, R
+  - name: z
+    type_desc: np.ndarray
+    constraints: Measurement
+outputs:
+  - name: updated_state
+    type_desc: StateModelSpec
+    constraints: Updated state (x_posterior, P_posterior)
+concept_type: posterior_update
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Update_step
+description: Updates the state and covariance based on a new measurement (update step of Kalman filter).
+---
+
+# Update_step
+
+> Updates the state and covariance based on a new measurement (update step of Kalman filter).
+
+## Conceptual Summary
+
+BeliefCorrectionFromObservation. Combines a probabilistic state estimate (a mean vector and a covariance matrix) with a new observation to produce a refined, maximum-likelihood state estimate. It computes the discrepancy between the observation and the state's predicted projection into the observation space. This discrepancy, weighted by the relative uncertainties of the state estimate and the observation model, is used to adjust the initial state, yielding a posterior estimate with optimally reduced uncertainty.. Applications: Economics: Estimating the 'true' daily volatility of a financial asset by treating the noisy daily squared returns as measurements of an underlying stochastic volatility process., Neuroscience: Tracking the firing rate of a neuron in real-time, where the prior belief about the rate is updated based on discrete spike train observations, which act as noisy measurements., Climate Science: Assimilating satellite temperature readings (measurements) into a numerical weather prediction model, where the model's grid-point forecasts (predicted state) are corrected to better match the real-world data.
+
+## Type Signature
+
+```
+(predicted_state: StateModelSpec, model_params: ModelParamsSpec, z: ndarray) -> StateModelSpec
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,46 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.linearizestatedynamicswrtstate
+predicate_id: linearizestatedynamicswrtstate
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(u: ControlVector<2>, yaw_plus_sideslip: f64) -> Matrix<3x3>"
+informal_desc: Evaluate the state Jacobian A = df/dx for the kinematic model, using the known sparse structure with only yaw-coupled nonzero terms.
+conceptual_summary: ""
+inputs:
+  - name: u
+    type_desc: np.ndarray
+    constraints: Finite controls.
+  - name: yaw_plus_sideslip
+    type_desc: float
+    constraints: Finite.
+outputs:
+  - name: A
+    type_desc: np.ndarray
+    constraints: Rows/cols follow state ordering [x, y, yaw].
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Linearizestatedynamicswrtstate
+description: Evaluate the state Jacobian A = df/dx for the kinematic model, using the known sparse structure with only yaw-coupled nonzero terms.
+---
+
+# Linearizestatedynamicswrtstate
+
+> Evaluate the state Jacobian A = df/dx for the kinematic model, using the known sparse structure with only yaw-coupled nonzero terms.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(u: ControlVector<2>, yaw_plus_sideslip: f64) -> Matrix<3x3>
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,122 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.svm_proc.cross_validation
+predicate_id: cross_validation
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(labels: Any, n_iter: Any, test_size: Any, train_size: Any, random_state: Any) -> Any"
+informal_desc: |-
+  Return a Cross Validation (CV) iterator.
+
+  Wraps the StratifiedShuffleSplit iterator from sklearn.model_selection.
+  This iterator returns stratified randomized folds, which preserve the
+  percentage of samples for each class.
+
+  Parameters
+  ----------
+  labels : list, array
+      List of class labels for each data sample.
+  n_iter : int, optional
+      Number of splitting iterations.
+  test_size : float, int, optional
+      If float, represents the proportion of the dataset to include in the
+      test split; if int, represents the absolute number of test samples.
+  train_size : float, int, optional
+      If float, represents the proportion of the dataset to include in the
+      train split; if int, represents the absolute number of train samples.
+  random_state : int, RandomState, optional
+      The seed of the pseudo random number generator to use when shuffling
+      the data.
+
+  Returns
+  -------
+  cv : CV iterator
+      Cross Validation iterator.
+conceptual_summary: ""
+inputs:
+  - name: labels
+    type_desc: list | NDArray
+    constraints: valid list | NDArray
+    required: true
+    default_value_repr: ""
+  - name: n_iter
+    type_desc: int
+    constraints: valid int
+    required: false
+    default_value_repr: "10"
+  - name: test_size
+    type_desc: float | int
+    constraints: valid float | int
+    required: false
+    default_value_repr: "0.1"
+  - name: train_size
+    type_desc: float | int | None
+    constraints: valid float | int | None
+    required: false
+    default_value_repr: None
+  - name: random_state
+    type_desc: int | None
+    constraints: valid int | None
+    required: false
+    default_value_repr: None
+outputs:
+  - name: result
+    type_desc: Iterator[tuple[NDArray[np.int64], NDArray[np.int64]]]
+    constraints: valid Iterator[tuple[NDArray[np.int64], NDArray[np.int64]]]
+    required: true
+    default_value_repr: ""
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Cross_validation
+description: |-
+  Return a Cross Validation (CV) iterator.
+
+  Wraps the StratifiedShuffleSplit iterator from sklearn.model_selection.
+  This iterator returns stratified randomized f…
+---
+
+# Cross_validation
+
+> Return a Cross Validation (CV) iterator.
+
+Wraps the StratifiedShuffleSplit iterator from sklearn.model_selection.
+This iterator returns stratified randomized folds, which preserve the
+percentage of samples for each class.
+
+Parameters
+----------
+labels : list, array
+    List of class labels for each data sample.
+n_iter : int, optional
+    Number of splitting iterations.
+test_size : float, int, optional
+    If float, represents the proportion of the dataset to include in the
+    test split; if int, represents the absolute number of test samples.
+train_size : float, int, optional
+    If float, represents the proportion of the dataset to include in the
+    train split; if int, represents the absolute number of train samples.
+random_state : int, RandomState, optional
+    The seed of the pseudo random number generator to use when shuffling
+    the data.
+
+Returns
+-------
+cv : CV iterator
+    Cross Validation iterator.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(labels: Any, n_iter: Any, test_size: Any, train_size: Any, random_state: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

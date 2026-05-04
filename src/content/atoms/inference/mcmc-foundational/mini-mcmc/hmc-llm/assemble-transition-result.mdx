@@ -1,0 +1,72 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.assemble_transition_result
+predicate_id: assemble_transition_result
+repo: sciona-atoms
+domain: inference
+type_signature: "(state_in: HMCState, proposed_positions: Tensor[n_chains, dim], accept_mask: Tensor[n_chains] (bool), grad_half_last: Tensor[n_chains, dim], prng_key_out: PRNGKey, h_current: Tensor[n_chains], h_proposed: Tensor[n_chains], accept_log_ratio: Tensor[n_chains]) -> tuple[HMCState, PRNGKey, dict]"
+informal_desc: Construct next chain state by selecting proposed vs current positions per chain and package diagnostics.
+conceptual_summary: ""
+inputs:
+  - name: state_in
+    type_desc: HMCState
+    constraints: Current state.
+  - name: proposed_positions
+    type_desc: Tensor[n_chains, dim]
+    constraints: From integrate_leapfrog_proposal.
+  - name: accept_mask
+    type_desc: Tensor
+    constraints: From derive_acceptance_mask.
+  - name: grad_half_last
+    type_desc: Tensor[n_chains, dim]
+    constraints: From integrate_leapfrog_proposal.
+  - name: prng_key_out
+    type_desc: PRNGKey
+    constraints: From sample_transition_randomness.
+  - name: h_current
+    type_desc: Tensor[n_chains]
+    constraints: From compute_current_hamiltonian.
+  - name: h_proposed
+    type_desc: Tensor[n_chains]
+    constraints: From compute_acceptance_log_ratio.
+  - name: accept_log_ratio
+    type_desc: Tensor[n_chains]
+    constraints: From compute_acceptance_log_ratio.
+outputs:
+  - name: state_out
+    type_desc: HMCState
+    constraints: Positions are masked-select(current, proposed); includes updated cached gradient if state tracks it.
+  - name: prng_key_out_final
+    type_desc: PRNGKey
+    constraints: Forwarded unchanged from RNG sampling output.
+  - name: transition_stats
+    type_desc: dict
+    constraints: Contains per-chain acceptance, energies, and acceptance log-ratios.
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Assemble_transition_result
+description: Construct next chain state by selecting proposed vs current positions per chain and package diagnostics.
+---
+
+# Assemble_transition_result
+
+> Construct next chain state by selecting proposed vs current positions per chain and package diagnostics.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(state_in: HMCState, proposed_positions: Tensor[n_chains, dim], accept_mask: Tensor[n_chains] (bool), grad_half_last: Tensor[n_chains, dim], prng_key_out: PRNGKey, h_current: Tensor[n_chains], h_proposed: Tensor[n_chains], accept_log_ratio: Tensor[n_chains]) -> tuple[HMCState, PRNGKey, dict]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

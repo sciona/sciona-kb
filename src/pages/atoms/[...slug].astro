@@ -1,0 +1,20 @@
+---
+import AtomLayout from "../../layouts/AtomLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const atoms = await getCollection("atoms");
+  return atoms.map((atom) => ({
+    params: { slug: atom.id },
+    props: { atom },
+  }));
+}
+
+const { atom } = Astro.props;
+const { Content } = await render(atom);
+const contentPath = `atoms/${atom.id}.mdx`;
+---
+
+<AtomLayout atom={atom} contentPath={contentPath}>
+  <Content />
+</AtomLayout>

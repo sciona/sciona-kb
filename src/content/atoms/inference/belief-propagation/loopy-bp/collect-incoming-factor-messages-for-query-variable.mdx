@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.inference.belief_propagation.loopy_bp.collect_incoming_factor_messages_for_query_variable
+predicate_id: collect_incoming_factor_messages_for_query_variable
+repo: sciona-atoms
+domain: inference
+type_signature: "(state_out: BPStateModelSpec{pgm, msg, msg_new, t}, v_name: string) -> List[FactorMessage]"
+informal_desc: Traverses the query variable's neighboring factors and collects each factor->variable message from the updated message table.
+conceptual_summary: ""
+inputs:
+  - name: state_out
+    type_desc: object
+    constraints: Must already be advanced to requested iteration.
+  - name: v_name
+    type_desc: str
+    constraints: Must be a variable node in the factor graph.
+outputs:
+  - name: incoming_messages
+    type_desc: List[FactorMessage]
+    constraints: One message per neighboring factor of `v_name`.
+concept_type: graph_traversal
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: murphy1999loopy
+    citation: Exact loopy belief propagation attribution.
+  - title: repo_belief_propagation
+    citation: Upstream implementation is mapped to the vendored Belief-Propagation repository.
+title: Collect_incoming_factor_messages_for_query_variable
+description: Traverses the query variable's neighboring factors and collects each factor->variable message from the updated message table.
+---
+
+# Collect_incoming_factor_messages_for_query_variable
+
+> Traverses the query variable's neighboring factors and collects each factor->variable message from the updated message table.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(state_out: BPStateModelSpec{pgm, msg, msg_new, t}, v_name: string) -> List[FactorMessage]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

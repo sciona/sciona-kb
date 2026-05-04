@@ -1,0 +1,79 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018_d12.assemblezz2018sqi
+predicate_id: assemblezz2018sqi
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(signal: array-like, detector_1: array-like beat locations, detector_2: array-like beat locations, fs: float, search_window: float, nseg: int, mode: string, b_sqi: float, f_sqi: float, k_sqi: float) -> float or label"
+informal_desc: Builds the final ZZ2018 signal-quality result by combining beat, frequency, and kurtosis evidence.
+conceptual_summary: "Band-Limited Spectral Energy Ratio Scorer. Transforms a 1-D sampled scalar sequence into the frequency domain using segment-based spectral estimation, then aggregates power within two user-defined frequency intervals. It maps these aggregated energies to a single scalar via a selectable ratio/normalization rule, quantifying how strongly energy is concentrated in one band relative to another. The operation is a lossy projection from a high-dimensional spectrum to a compact quality index.. Applications: Condition monitoring: quantify fault-signature harmonic concentration versus broadband background in rotating machinery vibration signals., Geophysics: score microseismic event quality by contrasting event-band energy against noise-band energy in single-station traces., Wireless systems: estimate channel occupancy quality by comparing target sub-band power to adjacent/interference bands in RF captures., Acoustics: evaluate tonal prominence versus ambient noise in environmental or industrial sound measurements."
+inputs:
+  - name: signal
+    type_desc: ndarray
+    constraints: ECG samples
+    required: true
+    default_value_repr: ""
+  - name: detector_1
+    type_desc: ndarray
+    constraints: first R-peak detector output
+    required: true
+    default_value_repr: ""
+  - name: detector_2
+    type_desc: ndarray
+    constraints: second R-peak detector output
+    required: true
+    default_value_repr: ""
+  - name: fs
+    type_desc: float
+    constraints: "> 0"
+    required: false
+    default_value_repr: "1000.0"
+  - name: search_window
+    type_desc: int
+    constraints: ">= 0 milliseconds"
+    required: false
+    default_value_repr: "100"
+  - name: nseg
+    type_desc: int
+    constraints: "> 0"
+    required: false
+    default_value_repr: "1024"
+  - name: mode
+    type_desc: str
+    constraints: BioSPPy ZZ2018 mode
+    required: false
+    default_value_repr: "'simple'"
+outputs:
+  - name: noise_class
+    type_desc: str
+    constraints: ZZ2018 quality class label
+    required: true
+    default_value_repr: ""
+concept_type: classification
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Assemblezz2018sqi
+description: Builds the final ZZ2018 signal-quality result by combining beat, frequency, and kurtosis evidence.
+---
+
+# Assemblezz2018sqi
+
+> Builds the final ZZ2018 signal-quality result by combining beat, frequency, and kurtosis evidence.
+
+## Conceptual Summary
+
+Band-Limited Spectral Energy Ratio Scorer. Transforms a 1-D sampled scalar sequence into the frequency domain using segment-based spectral estimation, then aggregates power within two user-defined frequency intervals. It maps these aggregated energies to a single scalar via a selectable ratio/normalization rule, quantifying how strongly energy is concentrated in one band relative to another. The operation is a lossy projection from a high-dimensional spectrum to a compact quality index.. Applications: Condition monitoring: quantify fault-signature harmonic concentration versus broadband background in rotating machinery vibration signals., Geophysics: score microseismic event quality by contrasting event-band energy against noise-band energy in single-station traces., Wireless systems: estimate channel occupancy quality by comparing target sub-band power to adjacent/interference bands in RF captures., Acoustics: evaluate tonal prominence versus ambient noise in environmental or industrial sound measurements.
+
+## Type Signature
+
+```
+(signal: array-like, detector_1: array-like beat locations, detector_2: array-like beat locations, fs: float, search_window: float, nseg: int, mode: string, b_sqi: float, f_sqi: float, k_sqi: float) -> float or label
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

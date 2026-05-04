@@ -1,0 +1,69 @@
+---
+fqdn: sciona.atoms.fintech.hftbacktest.calculate_half_spread
+predicate_id: calculate_half_spread
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(c1: float, c2: float, delta: float, volatility: float, adj1: float) -> float"
+informal_desc: Computes the half spread based on market coefficients, order size, and volatility.
+conceptual_summary: ""
+inputs:
+  - name: c1
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: c2
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: delta
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: volatility
+    type_desc: float
+    constraints: finite numeric value
+    required: true
+    default_value_repr: ""
+  - name: adj1
+    type_desc: float
+    constraints: Adjustment factor for the half spread
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: half_spread
+    type_desc: float
+    constraints: The calculated half spread value
+    required: true
+    default_value_repr: ""
+concept_type: arithmetic
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: gueant2013inventory
+    citation: Exact GLFT attribution.
+  - title: repo_hftbacktest
+    citation: Upstream implementation is mapped to the vendored hftbacktest repository.
+title: Calculate_half_spread
+description: Computes the half spread based on market coefficients, order size, and volatility.
+---
+
+# Calculate_half_spread
+
+> Computes the half spread based on market coefficients, order size, and volatility.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(c1: float, c2: float, delta: float, volatility: float, adj1: float) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

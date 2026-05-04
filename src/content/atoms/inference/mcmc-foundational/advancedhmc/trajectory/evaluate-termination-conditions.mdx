@@ -1,0 +1,67 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.trajectory.evaluate_termination_conditions
+predicate_id: evaluate_termination_conditions
+repo: sciona-atoms
+domain: inference
+type_signature: "(termination_after_initial_build: Termination, termination_after_expansion: Termination, trajectory_params: Trajectory, hamiltonian: Hamiltonian, combined_tree: BinaryTree, left_tree: BinaryTree, right_tree: BinaryTree) -> Termination"
+informal_desc: Checks the No-U-Turn condition across the combined tree and aggregates this with the termination statuses from the two sub-builds.
+conceptual_summary: ""
+inputs:
+  - name: termination_after_initial_build
+    type_desc: Termination
+    constraints: x is not None
+  - name: termination_after_expansion
+    type_desc: Termination
+    constraints: x is not None
+  - name: trajectory_params
+    type_desc: Trajectory
+    constraints: x is not None
+  - name: hamiltonian
+    type_desc: Hamiltonian
+    constraints: x is not None
+  - name: combined_tree
+    type_desc: BinaryTree
+    constraints: x is not None
+  - name: left_tree
+    type_desc: BinaryTree
+    constraints: x is not None
+  - name: right_tree
+    type_desc: BinaryTree
+    constraints: x is not None
+outputs:
+  - name: final_termination_status
+    type_desc: Termination
+    constraints: x is not None
+concept_type: probabilistic_oracle
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for doubling trajectory trees and No-U-Turn termination.
+  - title: advancedhmc2020
+    citation: Package paper for AdvancedHMC.jl trajectory construction.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper returns compact NumPy leaves rather than Julia BinaryTree objects.
+  - title: neal2011hmc
+    citation: Canonical HMC reference for Hamiltonian dynamics and Metropolis-style energy diagnostics used by NUTS.
+title: Evaluate_termination_conditions
+description: Checks the No-U-Turn condition across the combined tree and aggregates this with the termination statuses from the two sub-builds.
+---
+
+# Evaluate_termination_conditions
+
+> Checks the No-U-Turn condition across the combined tree and aggregates this with the termination statuses from the two sub-builds.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(termination_after_initial_build: Termination, termination_after_expansion: Termination, trajectory_params: Trajectory, hamiltonian: Hamiltonian, combined_tree: BinaryTree, left_tree: BinaryTree, right_tree: BinaryTree) -> Termination
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

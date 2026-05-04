@@ -1,0 +1,65 @@
+---
+cdg_asset_id: solution.kaggle.facebook_image_similarity_1st
+title: Facebook AI Image Similarity Challenge - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by Facebook AI Image Similarity Challenge - 1st Place (2021): prepare the data, build task-specific representatio…"
+problem_statement: "Metric Learning / Image Retrieval solution template for Facebook AI Image Similarity Challenge - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Contrastive Augmentation, Backbone architecture, FAISS Indexing, Database-Side Augmentation (Query Expansion), and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Facebook AI Image Similarity Challenge - 1st Place (2021)
+placement: ""
+year: 0
+domain: multimodal_retrieval
+paradigm: optimization
+family: multimodal_retrieval
+tags:
+  - faiss
+  - arcface
+  - metric_learning
+  - transformer
+  - metric
+  - learning
+  - image
+  - retrieval
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Contrastive Augmentation creates the representation needed by Spatial Verification, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://github.com/lyakaap/ISC2021-1st-place
+source_license: null
+---
+
+# Facebook AI Image Similarity Challenge - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+Metric Learning / Image Retrieval solution template for Facebook AI Image Similarity Challenge - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Contrastive Augmentation, Backbone architecture, FAISS Indexing, Database-Side Augmentation (Query Expansion), and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Facebook AI Image Similarity Challenge - 1st Place (2021): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.facebook_image_similarity_1st" readOnly={true} /> */}
+
+1. **Contrastive Augmentation** -- This stage heavily apply cropping, color jitter, blur, and overlaid text/emojis during training to mimic highly manipulated social media images (Albumentations).
+1. **Backbone architecture** -- This stage train a massive EfficientNet-V2 / Swin Transformer architecture using ArcFace loss and GeM pooling to output robust 256D representations (PyTorch).
+1. **FAISS Indexing** -- This stage project all 1 million reference images into the 256D embedding space and load them into an exact L2 distance FAISS index.
+1. **Database-Side Augmentation (Query Expansion)** -- This stage query the database using the test image; extract the top 3 results, average their embeddings with the test image embedding, and query the database a second time to pull deeply hidden matches (numpy).
+1. **Spatial Verification** -- This stage run an exact geometry check on the top returned pairs to confirm actual overlap, reranking the final output (OpenCV).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Contrastive Augmentation creates the representation needed by Spatial Verification, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.facebook_image_similarity_1st" label="Reproduce this solution in Sciona" /> */}

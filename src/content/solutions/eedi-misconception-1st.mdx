@@ -1,0 +1,59 @@
+---
+cdg_asset_id: solution.kaggle.eedi_misconception_1st
+title: EEDI Misconception Prediction - 1st Place (2025) - Pipeline Template
+description: "This template captures the ordered steps used by EEDI Misconception Prediction - 1st Place (2025): prepare the data, build task-specific representations, train…"
+problem_statement: "Learning-to-rank / NLP Classification solution template for EEDI Misconception Prediction - 1st Place (2025), modeled as a 7-stage deterministic pipeline: Data Deduplication, Prefix Formatting, Attention Masking, Feature Extraction, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: EEDI Misconception Prediction - 1st Place (2025)
+placement: 1st
+year: 2025
+domain: learning_to_rank
+paradigm: loss_function
+family: learning_to_rank
+tags:
+  - learning
+  - classification
+key_insight: "The load-bearing idea is the pipeline topology: Data Deduplication creates the representation needed by Model Merging, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/conjuring92/writeups
+source_license: null
+---
+
+# EEDI Misconception Prediction - 1st Place (2025) - Pipeline Template
+
+## Problem
+
+Learning-to-rank / NLP Classification solution template for EEDI Misconception Prediction - 1st Place (2025), modeled as a 7-stage deterministic pipeline: Data Deduplication, Prefix Formatting, Attention Masking, Feature Extraction, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by EEDI Misconception Prediction - 1st Place (2025): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.eedi_misconception_1st" readOnly={true} /> */}
+
+1. **Data Deduplication** -- This stage clean the input diagnostic math multiple-choice questions and permanently drop duplicate text rows to prevent data leakage (pandas).
+1. **Prefix Formatting** -- This stage organize text inputs into a highly structured "prefix-shared" format, combining the overarching context, the correct answer, and multiple candidate misconceptions into a single continuous prompt block.
+1. **Attention Masking** -- This stage utilize custom attention masks (FlexAttention) to explicitly map the causal relationships between the shared prefix and the multiple suffix candidates without cross-contamination (torch.nn.attention).
+1. **Feature Extraction** -- This stage extract the isolated last-token features from the concatenated sequences.
+1. **SFT Head** -- This stage feed the extracted features into a standard linear classifier (nn.Linear) optimized strictly with Cross-Entropy Loss to initially score the candidates via Supervised Fine-Tuning.
+1. **Reasoning Optimization** -- This stage fine-tune a secondary, deeper checkpoint utilizing Group Relative Policy Optimization (GRPO) on significantly longer context windows to capture extended logic.
+1. **Model Merging** -- This stage merge the distinct SFT and GRPO weights linearly to strike an optimal balance between token efficiency and complex reasoning accuracy (peft, torch).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Data Deduplication creates the representation needed by Model Merging, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.eedi_misconception_1st" label="Reproduce this solution in Sciona" /> */}

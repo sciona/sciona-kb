@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.robotics.pronto.yaw_lock.set_joint_pose_and_initial_angles
+predicate_id: set_joint_pose_and_initial_angles
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(state_in: YawLockState, joint_name_in: joint identifier collection, joint_position_in: numeric collection, joint_angles_init_in: numeric collection) -> YawLockState"
+informal_desc: Store joint identity/position inputs and corresponding initial-angle snapshot as a new immutable state.
+conceptual_summary: "Immutable Indexed-Array State Replacement. Creates a new immutable state object by replacing three aligned fields: an identifier sequence, a numeric coordinate/value sequence, and an initialization snapshot sequence. The transform performs a structural copy with targeted field substitution, preserving all non-target fields from the input state. It enforces index-wise correspondence constraints between identifier and numeric sequences to maintain referential integrity.. Applications: Computational neuroscience: update an immutable model state with channel identifiers, current signal amplitudes, and baseline calibration vector., Distributed systems monitoring: store aligned metric keys, latest measurements, and startup reference readings as a new snapshot state., Geospatial analytics: replace region index labels, current scalar field samples, and initial reference field in an immutable simulation step record., Additive manufacturing control: persist actuator index map, present control values, and initial tuning profile as a versioned machine state."
+inputs:
+  - name: state_in
+    type_desc: YawLockState
+    constraints: Immutable input state.
+  - name: joint_name_in
+    type_desc: list[int]
+    constraints: Shape must align with positions.
+  - name: joint_position_in
+    type_desc: np.ndarray
+    constraints: Shape must align with joint names.
+  - name: joint_angles_init_in
+    type_desc: np.ndarray
+    constraints: Initialization snapshot.
+outputs:
+  - name: state_out
+    type_desc: YawLockState
+    constraints: New object with joint_name, joint_position, joint_angles_init replaced.
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Set_joint_pose_and_initial_angles
+description: Store joint identity/position inputs and corresponding initial-angle snapshot as a new immutable state.
+---
+
+# Set_joint_pose_and_initial_angles
+
+> Store joint identity/position inputs and corresponding initial-angle snapshot as a new immutable state.
+
+## Conceptual Summary
+
+Immutable Indexed-Array State Replacement. Creates a new immutable state object by replacing three aligned fields: an identifier sequence, a numeric coordinate/value sequence, and an initialization snapshot sequence. The transform performs a structural copy with targeted field substitution, preserving all non-target fields from the input state. It enforces index-wise correspondence constraints between identifier and numeric sequences to maintain referential integrity.. Applications: Computational neuroscience: update an immutable model state with channel identifiers, current signal amplitudes, and baseline calibration vector., Distributed systems monitoring: store aligned metric keys, latest measurements, and startup reference readings as a new snapshot state., Geospatial analytics: replace region index labels, current scalar field samples, and initial reference field in an immutable simulation step record., Additive manufacturing control: persist actuator index map, present control values, and initial tuning profile as a versioned machine state.
+
+## Type Signature
+
+```
+(state_in: YawLockState, joint_name_in: joint identifier collection, joint_position_in: numeric collection, joint_angles_init_in: numeric collection) -> YawLockState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

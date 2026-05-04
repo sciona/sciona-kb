@@ -1,0 +1,64 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping_d12.init_problem_context
+predicate_id: init_problem_context
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(graph: Graph, lattice_instance: LatticeInstance, previously_generated_subgraphs: Collection[Subgraph], seed: int) -> GreedyMappingContext"
+informal_desc: "Bootstraps immutable problem context for all later kernels: graph topology, lattice abstraction, lattice instance, previously generated subgraphs, and seed."
+conceptual_summary: "Deterministic Immutable Context Bootstrap. Aggregates multiple heterogeneous structural inputs into a single immutable state carrier that is passed unchanged across later computational kernels. The transform performs no optimization or inference; it formalizes boundary conditions by binding a read-only relational topology, a discrete embedding/placement scaffold context, historical substructure constraints, and a reproducibility token into one canonical context object. This creates a stable reference frame so downstream greedy or stochastic procedures can be evaluated consistently.. Applications: Initializing a molecular conformation search pipeline with a fixed bond graph, spatial discretization schema, prior sampled motifs, and a random seed, Bootstrapping robotic path-planning with workspace connectivity, occupancy grid instance, previously explored trajectory fragments, and deterministic rollout seed, Preparing a distributed scheduling optimizer using system dependency topology, resource-slot lattice instance, prior allocation patterns, and reproducible simulation seed"
+inputs:
+  - name: graph
+    type_desc: Graph
+    constraints: Required; treated as immutable input state
+    required: true
+    default_value_repr: ""
+  - name: lattice_instance
+    type_desc: LatticeInstance
+    constraints: Required; used for placement/scoring context
+    required: true
+    default_value_repr: ""
+  - name: previously_generated_subgraphs
+    type_desc: Collection[Subgraph]
+    constraints: Required; historical constraints for scoring
+    required: true
+    default_value_repr: ""
+  - name: seed
+    type_desc: int
+    constraints: Deterministic initialization input
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: problem_context
+    type_desc: GreedyMappingContext
+    constraints: Immutable state object carrying graph, lattice, lattice_instance, previously_generated_subgraphs, seed
+    required: true
+    default_value_repr: ""
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Init_problem_context
+description: "Bootstraps immutable problem context for all later kernels: graph topology, lattice abstraction, lattice instance, previously generated subgraphs, and seed."
+---
+
+# Init_problem_context
+
+> Bootstraps immutable problem context for all later kernels: graph topology, lattice abstraction, lattice instance, previously generated subgraphs, and seed.
+
+## Conceptual Summary
+
+Deterministic Immutable Context Bootstrap. Aggregates multiple heterogeneous structural inputs into a single immutable state carrier that is passed unchanged across later computational kernels. The transform performs no optimization or inference; it formalizes boundary conditions by binding a read-only relational topology, a discrete embedding/placement scaffold context, historical substructure constraints, and a reproducibility token into one canonical context object. This creates a stable reference frame so downstream greedy or stochastic procedures can be evaluated consistently.. Applications: Initializing a molecular conformation search pipeline with a fixed bond graph, spatial discretization schema, prior sampled motifs, and a random seed, Bootstrapping robotic path-planning with workspace connectivity, occupancy grid instance, previously explored trajectory fragments, and deterministic rollout seed, Preparing a distributed scheduling optimizer using system dependency topology, resource-slot lattice instance, prior allocation patterns, and reproducible simulation seed
+
+## Type Signature
+
+```
+(graph: Graph, lattice_instance: LatticeInstance, previously_generated_subgraphs: Collection[Subgraph], seed: int) -> GreedyMappingContext
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

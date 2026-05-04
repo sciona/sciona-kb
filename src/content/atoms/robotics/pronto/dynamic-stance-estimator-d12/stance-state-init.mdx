@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.robotics.pronto.dynamic_stance_estimator_d12.stance_state_init
+predicate_id: stance_state_init
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(config: EstimatorConfig | dict) -> StanceState"
+informal_desc: Bootstraps the internal state containers for the dynamic stance estimator — allocates covariance matrices (P, Q, R), latent mean/variance buffers, and any persistent bookkeeping needed before the first estimation step.
+conceptual_summary: "StochasticFilterStateBootstrapper. Allocates and initializes the full set of persistent numeric containers required by a recursive probabilistic estimator — specifically the prior covariance matrix (P), process noise covariance (Q), and observation noise covariance (R) — along with latent mean and variance buffers, seeded from hyperparameter priors supplied at construction time. The operation maps a static configuration descriptor into a typed, immutable state bag that encodes the estimator's initial uncertainty beliefs before any observations are processed. This is a pure setup transform: it performs no inference, applies no data, and produces a deterministic zero-step posterior ready to receive the first update tick.. Applications: Robotics / SLAM: Initializing the covariance and noise matrices of an Extended Kalman Filter before the first LiDAR or IMU observation is fused into a robot's pose estimate — identical P/Q/R allocation pattern with a 6-DOF latent state vector, Computational Neuroscience: Bootstrapping a Bayesian brain-state decoder prior to streaming electrophysiological time-series data, where the latent mean buffer represents a neural population vector and R encodes electrode noise characteristics, Quantitative Ecology: Setting up a state-space population dynamics model before ingesting seasonal survey counts, where Q captures environmental stochasticity and P encodes prior uncertainty over hidden carrying-capacity parameters, Structural Health Monitoring: Pre-allocating the filter state for a vibration-based damage detection system on a civil structure, where D encodes the number of tracked modal frequencies and R is calibrated from baseline accelerometer noise floors"
+inputs:
+  - name: config
+    type_desc: EstimatorConfig | dict
+    constraints: Must contain at minimum noise hyperparameters and dimensionality spec
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: stance_state
+    type_desc: StanceState
+    constraints: Freshly initialised, immutable state bag; P/Q/R set to priors
+    required: true
+    default_value_repr: ""
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Stance_state_init
+description: Bootstraps the internal state containers for the dynamic stance estimator — allocates covariance matrices (P, Q, R), latent mean/variance buffers, and any pers…
+---
+
+# Stance_state_init
+
+> Bootstraps the internal state containers for the dynamic stance estimator — allocates covariance matrices (P, Q, R), latent mean/variance buffers, and any persistent bookkeeping needed before the first estimation step.
+
+## Conceptual Summary
+
+StochasticFilterStateBootstrapper. Allocates and initializes the full set of persistent numeric containers required by a recursive probabilistic estimator — specifically the prior covariance matrix (P), process noise covariance (Q), and observation noise covariance (R) — along with latent mean and variance buffers, seeded from hyperparameter priors supplied at construction time. The operation maps a static configuration descriptor into a typed, immutable state bag that encodes the estimator's initial uncertainty beliefs before any observations are processed. This is a pure setup transform: it performs no inference, applies no data, and produces a deterministic zero-step posterior ready to receive the first update tick.. Applications: Robotics / SLAM: Initializing the covariance and noise matrices of an Extended Kalman Filter before the first LiDAR or IMU observation is fused into a robot's pose estimate — identical P/Q/R allocation pattern with a 6-DOF latent state vector, Computational Neuroscience: Bootstrapping a Bayesian brain-state decoder prior to streaming electrophysiological time-series data, where the latent mean buffer represents a neural population vector and R encodes electrode noise characteristics, Quantitative Ecology: Setting up a state-space population dynamics model before ingesting seasonal survey counts, where Q captures environmental stochasticity and P encodes prior uncertainty over hidden carrying-capacity parameters, Structural Health Monitoring: Pre-allocating the filter state for a vibration-based damage detection system on a civil structure, where D encodes the number of tracked modal frequencies and R is calibrated from baseline accelerometer noise floors
+
+## Type Signature
+
+```
+(config: EstimatorConfig | dict) -> StanceState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

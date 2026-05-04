@@ -1,0 +1,69 @@
+---
+cdg_asset_id: solution.kaggle.adversarial_attacks_1st
+title: NIPS 2017 Adversarial Attacks 1st Place -- Momentum Iterative FGSM
+description: Repeatedly nudge an image so that multiple neural networks misclassify it, using a running average of past nudge directions to avoid getting stuck, and weighti…
+problem_statement: Iterative gradient-based adversarial attack using momentum-accumulated gradients across an ensemble of models with asymmetric weighting, auxiliary logit loss, and adaptive budget allocation for both non-targeted and targeted settings.
+platform: kaggle
+competition_name: NIPS 2017 Non-Targeted + Targeted Adversarial Attack
+placement: 1st (both tracks)
+year: 2017
+domain: adversarial_ml
+paradigm: optimization
+family: adversarial
+tags:
+  - mi_fgsm
+  - momentum_iterative_fgsm
+  - adversarial_attack_ensemble
+  - targeted_adversarial_attack
+  - non_targeted_adversarial_attack
+  - transferable_adversarial_examples
+  - l_infinity_perturbation
+  - gradient_consensus
+  - model_ensemble_attack
+  - black_box_transfer
+  - iterative_gradient_attack
+  - auxiliary_logit_loss
+key_insight: Full momentum (mu=1.0) with L1-normalized gradients produces perturbations that transfer to unseen models because the accumulated gradient direction approximates the consensus gradient across model families. The L1 normalization prevents any single iteration's gradient magnitude from dominating, and full momentum ensures every iteration contributes equally to the final direction.
+failure_modes:
+  - "Adversarially-trained target models: momentum helps but transfer rates drop significantly against robust models"
+  - "Very tight perturbation budgets (epsilon < 4): too few effective iterations for momentum to accumulate a useful consensus direction"
+  - "Source and target model families are architecturally very different (e.g., CNN source vs. vision transformer target): gradient consensus may not transfer across architectural paradigms"
+source_url: https://github.com/dongyp13/Non-Targeted-Adversarial-Attacks
+source_license: Apache-2.0
+---
+
+# NIPS 2017 Adversarial Attacks 1st Place -- Momentum Iterative FGSM
+
+## Problem
+
+Iterative gradient-based adversarial attack using momentum-accumulated gradients across an ensemble of models with asymmetric weighting, auxiliary logit loss, and adaptive budget allocation for both non-targeted and targeted settings.
+
+## Approach
+
+Repeatedly nudge an image so that multiple neural networks misclassify it, using a running average of past nudge directions to avoid getting stuck, and weighting some networks less than others to produce perturbations that transfer to unseen networks.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.adversarial_attacks_1st" readOnly={true} /> */}
+
+1. **Ensemble Prediction Label Inference** -- Ask all models what class the image is, take the majority vote as the true label, and keep that label fixed for the entire attack.
+1. **Adaptive Epsilon Attack Strategy** -- Choose how many models to use and how many steps to take based on how much room you have to change the image -- tight budgets need more precise, smaller steps with fewer models.
+1. **Ensemble Logit Fusion with Asymmetric Weights** -- Average the raw predictions from all models, but give adversarially-hardened models less influence so the attack generalizes to new models.
+1. **Auxiliary Logit Loss Fusion** -- Compute the attack loss using both the final prediction and an intermediate prediction from each model, so the attack signal captures what the network cares about at multiple layers.
+1. **Momentum Iterative Gradient Accumulation (MI-FGSM)** -- Keep a running average of past attack directions, normalizing each new direction before adding it in, so the attack follows a smoother path that works on models it has never seen.
+1. **Std-Normalized Momentum Gradient (Targeted Variant)** -- A variant of the momentum accumulation that normalizes by standard deviation instead of average, applied twice to keep the attack signal stable when pushing toward a specific target class.
+1. **Rounded Clipped Perturbation Step** -- Instead of nudging every pixel by the same amount, nudge confident pixels more and uncertain pixels less, using a 5-level scale instead of just plus/minus one.
+
+## Key Insight
+
+Full momentum (mu=1.0) with L1-normalized gradients produces perturbations that transfer to unseen models because the accumulated gradient direction approximates the consensus gradient across model families. The L1 normalization prevents any single iteration's gradient magnitude from dominating, and full momentum ensures every iteration contributes equally to the final direction.
+
+## Failure Modes
+
+- Adversarially-trained target models: momentum helps but transfer rates drop significantly against robust models
+- Very tight perturbation budgets (epsilon &lt; 4): too few effective iterations for momentum to accumulate a useful consensus direction
+- Source and target model families are architecturally very different (e.g., CNN source vs. vision transformer target): gradient consensus may not transfer across architectural paradigms
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.adversarial_attacks_1st" label="Reproduce this solution in Sciona" /> */}

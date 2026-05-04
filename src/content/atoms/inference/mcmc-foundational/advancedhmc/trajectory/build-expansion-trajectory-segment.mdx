@@ -1,0 +1,76 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.trajectory.build_expansion_trajectory_segment
+predicate_id: build_expansion_trajectory_segment
+repo: sciona-atoms
+domain: inference
+type_signature: "(rng: AbstractRNG, trajectory_params: Trajectory, hamiltonian: Hamiltonian, initial_tree: BinaryTree, sampler_after_initial_build: AbstractTrajectorySampler, direction: Int, depth: Int, initial_energy: AbstractFloat) -> tuple[BinaryTree, AbstractTrajectorySampler, Termination]"
+informal_desc: If the initial segment did not terminate, this recursively constructs the second half of the trajectory, starting from the edge of the first, to double the total length.
+conceptual_summary: ""
+inputs:
+  - name: rng
+    type_desc: AbstractRNG
+    constraints: isinstance(x, str)
+  - name: trajectory_params
+    type_desc: Trajectory
+    constraints: x is not None
+  - name: hamiltonian
+    type_desc: Hamiltonian
+    constraints: x is not None
+  - name: initial_tree
+    type_desc: BinaryTree
+    constraints: Used to find the starting state for the expansion.
+  - name: sampler_after_initial_build
+    type_desc: AbstractTrajectorySampler
+    constraints: isinstance(x, str)
+  - name: direction
+    type_desc: Int
+    constraints: Value is -1 or 1
+  - name: depth
+    type_desc: Int
+    constraints: Represents j-1 from the original code
+  - name: initial_energy
+    type_desc: AbstractFloat
+    constraints: isinstance(x, (int, float))
+outputs:
+  - name: expansion_tree
+    type_desc: BinaryTree
+    constraints: x is not None
+  - name: sampler_after_expansion
+    type_desc: AbstractTrajectorySampler
+    constraints: isinstance(x, str)
+  - name: termination_after_expansion
+    type_desc: Termination
+    constraints: x is not None
+concept_type: divide_and_conquer
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for doubling trajectory trees and No-U-Turn termination.
+  - title: advancedhmc2020
+    citation: Package paper for AdvancedHMC.jl trajectory construction.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper returns compact NumPy leaves rather than Julia BinaryTree objects.
+  - title: neal2011hmc
+    citation: Canonical HMC reference for Hamiltonian dynamics and Metropolis-style energy diagnostics used by NUTS.
+title: Build_expansion_trajectory_segment
+description: If the initial segment did not terminate, this recursively constructs the second half of the trajectory, starting from the edge of the first, to double the tot…
+---
+
+# Build_expansion_trajectory_segment
+
+> If the initial segment did not terminate, this recursively constructs the second half of the trajectory, starting from the edge of the first, to double the total length.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(rng: AbstractRNG, trajectory_params: Trajectory, hamiltonian: Hamiltonian, initial_tree: BinaryTree, sampler_after_initial_build: AbstractTrajectorySampler, direction: Int, depth: Int, initial_energy: AbstractFloat) -> tuple[BinaryTree, AbstractTrajectorySampler, Termination]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

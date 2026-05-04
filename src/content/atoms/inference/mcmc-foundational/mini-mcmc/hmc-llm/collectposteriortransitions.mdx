@@ -1,0 +1,72 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.collectposteriortransitions
+predicate_id: collectposteriortransitions
+repo: sciona-atoms
+domain: inference
+type_signature: "(n_collect: int, chain_state_burned: HMCState, prng_key_burned: PRNGKey/RNG state, kernel_spec: StateModelSpec, collection_buffer_0: array/tensor[n_collect, n_chains, dim], chain_dims: tuple(int n_chains, int dim), trace_state_seeded: chain trace accumulator) -> tuple[array/tensor[n_collect, n_chains, dim], HMCState, PRNGKey/RNG state, chain trace accumulator]"
+informal_desc: Iterate n_collect transitions; at each step advance state with kernel, write positions into buffer, and update diagnostics/progress trace.
+conceptual_summary: ""
+inputs:
+  - name: n_collect
+    type_desc: int
+    constraints: ">= 0"
+  - name: chain_state_burned
+    type_desc: HMCState
+    constraints: initial state for collection loop
+  - name: prng_key_burned
+    type_desc: np.ndarray
+    constraints: x is not None
+  - name: kernel_spec
+    type_desc: StateModelSpec
+    constraints: contains transition kernel
+  - name: collection_buffer_0
+    type_desc: np.ndarray
+    constraints: time-major buffer
+  - name: chain_dims
+    type_desc: tuple[int, int]
+    constraints: must match state positions
+  - name: trace_state_seeded
+    type_desc: object
+    constraints: x is not None
+outputs:
+  - name: collection_buffer_filled
+    type_desc: np.ndarray
+    constraints: all collection slots filled in order
+  - name: final_state
+    type_desc: HMCState
+    constraints: state after final collection transition
+  - name: final_prng_key
+    type_desc: np.ndarray
+    constraints: advanced by n_collect transitions
+  - name: trace_state_final
+    type_desc: object
+    constraints: includes per-step diagnostics/progress payloads
+concept_type: data_assembly
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Collectposteriortransitions
+description: Iterate n_collect transitions; at each step advance state with kernel, write positions into buffer, and update diagnostics/progress trace.
+---
+
+# Collectposteriortransitions
+
+> Iterate n_collect transitions; at each step advance state with kernel, write positions into buffer, and update diagnostics/progress trace.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(n_collect: int, chain_state_burned: HMCState, prng_key_burned: PRNGKey/RNG state, kernel_spec: StateModelSpec, collection_buffer_0: array/tensor[n_collect, n_chains, dim], chain_dims: tuple(int n_chains, int dim), trace_state_seeded: chain trace accumulator) -> tuple[array/tensor[n_collect, n_chains, dim], HMCState, PRNGKey/RNG state, chain trace accumulator]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

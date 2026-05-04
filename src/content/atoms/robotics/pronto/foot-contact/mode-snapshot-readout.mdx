@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.robotics.pronto.foot_contact.mode_snapshot_readout
+predicate_id: mode_snapshot_readout
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(mode_state_in: object { mode_: Mode, previous_mode_: Mode }) -> tuple[Mode, Mode]"
+informal_desc: Reads current and previous mode from immutable classifier state and exposes them as explicit outputs.
+conceptual_summary: "Lag-1 Discrete State Projection. Extracts two temporally adjacent categorical state tokens from an immutable composite snapshot and emits them as separate outputs. The mapping is a direct structural projection from a packed record to an explicit ordered pair representing present and immediately preceding state. No mutation, inference, or recomputation is performed; symbol identity is preserved exactly.. Applications: Finite-state controller diagnostics in robotics, exposing current and previous control regimes for transition validation, Communication protocol analyzers, surfacing current and prior parser states for handshake/sequence debugging, Compiler or interpreter pipeline tracing, reporting current and previous processing phases for execution observability, Industrial process automation monitoring, emitting current and prior machine operation states for rule-based safety checks"
+inputs:
+  - name: mode_state_in
+    type_desc: object
+    constraints: Read-only snapshot.
+outputs:
+  - name: mode
+    type_desc: Mode
+    constraints: Current classifier mode.
+  - name: previous_mode
+    type_desc: Mode
+    constraints: Previous classifier mode.
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Mode_snapshot_readout
+description: Reads current and previous mode from immutable classifier state and exposes them as explicit outputs.
+---
+
+# Mode_snapshot_readout
+
+> Reads current and previous mode from immutable classifier state and exposes them as explicit outputs.
+
+## Conceptual Summary
+
+Lag-1 Discrete State Projection. Extracts two temporally adjacent categorical state tokens from an immutable composite snapshot and emits them as separate outputs. The mapping is a direct structural projection from a packed record to an explicit ordered pair representing present and immediately preceding state. No mutation, inference, or recomputation is performed; symbol identity is preserved exactly.. Applications: Finite-state controller diagnostics in robotics, exposing current and previous control regimes for transition validation, Communication protocol analyzers, surfacing current and prior parser states for handshake/sequence debugging, Compiler or interpreter pipeline tracing, reporting current and previous processing phases for execution observability, Industrial process automation monitoring, emitting current and prior machine operation states for rule-based safety checks
+
+## Type Signature
+
+```
+(mode_state_in: object { mode_: Mode, previous_mode_: Mode }) -> tuple[Mode, Mode]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

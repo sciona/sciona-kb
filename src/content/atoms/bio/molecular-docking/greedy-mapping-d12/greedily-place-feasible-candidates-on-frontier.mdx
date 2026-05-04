@@ -1,0 +1,64 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping_d12.greedily_place_feasible_candidates_on_frontier
+predicate_id: greedily_place_feasible_candidates_on_frontier
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(problem_context: GreedyMappingContext, mapping_state_seeded: MappingState, ranked_unplaced_nodes: Collection[NodeId]) -> tuple[MappingState, Collection[NodeId]]"
+informal_desc: Iterate frontier lattice neighbors and greedily place the first candidate satisfying lattice/graph adjacency consistency checks, returning updated mapping state and leftovers.
+conceptual_summary: ""
+inputs:
+  - name: problem_context
+    type_desc: GreedyMappingContext
+    constraints: Must provide graph and lattice topology.
+    required: true
+    default_value_repr: ""
+  - name: mapping_state_seeded
+    type_desc: MappingState
+    constraints: Must include mapping, unmapping, unexpanded_nodes, and free_lattice_neighbors frontier.
+    required: true
+    default_value_repr: ""
+  - name: ranked_unplaced_nodes
+    type_desc: Collection[NodeId]
+    constraints: Candidate nodes in greedy priority order.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: mapping_state_extended
+    type_desc: MappingState
+    constraints: State after zero or more feasible placements, with unexpanded_nodes updated for placed nodes.
+    required: true
+    default_value_repr: ""
+  - name: remaining_unplaced_nodes
+    type_desc: Collection[NodeId]
+    constraints: Candidates still not placed after frontier scan.
+    required: true
+    default_value_repr: ""
+concept_type: greedy
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Greedily_place_feasible_candidates_on_frontier
+description: Iterate frontier lattice neighbors and greedily place the first candidate satisfying lattice/graph adjacency consistency checks, returning updated mapping stat…
+---
+
+# Greedily_place_feasible_candidates_on_frontier
+
+> Iterate frontier lattice neighbors and greedily place the first candidate satisfying lattice/graph adjacency consistency checks, returning updated mapping state and leftovers.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(problem_context: GreedyMappingContext, mapping_state_seeded: MappingState, ranked_unplaced_nodes: Collection[NodeId]) -> tuple[MappingState, Collection[NodeId]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

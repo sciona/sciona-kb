@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.route_and_run_quantum_simulation
+predicate_id: route_and_run_quantum_simulation
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(params: dict, reg: Register, opt_reg: Register, list_perm: list[int], weights_rev: np.ndarray[float]) -> dict[str, int]"
+informal_desc: "Branch on register size: for < 22 atoms run the statevector simulator; for ≥ 22 atoms run the MPS emulator. Returns the raw measurement count distribution from simple_quantum_loop."
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Route_and_run_quantum_simulation
+description: "Branch on register size: for < 22 atoms run the statevector simulator; for ≥ 22 atoms run the MPS emulator. Returns the raw measurement count distribution from…"
+---
+
+# Route_and_run_quantum_simulation
+
+> Branch on register size: for &lt; 22 atoms run the statevector simulator; for ≥ 22 atoms run the MPS emulator. Returns the raw measurement count distribution from simple_quantum_loop.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(params: dict, reg: Register, opt_reg: Register, list_perm: list[int], weights_rev: np.ndarray[float]) -> dict[str, int]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

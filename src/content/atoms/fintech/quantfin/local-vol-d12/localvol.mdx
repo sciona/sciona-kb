@@ -1,0 +1,72 @@
+---
+fqdn: sciona.atoms.fintech.quantfin.local_vol_d12.localvol
+predicate_id: localvol
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: "(dwdt: Any, k: Any, otherwise: Any, rcurve: Any, s0: Any, solution: Any, sqrt: Any, t: Any, v: Any, w: Any) -> Any"
+informal_desc: ""
+conceptual_summary: ""
+inputs:
+  - name: dwdt
+    type_desc: float
+    constraints: time derivative of total variance
+  - name: k
+    type_desc: float
+    constraints: positive stock or strike level
+  - name: otherwise
+    type_desc: float
+    constraints: non-negative fallback volatility
+  - name: rcurve
+    type_desc: Mapping[str, float | complex | str | bool]
+    constraints: rate-curve context
+  - name: s0
+    type_desc: float
+    constraints: positive initial spot
+  - name: solution
+    type_desc: float
+    constraints: Dupire denominator
+  - name: sqrt
+    type_desc: float->float callable
+    constraints: square-root function
+  - name: t
+    type_desc: float
+    constraints: non-negative time to maturity
+  - name: v
+    type_desc: float
+    constraints: implied variance
+  - name: w
+    type_desc: float
+    constraints: total implied variance
+outputs:
+  - name: local_volatility
+    type_desc: float
+    constraints: non-negative scalar
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: gatheral2006
+    citation: Local-volatility / vol-surface attribution.
+  - title: repo_quantfin
+    citation: Upstream implementation is mapped to the vendored quantfin repository.
+title: Localvol
+description: ""
+---
+
+# Localvol
+
+> 
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(dwdt: Any, k: Any, otherwise: Any, rcurve: Any, s0: Any, solution: Any, sqrt: Any, t: Any, v: Any, w: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

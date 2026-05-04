@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.robotics.pronto.yaw_lock.set_standing_link_targets
+predicate_id: set_standing_link_targets
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(state_in: YawLockState, left_standing_link_in: link identifier, right_standing_link_in: link identifier) -> YawLockState"
+informal_desc: Set left/right standing link identifiers in a newly returned immutable state.
+conceptual_summary: "Immutable Dual-Reference Field Substitution. Takes an immutable structured state and performs a selective substitution of exactly two designated reference-valued fields using externally provided identifiers. It returns a new state instance with those two fields overwritten while preserving all other fields bit-for-bit from the input structure. The operation is a non-iterative, deterministic structural copy-with-update transform.. Applications: Versioned graph analytics: replace predecessor/successor node identifiers in a snapshot without mutating prior graph states, Distributed systems configuration: update primary/secondary endpoint IDs in an immutable failover configuration object, Computational geometry or CAD: swap two boundary-connection handles in an immutable mesh/topology state, Molecular simulation pipelines: revise two bonded-partner indices in an immutable interaction-state record"
+inputs:
+  - name: state_in
+    type_desc: YawLockState
+    constraints: Immutable input state.
+  - name: left_standing_link_in
+    type_desc: int
+    constraints: x is not None
+  - name: right_standing_link_in
+    type_desc: int
+    constraints: x is not None
+outputs:
+  - name: state_out
+    type_desc: YawLockState
+    constraints: New object with left_standing_link and right_standing_link replaced.
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Set_standing_link_targets
+description: Set left/right standing link identifiers in a newly returned immutable state.
+---
+
+# Set_standing_link_targets
+
+> Set left/right standing link identifiers in a newly returned immutable state.
+
+## Conceptual Summary
+
+Immutable Dual-Reference Field Substitution. Takes an immutable structured state and performs a selective substitution of exactly two designated reference-valued fields using externally provided identifiers. It returns a new state instance with those two fields overwritten while preserving all other fields bit-for-bit from the input structure. The operation is a non-iterative, deterministic structural copy-with-update transform.. Applications: Versioned graph analytics: replace predecessor/successor node identifiers in a snapshot without mutating prior graph states, Distributed systems configuration: update primary/secondary endpoint IDs in an immutable failover configuration object, Computational geometry or CAD: swap two boundary-connection handles in an immutable mesh/topology state, Molecular simulation pipelines: revise two bonded-partner indices in an immutable interaction-state record
+
+## Type Signature
+
+```
+(state_in: YawLockState, left_standing_link_in: link identifier, right_standing_link_in: link identifier) -> YawLockState
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

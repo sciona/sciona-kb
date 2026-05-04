@@ -1,0 +1,156 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.svm_proc.get_auth_rates
+predicate_id: get_auth_rates
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(TP: Any, FP: Any, TN: Any, FN: Any, thresholds: Any) -> Any"
+informal_desc: |-
+  Compute authentication rates from the confusion matrix.
+
+  Parameters
+  ----------
+  TP : array
+      True Positive counts for each classifier threshold.
+  FP : array
+      False Positive counts for each classifier threshold.
+  TN : array
+      True Negative counts for each classifier threshold.
+  FN : array
+      False Negative counts for each classifier threshold.
+  thresholds : array
+      Classifier thresholds.
+
+  Returns
+  -------
+  Acc : array
+      Accuracy at each classifier threshold.
+  TAR : array
+      True Accept Rate at each classifier threshold.
+  FAR : array
+      False Accept Rate at each classifier threshold.
+  FRR : array
+      False Reject Rate at each classifier threshold.
+  TRR : array
+      True Reject Rate at each classifier threshold.
+  EER : array
+      Equal Error Rate points, with format (threshold, rate).
+  Err : array
+      Error rate at each classifier threshold.
+  PPV : array
+      Positive Predictive Value at each classifier threshold.
+  FDR : array
+      False Discovery Rate at each classifier threshold.
+  NPV : array
+      Negative Predictive Value at each classifier threshold.
+  FOR : array
+      False Omission Rate at each classifier threshold.
+  MCC : array
+      Matthrews Correlation Coefficient at each classifier threshold.
+conceptual_summary: ""
+inputs:
+  - name: TP
+    type_desc: NDArray[np.float64]
+    constraints: valid NDArray[np.float64]
+    required: true
+    default_value_repr: ""
+  - name: FP
+    type_desc: NDArray[np.float64]
+    constraints: valid NDArray[np.float64]
+    required: true
+    default_value_repr: ""
+  - name: TN
+    type_desc: NDArray[np.float64]
+    constraints: valid NDArray[np.float64]
+    required: true
+    default_value_repr: ""
+  - name: FN
+    type_desc: NDArray[np.float64]
+    constraints: valid NDArray[np.float64]
+    required: true
+    default_value_repr: ""
+  - name: thresholds
+    type_desc: NDArray[np.float64]
+    constraints: valid NDArray[np.float64]
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: result
+    type_desc: dict[str, object]
+    constraints: valid dict[str, object]
+    required: true
+    default_value_repr: ""
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Get_auth_rates
+description: |-
+  Compute authentication rates from the confusion matrix.
+
+  Parameters
+  ----------
+  TP : array
+      True Positive counts for each classifier threshold.
+  FP : array
+    …
+---
+
+# Get_auth_rates
+
+> Compute authentication rates from the confusion matrix.
+
+Parameters
+----------
+TP : array
+    True Positive counts for each classifier threshold.
+FP : array
+    False Positive counts for each classifier threshold.
+TN : array
+    True Negative counts for each classifier threshold.
+FN : array
+    False Negative counts for each classifier threshold.
+thresholds : array
+    Classifier thresholds.
+
+Returns
+-------
+Acc : array
+    Accuracy at each classifier threshold.
+TAR : array
+    True Accept Rate at each classifier threshold.
+FAR : array
+    False Accept Rate at each classifier threshold.
+FRR : array
+    False Reject Rate at each classifier threshold.
+TRR : array
+    True Reject Rate at each classifier threshold.
+EER : array
+    Equal Error Rate points, with format (threshold, rate).
+Err : array
+    Error rate at each classifier threshold.
+PPV : array
+    Positive Predictive Value at each classifier threshold.
+FDR : array
+    False Discovery Rate at each classifier threshold.
+NPV : array
+    Negative Predictive Value at each classifier threshold.
+FOR : array
+    False Omission Rate at each classifier threshold.
+MCC : array
+    Matthrews Correlation Coefficient at each classifier threshold.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(TP: Any, FP: Any, TN: Any, FN: Any, thresholds: Any) -> Any
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

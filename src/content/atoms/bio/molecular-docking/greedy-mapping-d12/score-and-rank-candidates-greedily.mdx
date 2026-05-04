@@ -1,0 +1,74 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.greedy_mapping_d12.score_and_rank_candidates_greedily
+predicate_id: score_and_rank_candidates_greedily
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(problem_context: GreedyMappingContext, unplaced_nodes: Collection[NodeId], mapping_state_seeded: MappingState, remove_invalid_placement_nodes: bool, rank_nodes: bool) -> tuple[Collection[NodeId], Collection[ScoredNode]]"
+informal_desc: Optionally call greedy_node_scoring and produce ranked unplaced nodes; also emit scored node records for downstream observability/output.
+conceptual_summary: ""
+inputs:
+  - name: problem_context
+    type_desc: GreedyMappingContext
+    constraints: Must provide graph, lattice_instance.avg_degree, previously_generated_subgraphs.
+    required: true
+    default_value_repr: ""
+  - name: unplaced_nodes
+    type_desc: Collection[NodeId]
+    constraints: Nodes eligible for scoring.
+    required: true
+    default_value_repr: ""
+  - name: mapping_state_seeded
+    type_desc: MappingState
+    constraints: Provides current mapping for feature computation.
+    required: true
+    default_value_repr: ""
+  - name: remove_invalid_placement_nodes
+    type_desc: bool
+    constraints: Controls non-neighbor score component.
+    required: true
+    default_value_repr: ""
+  - name: rank_nodes
+    type_desc: bool
+    constraints: If false, preserve original candidate order and emit empty/default scores.
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: ranked_unplaced_nodes
+    type_desc: Collection[NodeId]
+    constraints: Sorted descending by (heuristic_score, random_tiebreaker) when rank_nodes=true.
+    required: true
+    default_value_repr: ""
+  - name: scored_nodes
+    type_desc: Collection[ScoredNode]
+    constraints: Node-level score payload derived from greedy_node_scoring.
+    required: true
+    default_value_repr: ""
+concept_type: greedy
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Score_and_rank_candidates_greedily
+description: Optionally call greedy_node_scoring and produce ranked unplaced nodes; also emit scored node records for downstream observability/output.
+---
+
+# Score_and_rank_candidates_greedily
+
+> Optionally call greedy_node_scoring and produce ranked unplaced nodes; also emit scored node records for downstream observability/output.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(problem_context: GreedyMappingContext, unplaced_nodes: Collection[NodeId], mapping_state_seeded: MappingState, remove_invalid_placement_nodes: bool, rank_nodes: bool) -> tuple[Collection[NodeId], Collection[ScoredNode]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

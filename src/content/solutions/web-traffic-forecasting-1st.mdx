@@ -1,0 +1,60 @@
+---
+cdg_asset_id: solution.kaggle.web_traffic_forecasting_1st
+title: Web Traffic Time Series Forecasting - 1st Place (2017) - Pipeline Template
+description: "This template captures the ordered steps used by Web Traffic Time Series Forecasting - 1st Place (2017): prepare the data, build task-specific representations,…"
+problem_statement: "Time Series / Sequence-to-Sequence solution template for Web Traffic Time Series Forecasting - 1st Place (2017), modeled as a 5-stage deterministic pipeline: Log1p Transformation, Missing value masking, Seq2Seq Architecture, Exogenous concatenation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Web Traffic Time Series Forecasting - 1st Place (2017)
+placement: ""
+year: 0
+domain: structured_prediction
+paradigm: loss_function
+family: structured_prediction
+tags:
+  - lstm
+  - series
+  - sequence
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Log1p Transformation creates the representation needed by SMAPE optimization, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/web-traffic-time-series-forecasting/discussion/39395
+source_license: null
+---
+
+# Web Traffic Time Series Forecasting - 1st Place (2017) - Pipeline Template
+
+## Problem
+
+Time Series / Sequence-to-Sequence solution template for Web Traffic Time Series Forecasting - 1st Place (2017), modeled as a 5-stage deterministic pipeline: Log1p Transformation, Missing value masking, Seq2Seq Architecture, Exogenous concatenation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Web Traffic Time Series Forecasting - 1st Place (2017): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.web_traffic_forecasting_1st" readOnly={true} /> */}
+
+1. **Log1p Transformation** -- This stage strictly apply log1p to the Wikipedia page views to suppress massive traffic spikes and stabilize neural network gradients (numpy).
+1. **Missing value masking** -- This stage tag NaN values with an explicit boolean flag and fill with 0 to inform the network of missing data mechanically (pandas).
+1. **Seq2Seq Architecture** -- This stage construct an LSTM Encoder-Decoder network. The encoder ingests the trailing 60 days of traffic, passing the hidden state to the decoder which predicts the next 60 days autoregressively (TensorFlow).
+1. **Exogenous concatenation** -- This stage append Wikipedia page metadata (language, domain) to the LSTM inputs at every timestep.
+1. **SMAPE optimization** -- This stage train the entire network natively on a smooth approximation of the SMAPE (Symmetric Mean Absolute Percentage Error) loss function (TensorFlow).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Log1p Transformation creates the representation needed by SMAPE optimization, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.web_traffic_forecasting_1st" label="Reproduce this solution in Sciona" /> */}

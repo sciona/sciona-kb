@@ -1,0 +1,20 @@
+---
+import CatalogLayout from "../../layouts/CatalogLayout.astro";
+import { getCollection } from "astro:content";
+
+const solutions = await getCollection("solutions");
+
+const items = solutions.map((s) => ({
+  slug: s.id,
+  href: `/solutions/${s.id}`,
+  title: s.data.title,
+  description: s.data.description,
+  tags: [s.data.platform, s.data.paradigm, s.data.family, ...s.data.tags.slice(0, 2)],
+}));
+---
+
+<CatalogLayout
+  title="Solutions"
+  description={`${items.length} competition-winning solutions explained step-by-step with CDG breakdowns.`}
+  items={items}
+/>

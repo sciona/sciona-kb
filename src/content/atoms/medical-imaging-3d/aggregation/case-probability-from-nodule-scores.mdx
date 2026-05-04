@@ -1,0 +1,64 @@
+---
+fqdn: sciona.atoms.medical_imaging_3d.aggregation.case_probability_from_nodule_scores
+predicate_id: case_probability_from_nodule_scores
+repo: sciona-atoms-bio
+domain: medical_imaging_3d
+type_signature: "(nodule_probabilities: NDArray[np.float64], baseline_logit: float = -30.0) -> NDArray[np.float64]"
+informal_desc: Combine candidate nodule cancer probabilities into case probabilities.
+conceptual_summary: Computes the CaseNet leaky noisy-or aggregation equation.
+inputs:
+  - name: nodule_probabilities
+    type_desc: NDArray[np.float64]
+    constraints: one- or two-dimensional finite probabilities in [0, 1]
+    data_kind: probability
+    time_basis: ""
+    provenance: CaseNet per-nodule classifier outputs
+    required: true
+    default_value_repr: ""
+  - name: baseline_logit
+    type_desc: float
+    constraints: finite scalar logit for dummy missed-nodule probability
+    data_kind: model_parameter
+    time_basis: ""
+    provenance: CaseNet baseline parameter
+    required: false
+    default_value_repr: "-30.0"
+outputs:
+  - name: result
+    type_desc: NDArray[np.float64]
+    constraints: one-dimensional case probabilities in [0, 1]
+    data_kind: probability
+    time_basis: ""
+    provenance: leaky noisy-or aggregation
+    required: true
+    default_value_repr: ""
+concept_type: probabilistic_aggregation
+verification_level: type_checked
+used_by_cdgs:
+  - solution.kaggle.dsb2017_1st
+references:
+  - title: repo_dsb2017_lfz
+    citation: Implements the explicit CaseNet casePred equation after per-nodule probabilities are already available.
+  - title: liao2017leakyNoisyOr
+    citation: The paper describes combining top-nodule cancer probabilities with a leaky noisy-or gate to obtain case-level lung-cancer probability.
+title: Case_probability_from_nodule_scores
+description: Combine candidate nodule cancer probabilities into case probabilities.
+---
+
+# Case_probability_from_nodule_scores
+
+> Combine candidate nodule cancer probabilities into case probabilities.
+
+## Conceptual Summary
+
+Computes the CaseNet leaky noisy-or aggregation equation.
+
+## Type Signature
+
+```
+(nodule_probabilities: NDArray[np.float64], baseline_logit: float = -30.0) -> NDArray[np.float64]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

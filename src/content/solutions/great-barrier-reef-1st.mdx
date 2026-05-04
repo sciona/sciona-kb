@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.great_barrier_reef_1st
+title: TensorFlow Great Barrier Reef - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by TensorFlow Great Barrier Reef - 1st Place (2022): prepare the data, build task-specific representations, train…"
+problem_statement: "Object detection (2D) solution template for TensorFlow Great Barrier Reef - 1st Place (2022), modeled as a 8-stage deterministic pipeline: Video Frame Extraction, Patch Generation, Boundary Filtering, Data Augmentation, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: TensorFlow Great Barrier Reef - 1st Place (2022)
+placement: 1st
+year: 2022
+domain: object_detection_2d
+paradigm: signal_filter
+family: object_detection_2d
+tags:
+  - cnn
+  - yolov5
+  - object
+  - detection
+key_insight: "The load-bearing idea is the pipeline topology: Video Frame Extraction creates the representation needed by Post-processing, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: ""
+source_license: null
+---
+
+# TensorFlow Great Barrier Reef - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+Object detection (2D) solution template for TensorFlow Great Barrier Reef - 1st Place (2022), modeled as a 8-stage deterministic pipeline: Video Frame Extraction, Patch Generation, Boundary Filtering, Data Augmentation, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by TensorFlow Great Barrier Reef - 1st Place (2022): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.great_barrier_reef_1st" readOnly={true} /> */}
+
+1. **Video Frame Extraction** -- This stage load continuous MP4 videos, extract 1280x720 spatial frames, and split the dataset via a 3-fold cross-validation strategy specifically stratified by video_id to prevent temporal leakage (cv2, pandas).
+1. **Patch Generation** -- This stage slice the original high-resolution frames into smaller 512x320 pixel patches to artificially enlarge small starfish targets for the detector (numpy).
+1. **Boundary Filtering** -- This stage remove any bounding boxes that intersect the patch boundaries to prevent the network from learning truncated artifacts.
+1. **Data Augmentation** -- This stage apply geometric rotation, mixup blending, and bounding-box-safe augmentations (albumentations).
+1. **Detector Training** -- This stage train an array of YOLOv5 models on the isolated patches utilizing modified, highly permissive confidence thresholds (box=0.2, iou_t=0.3) to maximize recall (torch, yolov5).
+1. **Full-Frame Inference** -- This stage infer bounding box coordinates on the original unpatched 1280x720 test images.
+1. **Classification Rescoring** -- This stage extract the predicted bounding box crops and pass them through a completely independent secondary CNN classifier to penalize and discard false positive predictions (torch.nn, timm).
+1. **Post-processing** -- This stage apply Non-Maximum Suppression (NMS) to collapse overlapping boxes and format final predictions for submission (torchvision.ops).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Video Frame Extraction creates the representation needed by Post-processing, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.great_barrier_reef_1st" label="Reproduce this solution in Sciona" /> */}

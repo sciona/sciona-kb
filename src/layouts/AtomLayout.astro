@@ -1,0 +1,90 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/seo/Breadcrumbs.astro";
+import TypeSignature from "../components/content/TypeSignature.astro";
+import IOSpecTable from "../components/content/IOSpecTable.astro";
+import AtomReverseLinks from "../components/content/AtomReverseLinks.astro";
+import PlatformCTA from "../components/cta/PlatformCTA.astro";
+import GitHubEditLink from "../components/cta/GitHubEditLink.astro";
+
+interface Props {
+  atom: CollectionEntry<"atoms">;
+  contentPath: string;
+}
+
+const { atom, contentPath } = Astro.props;
+const { data } = atom;
+
+const breadcrumbs = [
+  { label: "Atlas", href: "/" },
+  { label: "Atoms", href: "/atoms" },
+  { label: data.domain, href: `/concept/${data.concept_type}` },
+  { label: data.title, href: Astro.url.pathname },
+];
+---
+
+<BaseLayout title={data.title} description={data.description}>
+  <div class="max-w-4xl mx-auto">
+    <Breadcrumbs segments={breadcrumbs} />
+    <GitHubEditLink contentPath={contentPath} />
+
+    <h1 class="text-3xl font-bold mt-4 mb-2">{data.title}</h1>
+    <p class="text-atlas-text-muted text-lg mb-6">{data.informal_desc}</p>
+
+    <div class="flex flex-wrap gap-2 mb-6">
+      <span class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted">{data.concept_type}</span>
+      <span class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted">{data.repo}</span>
+      <span class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted">{data.verification_level}</span>
+    </div>
+
+    <TypeSignature signature={data.type_signature} />
+
+    {data.inputs.length > 0 && (
+      <section class="mt-8">
+        <h2 class="text-xl font-semibold mb-3">Inputs</h2>
+        <IOSpecTable specs={data.inputs} direction="input" />
+      </section>
+    )}
+
+    {data.outputs.length > 0 && (
+      <section class="mt-8">
+        <h2 class="text-xl font-semibold mb-3">Outputs</h2>
+        <IOSpecTable specs={data.outputs} direction="output" />
+      </section>
+    )}
+
+    <article class="prose prose-invert max-w-none mt-8">
+      <slot />
+    </article>
+
+    {data.references.length > 0 && (
+      <section class="mt-8">
+        <h2 class="text-xl font-semibold mb-3">References</h2>
+        <ul class="space-y-2">
+          {data.references.map((ref) => (
+            <li class="text-atlas-text-muted">
+              <span class="text-atlas-text font-medium">{ref.title}</span>
+              {ref.url ? (
+                <a href={ref.url} class="text-atlas-accent hover:text-atlas-accent-hover ml-2" target="_blank" rel="noopener">{ref.citation}</a>
+              ) : (
+                <span class="ml-2">{ref.citation}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {data.used_by_cdgs.length > 0 && (
+      <section class="mt-8">
+        <h2 class="text-xl font-semibold mb-3">Used in CDGs</h2>
+        <AtomReverseLinks cdgAssetIds={data.used_by_cdgs} />
+      </section>
+    )}
+
+    <div class="mt-12">
+      <PlatformCTA atomFqdn={data.fqdn} label="Use this atom in Sciona" />
+    </div>
+  </div>
+</BaseLayout>

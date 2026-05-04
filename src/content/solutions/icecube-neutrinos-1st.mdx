@@ -1,0 +1,60 @@
+---
+cdg_asset_id: solution.kaggle.icecube_neutrinos_1st
+title: IceCube - Neutrinos in Deep Ice - 1st Place (2023) - Pipeline Template
+description: "This template captures the ordered steps used by IceCube - Neutrinos in Deep Ice - 1st Place (2023): prepare the data, build task-specific representations, tra…"
+problem_statement: "3D Graph / Sequence Regression (Directional) solution template for IceCube - Neutrinos in Deep Ice - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Point cloud processing, Graph definition, Graph Neural Network, Transformer block, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: IceCube - Neutrinos in Deep Ice - 1st Place (2023)
+placement: 1st
+year: 2023
+domain: graph_regression
+paradigm: loss_function
+family: graph_regression
+tags:
+  - transformer
+  - graph
+  - sequence
+  - regression
+  - directional
+key_insight: "The load-bearing idea is the pipeline topology: Point cloud processing creates the representation needed by Directional loss, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402882
+source_license: null
+---
+
+# IceCube - Neutrinos in Deep Ice - 1st Place (2023) - Pipeline Template
+
+## Problem
+
+3D Graph / Sequence Regression (Directional) solution template for IceCube - Neutrinos in Deep Ice - 1st Place (2023), modeled as a 5-stage deterministic pipeline: Point cloud processing, Graph definition, Graph Neural Network, Transformer block, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by IceCube - Neutrinos in Deep Ice - 1st Place (2023): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.icecube_neutrinos_1st" readOnly={true} /> */}
+
+1. **Point cloud processing** -- This stage format detector hits into node features (x, y, z, time, charge) (numpy).
+1. **Graph definition** -- This stage build a KNN graph connecting hits based strictly on spatial and temporal proximity (PyTorch Geometric).
+1. **Graph Neural Network** -- This stage pass the graph through a DynEdge architecture (GraphNet) to allow message passing between detector nodes (PyTorch).
+1. **Transformer block** -- This stage feed the pooled graph node embeddings into a transformer encoder for global context mapping.
+1. **Directional loss** -- This stage predict 3D spherical coordinates using a von Mises-Fisher (vMF) loss function to handle angular periodicity constraints.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Point cloud processing creates the representation needed by Directional loss, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.icecube_neutrinos_1st" label="Reproduce this solution in Sciona" /> */}

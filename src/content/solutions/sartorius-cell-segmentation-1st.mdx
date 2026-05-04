@@ -1,0 +1,62 @@
+---
+cdg_asset_id: solution.kaggle.sartorius_cell_segmentation_1st
+title: Sartorius Cell Instance Segmentation - 1st Place (2022) - Pipeline Template
+description: "This template captures the ordered steps used by Sartorius Cell Instance Segmentation - 1st Place (2022): prepare the data, build task-specific representations…"
+problem_statement: "Object detection (2D) / Instance Segmentation solution template for Sartorius Cell Instance Segmentation - 1st Place (2022), modeled as a 7-stage deterministic pipeline: Data Loading, Label Harmonization, Bounding Box Generation, Detection Stage, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Sartorius Cell Instance Segmentation - 1st Place (2022)
+placement: 1st
+year: 2022
+domain: object_detection_2d
+paradigm: optimization
+family: object_detection_2d
+tags:
+  - rag
+  - segmentation
+  - object
+  - detection
+  - instance
+key_insight: "The load-bearing idea is the pipeline topology: Data Loading creates the representation needed by Ensemble & TTA, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/hubmap-hacking-the-human-vasculature/discussion/428447
+source_license: null
+---
+
+# Sartorius Cell Instance Segmentation - 1st Place (2022) - Pipeline Template
+
+## Problem
+
+Object detection (2D) / Instance Segmentation solution template for Sartorius Cell Instance Segmentation - 1st Place (2022), modeled as a 7-stage deterministic pipeline: Data Loading, Label Harmonization, Bounding Box Generation, Detection Stage, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Sartorius Cell Instance Segmentation - 1st Place (2022): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.sartorius_cell_segmentation_1st" readOnly={true} /> */}
+
+1. **Data Loading** -- This stage ingest microscopy imagery and corresponding bounding box/mask annotations (pandas, PIL).
+1. **Label Harmonization** -- This stage intentionally include low-confidence "unsure" labels during the training phase to maximize data volume, establishing that pipeline robustness benefits more from dataset scale than from absolute label purity.
+1. **Bounding Box Generation** -- This stage convert irregular instance masks into tightly bounded box coordinates to serve as targets for the initial detection stage (scikit-image).
+1. **Detection Stage** -- This stage train a standard 2D object detector to locate broader cell clusters across the slide (torchvision.models.detection).
+1. **Crop Extraction** -- This stage extract highly specific regions of interest (ROIs) based entirely on the detector's coordinate predictions (torch.tensor).
+1. **Segmentation Stage** -- This stage train a semantic segmentation model (U-Net architecture) exclusively on the localized crops to output pixel-precise biological masks (segmentation_models_pytorch).
+1. **Ensemble & TTA** -- This stage average the mask probabilities across multiple spatial scales and horizontal/vertical flips (Test-Time Augmentation).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Data Loading creates the representation needed by Ensemble & TTA, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.sartorius_cell_segmentation_1st" label="Reproduce this solution in Sciona" /> */}

@@ -1,0 +1,78 @@
+---
+cdg_asset_id: solution.kaggle.cause_effect_2nd
+title: Cause-Effect Pairs 2nd Place — Causal Direction from Bivariate Data
+description: For each pair of variables, compute features that are different depending on which causes which, then train classifiers on those features and enforce the physi…
+problem_statement: Determine causal direction between variable pairs using asymmetric statistical features (IGCI, HSIC, conditional noise diagnostics, additive noise model residuals) fed into a three-estimator ensemble with antisymmetry enforcement.
+platform: kaggle
+competition_name: Kaggle Cause-Effect Pairs
+placement: 2nd
+year: 2013
+domain: causal_inference
+paradigm: analysis
+family: causal_inference
+tags:
+  - causal_discovery
+  - cause_effect_pairs
+  - bivariate_causal_inference
+  - additive_noise_model
+  - independence_of_cause_and_mechanism
+  - igci
+  - hsic_kernel_test
+  - antisymmetric_features
+  - mixed_continuous_discrete
+  - deterministic_causal_systems
+  - small_sample_bivariate
+key_insight: IGCI (information-geometric causal inference) exploits the independence of cause mechanism from cause distribution — a theoretical asymmetry that holds for deterministic causal systems. The cause's distribution and the mechanism mapping cause to effect are independently chosen by nature, creating a detectable statistical signature.
+failure_modes:
+  - "Symmetric causal mechanisms where f and f^{-1} have identical complexity: IGCI score is near zero and direction is unresolvable"
+  - "Heavy confounding: all asymmetric features measure spurious associations rather than causal direction"
+  - "Highly nonlinear relationships with few samples: polynomial residual features underfit while conditional statistics have high variance"
+source_url: https://github.com/jarfo/cause-effect
+source_license: Apache-2.0
+---
+
+# Cause-Effect Pairs 2nd Place — Causal Direction from Bivariate Data
+
+## Problem
+
+Determine causal direction between variable pairs using asymmetric statistical features (IGCI, HSIC, conditional noise diagnostics, additive noise model residuals) fed into a three-estimator ensemble with antisymmetry enforcement.
+
+## Approach
+
+For each pair of variables, compute features that are different depending on which causes which, then train classifiers on those features and enforce the physical constraint that if A causes B then B cannot cause A.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.cause_effect_2nd" readOnly={true} /> */}
+
+1. **Discretize and Bin** -- Convert continuous values into discrete bins, ignoring extreme outliers so they don't distort the bin boundaries.
+1. **IGCI Asymmetry Score** -- Measure whether the relationship from A to B looks simpler than the reverse, using a geometric information theory test.
+1. **HSIC Independence Test** -- Test whether two variables are statistically related using a kernel-based measure that can detect nonlinear relationships.
+1. **Normalized Error Probability** -- Measure how much knowing X helps predict Y, beyond what you could guess from Y alone.
+1. **Uniform Divergence** -- Measure how far a variable's distribution is from perfectly uniform — cause variables tend to be more uniform than effect variables.
+1. **KNN Entropy Estimator** -- Estimate the randomness of a variable using nearest-neighbor distances.
+1. **Polyfit Nonlinearity Asymmetry** -- Measure how nonlinear the relationship is by comparing a straight line fit to a curved one.
+1. **Polyfit Residual Error** -- Fit a polynomial from X to Y and measure how much error remains — the direction with less error is likely the causal direction.
+1. **Conditional Noise Entropy Variance** -- Check whether the randomness of Y is equally spread across all ranges of X — if so, X is more likely the cause.
+1. **Conditional Noise Skewness Variance** -- Check whether the shape of Y's distribution changes across ranges of X — changes suggest X is the effect, not the cause.
+1. **Conditional Noise Kurtosis Variance** -- Check whether the tail heaviness of Y changes across ranges of X.
+1. **Conditional Distribution Similarity** -- Check whether the full shape of Y's distribution stays the same across ranges of X, not just the average or spread.
+1. **Asymmetric Feature Difference** -- Compute every measurement both ways and subtract — the difference tells you which direction is more likely causal.
+1. **Symmetrized Prediction Fusion** -- Force the final scores to be exactly opposite for A→B vs B→A.
+1. **Two-Stage Independence+Direction Estimator** -- First decide if the variables are related at all, then decide which direction the relationship goes — don't try to assign direction to unrelated variables.
+1. **Left-Right Decomposed Estimator** -- Train two separate detectors — one for each direction — and take the difference.
+1. **Weighted Ensemble Combination** -- Blend three different classifiers with learned weights to get the final causal score.
+
+## Key Insight
+
+IGCI (information-geometric causal inference) exploits the independence of cause mechanism from cause distribution — a theoretical asymmetry that holds for deterministic causal systems. The cause's distribution and the mechanism mapping cause to effect are independently chosen by nature, creating a detectable statistical signature.
+
+## Failure Modes
+
+- Symmetric causal mechanisms where f and f^&#123;-1&#125; have identical complexity: IGCI score is near zero and direction is unresolvable
+- Heavy confounding: all asymmetric features measure spurious associations rather than causal direction
+- Highly nonlinear relationships with few samples: polynomial residual features underfit while conditional statistics have high variance
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.cause_effect_2nd" label="Reproduce this solution in Sciona" /> */}

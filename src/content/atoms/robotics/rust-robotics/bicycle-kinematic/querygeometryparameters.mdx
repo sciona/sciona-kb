@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.bicycle_kinematic.querygeometryparameters
+predicate_id: querygeometryparameters
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(model_spec: ModelSpec) -> tuple[float, float, float]"
+informal_desc: Project front length, rear length, and derived wheelbase from the immutable model spec.
+conceptual_summary: "Bipartite Scalar Projection with Additive Extent Derivation. The operation reads two non-negative scalar components from an immutable structured input and returns them directly as explicit outputs. It then computes a third scalar by linear addition of those components, producing a total 1D extent. No state is changed, and the mapping is fully deterministic.. Applications: Genomics: expose upstream/downstream sequence segment lengths and derive total amplicon span., Network engineering: expose forward/reverse path propagation delays and derive round-trip baseline delay., Manufacturing process planning: expose pre-process/post-process motion distances and derive total traverse distance., Signal processing: expose pre-event/post-event window durations and derive full analysis window length."
+inputs:
+  - name: model_spec
+    type_desc: ModelSpec
+    constraints: must contain front/rear lengths
+outputs:
+  - name: length_front
+    type_desc: float
+    constraints: ">= 0"
+  - name: length_rear
+    type_desc: float
+    constraints: ">= 0"
+  - name: wheelbase
+    type_desc: float
+    constraints: length_front + length_rear
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Querygeometryparameters
+description: Project front length, rear length, and derived wheelbase from the immutable model spec.
+---
+
+# Querygeometryparameters
+
+> Project front length, rear length, and derived wheelbase from the immutable model spec.
+
+## Conceptual Summary
+
+Bipartite Scalar Projection with Additive Extent Derivation. The operation reads two non-negative scalar components from an immutable structured input and returns them directly as explicit outputs. It then computes a third scalar by linear addition of those components, producing a total 1D extent. No state is changed, and the mapping is fully deterministic.. Applications: Genomics: expose upstream/downstream sequence segment lengths and derive total amplicon span., Network engineering: expose forward/reverse path propagation delays and derive round-trip baseline delay., Manufacturing process planning: expose pre-process/post-process motion distances and derive total traverse distance., Signal processing: expose pre-event/post-event window durations and derive full analysis window length.
+
+## Type Signature
+
+```
+(model_spec: ModelSpec) -> tuple[float, float, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

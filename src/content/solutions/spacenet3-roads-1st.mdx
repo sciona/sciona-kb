@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.spacenet3_roads_1st
+title: "SpaceNet 3: Road Network Extraction - 1st Place (2018) - Pipeline Template"
+description: "This template captures the ordered steps used by SpaceNet 3: Road Network Extraction - 1st Place (2018): prepare the data, build task-specific representations,…"
+problem_statement: "Geospatial / Graph Extraction solution template for SpaceNet 3: Road Network Extraction - 1st Place (2018), modeled as a 5-stage deterministic pipeline: Multispectral stacking, Multi-class segmentation, Skeletonization, Graph generation, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: "SpaceNet 3: Road Network Extraction - 1st Place (2018)"
+placement: ""
+year: 0
+domain: geospatial_segmentation
+paradigm: graph_signal_processing
+family: geospatial_segmentation
+tags:
+  - segmentation
+  - geospatial
+  - graph
+  - extraction
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Multispectral stacking creates the representation needed by Path routing, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://medium.com/the-spacennet-catalog/spacennet-3-road-network-extraction-challenge-winning-solution-albu-862d7c57c427
+source_license: null
+---
+
+# SpaceNet 3: Road Network Extraction - 1st Place (2018) - Pipeline Template
+
+## Problem
+
+Geospatial / Graph Extraction solution template for SpaceNet 3: Road Network Extraction - 1st Place (2018), modeled as a 5-stage deterministic pipeline: Multispectral stacking, Multi-class segmentation, Skeletonization, Graph generation, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by SpaceNet 3: Road Network Extraction - 1st Place (2018): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.spacenet3_roads_1st" readOnly={true} /> */}
+
+1. **Multispectral stacking** -- This stage stack panchromatic and multi-spectral GeoTIFF bands into a single 8-channel image tensor (rasterio).
+1. **Multi-class segmentation** -- This stage train a deep U-Net (ResNet34 backbone) to predict 3 distinct spatial masks: roads, intersections, and background (PyTorch).
+1. **Skeletonization** -- This stage pass the binary road mask through a morphological skeletonization algorithm to reduce roads to 1-pixel wide continuous lines (skimage.morphology).
+1. **Graph generation** -- This stage trace the skeletonized pixels to define nodes (intersections) and edges (road segments) (NetworkX).
+1. **Path routing** -- This stage implement an A* search heuristic to bridge small pixel gaps in the graph caused by tree cover or cloud shadows (Python).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Multispectral stacking creates the representation needed by Path routing, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.spacenet3_roads_1st" label="Reproduce this solution in Sciona" /> */}

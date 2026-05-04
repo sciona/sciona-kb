@@ -1,0 +1,59 @@
+---
+cdg_asset_id: solution.kaggle.rsna_miccai_brain_tumor_1st
+title: RSNA-MICCAI Brain Tumor Radiogenomic Classification - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by RSNA-MICCAI Brain Tumor Radiogenomic Classification - 1st Place (2021): prepare the data, build task-specific …"
+problem_statement: "3D MRI to Genomics (Weak labels) solution template for RSNA-MICCAI Brain Tumor Radiogenomic Classification - 1st Place (2021), modeled as a 5-stage deterministic pipeline: 3D Volume registration, Brain masking, 3D CNN Backbone, Multi-plane slicing (2.5D fallback), and downstream competition-specific finalization."
+platform: kaggle
+competition_name: RSNA-MICCAI Brain Tumor Radiogenomic Classification - 1st Place (2021)
+placement: ""
+year: 0
+domain: structured_prediction
+paradigm: neural_network
+family: structured_prediction
+tags:
+  - genomics
+  - labels
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: 3D Volume registration creates the representation needed by Late Fusion, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/281030
+source_license: null
+---
+
+# RSNA-MICCAI Brain Tumor Radiogenomic Classification - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+3D MRI to Genomics (Weak labels) solution template for RSNA-MICCAI Brain Tumor Radiogenomic Classification - 1st Place (2021), modeled as a 5-stage deterministic pipeline: 3D Volume registration, Brain masking, 3D CNN Backbone, Multi-plane slicing (2.5D fallback), and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by RSNA-MICCAI Brain Tumor Radiogenomic Classification - 1st Place (2021): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.rsna_miccai_brain_tumor_1st" readOnly={true} /> */}
+
+1. **3D Volume registration** -- This stage coregister all 4 MRI modalities (FLAIR, T1w, T1Gd, T2w) into exactly the same physical space using a medical imaging registration tool (ANTs/SimpleITK).
+1. **Brain masking** -- This stage utilize a pre-trained Brain Extraction Tool (BET) to strictly mask out the skull and eyes from the 3D volume (SimpleITK).
+1. **3D CNN Backbone** -- This stage train a 3D ResNet/EfficientNet-3D architecture on the volumes (PyTorch / MONAI).
+1. **Multi-plane slicing (2.5D fallback)** -- This stage extract the middle slices across the Axial, Coronal, and Sagittal planes, and train separate 2D CNNs on each plane (PyTorch).
+1. **Late Fusion** -- This stage concatenate the 1D embeddings of the 3D model and the 2.5D models into an MLP to predict the MGMT promoter methylation status (genomic binary target).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: 3D Volume registration creates the representation needed by Late Fusion, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.rsna_miccai_brain_tumor_1st" label="Reproduce this solution in Sciona" /> */}

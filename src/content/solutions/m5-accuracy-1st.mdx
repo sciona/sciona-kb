@@ -1,0 +1,61 @@
+---
+cdg_asset_id: solution.kaggle.m5_accuracy_1st
+title: M5 Forecasting (Accuracy) - 1st Place (2020) - Pipeline Template
+description: "This template captures the ordered steps used by M5 Forecasting (Accuracy) - 1st Place (2020): prepare the data, build task-specific representations, run the m…"
+problem_statement: "Hierarchical Time Series Forecasting solution template for M5 Forecasting (Accuracy) - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Temporal unrolling, Recursive feature engineering, Objective function optimization, Magic Multiplier, and downstream competition-specific finalization."
+platform: kaggle
+competition_name: M5 Forecasting (Accuracy) - 1st Place (2020)
+placement: ""
+year: 0
+domain: time_series_forecasting
+paradigm: optimization
+family: time_series_forecasting
+tags:
+  - lightgbm
+  - hierarchical
+  - series
+  - forecasting
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Temporal unrolling creates the representation needed by Hierarchical Reconciliation, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/m5-forecasting-accuracy/discussion/163613
+source_license: null
+---
+
+# M5 Forecasting (Accuracy) - 1st Place (2020) - Pipeline Template
+
+## Problem
+
+Hierarchical Time Series Forecasting solution template for M5 Forecasting (Accuracy) - 1st Place (2020), modeled as a 5-stage deterministic pipeline: Temporal unrolling, Recursive feature engineering, Objective function optimization, Magic Multiplier, and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by M5 Forecasting (Accuracy) - 1st Place (2020): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.m5_accuracy_1st" readOnly={true} /> */}
+
+1. **Temporal unrolling** -- This stage melt the wide historical sales matrix into a long, row-based format suitable for standard machine learning (pandas).
+1. **Recursive feature engineering** -- This stage calculate rolling means, standard deviations, and lag features at 7, 14, and 28-day intervals (pandas).
+1. **Objective function optimization** -- This stage configure a LightGBM model utilizing a Tweedie objective function, perfectly suited for data with a massive number of exact zero values (LightGBM).
+1. **Magic Multiplier** -- This stage mathematically shift all predictions upward by a strict constant multiplier (e.g., 1.03) to manually account for the competition's anomalous "empty" days (numpy).
+1. **Hierarchical Reconciliation** -- This stage aggregate the store-level/item-level predictions bottom-up to ensure they perfectly match the required state-level and national-level hierarchical constraints (scipy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Temporal unrolling creates the representation needed by Hierarchical Reconciliation, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.m5_accuracy_1st" label="Reproduce this solution in Sciona" /> */}

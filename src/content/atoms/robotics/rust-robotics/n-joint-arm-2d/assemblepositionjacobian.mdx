@@ -1,0 +1,55 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.n_joint_arm_2d.assemblepositionjacobian
+predicate_id: assemblepositionjacobian
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(x: array-like, link_lengths: array-like, dof: integer, state_dim_ratio: integer) -> tuple[matrix-like, array-like]"
+informal_desc: Construct the 2xDOF position Jacobian from current chain state and link lengths by accumulating each joint’s positional influence.
+conceptual_summary: ""
+inputs:
+  - name: x
+    type_desc: np.ndarray
+    constraints: length == dof * state_dim_ratio
+  - name: link_lengths
+    type_desc: np.ndarray
+    constraints: length == dof
+  - name: dof
+    type_desc: int
+    constraints: dof > 0
+  - name: state_dim_ratio
+    type_desc: int
+    constraints: ratio >= 3
+outputs:
+  - name: position_jacobian
+    type_desc: np.ndarray
+    constraints: shape == (2, dof)
+  - name: joint_angles_snapshot
+    type_desc: np.ndarray
+    constraints: length == dof
+concept_type: algebra
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Assemblepositionjacobian
+description: Construct the 2xDOF position Jacobian from current chain state and link lengths by accumulating each joint’s positional influence.
+---
+
+# Assemblepositionjacobian
+
+> Construct the 2xDOF position Jacobian from current chain state and link lengths by accumulating each joint’s positional influence.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(x: array-like, link_lengths: array-like, dof: integer, state_dim_ratio: integer) -> tuple[matrix-like, array-like]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,79 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.advancedhmc.trajectory.iteratively_build_proposal_tree
+predicate_id: iteratively_build_proposal_tree
+repo: sciona-atoms
+domain: inference
+type_signature: "(rng: AbstractRNG, h: Hamiltonian, τ: Trajectory, H0: Real, initial_tree: BinaryTree, initial_sampler: AbstractTrajectorySampler, initial_termination: Termination, initial_zcand: PhasePoint) -> tuple[BinaryTree, PhasePoint, Termination, Int]"
+informal_desc: Executes the core NUTS logic by iteratively expanding a binary tree of states. It builds sub-trees in random directions and continues until a termination condition is met, updating a candidate state at each depth via a Metropolis-Hastings acceptance step.
+conceptual_summary: ""
+inputs:
+  - name: rng
+    type_desc: AbstractRNG
+    constraints: isinstance(x, str)
+  - name: h
+    type_desc: Hamiltonian
+    constraints: x is not None
+  - name: τ
+    type_desc: Trajectory
+    constraints: x is not None
+  - name: H0
+    type_desc: Real
+    constraints: Initial energy for reference.
+  - name: initial_tree
+    type_desc: BinaryTree
+    constraints: x is not None
+  - name: initial_sampler
+    type_desc: AbstractTrajectorySampler
+    constraints: isinstance(x, str)
+  - name: initial_termination
+    type_desc: Termination
+    constraints: x is not None
+  - name: initial_zcand
+    type_desc: PhasePoint
+    constraints: isinstance(x, int)
+outputs:
+  - name: final_tree
+    type_desc: BinaryTree
+    constraints: The fully constructed proposal tree.
+  - name: final_zcand
+    type_desc: PhasePoint
+    constraints: The final accepted candidate state from the tree.
+  - name: final_termination
+    type_desc: Termination
+    constraints: The final termination status, indicating why the build stopped.
+  - name: final_depth
+    type_desc: Int
+    constraints: The final depth of the constructed tree.
+concept_type: mcmc_kernel
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: hoffman2014nuts
+    citation: Canonical NUTS reference for doubling trajectory trees and No-U-Turn termination.
+  - title: advancedhmc2020
+    citation: Package paper for AdvancedHMC.jl trajectory construction.
+  - title: repo_advancedhmc_jl
+    citation: Repository-family attribution; this wrapper returns compact NumPy leaves rather than Julia BinaryTree objects.
+  - title: neal2011hmc
+    citation: Canonical HMC reference for Hamiltonian dynamics and Metropolis-style energy diagnostics used by NUTS.
+title: Iteratively_build_proposal_tree
+description: Executes the core NUTS logic by iteratively expanding a binary tree of states. It builds sub-trees in random directions and continues until a termination condi…
+---
+
+# Iteratively_build_proposal_tree
+
+> Executes the core NUTS logic by iteratively expanding a binary tree of states. It builds sub-trees in random directions and continues until a termination condition is met, updating a candidate state at each depth via a Metropolis-Hastings acceptance step.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(rng: AbstractRNG, h: Hamiltonian, τ: Trajectory, H0: Real, initial_tree: BinaryTree, initial_sampler: AbstractTrajectorySampler, initial_termination: Termination, initial_zcand: PhasePoint) -> tuple[BinaryTree, PhasePoint, Termination, Int]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc.computeterminallogprobandemitproposal
+predicate_id: computeterminallogprobandemitproposal
+repo: sciona-atoms
+domain: inference
+type_signature: "(position_final: Tensor<B, 2>, momentum_final: Tensor<B, 2>, log_prob_oracle: callable) -> StateModelSpec"
+informal_desc: After repeating the leapfrog transition exactly n_leapfrog times, compute final log-probability at the terminal position and return detached proposal tensors.
+conceptual_summary: ""
+inputs:
+  - name: position_final
+    type_desc: Tensor
+    constraints: Output position after final iteration
+  - name: momentum_final
+    type_desc: Tensor
+    constraints: Output momentum after final iteration
+  - name: log_prob_oracle
+    type_desc: Callable
+    constraints: Computes unnormalized batch log-probability
+outputs:
+  - name: proposal_state_out
+    type_desc: StateModelSpec
+    constraints: Contains detached position, detached momentum, detached final log-probability
+concept_type: likelihood_evaluation
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for state initialization, cached log-density, gradient, integrator settings, and explicit random-state threading.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; this wrapper is a lightweight local NumPy implementation rather than a direct upstream runtime call.
+title: Computeterminallogprobandemitproposal
+description: After repeating the leapfrog transition exactly n_leapfrog times, compute final log-probability at the terminal position and return detached proposal tensors.
+---
+
+# Computeterminallogprobandemitproposal
+
+> After repeating the leapfrog transition exactly n_leapfrog times, compute final log-probability at the terminal position and return detached proposal tensors.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(position_final: Tensor<B, 2>, momentum_final: Tensor<B, 2>, log_prob_oracle: callable) -> StateModelSpec
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.ml.sklearn.images.image_patch_sampling_and_assembly
+predicate_id: image_patch_sampling_and_assembly
+repo: sciona-atoms-ml
+domain: ml
+type_signature: "(image: Any, patch_size: Any, max_patches: Any, random_state: Any) -> array of extracted 2D patches"
+informal_desc: Computes valid patch counts, extracts sliding 2D patches from an image tensor, and optionally subsamples patches when max_patches is specified. [query]
+conceptual_summary: Canonical query operation via extract_patches_2d.
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_sklearn
+    citation: Adapted from sklearn.feature_extraction.image.extract_patches_2d in scikit-learn 1.8.0.
+  - title: pedregosa2011sklearn
+    citation: Project-level publication for scikit-learn.
+title: Image_patch_sampling_and_assembly
+description: Computes valid patch counts, extracts sliding 2D patches from an image tensor, and optionally subsamples patches when max_patches is specified. [query]
+---
+
+# Image_patch_sampling_and_assembly
+
+> Computes valid patch counts, extracts sliding 2D patches from an image tensor, and optionally subsamples patches when max_patches is specified. [query]
+
+## Conceptual Summary
+
+Canonical query operation via extract_patches_2d.
+
+## Type Signature
+
+```
+(image: Any, patch_size: Any, max_patches: Any, random_state: Any) -> array of extracted 2D patches
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

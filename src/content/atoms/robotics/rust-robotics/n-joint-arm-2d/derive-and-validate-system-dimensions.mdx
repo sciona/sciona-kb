@@ -1,0 +1,55 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.n_joint_arm_2d.derive_and_validate_system_dimensions
+predicate_id: derive_and_validate_system_dimensions
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(self: ModelD<f64> metadata + link_lengths, x: DVector<f64>, u: DVector<f64>) -> tuple[usize, usize, usize]"
+informal_desc: Derive structural dimensions (state-to-dimension ratio, total states, degrees of freedom) and enforce compatibility between state size, link count, and input count.
+conceptual_summary: ""
+inputs:
+  - name: self
+    type_desc: object
+    constraints: Must expose ratio via SystemHD and link_lengths length
+  - name: x
+    type_desc: np.ndarray
+    constraints: Length defines total state dimension
+  - name: u
+    type_desc: np.ndarray
+    constraints: Length must equal DOF
+outputs:
+  - name: ratio
+    type_desc: int
+    constraints: num_states_to_num_dim_ratio(self) cast to usize
+  - name: num_states
+    type_desc: int
+    constraints: x.len()
+  - name: dof
+    type_desc: int
+    constraints: num_states / ratio, with num_states % ratio == 0
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Derive_and_validate_system_dimensions
+description: Derive structural dimensions (state-to-dimension ratio, total states, degrees of freedom) and enforce compatibility between state size, link count, and input c…
+---
+
+# Derive_and_validate_system_dimensions
+
+> Derive structural dimensions (state-to-dimension ratio, total states, degrees of freedom) and enforce compatibility between state size, link count, and input count.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(self: ModelD<f64> metadata + link_lengths, x: DVector<f64>, u: DVector<f64>) -> tuple[usize, usize, usize]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

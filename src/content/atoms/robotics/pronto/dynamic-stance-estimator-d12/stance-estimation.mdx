@@ -1,0 +1,59 @@
+---
+fqdn: sciona.atoms.robotics.pronto.dynamic_stance_estimator_d12.stance_estimation
+predicate_id: stance_estimation
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(stance_state: StanceState, observation: array[float]) -> tuple[StanceState, array[float]]"
+informal_desc: "Core dynamic-stance estimation pass: consumes the current stance state and a new observation vector, runs the estimation kernel (predict + update), and returns an updated immutable stance state together with the estimated stance output."
+conceptual_summary: "ImmutablePosteriorStateUpdater. Consumes an immutable latent-state object and a new observed measurement vector, then executes a two-phase Bayesian estimation kernel — a forward projection of the prior distribution (predict) followed by a likelihood-weighted correction (update) — to produce a new immutable state object and the posterior mean vector. The operation maps the tuple (prior belief, new evidence) → (updated belief, point estimate), implementing a single step of a recursive Bayesian filter without side effects on the input state.. Applications: Robotics & autonomous navigation: sequentially fusing IMU accelerometer/gyroscope readings with wheel-odometry to maintain a posterior estimate of a mobile agent's 6-DOF pose (position + orientation tensor) across discrete control loop ticks, enabling real-time localization without replaying full sensor history., Climate & geophysical modeling: assimilating a sparse vector of satellite radiance observations into a high-dimensional atmospheric state tensor at each forecast cycle to produce an updated posterior estimate of temperature, pressure, and humidity fields — the core step in ensemble Kalman data-assimilation pipelines., Computational neuroscience / brain-computer interfaces: updating a probabilistic model of a subject's intended motor-command vector from a new multi-electrode neural firing-rate snapshot at each millisecond bin, producing a posterior estimate of the latent motor intention for real-time neuroprosthetic decoding., Quantitative signal processing in IoT sensor networks: recursively refining the posterior estimate of a slowly drifting physical process scalar (e.g., structural strain, ambient chemical concentration) from noisy, asynchronous sensor readings, enabling low-latency anomaly detection without batch reprocessing."
+inputs:
+  - name: stance_state
+    type_desc: StanceState
+    constraints: Output of StanceStateInit or a prior StanceEstimation call; treated as immutable
+    required: true
+    default_value_repr: ""
+  - name: observation
+    type_desc: array[float]
+    constraints: Raw sensor / feature vector aligned to the state dimensionality
+    required: true
+    default_value_repr: ""
+outputs:
+  - name: stance_state_out
+    type_desc: StanceState
+    constraints: New object; never mutates stance_state_in
+    required: true
+    default_value_repr: ""
+  - name: stance_estimate
+    type_desc: array[float]
+    constraints: Posterior mean of the stance vector at the current time step
+    required: true
+    default_value_repr: ""
+concept_type: posterior_update
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Stance_estimation
+description: "Core dynamic-stance estimation pass: consumes the current stance state and a new observation vector, runs the estimation kernel (predict + update), and returns…"
+---
+
+# Stance_estimation
+
+> Core dynamic-stance estimation pass: consumes the current stance state and a new observation vector, runs the estimation kernel (predict + update), and returns an updated immutable stance state together with the estimated stance output.
+
+## Conceptual Summary
+
+ImmutablePosteriorStateUpdater. Consumes an immutable latent-state object and a new observed measurement vector, then executes a two-phase Bayesian estimation kernel — a forward projection of the prior distribution (predict) followed by a likelihood-weighted correction (update) — to produce a new immutable state object and the posterior mean vector. The operation maps the tuple (prior belief, new evidence) → (updated belief, point estimate), implementing a single step of a recursive Bayesian filter without side effects on the input state.. Applications: Robotics & autonomous navigation: sequentially fusing IMU accelerometer/gyroscope readings with wheel-odometry to maintain a posterior estimate of a mobile agent's 6-DOF pose (position + orientation tensor) across discrete control loop ticks, enabling real-time localization without replaying full sensor history., Climate & geophysical modeling: assimilating a sparse vector of satellite radiance observations into a high-dimensional atmospheric state tensor at each forecast cycle to produce an updated posterior estimate of temperature, pressure, and humidity fields — the core step in ensemble Kalman data-assimilation pipelines., Computational neuroscience / brain-computer interfaces: updating a probabilistic model of a subject's intended motor-command vector from a new multi-electrode neural firing-rate snapshot at each millisecond bin, producing a posterior estimate of the latent motor intention for real-time neuroprosthetic decoding., Quantitative signal processing in IoT sensor networks: recursively refining the posterior estimate of a slowly drifting physical process scalar (e.g., structural strain, ambient chemical concentration) from noisy, asynchronous sensor readings, enabling low-latency anomaly detection without batch reprocessing.
+
+## Type Signature
+
+```
+(stance_state: StanceState, observation: array[float]) -> tuple[StanceState, array[float]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

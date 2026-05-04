@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.seeddiagnosticsfromburnedstate
+predicate_id: seeddiagnosticsfromburnedstate
+repo: sciona-atoms
+domain: inference
+type_signature: "(chain_state_burned: HMCState, trace_state_0: chain trace accumulator) -> chain trace accumulator"
+informal_desc: Register the post-burn-in state as the initial diagnostics sample and update trace state with any recoverable diagnostics warnings.
+conceptual_summary: ""
+inputs:
+  - name: chain_state_burned
+    type_desc: HMCState
+    constraints: x is not None
+  - name: trace_state_0
+    type_desc: object
+    constraints: x is not None
+outputs:
+  - name: trace_state_seeded
+    type_desc: object
+    constraints: includes baseline diagnostics observation
+concept_type: sampler
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Seeddiagnosticsfromburnedstate
+description: Register the post-burn-in state as the initial diagnostics sample and update trace state with any recoverable diagnostics warnings.
+---
+
+# Seeddiagnosticsfromburnedstate
+
+> Register the post-burn-in state as the initial diagnostics sample and update trace state with any recoverable diagnostics warnings.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(chain_state_burned: HMCState, trace_state_0: chain trace accumulator) -> chain trace accumulator
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

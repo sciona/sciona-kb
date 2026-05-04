@@ -1,0 +1,59 @@
+---
+cdg_asset_id: solution.kaggle.chaii_qa_1st
+title: Chaii - Hindi/Tamil Question Answering - 1st Place (2021) - Pipeline Template
+description: "This template captures the ordered steps used by Chaii - Hindi/Tamil Question Answering - 1st Place (2021): prepare the data, build task-specific representatio…"
+problem_statement: "NLP Extractive Question Answering solution template for Chaii - Hindi/Tamil Question Answering - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Language merging, Tokenization, Span modeling, Post-processing logic, and downstream competition-specific post-processing."
+platform: kaggle
+competition_name: Chaii - Hindi/Tamil Question Answering - 1st Place (2021)
+placement: 1st
+year: 2021
+domain: nlp_span_detection
+paradigm: optimization
+family: nlp_span_detection
+tags:
+  - rag
+  - extractive
+  - question
+  - answering
+key_insight: "The load-bearing idea is the pipeline topology: Language merging creates the representation needed by Ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+  - A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/chaii-hindi-and-tamil-question-answering/discussion/288078
+source_license: null
+---
+
+# Chaii - Hindi/Tamil Question Answering - 1st Place (2021) - Pipeline Template
+
+## Problem
+
+NLP Extractive Question Answering solution template for Chaii - Hindi/Tamil Question Answering - 1st Place (2021), modeled as a 5-stage deterministic pipeline: Language merging, Tokenization, Span modeling, Post-processing logic, and downstream competition-specific post-processing.
+
+## Approach
+
+This template captures the ordered steps used by Chaii - Hindi/Tamil Question Answering - 1st Place (2021): prepare the data, build task-specific representations, train or apply the main model, and convert outputs into the final competition submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.chaii_qa_1st" readOnly={true} /> */}
+
+1. **Language merging** -- This stage translate external Hindi/Tamil QA datasets to English, and English datasets (SQuAD) to Hindi/Tamil for heavy cross-lingual pretraining (Google Translate API).
+1. **Tokenization** -- This stage tokenize question and context strings using Muril, XLM-RoBERTa, and RemBERT tokenizers (HuggingFace).
+1. **Span modeling** -- This stage train models using a standard Question-Answering head (two linear layers predicting start_token_logits and end_token_logits) (PyTorch).
+1. **Post-processing logic** -- This stage iterate through the top 20 start/end token predictions, penalize answers that are too long (e.g., > 100 characters), and select the highest scoring valid span.
+1. **Ensembling** -- This stage average the start and end logits across 5 different model architectures before executing the post-processing.
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Language merging creates the representation needed by Ensembling, so later stages can optimize the competition metric without solving raw-data ingestion from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, post-processing rules, or validation-derived weights.
+- Missing metadata prevents faithful construction of candidates, groups, windows, or cross-validation folds.
+- A weak first-stage recall step cannot be recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.chaii_qa_1st" label="Reproduce this solution in Sciona" /> */}

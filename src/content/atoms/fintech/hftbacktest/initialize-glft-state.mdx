@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.fintech.hftbacktest.initialize_glft_state
+predicate_id: initialize_glft_state
+repo: sciona-atoms-fintech
+domain: fintech
+type_signature: () -> tuple[float, float]
+informal_desc: Initializes the state for the GLFT model coefficients.
+conceptual_summary: "initialize_2d_scalar_state. Generates a fixed, two-dimensional state vector represented by two independent scalar floating-point values. This function acts as a factory, providing a deterministic, hardcoded starting point for any system or model requiring a two-parameter initial condition.. Applications: Initializing the starting (x, y) coordinates for a particle in a 2D particle filter for robot localization., Setting the initial proportional and integral gain parameters for a PI controller in a feedback control system before an auto-tuning process begins., Defining the initial population sizes for two interacting species in a Lotka-Volterra predator-prey model., Establishing the starting weights for a two-neuron, single-layer perceptron in a simple neural network."
+inputs:
+  - name: _trigger
+    type_desc: NoneType
+    constraints: sentinel input for zero-parameter initializer
+    required: false
+    default_value_repr: None
+outputs:
+  - name: initial_c1
+    type_desc: float
+    constraints: Represents the initial value of the state variable 'c1'.
+    required: true
+    default_value_repr: ""
+  - name: initial_c2
+    type_desc: float
+    constraints: Represents the initial value of the state variable 'c2'.
+    required: true
+    default_value_repr: ""
+concept_type: state_init
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: gueant2013inventory
+    citation: Exact GLFT attribution.
+  - title: repo_hftbacktest
+    citation: Upstream implementation is mapped to the vendored hftbacktest repository.
+title: Initialize_glft_state
+description: Initializes the state for the GLFT model coefficients.
+---
+
+# Initialize_glft_state
+
+> Initializes the state for the GLFT model coefficients.
+
+## Conceptual Summary
+
+initialize_2d_scalar_state. Generates a fixed, two-dimensional state vector represented by two independent scalar floating-point values. This function acts as a factory, providing a deterministic, hardcoded starting point for any system or model requiring a two-parameter initial condition.. Applications: Initializing the starting (x, y) coordinates for a particle in a 2D particle filter for robot localization., Setting the initial proportional and integral gain parameters for a PI controller in a feedback control system before an auto-tuning process begins., Defining the initial population sizes for two interacting species in a Lotka-Volterra predator-prey model., Establishing the starting weights for a two-neuron, single-layer perceptron in a simple neural network.
+
+## Type Signature
+
+```
+() -> tuple[float, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

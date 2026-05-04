@@ -1,0 +1,66 @@
+---
+cdg_asset_id: solution.kaggle.toxic_comment_1st
+title: Toxic Comment Classification 1st Place — Back-Translation Augmented BiRNN Ensemble
+description: Classify online comments into six toxicity categories by generating extra training data through round-trip translation, feeding word embeddings through bidirec…
+problem_statement: Multi-label toxic comment classification using back-translation augmentation, pre-trained word embeddings, bidirectional GRU/LSTM with dual pooling, and a LightGBM meta-model trained on out-of-fold neural network predictions.
+platform: kaggle
+competition_name: Toxic Comment Classification Challenge - 1st Place (2018)
+placement: 1st
+year: 2018
+domain: nlp_classification
+paradigm: neural_network
+family: nlp_classification
+tags:
+  - back_translation_augmentation
+  - bidirectional_rnn
+  - dual_pooling
+  - multi_label_text_classification
+  - stacking_ensemble
+  - highly_imbalanced
+  - multi_label
+  - noisy_user_generated_text
+  - short_text
+  - content_moderation
+key_insight: "Back-translation generates semantically equivalent but lexically diverse paraphrases, which acts as a form of invariance training: the model learns to classify based on meaning rather than surface-level word patterns. This is especially powerful for imbalanced multi-label problems because it selectively upsamples minority labels without duplicating exact examples, avoiding the overfitting trap of naive oversampling."
+failure_modes:
+  - Back-translation with low-quality MT models introduces label noise — translated text may lose or alter the toxic signal (e.g., sarcasm or slang lost in translation)
+  - "Very small datasets (<5K samples): multi-seed RNN ensemble overfits even with augmentation, and the meta-model has insufficient OOF signal to learn from"
+  - "Adversarial or obfuscated text (leet-speak, Unicode tricks): character-level patterns that back-translation cannot generate and word embeddings cannot represent"
+source_url: https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/discussion/52557
+source_license: null
+---
+
+# Toxic Comment Classification 1st Place — Back-Translation Augmented BiRNN Ensemble
+
+## Problem
+
+Multi-label toxic comment classification using back-translation augmentation, pre-trained word embeddings, bidirectional GRU/LSTM with dual pooling, and a LightGBM meta-model trained on out-of-fold neural network predictions.
+
+## Approach
+
+Classify online comments into six toxicity categories by generating extra training data through round-trip translation, feeding word embeddings through bidirectional recurrent networks with parallel pooling strategies, and combining multiple models with a gradient boosting meta-learner.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.toxic_comment_1st" readOnly={true} /> */}
+
+1. **Back-Translation Augmentation** -- Create extra training examples by translating comments to other languages and back, producing slightly different wordings of the same meaning, especially for rare toxicity types.
+1. **Tokenization and Embedding** -- Break comments into words, convert each word into a numeric vector using pre-trained word dictionaries (FastText and GloVe), and pad all comments to the same length.
+1. **Bidirectional RNN Features** -- Process each comment in both forward and backward direction using a recurrent neural network, with random dropout to prevent overfitting, producing a sequence of context-aware representations.
+1. **Dual Pooling** -- Summarize the variable-length sequence output into a fixed-size vector by taking both the maximum and average values across all positions, then combining them.
+1. **Classification Head** -- A final layer that converts the pooled features into 6 probability scores, one for each type of toxicity.
+1. **Meta-Model Ensemble** -- Train a gradient boosting model to combine predictions from many different neural network runs, learning which models to trust more for each type of toxicity.
+
+## Key Insight
+
+Back-translation generates semantically equivalent but lexically diverse paraphrases, which acts as a form of invariance training: the model learns to classify based on meaning rather than surface-level word patterns. This is especially powerful for imbalanced multi-label problems because it selectively upsamples minority labels without duplicating exact examples, avoiding the overfitting trap of naive oversampling.
+
+## Failure Modes
+
+- Back-translation with low-quality MT models introduces label noise — translated text may lose or alter the toxic signal (e.g., sarcasm or slang lost in translation)
+- Very small datasets (&lt;5K samples): multi-seed RNN ensemble overfits even with augmentation, and the meta-model has insufficient OOF signal to learn from
+- Adversarial or obfuscated text (leet-speak, Unicode tricks): character-level patterns that back-translation cannot generate and word embeddings cannot represent
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.toxic_comment_1st" label="Reproduce this solution in Sciona" /> */}

@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.validatedetectorinputs
+predicate_id: validatedetectorinputs
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(detector_1: NDArray, detector_2: NDArray) -> bool"
+informal_desc: Checks if the R-peak detector inputs are empty. If either is empty, the signal quality is immediately deemed unacceptable.
+conceptual_summary: ""
+inputs:
+  - name: detector_1
+    type_desc: NDArray
+    constraints: Array of R-peak locations.
+  - name: detector_2
+    type_desc: NDArray
+    constraints: Array of R-peak locations from a second detector.
+outputs:
+  - name: is_valid
+    type_desc: bool
+    constraints: False if either detector input is empty, True otherwise.
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Validatedetectorinputs
+description: Checks if the R-peak detector inputs are empty. If either is empty, the signal quality is immediately deemed unacceptable.
+---
+
+# Validatedetectorinputs
+
+> Checks if the R-peak detector inputs are empty. If either is empty, the signal quality is immediately deemed unacceptable.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(detector_1: NDArray, detector_2: NDArray) -> bool
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

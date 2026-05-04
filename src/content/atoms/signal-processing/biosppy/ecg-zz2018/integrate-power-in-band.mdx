@@ -1,0 +1,51 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.integrate_power_in_band
+predicate_id: integrate_power_in_band
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(frequencies: NDArray, power_density: NDArray, frequency_band: list[float]) -> float"
+informal_desc: Calculates the total power within a specified frequency band by performing a trapezoidal integration over the power spectral density.
+conceptual_summary: ""
+inputs:
+  - name: frequencies
+    type_desc: NDArray
+    constraints: Array of sample frequencies, must be monotonic.
+  - name: power_density
+    type_desc: NDArray
+    constraints: Power spectral density corresponding to the frequencies.
+  - name: frequency_band
+    type_desc: list[float]
+    constraints: A list containing the start and end frequency of the band, e.g., [5, 20].
+outputs:
+  - name: band_power
+    type_desc: float
+    constraints: The total power integrated over the specified frequency band.
+concept_type: analysis
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Integrate_power_in_band
+description: Calculates the total power within a specified frequency band by performing a trapezoidal integration over the power spectral density.
+---
+
+# Integrate_power_in_band
+
+> Calculates the total power within a specified frequency band by performing a trapezoidal integration over the power spectral density.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(frequencies: NDArray, power_density: NDArray, frequency_band: list[float]) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

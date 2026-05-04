@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.bio.molecular_docking.quantum_solver_d12.compute_u_max_from_disconnected_distances
+predicate_id: compute_u_max_from_disconnected_distances
+repo: sciona-atoms-bio
+domain: bio
+type_signature: "(distance_list_no_connected: list of float, interaction_coefficient: float) -> float"
+informal_desc: Derives the maximum interaction energy U_max by applying the van-der-Waals interaction law U = C / r^6 to the minimum pairwise distance among non-connected edges, using the device interaction coefficient.
+conceptual_summary: ""
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: moleculardocking2025
+    citation: Primary Molecular-Docking paper.
+  - title: repo_molecular_docking
+    citation: Upstream implementation is mapped to the vendored Molecular-Docking repository.
+title: Compute_u_max_from_disconnected_distances
+description: Derives the maximum interaction energy U_max by applying the van-der-Waals interaction law U = C / r^6 to the minimum pairwise distance among non-connected edg…
+---
+
+# Compute_u_max_from_disconnected_distances
+
+> Derives the maximum interaction energy U_max by applying the van-der-Waals interaction law U = C / r^6 to the minimum pairwise distance among non-connected edges, using the device interaction coefficient.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(distance_list_no_connected: list of float, interaction_coefficient: float) -> float
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

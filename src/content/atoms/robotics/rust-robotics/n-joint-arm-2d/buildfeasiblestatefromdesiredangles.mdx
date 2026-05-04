@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.n_joint_arm_2d.buildfeasiblestatefromdesiredangles
+predicate_id: buildfeasiblestatefromdesiredangles
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(angles_desired: array-like, link_lengths: array-like, state_dim_ratio: integer) -> array-like"
+informal_desc: Roll forward the planar chain from desired joint angles to construct a feasible per-link state vector [x_i, y_i, cumulative_angle_i].
+conceptual_summary: ""
+inputs:
+  - name: angles_desired
+    type_desc: np.ndarray
+    constraints: length == dof
+  - name: link_lengths
+    type_desc: np.ndarray
+    constraints: length == dof
+  - name: state_dim_ratio
+    type_desc: int
+    constraints: ratio >= 3
+outputs:
+  - name: feasible_state_initial
+    type_desc: np.ndarray
+    constraints: length == dof * state_dim_ratio
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Buildfeasiblestatefromdesiredangles
+description: Roll forward the planar chain from desired joint angles to construct a feasible per-link state vector [x_i, y_i, cumulative_angle_i].
+---
+
+# Buildfeasiblestatefromdesiredangles
+
+> Roll forward the planar chain from desired joint angles to construct a feasible per-link state vector [x_i, y_i, cumulative_angle_i].
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(angles_desired: array-like, link_lengths: array-like, state_dim_ratio: integer) -> array-like
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

@@ -1,0 +1,39 @@
+---
+fqdn: sciona.atoms.ml.sklearn.images.3d_image_graph_materialization
+predicate_id: 3d_image_graph_materialization
+repo: sciona-atoms-ml
+domain: ml
+type_signature: "(img: Any, mask: Any, return_as: Any, dtype: Any) -> weighted adjacency graph/sparse matrix"
+informal_desc: Converts a 3D image volume into a weighted voxel-adjacency graph by constructing neighborhood edges, computing gradient-based edge weights, optionally masking invalid edges, and returning the graph in the requested representation. [query]
+conceptual_summary: "Canonical query operation via img_to_graph. Planned group: 3d_image_graph_materialization."
+inputs: []
+outputs: []
+concept_type: custom
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_sklearn
+    citation: Adapted from sklearn.feature_extraction.image.extract_patches_2d in scikit-learn 1.8.0.
+  - title: pedregosa2011sklearn
+    citation: Project-level publication for scikit-learn.
+title: 3d_image_graph_materialization
+description: Converts a 3D image volume into a weighted voxel-adjacency graph by constructing neighborhood edges, computing gradient-based edge weights, optionally masking …
+---
+
+# 3d_image_graph_materialization
+
+> Converts a 3D image volume into a weighted voxel-adjacency graph by constructing neighborhood edges, computing gradient-based edge weights, optionally masking invalid edges, and returning the graph in the requested representation. [query]
+
+## Conceptual Summary
+
+Canonical query operation via img_to_graph. Planned group: 3d_image_graph_materialization.
+
+## Type Signature
+
+```
+(img: Any, mask: Any, return_as: Any, dtype: Any) -> weighted adjacency graph/sparse matrix
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

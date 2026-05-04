@@ -1,0 +1,49 @@
+---
+fqdn: sciona.atoms.robotics.rust_robotics.n_joint_arm_2d.computegoaldistancemetric
+predicate_id: computegoaldistancemetric
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(position_current: array-like, position_goal: array-like) -> tuple[array-like, float]"
+informal_desc: Validate current/goal positions as 2D vectors, compute Cartesian error, and return squared Euclidean goal distance.
+conceptual_summary: ""
+inputs:
+  - name: position_current
+    type_desc: np.ndarray
+    constraints: length == 2
+  - name: position_goal
+    type_desc: np.ndarray
+    constraints: length == 2
+outputs:
+  - name: goal_error_vector
+    type_desc: np.ndarray
+    constraints: length == 2
+  - name: goal_distance_squared
+    type_desc: float
+    constraints: ">= 0"
+concept_type: geometry
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: repo_rust_robotics
+    citation: Primary repository attribution for rust_robotics atoms.
+title: Computegoaldistancemetric
+description: Validate current/goal positions as 2D vectors, compute Cartesian error, and return squared Euclidean goal distance.
+---
+
+# Computegoaldistancemetric
+
+> Validate current/goal positions as 2D vectors, compute Cartesian error, and return squared Euclidean goal distance.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(position_current: array-like, position_goal: array-like) -> tuple[array-like, float]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

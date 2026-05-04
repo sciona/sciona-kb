@@ -1,0 +1,60 @@
+---
+cdg_asset_id: solution.kaggle.outbrain_click_prediction_1st
+title: Outbrain Click Prediction - 1st Place (2017) - Pipeline Template
+description: "This template captures the ordered steps used by Outbrain Click Prediction - 1st Place (2017): prepare the data, build task-specific representations, run the m…"
+problem_statement: "AdTech / Learning-to-Rank solution template for Outbrain Click Prediction - 1st Place (2017), modeled as a 5-stage deterministic pipeline: Data leak extraction, Feature hashing, Field-aware Factorization Machine (FFM), Follow-The-Regularized-Leader (FTRL), and downstream competition-specific finalization."
+platform: kaggle
+competition_name: Outbrain Click Prediction - 1st Place (2017)
+placement: ""
+year: 0
+domain: structured_prediction
+paradigm: optimization
+family: structured_prediction
+tags:
+  - rank_averaging
+  - adtech
+  - learning
+  - competition_solution
+  - pipeline_template
+key_insight: "The load-bearing idea is the pipeline topology: Data leak extraction creates the representation needed by Rank Averaging, so later stages optimize the metric without solving raw-data routing from scratch."
+failure_modes:
+  - Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+  - Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+  - A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+source_url: https://www.kaggle.com/c/outbrain-click-prediction/discussion/27495
+source_license: null
+---
+
+# Outbrain Click Prediction - 1st Place (2017) - Pipeline Template
+
+## Problem
+
+AdTech / Learning-to-Rank solution template for Outbrain Click Prediction - 1st Place (2017), modeled as a 5-stage deterministic pipeline: Data leak extraction, Feature hashing, Field-aware Factorization Machine (FFM), Follow-The-Regularized-Leader (FTRL), and downstream competition-specific finalization.
+
+## Approach
+
+This template captures the ordered steps used by Outbrain Click Prediction - 1st Place (2017): prepare the data, build task-specific representations, run the main modeling or search loop, and convert outputs into the final benchmark submission.
+
+## CDG Walkthrough
+
+{/* <ScionaViewerPlaceholder cdgId="solution.kaggle.outbrain_click_prediction_1st" readOnly={true} /> */}
+
+1. **Data leak extraction** -- This stage algorithmically trace document IDs between page views and ad clicks, generating a strict deterministic matching feature that bypasses ML completely (pandas).
+1. **Feature hashing** -- This stage hash billions of sparse categorical features (user IDs, geo-locations, ad IDs) into a fixed-width vector space to fit into memory (Vowpal Wabbit).
+1. **Field-aware Factorization Machine (FFM)** -- This stage train an FFM architecture heavily optimized for sparse click-through-rate predictions (libffm).
+1. **Follow-The-Regularized-Leader (FTRL)** -- This stage train an online FTRL model passing linearly through the dataset row-by-row, constantly updating its weights to handle chronological concept drift (Vowpal Wabbit).
+1. **Rank Averaging** -- This stage sort the outputs of the FFM and FTRL models per user, and average their sorted ranks to generate final ad placements (scipy).
+
+## Key Insight
+
+The load-bearing idea is the pipeline topology: Data leak extraction creates the representation needed by Rank Averaging, so later stages optimize the metric without solving raw-data routing from scratch.
+
+## Failure Modes
+
+- Distribution shift breaks handcrafted thresholds, validation-derived weights, or post-processing rules.
+- Missing metadata prevents faithful construction of candidates, groups, windows, graphs, or cross-validation folds.
+- A weak first-stage recall, search, or representation step cannot be fully recovered by downstream rescoring or ensembling.
+
+## Try It
+
+{/* <PlatformCTA cdgId="solution.kaggle.outbrain_click_prediction_1st" label="Reproduce this solution in Sciona" /> */}

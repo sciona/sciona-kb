@@ -1,0 +1,48 @@
+---
+fqdn: sciona.atoms.robotics.pronto.leg_odometer.velocity_state_readout
+predicate_id: velocity_state_readout
+repo: sciona-atoms-robotics
+domain: robotics
+type_signature: "(state_in: LegOdometerState{xd_b_, vel_cov_}) -> tuple[Vector-like velocity estimate, Covariance matrix]"
+informal_desc: Reads immutable velocity state-space components (body-frame velocity and its covariance) and returns the current velocity estimate.
+conceptual_summary: "Immutable Latent Moment Readout. Takes an immutable state container holding the first-order moment (mean vector) and second-order uncertainty structure (covariance matrix) of a latent variable, then performs a direct readout of those components. No inference, filtering, or parameter update is applied; the output is an exact structural projection of stored moments.. Applications: Neuroscience signal processing: read current latent neural activity estimate and posterior covariance from a state-space decoder, Climate data assimilation: extract present atmospheric/ocean latent state mean and uncertainty from an analysis snapshot, Industrial process control: retrieve estimated hidden process variables and confidence structure from a digital twin state, Network operations engineering: read inferred traffic-flow state vector and covariance from a probabilistic monitoring model"
+inputs:
+  - name: state_in
+    type_desc: object
+    constraints: Immutable snapshot; includes latent velocity mean xd_b_ and covariance vel_cov_.
+outputs:
+  - name: velocity
+    type_desc: np.ndarray
+    constraints: Derived from xd_b_.
+  - name: velocity_covariance
+    type_desc: np.ndarray
+    constraints: Directly from vel_cov_; no mutation.
+concept_type: data_extraction
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: camurri2020pronto
+    citation: Primary Pronto software paper.
+  - title: repo_pronto
+    citation: Upstream implementation is mapped to the vendored pronto repository.
+title: Velocity_state_readout
+description: Reads immutable velocity state-space components (body-frame velocity and its covariance) and returns the current velocity estimate.
+---
+
+# Velocity_state_readout
+
+> Reads immutable velocity state-space components (body-frame velocity and its covariance) and returns the current velocity estimate.
+
+## Conceptual Summary
+
+Immutable Latent Moment Readout. Takes an immutable state container holding the first-order moment (mean vector) and second-order uncertainty structure (covariance matrix) of a latent variable, then performs a direct readout of those components. No inference, filtering, or parameter update is applied; the output is an exact structural projection of stored moments.. Applications: Neuroscience signal processing: read current latent neural activity estimate and posterior covariance from a state-space decoder, Climate data assimilation: extract present atmospheric/ocean latent state mean and uncertainty from an analysis snapshot, Industrial process control: retrieve estimated hidden process variables and confidence structure from a digital twin state, Network operations engineering: read inferred traffic-flow state vector and covariance from a probabilistic monitoring model
+
+## Type Signature
+
+```
+(state_in: LegOdometerState{xd_b_, vel_cov_}) -> tuple[Vector-like velocity estimate, Covariance matrix]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

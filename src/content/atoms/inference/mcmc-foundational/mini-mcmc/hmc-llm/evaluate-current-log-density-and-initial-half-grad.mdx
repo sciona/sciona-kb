@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.inference.mcmc_foundational.mini_mcmc.hmc_llm.evaluate_current_log_density_and_initial_half_grad
+predicate_id: evaluate_current_log_density_and_initial_half_grad
+repo: sciona-atoms
+domain: inference
+type_signature: "(state_in.positions: Tensor[n_chains, dim], kernel_spec.step_size: scalar, logp_oracle: callable(position_batch) -> Tensor[n_chains]) -> tuple[Tensor[n_chains], Tensor[n_chains, dim]]"
+informal_desc: Evaluate current log density and compute the initial half-step momentum increment from the position gradient.
+conceptual_summary: ""
+inputs:
+  - name: state_in.positions
+    type_desc: Tensor[n_chains, dim]
+    constraints: Current positions.
+  - name: kernel_spec.step_size
+    type_desc: float
+    constraints: Typically positive.
+  - name: logp_oracle
+    type_desc: Callable
+    constraints: Differentiable w.r.t. positions.
+outputs:
+  - name: logp_current
+    type_desc: Tensor[n_chains]
+    constraints: Unnormalized log density at current positions.
+  - name: grad_half_0
+    type_desc: Tensor[n_chains, dim]
+    constraints: 0.5 * step_size * grad(logp_current).
+concept_type: oracle_gradient
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: neal2011hmc
+    citation: Canonical HMC reference for burn-in and collection loops that repeatedly apply the transition kernel before recording posterior samples.
+  - title: repo_mini_mcmc
+    citation: Repository-family attribution; the repaired local collection loop now calls the companion HMC transition kernel and records diagnostics.
+title: Evaluate_current_log_density_and_initial_half_grad
+description: Evaluate current log density and compute the initial half-step momentum increment from the position gradient.
+---
+
+# Evaluate_current_log_density_and_initial_half_grad
+
+> Evaluate current log density and compute the initial half-step momentum increment from the position gradient.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(state_in.positions: Tensor[n_chains, dim], kernel_spec.step_size: scalar, logp_oracle: callable(position_batch) -> Tensor[n_chains]) -> tuple[Tensor[n_chains], Tensor[n_chains, dim]]
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}

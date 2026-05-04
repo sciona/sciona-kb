@@ -1,0 +1,54 @@
+---
+fqdn: sciona.atoms.signal_processing.biosppy.ecg_zz2018.calculatefuzzymemberships
+predicate_id: calculatefuzzymemberships
+repo: sciona-atoms-signal
+domain: signal_processing
+type_signature: "(qsqi: float, psqi: float, ksqi: float, bassqi: float) -> NDArray"
+informal_desc: Transforms each of the four raw SQI scores into a vector of three fuzzy membership grades corresponding to 'Excellent', 'Barely acceptable', and 'Unacceptable' quality levels.
+conceptual_summary: ""
+inputs:
+  - name: qsqi
+    type_desc: float
+    constraints: Beat-matching quality index.
+  - name: psqi
+    type_desc: float
+    constraints: QRS power-spectrum quality index.
+  - name: ksqi
+    type_desc: float
+    constraints: Kurtosis quality index.
+  - name: bassqi
+    type_desc: float
+    constraints: Baseline wander quality index.
+outputs:
+  - name: evaluation_matrix_R
+    type_desc: NDArray
+    constraints: A 4x3 matrix where each row is the fuzzy membership vector for an SQI.
+concept_type: signal_transform
+verification_level: type_checked
+used_by_cdgs: []
+references:
+  - title: zhao2018ecgsqi
+    citation: Exact ECG SQI attribution.
+  - title: repo_biosppy
+    citation: Primary BioSPPy software attribution.
+title: Calculatefuzzymemberships
+description: Transforms each of the four raw SQI scores into a vector of three fuzzy membership grades corresponding to 'Excellent', 'Barely acceptable', and 'Unacceptable'…
+---
+
+# Calculatefuzzymemberships
+
+> Transforms each of the four raw SQI scores into a vector of three fuzzy membership grades corresponding to 'Excellent', 'Barely acceptable', and 'Unacceptable' quality levels.
+
+## Conceptual Summary
+
+
+
+## Type Signature
+
+```
+(qsqi: float, psqi: float, ksqi: float, bassqi: float) -> NDArray
+```
+
+## Deep Dive
+
+{/* Community contributions welcome -- click "Edit this page on GitHub" above. */}
