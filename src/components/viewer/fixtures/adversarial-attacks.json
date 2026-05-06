@@ -1,0 +1,589 @@
+{
+  "asset_id": "solution.kaggle.adversarial_attacks_1st",
+  "name": "NIPS 2017 Adversarial Attacks 1st Place -- Momentum Iterative FGSM",
+  "stages": [
+    {
+      "stage_id": "ensemble_prediction_label_inference",
+      "name": "Ensemble Prediction Label Inference",
+      "description": "Infers true label from ensemble consensus on first iteration only, then freezes for subsequent iterations. Avoids label leakage from competition infrastructure.",
+      "dejargonized_description": "Ask all models what class the image is, take the majority vote as the true label, and keep that label fixed for the entire attack.",
+      "concept_type": "data_assembly",
+      "inputs": [
+        {
+          "name": "predictions_list",
+          "type_desc": "List[Tensor[B, C]]",
+          "constraints": "Prediction logits from each model in ensemble.",
+          "required": true
+        },
+        {
+          "name": "iteration_index",
+          "type_desc": "int",
+          "constraints": "Current iteration number.",
+          "required": true
+        },
+        {
+          "name": "previous_labels",
+          "type_desc": "Tensor[B]",
+          "constraints": "Labels from prior iteration (ignored on iteration 0).",
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "name": "attack_labels",
+          "type_desc": "Tensor[B]",
+          "constraints": "One-hot encoded labels for loss computation.",
+          "required": true
+        }
+      ],
+      "preconditions": [
+        "At least one model prediction available."
+      ],
+      "guarantees": [
+        "Labels are fixed after iteration 0."
+      ],
+      "matched_primitive": ""
+    },
+    {
+      "stage_id": "adaptive_epsilon_attack_strategy",
+      "name": "Adaptive Epsilon Attack Strategy",
+      "description": "Selects model count, iteration count, and step size based on perturbation budget. eps >= 8: 5 models, 20 iters, alpha=eps/12. eps < 8: 2 models, 40 iters, alpha=eps/28. With tight budget, precision matters more; with large budget, model diversity matters more.",
+      "dejargonized_description": "Choose how many models to use and how many steps to take based on how much room you have to change the image -- tight budgets need more precise, smaller steps with fewer models.",
+      "concept_type": "conditional_routing",
+      "inputs": [
+        {
+          "name": "max_epsilon",
+          "type_desc": "float",
+          "constraints": "Maximum perturbation budget.",
+          "required": true
+        },
+        {
+          "name": "threshold",
+          "type_desc": "float",
+          "constraints": "Budget threshold for strategy switch (default 8.0).",
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "name": "config",
+          "type_desc": "dict",
+          "constraints": "Keys: num_models (int), num_iterations (int), step_size (float).",
+          "required": true
+        }
+      ],
+      "preconditions": [
+        "max_epsilon > 0."
+      ],
+      "guarantees": [
+        "step_size * num_iterations approximately covers epsilon budget."
+      ],
+      "matched_primitive": ""
+    },
+    {
+      "stage_id": "ensemble_logit_fusion_with_asymmetric_weights",
+      "name": "Ensemble Logit Fusion with Asymmetric Weights",
+      "description": "Weighted average of logits from multiple models. Adversarially-trained models (adv_inception_v3) get weight 0.25 while standard models get 1.0, preventing perturbations from overfitting to the adversarial training distribution.",
+      "dejargonized_description": "Average the raw predictions from all models, but give adversarially-hardened models less influence so the attack generalizes to new models.",
+      "concept_type": "optimization",
+      "inputs": [
+        {
+          "name": "logits_dict",
+          "type_desc": "Dict[str, Tensor[B, C]]",
+          "constraints": "Model name to logits mapping.",
+          "required": true
+        },
+        {
+          "name": "weights",
+          "type_desc": "Dict[str, float]",
+          "constraints": "Model name to weight mapping. Adversarially-trained models should be downweighted.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "fused_logits",
+          "type_desc": "Tensor[B, C]",
+          "constraints": "Weighted average logits.",
+          "required": true
+        }
+      ],
+      "preconditions": [
+        "All logits have same shape [B, C]."
+      ],
+      "guarantees": [
+        "Output shape matches input logit shape."
+      ],
+      "matched_primitive": ""
+    },
+    {
+      "stage_id": "auxiliary_logit_loss_fusion",
+      "name": "Auxiliary Logit Loss Fusion",
+      "description": "Backpropagates through both main and auxiliary classification heads with weight 0.4 on auxiliary. Produces richer gradients capturing feature sensitivity at multiple network depths. Correctly excludes models without auxiliary heads (e.g., ResNet).",
+      "dejargonized_description": "Compute the attack loss using both the final prediction and an intermediate prediction from each model, so the attack signal captures what the network cares about at multiple layers.",
+      "concept_type": "optimization",
+      "inputs": [
+        {
+          "name": "main_logits",
+          "type_desc": "Tensor[B, C]",
+          "constraints": "Main classification head logits.",
+          "required": true
+        },
+        {
+          "name": "aux_logits",
+          "type_desc": "Tensor[B, C] | None",
+          "constraints": "Auxiliary head logits (None for models without aux head).",
+          "required": false
+        },
+        {
+          "name": "labels",
+          "type_desc": "Tensor[B, C]",
+          "constraints": "One-hot encoded target labels.",
+          "required": true
+        },
+        {
+          "name": "aux_weight",
+          "type_desc": "float",
+          "constraints": "Weight for auxiliary loss (default 0.4).",
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "name": "combined_loss",
+          "type_desc": "Tensor[scalar]",
+          "constraints": "Scalar loss for gradient computation.",
+          "required": true
+        }
+      ],
+      "preconditions": [
+        "Main logits always available. Aux logits may be None."
+      ],
+      "guarantees": [
+        "Loss is differentiable w.r.t. input images."
+      ],
+      "matched_primitive": ""
+    },
+    {
+      "stage_id": "momentum_iterative_gradient_accumulation",
+      "name": "Momentum Iterative Gradient Accumulation (MI-FGSM)",
+      "description": "L1-normalizes current gradient, accumulates with momentum mu=1.0. The paper's headline contribution. Full momentum means accumulated gradient has equal weight to new gradient. L1-normalization prevents any single iteration's gradient magnitude from dominating. Dramatically improves transferability to unseen models.",
+      "dejargonized_description": "Keep a running average of past attack directions, normalizing each new direction before adding it in, so the attack follows a smoother path that works on models it has never seen.",
+      "concept_type": "fixed_point",
+      "inputs": [
+        {
+          "name": "gradient",
+          "type_desc": "Tensor[B, H, W, 3]",
+          "constraints": "Current iteration raw gradient.",
+          "required": true
+        },
+        {
+          "name": "previous_accumulated",
+          "type_desc": "Tensor[B, H, W, 3]",
+          "constraints": "Accumulated gradient from prior iterations (zeros on first).",
+          "required": true
+        },
+        {
+          "name": "momentum",
+          "type_desc": "float",
+          "constraints": "Momentum decay factor (mu=1.0 in paper).",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "accumulated_gradient",
+          "type_desc": "Tensor[B, H, W, 3]",
+          "constraints": "Updated accumulated gradient.",
+          "required": true
+        }
+      ],
+      "preconditions": [
+        "Gradient has been computed from ensemble loss."
+      ],
+      "guarantees": [
+        "Output magnitude is controlled by L1 normalization."
+      ],
+      "matched_primitive": ""
+    },
+    {
+      "stage_id": "std_normalized_momentum_gradient",
+      "name": "Std-Normalized Momentum Gradient (Targeted Variant)",
+      "description": "Std-normalization applied TWICE: once to raw gradient before accumulation, once to accumulated result. Preserves relative spatial structure better than L1-mean, important for targeted attacks where perturbation must push toward a specific class boundary.",
+      "dejargonized_description": "A variant of the momentum accumulation that normalizes by standard deviation instead of average, applied twice to keep the attack signal stable when pushing toward a specific target class.",
+      "concept_type": "fixed_point",
+      "inputs": [
+        {
+          "name": "gradient",
+          "type_desc": "Tensor[B, H, W, 3]",
+          "constraints": "Current iteration raw gradient.",
+          "required": true
+        },
+        {
+          "name": "accumulated",
+          "type_desc": "Tensor[B, H, W, 3]",
+          "constraints": "Accumulated gradient from prior iterations.",
+          "required": true
+        },
+        {
+          "name": "momentum",
+          "type_desc": "float",
+          "constraints": "Momentum decay factor.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "normalized_accumulated",
+          "type_desc": "Tensor[B, H, W, 3]",
+          "constraints": "Double-std-normalized accumulated gradient.",
+          "required": true
+        }
+      ],
+      "preconditions": [
+        "Gradient computed from targeted loss (negated cross-entropy)."
+      ],
+      "guarantees": [
+        "Output has controlled magnitude via std normalization."
+      ],
+      "matched_primitive": ""
+    },
+    {
+      "stage_id": "rounded_clipped_perturbation_step",
+      "name": "Rounded Clipped Perturbation Step",
+      "description": "Uses round(noise) clipped to [-2, 2] instead of sign(noise). Produces integer values {-2,-1,0,1,2}. Multi-level quantized step allows larger per-pixel moves where gradient is confident, zero-steps where near-zero. Exploits perturbation budget more efficiently for targeted attacks.",
+      "dejargonized_description": "Instead of nudging every pixel by the same amount, nudge confident pixels more and uncertain pixels less, using a 5-level scale instead of just plus/minus one.",
+      "concept_type": "optimization",
+      "inputs": [
+        {
+          "name": "noise",
+          "type_desc": "Tensor[B, H, W, 3]",
+          "constraints": "Accumulated gradient signal.",
+          "required": true
+        },
+        {
+          "name": "alpha",
+          "type_desc": "float",
+          "constraints": "Step size multiplier.",
+          "required": true
+        },
+        {
+          "name": "clip_range",
+          "type_desc": "int",
+          "constraints": "Maximum absolute value after rounding (default 2).",
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "name": "perturbation_delta",
+          "type_desc": "Tensor[B, H, W, 3]",
+          "constraints": "Quantized perturbation step in {-2,-1,0,1,2} * alpha.",
+          "required": true
+        }
+      ],
+      "preconditions": [
+        "Accumulated gradient available."
+      ],
+      "guarantees": [
+        "Each pixel delta is an integer multiple of alpha, bounded by clip_range."
+      ],
+      "matched_primitive": ""
+    }
+  ],
+  "edges": [
+    {
+      "source_stage_id": "ensemble_prediction_label_inference",
+      "target_stage_id": "auxiliary_logit_loss_fusion",
+      "output_name": "attack_labels",
+      "input_name": "labels",
+      "source_type": "Tensor[B, C]",
+      "target_type": "Tensor[B, C]",
+      "data_kind": "label",
+      "provenance": "Ensemble-inferred labels used as attack target for loss computation.",
+      "loss_class": "preserving",
+      "edge_kind": "data_flow"
+    },
+    {
+      "source_stage_id": "adaptive_epsilon_attack_strategy",
+      "target_stage_id": "ensemble_logit_fusion_with_asymmetric_weights",
+      "output_name": "config",
+      "input_name": "model_selection",
+      "source_type": "dict",
+      "target_type": "dict",
+      "data_kind": "configuration",
+      "provenance": "Strategy determines how many models participate in ensemble.",
+      "loss_class": "preserving",
+      "edge_kind": "data_flow"
+    },
+    {
+      "source_stage_id": "ensemble_logit_fusion_with_asymmetric_weights",
+      "target_stage_id": "auxiliary_logit_loss_fusion",
+      "output_name": "fused_logits",
+      "input_name": "main_logits",
+      "source_type": "Tensor[B, C]",
+      "target_type": "Tensor[B, C]",
+      "data_kind": "logits",
+      "provenance": "Asymmetrically-weighted ensemble logits fed to loss.",
+      "loss_class": "preserving",
+      "edge_kind": "data_flow"
+    },
+    {
+      "source_stage_id": "auxiliary_logit_loss_fusion",
+      "target_stage_id": "momentum_iterative_gradient_accumulation",
+      "output_name": "combined_loss",
+      "input_name": "gradient",
+      "source_type": "Tensor[scalar]",
+      "target_type": "Tensor[B, H, W, 3]",
+      "data_kind": "gradient",
+      "provenance": "Loss differentiated w.r.t. input to produce gradient (tf.gradients).",
+      "loss_class": "preserving",
+      "edge_kind": "data_flow"
+    },
+    {
+      "source_stage_id": "auxiliary_logit_loss_fusion",
+      "target_stage_id": "std_normalized_momentum_gradient",
+      "output_name": "combined_loss",
+      "input_name": "gradient",
+      "source_type": "Tensor[scalar]",
+      "target_type": "Tensor[B, H, W, 3]",
+      "data_kind": "gradient",
+      "provenance": "Loss differentiated w.r.t. input for targeted variant.",
+      "loss_class": "preserving",
+      "edge_kind": "data_flow"
+    },
+    {
+      "source_stage_id": "std_normalized_momentum_gradient",
+      "target_stage_id": "rounded_clipped_perturbation_step",
+      "output_name": "normalized_accumulated",
+      "input_name": "noise",
+      "source_type": "Tensor[B, H, W, 3]",
+      "target_type": "Tensor[B, H, W, 3]",
+      "data_kind": "gradient",
+      "provenance": "Std-normalized accumulated gradient feeds into multi-level quantized step.",
+      "loss_class": "lossy_but_allowed",
+      "edge_kind": "data_flow"
+    }
+  ],
+  "bindings": [
+    {
+      "stage_id": "ensemble_prediction_label_inference",
+      "bound_atom_fqdn": "sciona.atoms.dl.adversarial.ensemble_prediction_label_inference",
+      "binding_confidence": 1,
+      "status": "active",
+      "action_class": "replace_stage",
+      "atom_code": "@register_atom(witness_ensemble_prediction_label_inference)\n@icontract.require(\n    lambda predictions: len(predictions) >= 1,\n    \"need at least one prediction array\",\n)\n@icontract.require(\n    lambda iteration, previous_labels: iteration == 0 or previous_labels is not None,\n    \"previous_labels must be provided when iteration > 0\",\n)\n@icontract.ensure(\n    lambda predictions, result: result.shape == (predictions[0].shape[0],),\n    \"output must have shape (B,)\",\n)\ndef ensemble_prediction_label_inference(\n    predictions: list[NDArray[np.float64]],\n    iteration: int = 0,\n    previous_labels: NDArray[np.int64] | None = None,",
+      "atom_code_html": "<pre class=\"shiki github-dark-default\" style=\"background-color:#0d1117;color:#e6edf3\" tabindex=\"0\"><code><span class=\"line\"><span style=\"color:#D2A8FF\">@register_atom</span><span style=\"color:#E6EDF3\">(witness_ensemble_prediction_label_inference)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> predictions: </span><span style=\"color:#79C0FF\">len</span><span style=\"color:#E6EDF3\">(predictions) </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#79C0FF\"> 1</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"need at least one prediction array\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> iteration, previous_labels: iteration </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#79C0FF\"> 0</span><span style=\"color:#FF7B72\"> or</span><span style=\"color:#E6EDF3\"> previous_labels </span><span style=\"color:#FF7B72\">is</span><span style=\"color:#FF7B72\"> not</span><span style=\"color:#79C0FF\"> None</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"previous_labels must be provided when iteration > 0\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.ensure</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> predictions, result: result.shape </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#E6EDF3\"> (predictions[</span><span style=\"color:#79C0FF\">0</span><span style=\"color:#E6EDF3\">].shape[</span><span style=\"color:#79C0FF\">0</span><span style=\"color:#E6EDF3\">],),</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"output must have shape (B,)\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">def</span><span style=\"color:#D2A8FF\"> ensemble_prediction_label_inference</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    predictions: list[NDArray[np.float64]],</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    iteration: </span><span style=\"color:#79C0FF\">int</span><span style=\"color:#FF7B72\"> =</span><span style=\"color:#79C0FF\"> 0</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    previous_labels: NDArray[np.int64] </span><span style=\"color:#FF7B72\">|</span><span style=\"color:#79C0FF\"> None</span><span style=\"color:#FF7B72\"> =</span><span style=\"color:#79C0FF\"> None</span><span style=\"color:#E6EDF3\">,</span></span></code></pre>",
+      "atom_summary": "",
+      "atom_type_sig": "",
+      "atom_github_path": "sciona-atoms-dl/src/sciona/atoms/dl/adversarial/atoms.py",
+      "swap_rationale": "",
+      "swap_candidates": []
+    },
+    {
+      "stage_id": "adaptive_epsilon_attack_strategy",
+      "bound_atom_fqdn": "sciona.atoms.ml.gradient_attacks.adaptive_epsilon_strategy",
+      "binding_confidence": 1,
+      "status": "active",
+      "action_class": "replace_stage",
+      "atom_code": "@register_atom(witness_adaptive_epsilon_strategy)\n@icontract.require(lambda max_epsilon: max_epsilon > 0.0, \"max_epsilon must be positive\")\n@icontract.require(lambda threshold: threshold > 0.0, \"threshold must be positive\")\n@icontract.ensure(\n    lambda result: all(k in result for k in (\"n_models\", \"n_iterations\", \"step_size\")),\n    \"result must contain n_models, n_iterations, and step_size keys\",\n)\n@icontract.ensure(\n    lambda result: result[\"n_models\"] >= 1 and result[\"n_iterations\"] >= 1 and result[\"step_size\"] > 0.0,\n    \"all configuration values must be positive\",\n)\ndef adaptive_epsilon_strategy(\n    max_epsilon: float,\n    threshold: float = 8.0,",
+      "atom_code_html": "<pre class=\"shiki github-dark-default\" style=\"background-color:#0d1117;color:#e6edf3\" tabindex=\"0\"><code><span class=\"line\"><span style=\"color:#D2A8FF\">@register_atom</span><span style=\"color:#E6EDF3\">(witness_adaptive_epsilon_strategy)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span><span style=\"color:#FF7B72\">lambda</span><span style=\"color:#E6EDF3\"> max_epsilon: max_epsilon </span><span style=\"color:#FF7B72\">></span><span style=\"color:#79C0FF\"> 0.0</span><span style=\"color:#E6EDF3\">, </span><span style=\"color:#A5D6FF\">\"max_epsilon must be positive\"</span><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span><span style=\"color:#FF7B72\">lambda</span><span style=\"color:#E6EDF3\"> threshold: threshold </span><span style=\"color:#FF7B72\">></span><span style=\"color:#79C0FF\"> 0.0</span><span style=\"color:#E6EDF3\">, </span><span style=\"color:#A5D6FF\">\"threshold must be positive\"</span><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.ensure</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> result: </span><span style=\"color:#79C0FF\">all</span><span style=\"color:#E6EDF3\">(k </span><span style=\"color:#FF7B72\">in</span><span style=\"color:#E6EDF3\"> result </span><span style=\"color:#FF7B72\">for</span><span style=\"color:#E6EDF3\"> k </span><span style=\"color:#FF7B72\">in</span><span style=\"color:#E6EDF3\"> (</span><span style=\"color:#A5D6FF\">\"n_models\"</span><span style=\"color:#E6EDF3\">, </span><span style=\"color:#A5D6FF\">\"n_iterations\"</span><span style=\"color:#E6EDF3\">, </span><span style=\"color:#A5D6FF\">\"step_size\"</span><span style=\"color:#E6EDF3\">)),</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"result must contain n_models, n_iterations, and step_size keys\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.ensure</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> result: result[</span><span style=\"color:#A5D6FF\">\"n_models\"</span><span style=\"color:#E6EDF3\">] </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#79C0FF\"> 1</span><span style=\"color:#FF7B72\"> and</span><span style=\"color:#E6EDF3\"> result[</span><span style=\"color:#A5D6FF\">\"n_iterations\"</span><span style=\"color:#E6EDF3\">] </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#79C0FF\"> 1</span><span style=\"color:#FF7B72\"> and</span><span style=\"color:#E6EDF3\"> result[</span><span style=\"color:#A5D6FF\">\"step_size\"</span><span style=\"color:#E6EDF3\">] </span><span style=\"color:#FF7B72\">></span><span style=\"color:#79C0FF\"> 0.0</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"all configuration values must be positive\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">def</span><span style=\"color:#D2A8FF\"> adaptive_epsilon_strategy</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    max_epsilon: </span><span style=\"color:#79C0FF\">float</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    threshold: </span><span style=\"color:#79C0FF\">float</span><span style=\"color:#FF7B72\"> =</span><span style=\"color:#79C0FF\"> 8.0</span><span style=\"color:#E6EDF3\">,</span></span></code></pre>",
+      "atom_summary": "",
+      "atom_type_sig": "",
+      "atom_github_path": "sciona-atoms-ml/src/sciona/atoms/ml/gradient_attacks/atoms.py",
+      "swap_rationale": "Fixed configuration (5 models, 20 iterations) works for most budgets. The adaptive strategy optimizes for edge cases.",
+      "swap_candidates": []
+    },
+    {
+      "stage_id": "ensemble_logit_fusion_with_asymmetric_weights",
+      "bound_atom_fqdn": "sciona.atoms.ml.gradient_attacks.ensemble_logit_fusion",
+      "binding_confidence": 0.9,
+      "status": "active",
+      "action_class": "replace_stage",
+      "atom_code": "@register_atom(witness_ensemble_logit_fusion)\n@icontract.require(\n    lambda logits, weights: len(logits) == len(weights),\n    \"number of logit arrays must match number of weights\",\n)\n@icontract.require(lambda logits: len(logits) >= 1, \"need at least one model\")\n@icontract.require(\n    lambda weights: all(w >= 0.0 for w in weights),\n    \"all weights must be non-negative\",\n)\n@icontract.ensure(\n    lambda logits, result: result.shape == logits[0].shape,\n    \"fused output shape must match individual logit shape\",\n)\ndef ensemble_logit_fusion(\n    logits: list[NDArray[np.float64]],\n    weights: NDArray[np.float64],",
+      "atom_code_html": "<pre class=\"shiki github-dark-default\" style=\"background-color:#0d1117;color:#e6edf3\" tabindex=\"0\"><code><span class=\"line\"><span style=\"color:#D2A8FF\">@register_atom</span><span style=\"color:#E6EDF3\">(witness_ensemble_logit_fusion)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> logits, weights: </span><span style=\"color:#79C0FF\">len</span><span style=\"color:#E6EDF3\">(logits) </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#79C0FF\"> len</span><span style=\"color:#E6EDF3\">(weights),</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"number of logit arrays must match number of weights\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span><span style=\"color:#FF7B72\">lambda</span><span style=\"color:#E6EDF3\"> logits: </span><span style=\"color:#79C0FF\">len</span><span style=\"color:#E6EDF3\">(logits) </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#79C0FF\"> 1</span><span style=\"color:#E6EDF3\">, </span><span style=\"color:#A5D6FF\">\"need at least one model\"</span><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> weights: </span><span style=\"color:#79C0FF\">all</span><span style=\"color:#E6EDF3\">(w </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#79C0FF\"> 0.0</span><span style=\"color:#FF7B72\"> for</span><span style=\"color:#E6EDF3\"> w </span><span style=\"color:#FF7B72\">in</span><span style=\"color:#E6EDF3\"> weights),</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"all weights must be non-negative\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.ensure</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> logits, result: result.shape </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#E6EDF3\"> logits[</span><span style=\"color:#79C0FF\">0</span><span style=\"color:#E6EDF3\">].shape,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"fused output shape must match individual logit shape\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">def</span><span style=\"color:#D2A8FF\"> ensemble_logit_fusion</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    logits: list[NDArray[np.float64]],</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    weights: NDArray[np.float64],</span></span></code></pre>",
+      "atom_summary": "",
+      "atom_type_sig": "",
+      "atom_github_path": "sciona-atoms-ml/src/sciona/atoms/ml/gradient_attacks/atoms.py",
+      "swap_rationale": "",
+      "swap_candidates": []
+    },
+    {
+      "stage_id": "auxiliary_logit_loss_fusion",
+      "bound_atom_fqdn": "sciona.atoms.dl.adversarial.auxiliary_logit_loss_fusion",
+      "binding_confidence": 1,
+      "status": "active",
+      "action_class": "replace_stage",
+      "atom_code": "@register_atom(witness_auxiliary_logit_loss_fusion)\n@icontract.require(\n    lambda main_logits, labels_onehot: main_logits.shape == labels_onehot.shape,\n    \"main_logits and labels_onehot must have the same shape\",\n)\n@icontract.require(\n    lambda main_logits, aux_logits: aux_logits is None or main_logits.shape == aux_logits.shape,\n    \"aux_logits must have the same shape as main_logits if provided\",\n)\n@icontract.require(lambda aux_weight: aux_weight >= 0.0, \"aux_weight must be non-negative\")\n@icontract.require(\n    lambda labels_onehot: np.allclose(labels_onehot.sum(axis=1), 1.0, atol=0.01),\n    \"labels_onehot rows must sum to approximately 1\",\n)\n@icontract.ensure(lambda result: result >= 0.0 and bool(np.isfinite(result)), \"loss must be finite and non-negative\")\ndef auxiliary_logit_loss_fusion(\n    main_logits: NDArray[np.float64],\n    labels_onehot: NDArray[np.float64],\n    aux_logits: NDArray[np.float64] | None = None,\n    aux_weight: float = 0.4,",
+      "atom_code_html": "<pre class=\"shiki github-dark-default\" style=\"background-color:#0d1117;color:#e6edf3\" tabindex=\"0\"><code><span class=\"line\"><span style=\"color:#D2A8FF\">@register_atom</span><span style=\"color:#E6EDF3\">(witness_auxiliary_logit_loss_fusion)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> main_logits, labels_onehot: main_logits.shape </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#E6EDF3\"> labels_onehot.shape,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"main_logits and labels_onehot must have the same shape\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> main_logits, aux_logits: aux_logits </span><span style=\"color:#FF7B72\">is</span><span style=\"color:#79C0FF\"> None</span><span style=\"color:#FF7B72\"> or</span><span style=\"color:#E6EDF3\"> main_logits.shape </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#E6EDF3\"> aux_logits.shape,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"aux_logits must have the same shape as main_logits if provided\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span><span style=\"color:#FF7B72\">lambda</span><span style=\"color:#E6EDF3\"> aux_weight: aux_weight </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#79C0FF\"> 0.0</span><span style=\"color:#E6EDF3\">, </span><span style=\"color:#A5D6FF\">\"aux_weight must be non-negative\"</span><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> labels_onehot: np.allclose(labels_onehot.sum(</span><span style=\"color:#FFA657\">axis</span><span style=\"color:#FF7B72\">=</span><span style=\"color:#79C0FF\">1</span><span style=\"color:#E6EDF3\">), </span><span style=\"color:#79C0FF\">1.0</span><span style=\"color:#E6EDF3\">, </span><span style=\"color:#FFA657\">atol</span><span style=\"color:#FF7B72\">=</span><span style=\"color:#79C0FF\">0.01</span><span style=\"color:#E6EDF3\">),</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"labels_onehot rows must sum to approximately 1\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.ensure</span><span style=\"color:#E6EDF3\">(</span><span style=\"color:#FF7B72\">lambda</span><span style=\"color:#E6EDF3\"> result: result </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#79C0FF\"> 0.0</span><span style=\"color:#FF7B72\"> and</span><span style=\"color:#79C0FF\"> bool</span><span style=\"color:#E6EDF3\">(np.isfinite(result)), </span><span style=\"color:#A5D6FF\">\"loss must be finite and non-negative\"</span><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">def</span><span style=\"color:#D2A8FF\"> auxiliary_logit_loss_fusion</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    main_logits: NDArray[np.float64],</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    labels_onehot: NDArray[np.float64],</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    aux_logits: NDArray[np.float64] </span><span style=\"color:#FF7B72\">|</span><span style=\"color:#79C0FF\"> None</span><span style=\"color:#FF7B72\"> =</span><span style=\"color:#79C0FF\"> None</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    aux_weight: </span><span style=\"color:#79C0FF\">float</span><span style=\"color:#FF7B72\"> =</span><span style=\"color:#79C0FF\"> 0.4</span><span style=\"color:#E6EDF3\">,</span></span></code></pre>",
+      "atom_summary": "",
+      "atom_type_sig": "",
+      "atom_github_path": "sciona-atoms-dl/src/sciona/atoms/dl/adversarial/atoms.py",
+      "swap_rationale": "Standard cross-entropy loss works without auxiliary heads. The auxiliary loss adds ~2% transfer rate improvement on Inception models.",
+      "swap_candidates": [
+        {
+          "fqdn": "sciona.atoms.dl.architectures.lightgbm_train",
+          "stage_name": "Tabular Model",
+          "cdg_name": "VSB Power Line Fault Detection 1st Place \u2014 Signal Processing + Hybrid Model Blend",
+          "cdg_asset_id": "solution.kaggle.vsb_power_line_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.dl.loss.label_smoothing_ce",
+          "stage_name": "Label Smoothing",
+          "cdg_name": "MoA Prediction 1st Place \u2014 Multi-Label Tabular Classification with Deep Ensembles",
+          "cdg_asset_id": "solution.kaggle.moa_prediction_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.ml.constrained_ml.decorrelation.flatness_penalty_gradient",
+          "stage_name": "Flatness-Constrained Gradient Boosting",
+          "cdg_name": "Flavours of Physics 1st Place -- Constraint-Satisfying Classification",
+          "cdg_asset_id": "solution.kaggle.flavours_physics_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.dl.training.online_hard_negative_mining",
+          "stage_name": "Online Hard Negative Mining (3D)",
+          "cdg_name": "DSB2017 1st Place \u2014 Lung Cancer Detection from CT Scans",
+          "cdg_asset_id": "solution.kaggle.dsb2017_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.dl.loss.miss_penalty_loss",
+          "stage_name": "Miss Penalty Loss",
+          "cdg_name": "DSB2017 1st Place \u2014 Lung Cancer Detection from CT Scans",
+          "cdg_asset_id": "solution.kaggle.dsb2017_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.dl.architectures.stochastic_weight_averaging",
+          "stage_name": "Stochastic Weight Averaging",
+          "cdg_name": "CommonLit Readability Prize 1st Place \u2014 Domain-Adapted Transformers with SWA and SVR Calibration",
+          "cdg_asset_id": "solution.kaggle.commonlit_readability_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.riemannian_bci.covariance_features.riemannian_mean_spd",
+          "stage_name": "Riemannian Mean (SPD Manifold)",
+          "cdg_name": "Melbourne Uni Seizure Prediction 1st Place -- Riemannian EEG Pipeline",
+          "cdg_asset_id": "solution.kaggle.barachant_seizure_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.ml.gradient_attacks.ensemble_logit_fusion",
+          "stage_name": "Ensemble Logit Fusion with Asymmetric Weights",
+          "cdg_name": "NIPS 2017 Adversarial Attacks 1st Place -- Momentum Iterative FGSM",
+          "cdg_asset_id": "solution.kaggle.adversarial_attacks_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.ml.gradient_attacks.rounded_clipped_perturbation_step",
+          "stage_name": "Rounded Clipped Perturbation Step",
+          "cdg_name": "NIPS 2017 Adversarial Attacks 1st Place -- Momentum Iterative FGSM",
+          "cdg_asset_id": "solution.kaggle.adversarial_attacks_1st"
+        }
+      ]
+    },
+    {
+      "stage_id": "momentum_iterative_gradient_accumulation",
+      "bound_atom_fqdn": "sciona.atoms.ml.gradient_attacks.momentum_gradient_accumulation",
+      "binding_confidence": 1,
+      "status": "active",
+      "action_class": "replace_stage",
+      "atom_code": "@register_atom(witness_momentum_gradient_accumulation)\n@icontract.require(\n    lambda gradient, previous_accumulated: gradient.shape == previous_accumulated.shape,\n    \"gradient and previous_accumulated must have the same shape\",\n)\n@icontract.require(lambda momentum: momentum >= 0.0, \"momentum must be non-negative\")\n@icontract.ensure(\n    lambda gradient, result: result.shape == gradient.shape,\n    \"output must preserve the input shape\",\n)\ndef momentum_gradient_accumulation(\n    gradient: NDArray[np.float64],\n    previous_accumulated: NDArray[np.float64],\n    momentum: float = 1.0,",
+      "atom_code_html": "<pre class=\"shiki github-dark-default\" style=\"background-color:#0d1117;color:#e6edf3\" tabindex=\"0\"><code><span class=\"line\"><span style=\"color:#D2A8FF\">@register_atom</span><span style=\"color:#E6EDF3\">(witness_momentum_gradient_accumulation)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> gradient, previous_accumulated: gradient.shape </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#E6EDF3\"> previous_accumulated.shape,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"gradient and previous_accumulated must have the same shape\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span><span style=\"color:#FF7B72\">lambda</span><span style=\"color:#E6EDF3\"> momentum: momentum </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#79C0FF\"> 0.0</span><span style=\"color:#E6EDF3\">, </span><span style=\"color:#A5D6FF\">\"momentum must be non-negative\"</span><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.ensure</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> gradient, result: result.shape </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#E6EDF3\"> gradient.shape,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"output must preserve the input shape\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">def</span><span style=\"color:#D2A8FF\"> momentum_gradient_accumulation</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    gradient: NDArray[np.float64],</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    previous_accumulated: NDArray[np.float64],</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    momentum: </span><span style=\"color:#79C0FF\">float</span><span style=\"color:#FF7B72\"> =</span><span style=\"color:#79C0FF\"> 1.0</span><span style=\"color:#E6EDF3\">,</span></span></code></pre>",
+      "atom_summary": "",
+      "atom_type_sig": "",
+      "atom_github_path": "sciona-atoms-ml/src/sciona/atoms/ml/gradient_attacks/atoms.py",
+      "swap_rationale": "",
+      "swap_candidates": []
+    },
+    {
+      "stage_id": "std_normalized_momentum_gradient",
+      "bound_atom_fqdn": "sciona.atoms.dl.adversarial.std_normalized_momentum_gradient",
+      "binding_confidence": 1,
+      "status": "active",
+      "action_class": "replace_stage",
+      "atom_code": "@register_atom(witness_std_normalized_momentum_gradient)\n@icontract.require(\n    lambda gradient, previous_accumulated: gradient.shape == previous_accumulated.shape,\n    \"gradient and previous_accumulated must have the same shape\",\n)\n@icontract.require(lambda momentum: momentum >= 0.0, \"momentum must be non-negative\")\n@icontract.ensure(\n    lambda gradient, result: result.shape == gradient.shape,\n    \"output must preserve the input shape\",\n)\ndef std_normalized_momentum_gradient(\n    gradient: NDArray[np.float64],\n    previous_accumulated: NDArray[np.float64],\n    momentum: float = 1.0,",
+      "atom_code_html": "<pre class=\"shiki github-dark-default\" style=\"background-color:#0d1117;color:#e6edf3\" tabindex=\"0\"><code><span class=\"line\"><span style=\"color:#D2A8FF\">@register_atom</span><span style=\"color:#E6EDF3\">(witness_std_normalized_momentum_gradient)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> gradient, previous_accumulated: gradient.shape </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#E6EDF3\"> previous_accumulated.shape,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"gradient and previous_accumulated must have the same shape\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span><span style=\"color:#FF7B72\">lambda</span><span style=\"color:#E6EDF3\"> momentum: momentum </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#79C0FF\"> 0.0</span><span style=\"color:#E6EDF3\">, </span><span style=\"color:#A5D6FF\">\"momentum must be non-negative\"</span><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.ensure</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> gradient, result: result.shape </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#E6EDF3\"> gradient.shape,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"output must preserve the input shape\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">def</span><span style=\"color:#D2A8FF\"> std_normalized_momentum_gradient</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    gradient: NDArray[np.float64],</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    previous_accumulated: NDArray[np.float64],</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    momentum: </span><span style=\"color:#79C0FF\">float</span><span style=\"color:#FF7B72\"> =</span><span style=\"color:#79C0FF\"> 1.0</span><span style=\"color:#E6EDF3\">,</span></span></code></pre>",
+      "atom_summary": "",
+      "atom_type_sig": "",
+      "atom_github_path": "sciona-atoms-dl/src/sciona/atoms/dl/adversarial/atoms.py",
+      "swap_rationale": "",
+      "swap_candidates": []
+    },
+    {
+      "stage_id": "rounded_clipped_perturbation_step",
+      "bound_atom_fqdn": "sciona.atoms.ml.gradient_attacks.rounded_clipped_perturbation_step",
+      "binding_confidence": 1,
+      "status": "active",
+      "action_class": "replace_stage",
+      "atom_code": "@register_atom(witness_rounded_clipped_perturbation_step)\n@icontract.require(lambda clip_range: clip_range >= 1, \"clip_range must be at least 1\")\n@icontract.ensure(\n    lambda noise, result: result.shape == noise.shape,\n    \"output must preserve the input shape\",\n)\n@icontract.ensure(\n    lambda clip_range, result: np.all(result >= -clip_range) and np.all(result <= clip_range),\n    \"all values must be within [-clip_range, clip_range]\",\n)\ndef rounded_clipped_perturbation_step(\n    noise: NDArray[np.float64],\n    clip_range: int = 2,",
+      "atom_code_html": "<pre class=\"shiki github-dark-default\" style=\"background-color:#0d1117;color:#e6edf3\" tabindex=\"0\"><code><span class=\"line\"><span style=\"color:#D2A8FF\">@register_atom</span><span style=\"color:#E6EDF3\">(witness_rounded_clipped_perturbation_step)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.require</span><span style=\"color:#E6EDF3\">(</span><span style=\"color:#FF7B72\">lambda</span><span style=\"color:#E6EDF3\"> clip_range: clip_range </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#79C0FF\"> 1</span><span style=\"color:#E6EDF3\">, </span><span style=\"color:#A5D6FF\">\"clip_range must be at least 1\"</span><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.ensure</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> noise, result: result.shape </span><span style=\"color:#FF7B72\">==</span><span style=\"color:#E6EDF3\"> noise.shape,</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"output must preserve the input shape\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#D2A8FF\">@icontract.ensure</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">    lambda</span><span style=\"color:#E6EDF3\"> clip_range, result: np.all(result </span><span style=\"color:#FF7B72\">>=</span><span style=\"color:#FF7B72\"> -</span><span style=\"color:#E6EDF3\">clip_range) </span><span style=\"color:#FF7B72\">and</span><span style=\"color:#E6EDF3\"> np.all(result </span><span style=\"color:#FF7B72\">&#x3C;=</span><span style=\"color:#E6EDF3\"> clip_range),</span></span>\n<span class=\"line\"><span style=\"color:#A5D6FF\">    \"all values must be within [-clip_range, clip_range]\"</span><span style=\"color:#E6EDF3\">,</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">)</span></span>\n<span class=\"line\"><span style=\"color:#FF7B72\">def</span><span style=\"color:#D2A8FF\"> rounded_clipped_perturbation_step</span><span style=\"color:#E6EDF3\">(</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    noise: NDArray[np.float64],</span></span>\n<span class=\"line\"><span style=\"color:#E6EDF3\">    clip_range: </span><span style=\"color:#79C0FF\">int</span><span style=\"color:#FF7B72\"> =</span><span style=\"color:#79C0FF\"> 2</span><span style=\"color:#E6EDF3\">,</span></span></code></pre>",
+      "atom_summary": "",
+      "atom_type_sig": "",
+      "atom_github_path": "sciona-atoms-ml/src/sciona/atoms/ml/gradient_attacks/atoms.py",
+      "swap_rationale": "Standard sign-based stepping (FGSM-style) works for non-targeted attacks. The rounded multi-level step is mainly beneficial for targeted attacks.",
+      "swap_candidates": [
+        {
+          "fqdn": "sciona.atoms.dl.architectures.lightgbm_train",
+          "stage_name": "Tabular Model",
+          "cdg_name": "VSB Power Line Fault Detection 1st Place \u2014 Signal Processing + Hybrid Model Blend",
+          "cdg_asset_id": "solution.kaggle.vsb_power_line_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.dl.loss.label_smoothing_ce",
+          "stage_name": "Label Smoothing",
+          "cdg_name": "MoA Prediction 1st Place \u2014 Multi-Label Tabular Classification with Deep Ensembles",
+          "cdg_asset_id": "solution.kaggle.moa_prediction_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.ml.constrained_ml.decorrelation.flatness_penalty_gradient",
+          "stage_name": "Flatness-Constrained Gradient Boosting",
+          "cdg_name": "Flavours of Physics 1st Place -- Constraint-Satisfying Classification",
+          "cdg_asset_id": "solution.kaggle.flavours_physics_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.dl.training.online_hard_negative_mining",
+          "stage_name": "Online Hard Negative Mining (3D)",
+          "cdg_name": "DSB2017 1st Place \u2014 Lung Cancer Detection from CT Scans",
+          "cdg_asset_id": "solution.kaggle.dsb2017_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.dl.loss.miss_penalty_loss",
+          "stage_name": "Miss Penalty Loss",
+          "cdg_name": "DSB2017 1st Place \u2014 Lung Cancer Detection from CT Scans",
+          "cdg_asset_id": "solution.kaggle.dsb2017_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.dl.architectures.stochastic_weight_averaging",
+          "stage_name": "Stochastic Weight Averaging",
+          "cdg_name": "CommonLit Readability Prize 1st Place \u2014 Domain-Adapted Transformers with SWA and SVR Calibration",
+          "cdg_asset_id": "solution.kaggle.commonlit_readability_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.riemannian_bci.covariance_features.riemannian_mean_spd",
+          "stage_name": "Riemannian Mean (SPD Manifold)",
+          "cdg_name": "Melbourne Uni Seizure Prediction 1st Place -- Riemannian EEG Pipeline",
+          "cdg_asset_id": "solution.kaggle.barachant_seizure_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.ml.gradient_attacks.ensemble_logit_fusion",
+          "stage_name": "Ensemble Logit Fusion with Asymmetric Weights",
+          "cdg_name": "NIPS 2017 Adversarial Attacks 1st Place -- Momentum Iterative FGSM",
+          "cdg_asset_id": "solution.kaggle.adversarial_attacks_1st"
+        },
+        {
+          "fqdn": "sciona.atoms.dl.adversarial.auxiliary_logit_loss_fusion",
+          "stage_name": "Auxiliary Logit Loss Fusion",
+          "cdg_name": "NIPS 2017 Adversarial Attacks 1st Place -- Momentum Iterative FGSM",
+          "cdg_asset_id": "solution.kaggle.adversarial_attacks_1st"
+        }
+      ]
+    }
+  ],
+  "applicability": {
+    "critical_stages": [
+      "momentum_iterative_gradient_accumulation",
+      "ensemble_logit_fusion_with_asymmetric_weights"
+    ],
+    "swappable_stages": {
+      "auxiliary_logit_loss_fusion": "Standard cross-entropy loss works without auxiliary heads. The auxiliary loss adds ~2% transfer rate improvement on Inception models.",
+      "adaptive_epsilon_attack_strategy": "Fixed configuration (5 models, 20 iterations) works for most budgets. The adaptive strategy optimizes for edge cases.",
+      "rounded_clipped_perturbation_step": "Standard sign-based stepping (FGSM-style) works for non-targeted attacks. The rounded multi-level step is mainly beneficial for targeted attacks."
+    }
+  }
+}

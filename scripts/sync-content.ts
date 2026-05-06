@@ -12,6 +12,7 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import { globSync } from "glob";
 import YAML from "yaml";
+import { createHighlighter, type Highlighter } from "shiki";
 
 // ─── Config ───────────────────────────────────────────────────────
 
@@ -131,6 +132,198 @@ function buildAtomToCdgMap(): Map<string, string[]> {
       }
     }
   }
+  return map;
+}
+
+// ─── Extract Python source for a bound atom FQDN ─────────────────
+
+/**
+ * Given "sciona.atoms.ml.gradient_attacks.momentum_gradient_accumulation",
+ * find the atoms.py in the matching repo/directory and extract the full
+ * decorated function definition.
+ */
+function extractAtomCode(fqdn: string): { code: string; githubPath: string } | null {
+  // Parse FQDN: sciona.atoms.<segments...>.<function_name>
+  const parts = fqdn.replace("sciona.atoms.", "").split(".");
+  if (parts.length < 2) return null;
+  const funcName = parts.pop()!;
+  const dirPath = parts.join("/");
+
+  const repos = discoverAtomRepos();
+  for (const repo of repos) {
+    const atomsFile = path.join(repo, "src/sciona/atoms", dirPath, "atoms.py");
+    if (!fs.existsSync(atomsFile)) continue;
+
+    const source = fs.readFileSync(atomsFile, "utf-8");
+    const code = extractFunction(source, funcName);
+    if (code) {
+      const repoName = path.basename(repo);
+      const relPath = `src/sciona/atoms/${dirPath}/atoms.py`;
+      return { code, githubPath: `${repoName}/${relPath}` };
+    }
+  }
+  return null;
+}
+
+/**
+ * Extract a decorated Python function from source text.
+ * Grabs from the first decorator (@) before `def funcName` through
+ * the end of the function body (next unindented line or EOF).
+ */
+function extractFunction(source: string, funcName: string): string | null {
+  const lines = source.split("\n");
+
+  // Find `def funcName(`
+  let defLine = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].match(new RegExp(`^def\\s+${funcName}\\s*\\(`))) {
+      defLine = i;
+      break;
+    }
+  }
+  if (defLine === -1) return null;
+
+  // Walk backwards to find first decorator
+  let startLine = defLine;
+  for (let i = defLine - 1; i >= 0; i--) {
+    const trimmed = lines[i].trim();
+    if (trimmed.startsWith("@") || trimmed.startsWith(")") || trimmed === "" || trimmed.startsWith("lambda") || trimmed.startsWith('"') || trimmed.startsWith("'")) {
+      startLine = i;
+      // keep going if it's a continuation
+      if (trimmed.startsWith("@")) {
+        startLine = i;
+        // but check if previous line is also part of decorator
+        continue;
+      }
+    } else {
+      break;
+    }
+  }
+  // Make sure we start at a decorator
+  while (startLine < defLine && !lines[startLine].trim().startsWith("@")) {
+    startLine++;
+  }
+
+  // Find end of function: next line at indent level 0 that isn't blank
+  let endLine = lines.length;
+  for (let i = defLine + 1; i < lines.length; i++) {
+    const line = lines[i];
+    // Non-empty line at indent 0 = new top-level definition
+    if (line.length > 0 && !line.startsWith(" ") && !line.startsWith("\t") && line.trim() !== "") {
+      endLine = i;
+      break;
+    }
+  }
+
+  // Trim trailing blank lines
+  while (endLine > startLine && lines[endLine - 1].trim() === "") {
+    endLine--;
+  }
+
+  return lines.slice(startLine, endLine).join("\n");
+}
+
+interface AtomCodeEntry {
+  code: string;
+  codeHtml: string;
+  githubPath: string;
+  summary: string;
+  typeSig: string;
+}
+
+/** Build a map from atom FQDN -> { code, codeHtml, githubPath, summary, typeSig } */
+function buildAtomCodeMap(): Map<string, AtomCodeEntry> {
+  const map = new Map<string, AtomCodeEntry>();
+
+  // Collect all bound FQDNs first
+  const allFqdns = new Set<string>();
+  const bindingFiles = globSync(path.join(CDG_DIR, "*_bindings.json"));
+  for (const bf of bindingFiles) {
+    const data = readJson(bf) as BindingFile;
+    for (const b of data.bindings) {
+      if (b.bound_artifact_fqdn && b.status === "active") {
+        allFqdns.add(b.bound_artifact_fqdn);
+      }
+    }
+  }
+
+  // Extract code + metadata for each
+  const repos = discoverAtomRepos();
+  for (const fqdn of allFqdns) {
+    const codeResult = extractAtomCode(fqdn);
+
+    // Also get conceptual_summary and type_signature from matches.json
+    const parts = fqdn.replace("sciona.atoms.", "").split(".");
+    const funcName = parts.pop()!;
+    const dirPath = parts.join("/");
+    let summary = "";
+    let typeSig = "";
+
+    for (const repo of repos) {
+      const matchesFile = path.join(repo, "src/sciona/atoms", dirPath, "matches.json");
+      if (!fs.existsSync(matchesFile)) continue;
+      const matches = readJson(matchesFile) as MatchEntry[];
+      const match = matches.find((m) => m.pdg_node.predicate_id === funcName);
+      if (match) {
+        summary = match.verified_match.candidate.declaration.conceptual_summary;
+        typeSig = match.pdg_node.statement;
+        break;
+      }
+    }
+
+    if (codeResult) {
+      map.set(fqdn, { ...codeResult, codeHtml: "", summary, typeSig });
+    }
+  }
+
+  console.log(`  atom code: extracted ${map.size}/${allFqdns.size} bound atom sources`);
+  return map;
+}
+
+// ─── Build concept_type → candidate atoms map ────────────────────
+
+interface SwapCandidate {
+  fqdn: string;
+  stage_name: string;
+  cdg_name: string;
+  cdg_asset_id: string;
+}
+
+function buildSwapCandidatesMap(): Map<string, SwapCandidate[]> {
+  const map = new Map<string, SwapCandidate[]>();
+
+  const cdgFiles = globSync(path.join(CDG_DIR, "*.json"))
+    .filter((f) => !f.endsWith("_bindings.json"));
+
+  for (const cdgFile of cdgFiles) {
+    const cdg = readJson(cdgFile) as SolutionCdg;
+    const baseName = path.basename(cdgFile, ".json");
+    const bindingsPath = path.join(CDG_DIR, `${baseName}_bindings.json`);
+    if (!fs.existsSync(bindingsPath)) continue;
+    const bindingsData = readJson(bindingsPath) as BindingFile;
+    const bindingsByStage = new Map(bindingsData.bindings.map((b) => [b.stage_id, b]));
+
+    for (const stage of cdg.stages) {
+      const ct = normalizeConcept(stage.concept_type as string);
+      const binding = bindingsByStage.get(stage.stage_id as string);
+      if (!binding?.bound_artifact_fqdn || binding.status !== "active") continue;
+
+      const existing = map.get(ct) ?? [];
+      // Deduplicate by fqdn
+      if (!existing.some((c) => c.fqdn === binding.bound_artifact_fqdn)) {
+        existing.push({
+          fqdn: binding.bound_artifact_fqdn,
+          stage_name: stage.name as string,
+          cdg_name: cdg.name,
+          cdg_asset_id: cdg.asset_id,
+        });
+        map.set(ct, existing);
+      }
+    }
+  }
+
+  const multiCount = [...map.values()].filter((v) => v.length >= 2).length;
+  console.log(`  swap candidates: ${multiCount} concept_types with 2+ atoms`);
   return map;
 }
 
@@ -345,7 +538,7 @@ interface SolutionCdg {
   audit: Record<string, unknown>;
 }
 
-function syncCdgs() {
+function syncCdgs(atomCodeMap: Map<string, AtomCodeEntry>, swapMap: Map<string, SwapCandidate[]>) {
   const cdgFiles = globSync(path.join(CDG_DIR, "*.json"))
     .filter((f) => !f.endsWith("_bindings.json"));
 
@@ -368,20 +561,45 @@ function syncCdgs() {
     }));
 
     // Normalize edge_kind and loss_class
-    const edges = cdg.edges.map((e) => ({
+    const edges = (cdg.edges ?? []).map((e) => ({
       ...e,
       edge_kind: (e.edge_kind as string || "data_flow").toLowerCase(),
       loss_class: (e.loss_class as string || "preserving").toLowerCase(),
     }));
 
-    // Build bindings array
-    const bindings = (bindingsData?.bindings ?? []).map((b) => ({
-      stage_id: b.stage_id,
-      bound_atom_fqdn: b.bound_artifact_fqdn ?? null,
-      binding_confidence: b.binding_confidence,
-      status: b.status as "active" | "gap" | "approximate",
-      action_class: b.action_class,
-    }));
+    // Build bindings array enriched with atom code + swap candidates
+    const swappableStages = (cdg.applicability as Record<string, unknown>)?.swappable_stages as Record<string, string> | undefined ?? {};
+    const stagesByIdMap = new Map((cdg.stages as Array<Record<string, unknown>>).map((s) => [s.stage_id as string, s]));
+
+    const bindings = (bindingsData?.bindings ?? []).map((b) => {
+      const fqdn = b.bound_artifact_fqdn ?? null;
+      const atomInfo = fqdn ? atomCodeMap.get(fqdn) : undefined;
+      const stage = stagesByIdMap.get(b.stage_id);
+      const isSwappable = b.stage_id in swappableStages;
+      const conceptType = stage ? normalizeConcept(stage.concept_type as string) : "";
+
+      // Get swap candidates: other atoms of the same concept_type, excluding current
+      let swapCandidates: Array<{ fqdn: string; stage_name: string; cdg_name: string; cdg_asset_id: string }> = [];
+      if (isSwappable && conceptType) {
+        swapCandidates = (swapMap.get(conceptType) ?? [])
+          .filter((c) => c.fqdn !== fqdn);
+      }
+
+      return {
+        stage_id: b.stage_id,
+        bound_atom_fqdn: fqdn,
+        binding_confidence: b.binding_confidence,
+        status: b.status as "active" | "gap" | "approximate",
+        action_class: b.action_class,
+        atom_code: atomInfo?.code ?? "",
+        atom_code_html: atomInfo?.codeHtml ?? "",
+        atom_summary: atomInfo?.summary ?? "",
+        atom_type_sig: atomInfo?.typeSig ?? "",
+        atom_github_path: atomInfo?.githubPath ?? "",
+        swap_rationale: swappableStages[b.stage_id] ?? "",
+        swap_candidates: swapCandidates,
+      };
+    });
 
     const summary = bindingsData?.binding_summary as Record<string, unknown> | undefined;
     const bindingSummary = summary
@@ -585,7 +803,7 @@ function generateSolutionBody(cdg: SolutionCdg, meta?: Record<string, unknown>):
 
 // ─── Main ─────────────────────────────────────────────────────────
 
-function main() {
+async function main() {
   console.log(`Syncing content from ${WORKSPACE}...`);
 
   // Clean output dirs
@@ -598,11 +816,37 @@ function main() {
   }
 
   const atomToCdg = buildAtomToCdgMap();
+  const atomCodeMap = buildAtomCodeMap();
+  const swapMap = buildSwapCandidatesMap();
+
+  // Syntax-highlight all extracted Python code with shiki
+  await highlightAllCode(atomCodeMap);
+
   syncAtoms(atomToCdg);
-  syncCdgs();
+  syncCdgs(atomCodeMap, swapMap);
   syncSolutions();
 
   console.log("Done.");
+}
+
+async function highlightAllCode(codeMap: Map<string, AtomCodeEntry>) {
+  const entries = [...codeMap.entries()].filter(([, v]) => v.code);
+  if (entries.length === 0) return;
+
+  const highlighter = await createHighlighter({
+    themes: ["github-dark-default"],
+    langs: ["python"],
+  });
+
+  for (const [fqdn, entry] of entries) {
+    entry.codeHtml = highlighter.codeToHtml(entry.code, {
+      lang: "python",
+      theme: "github-dark-default",
+    });
+  }
+
+  highlighter.dispose();
+  console.log(`  syntax highlight: ${entries.length} snippets`);
 }
 
 main();

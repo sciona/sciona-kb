@@ -100,7 +100,7 @@ const ConstraintSchema = z.object({
 });
 
 const AuditSchema = z.object({
-  source_kind: z.string(),
+  source_kind: z.string().default(""),
   review_status: z.enum(["draft", "reviewed", "published"]).default("draft"),
   rationale: z.string().default(""),
   provenance_notes: z.array(z.string()).default([]),
@@ -115,6 +115,18 @@ const BindingSchema = z.object({
   binding_confidence: z.number().default(0),
   status: z.enum(["active", "gap", "approximate"]).default("gap"),
   action_class: z.string().default(""),
+  atom_code: z.string().default(""),
+  atom_code_html: z.string().default(""),
+  atom_summary: z.string().default(""),
+  atom_type_sig: z.string().default(""),
+  atom_github_path: z.string().default(""),
+  swap_rationale: z.string().default(""),
+  swap_candidates: z.array(z.object({
+    fqdn: z.string(),
+    stage_name: z.string(),
+    cdg_name: z.string(),
+    cdg_asset_id: z.string(),
+  })).default([]),
 });
 
 const SolutionMetadataSchema = z.object({

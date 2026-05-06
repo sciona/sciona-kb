@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ScionaViewer from "../components/viewer/ScionaViewer";
+import adversarialData from "../components/viewer/fixtures/adversarial-attacks.json";
+---
+
+<BaseLayout title="Viewer Test" description="Integration test for the ScionaViewer component">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-2xl font-bold mb-2">ScionaViewer Integration Test</h1>
+    <p class="text-atlas-text-muted mb-6">
+      Rendering <strong>{adversarialData.name}</strong> &mdash;
+      {adversarialData.stages.length} stages, {adversarialData.edges.length} edges,
+      {adversarialData.bindings.filter((b: any) => b.status === "active").length}/{adversarialData.bindings.length} bound.
+    </p>
+
+    <div class="mb-8">
+      <h2 class="text-lg font-semibold mb-3">Top-to-Bottom (default)</h2>
+      <ScionaViewer
+        client:visible
+        cdgData={adversarialData as any}
+        readOnly={true}
+        direction="TB"
+        height="700px"
+      />
+    </div>
+
+    <div class="mb-8">
+      <h2 class="text-lg font-semibold mb-3">Left-to-Right</h2>
+      <ScionaViewer
+        client:visible
+        cdgData={adversarialData as any}
+        readOnly={true}
+        direction="LR"
+        height="500px"
+      />
+    </div>
+  </div>
+</BaseLayout>
