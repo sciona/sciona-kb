@@ -4,17 +4,30 @@ import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
   const atoms = await getCollection("atoms");
-  return atoms.map((atom) => ({
-    params: { slug: atom.id },
-    props: { atom },
-  }));
+  // Group by concept_type for related atoms
+  const byType = new Map<string, typeof atoms>();
+  for (const a of atoms) {
+    const list = byType.get(a.data.concept_type) ?? [];
+    list.push(a);
+    byType.set(a.data.concept_type, list);
+  }
+
+  return atoms.map((atom) => {
+    const siblings = (byType.get(atom.data.concept_type) ?? [])
+      .filter((a) => a.id !== atom.id)
+      .slice(0, 4);
+    return {
+      params: { slug: atom.id },
+      props: { atom, relatedAtoms: siblings },
+    };
+  });
 }
 
-const { atom } = Astro.props;
+const { atom, relatedAtoms } = Astro.props;
 const { Content } = await render(atom);
 const contentPath = `atoms/${atom.id}.mdx`;
 ---
 
-<AtomLayout atom={atom} contentPath={contentPath}>
+<AtomLayout atom={atom} contentPath={contentPath} relatedAtoms={relatedAtoms}>
   <Content />
 </AtomLayout>

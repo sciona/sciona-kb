@@ -45,7 +45,7 @@ interface ScionaViewerProps {
 export default function ScionaViewer({
   cdgData,
   readOnly = true,
-  direction = "TB",
+  direction = "LR",
   height = "600px",
 }: ScionaViewerProps) {
   const [dir, setDir] = useState(direction);

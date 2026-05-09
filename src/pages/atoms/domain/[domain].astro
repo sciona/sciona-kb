@@ -1,0 +1,49 @@
+---
+import AtomIndexLayout from "../../../layouts/AtomIndexLayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const atoms = await getCollection("atoms");
+  const domains = [...new Set(atoms.map((a) => a.data.domain))];
+  return domains.map((domain) => ({
+    params: { domain },
+    props: {
+      domain,
+      atoms: atoms.filter((a) => a.data.domain === domain),
+    },
+  }));
+}
+
+const { domain, atoms } = Astro.props;
+
+const domainMeta: Record<string, { label: string; color: string; description: string }> = {
+  inference: { label: "Probabilistic Inference", color: "#c084fc", description: "MCMC kernels, message passing, Bayesian computation, and posterior updates" },
+  bio: { label: "Biology & Medicine", color: "#4ade80", description: "Molecular docking, protein structure, medical imaging, and bioinformatics" },
+  physics: { label: "Physics", color: "#fb923c", description: "Particle tracking, simulation, physical constants, and experimental analysis" },
+  signal_processing: { label: "Signal Processing", color: "#a78bfa", description: "Audio analysis, EEG processing, anomaly detection, and wavelet transforms" },
+  robotics: { label: "Robotics", color: "#38bdf8", description: "State estimation, motion planning, sensor fusion, and control systems" },
+  fintech: { label: "Quantitative Finance", color: "#facc15", description: "Market microstructure, Kalman filtering, risk models, and execution algorithms" },
+  ml: { label: "Machine Learning", color: "#6c8cff", description: "Classical ML primitives: preprocessing, model selection, and sklearn wrappers" },
+  cs: { label: "Computer Science", color: "#6c8cff", description: "Assignment problems, metaheuristics, game AI, and string algorithms" },
+  state_estimation: { label: "State Estimation", color: "#c084fc", description: "Kalman filters, state space models, and sequential estimation" },
+  medical_imaging_3d: { label: "Medical Imaging 3D", color: "#4ade80", description: "Volumetric preprocessing, augmentation, and 3D segmentation" },
+  dynamic_programming: { label: "Dynamic Programming", color: "#6c8cff", description: "Optimal substructure algorithms and memoized solutions" },
+  geo: { label: "Geospatial", color: "#34d399", description: "Coordinate transforms, spatial indexing, and geographic computation" },
+  dl: { label: "Deep Learning", color: "#f87171", description: "Adversarial attacks, loss functions, gradient methods, and neural architectures" },
+};
+
+const meta = domainMeta[domain] ?? { label: domain.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()), color: "#6c8cff", description: "" };
+---
+
+<AtomIndexLayout
+  title={meta.label}
+  description={`${atoms.length} atoms in ${meta.label.toLowerCase()}. ${meta.description}`}
+  atoms={atoms}
+  accentColor={meta.color}
+  flat
+  breadcrumbs={[
+    { label: "Atlas", href: "/" },
+    { label: "Atoms", href: "/atoms" },
+    { label: meta.label, href: `/atoms/domain/${domain}` },
+  ]}
+/>

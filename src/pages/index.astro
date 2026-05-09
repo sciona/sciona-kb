@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { getConceptDescription } from "../data/concept-descriptions";
 import PlatformCTA from "../components/cta/PlatformCTA.astro";
 
 const cdgs = await getCollection("cdgs");
@@ -15,75 +16,165 @@ const featured = [...cdgs]
 // Unique paradigms and families for navigation
 const paradigms = [...new Set(cdgs.map((c) => c.data.paradigm))].sort();
 const families = [...new Set(cdgs.map((c) => c.data.family))].sort();
+
+// Popular concept types (by atom count)
+const conceptCounts = new Map<string, number>();
+for (const a of atoms) {
+  conceptCounts.set(a.data.concept_type, (conceptCounts.get(a.data.concept_type) ?? 0) + 1);
+}
+const topConcepts = [...conceptCounts.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 8)
+  .map(([type, count]) => ({ type, count, desc: getConceptDescription(type) }));
+
+// Recent solutions (by year, then placement)
+const recentSolutions = [...solutions]
+  .sort((a, b) => {
+    const yearDiff = parseInt(b.data.year) - parseInt(a.data.year);
+    return yearDiff !== 0 ? yearDiff : a.data.placement.localeCompare(b.data.placement);
+  })
+  .slice(0, 4);
+
+// Binding coverage stat
+const totalStages = cdgs.reduce((sum, c) => sum + (c.data.binding_summary?.total_stages ?? 0), 0);
+const boundStages = cdgs.reduce((sum, c) => sum + (c.data.binding_summary?.bound_active ?? 0), 0);
+const coveragePct = totalStages > 0 ? Math.round((boundStages / totalStages) * 100) : 0;
 ---
 
 <BaseLayout title="Algorithm Atlas" description="Wikipedia-style encyclopedia of algorithms, mental models, and competitive solutions -- powered by Sciona's composable atom system.">
   <div class="max-w-6xl mx-auto">
     <!-- Hero -->
-    <section class="text-center py-16">
-      <h1 class="text-5xl font-bold mb-4">
-        <span class="text-atlas-accent">Algorithm</span> Atlas
+    <section class="text-center py-20 relative">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(108,140,255,0.08)_0%,transparent_70%)] pointer-events-none"></div>
+      <h1 class="text-5xl sm:text-6xl font-bold mb-5 relative">
+        <span class="gradient-text">Algorithm</span> Atlas
       </h1>
-      <p class="text-xl text-atlas-text-muted max-w-2xl mx-auto mb-8">
-        Explore {cdgs.length} algorithmic pipelines, {atoms.length} mathematical atoms, and {solutions.length} competition-winning solutions -- all interconnected and composable.
+      <p class="text-xl text-atlas-text-muted max-w-2xl mx-auto mb-10 leading-relaxed relative">
+        An interconnected encyclopedia of {cdgs.length} algorithmic pipelines, {atoms.length} composable atoms, and {solutions.length} competition-winning solutions.
       </p>
-      <div class="flex flex-wrap justify-center gap-4">
+      <div class="flex flex-wrap justify-center gap-3 relative">
         <a href="/cdgs" class="px-6 py-3 rounded-lg bg-atlas-accent text-white font-medium hover:bg-atlas-accent-hover transition-colors">
-          Browse CDGs
+          Browse Pipelines
         </a>
         <a href="/atoms" class="px-6 py-3 rounded-lg border border-atlas-border text-atlas-text font-medium hover:border-atlas-accent hover:text-atlas-accent transition-colors">
           Explore Atoms
         </a>
         <a href="/solutions" class="px-6 py-3 rounded-lg border border-atlas-border text-atlas-text font-medium hover:border-atlas-accent hover:text-atlas-accent transition-colors">
-          Solutions
+          Study Solutions
         </a>
       </div>
     </section>
 
-    <!-- Stats -->
-    <section class="grid grid-cols-3 gap-4 mb-16">
-      <div class="bg-atlas-surface rounded-lg border border-atlas-border p-6 text-center">
-        <p class="text-3xl font-bold text-atlas-accent">{atoms.length}</p>
-        <p class="text-atlas-text-muted text-sm">Atoms</p>
-      </div>
-      <div class="bg-atlas-surface rounded-lg border border-atlas-border p-6 text-center">
-        <p class="text-3xl font-bold text-atlas-accent">{cdgs.length}</p>
-        <p class="text-atlas-text-muted text-sm">CDGs</p>
-      </div>
-      <div class="bg-atlas-surface rounded-lg border border-atlas-border p-6 text-center">
-        <p class="text-3xl font-bold text-atlas-accent">{solutions.length}</p>
-        <p class="text-atlas-text-muted text-sm">Solutions</p>
+    <!-- Stats — linked -->
+    <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16">
+      <a href="/atoms" class="group bg-atlas-surface rounded-lg border border-atlas-border p-5 text-center card-hover hover:border-atlas-accent/50">
+        <p class="text-3xl font-bold text-atlas-accent mb-1">{atoms.length}</p>
+        <p class="text-atlas-text-muted text-sm group-hover:text-atlas-text transition-colors">Atoms</p>
+      </a>
+      <a href="/cdgs" class="group bg-atlas-surface rounded-lg border border-atlas-border p-5 text-center card-hover hover:border-atlas-accent/50">
+        <p class="text-3xl font-bold text-atlas-accent mb-1">{cdgs.length}</p>
+        <p class="text-atlas-text-muted text-sm group-hover:text-atlas-text transition-colors">CDGs</p>
+      </a>
+      <a href="/solutions" class="group bg-atlas-surface rounded-lg border border-atlas-border p-5 text-center card-hover hover:border-atlas-accent/50">
+        <p class="text-3xl font-bold text-atlas-accent mb-1">{solutions.length}</p>
+        <p class="text-atlas-text-muted text-sm group-hover:text-atlas-text transition-colors">Solutions</p>
+      </a>
+      <div class="bg-atlas-surface rounded-lg border border-atlas-border p-5 text-center">
+        <p class="text-3xl font-bold text-atlas-green mb-1">{coveragePct}%</p>
+        <p class="text-atlas-text-muted text-sm">Stages Bound</p>
       </div>
     </section>
 
     <!-- Featured CDGs -->
     <section class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">Featured Pipelines</h2>
+      <div class="flex items-baseline justify-between mb-6">
+        <h2 class="text-2xl font-bold">Featured Pipelines</h2>
+        <a href="/cdgs" class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">View all &rarr;</a>
+      </div>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {featured.map((cdg) => (
-          <a href={`/cdgs/${cdg.id}`} class="group block p-4 rounded-lg bg-atlas-surface border border-atlas-border hover:border-atlas-accent/50 transition-colors">
-            <h3 class="font-semibold group-hover:text-atlas-accent transition-colors mb-1 line-clamp-2">{cdg.data.name}</h3>
-            <p class="text-sm text-atlas-text-muted line-clamp-2 mb-2">{cdg.data.dejargonized_summary}</p>
-            <div class="flex gap-2">
-              <span class="text-xs px-1.5 py-0.5 rounded bg-atlas-accent/10 text-atlas-accent">{cdg.data.paradigm}</span>
-              <span class="text-xs px-1.5 py-0.5 rounded bg-atlas-surface-2 text-atlas-text-muted">{cdg.data.family}</span>
-              {cdg.data.binding_summary && (
-                <span class="text-xs px-1.5 py-0.5 rounded bg-atlas-surface-2 text-atlas-text-muted">
-                  {cdg.data.binding_summary.bound_active}/{cdg.data.binding_summary.total_stages} bound
-                </span>
+        {featured.map((cdg) => {
+          const bs = cdg.data.binding_summary;
+          const pct = bs && bs.total_stages > 0 ? Math.round((bs.bound_active / bs.total_stages) * 100) : 0;
+          return (
+            <a href={`/cdgs/${cdg.id}`} class="group block p-5 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
+              <h3 class="font-semibold group-hover:text-atlas-accent transition-colors mb-2 line-clamp-2">{cdg.data.name}</h3>
+              <p class="text-sm text-atlas-text-muted line-clamp-2 mb-3">{cdg.data.dejargonized_summary}</p>
+              {bs && (
+                <div class="mb-3">
+                  <div class="flex justify-between text-xs text-atlas-text-muted mb-1">
+                    <span>{bs.bound_active}/{bs.total_stages} stages bound</span>
+                    <span>{pct}%</span>
+                  </div>
+                  <div class="binding-bar">
+                    <div class="binding-bar-fill" style={`width: ${pct}%`}></div>
+                  </div>
+                </div>
               )}
+              <div class="flex gap-2">
+                <a href={`/paradigm/${cdg.data.paradigm}`} class="tag-link tag-accent" onclick="event.stopPropagation()">{cdg.data.paradigm.replace(/_/g, " ")}</a>
+                <a href={`/family/${cdg.data.family}`} class="tag-link" onclick="event.stopPropagation()">{cdg.data.family.replace(/_/g, " ")}</a>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <hr class="section-rule mb-16" />
+
+    <!-- Popular Concepts -->
+    <section class="mb-16">
+      <div class="flex items-baseline justify-between mb-6">
+        <h2 class="text-2xl font-bold">Explore by Concept</h2>
+        <a href="/atoms" class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">All atoms &rarr;</a>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {topConcepts.map(({ type, count, desc }) => (
+          <a href={`/concept/${type}`} class="group block p-4 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl">{desc.emoji}</span>
+              <h3 class="font-semibold text-sm group-hover:text-atlas-accent transition-colors">{desc.title}</h3>
+            </div>
+            <p class="text-xs text-atlas-text-muted line-clamp-2 mb-2">{desc.oneLiner}</p>
+            <span class="text-xs text-atlas-text-muted">{count} atoms</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Recent Solutions -->
+    <section class="mb-16">
+      <div class="flex items-baseline justify-between mb-6">
+        <h2 class="text-2xl font-bold">Competition Solutions</h2>
+        <a href="/solutions" class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">View all &rarr;</a>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {recentSolutions.map((sol) => (
+          <a href={`/solutions/${sol.id}`} class="group flex gap-4 p-4 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
+            <div class="shrink-0 flex flex-col items-center justify-center w-14 h-14 rounded-lg bg-atlas-accent/10 text-atlas-accent">
+              <span class="text-xs font-bold uppercase">{sol.data.platform}</span>
+            </div>
+            <div class="min-w-0">
+              <h3 class="font-semibold text-sm group-hover:text-atlas-accent transition-colors line-clamp-1 mb-1">{sol.data.title}</h3>
+              <p class="text-xs text-atlas-text-muted line-clamp-1 mb-2">{sol.data.competition_name} &middot; {sol.data.placement} &middot; {sol.data.year}</p>
+              <div class="flex gap-2">
+                <a href={`/paradigm/${sol.data.paradigm}`} class="tag-link" onclick="event.stopPropagation()">{sol.data.paradigm.replace(/_/g, " ")}</a>
+                <a href={`/family/${sol.data.family}`} class="tag-link" onclick="event.stopPropagation()">{sol.data.family.replace(/_/g, " ")}</a>
+              </div>
             </div>
           </a>
         ))}
       </div>
     </section>
 
+    <hr class="section-rule mb-16" />
+
     <!-- Paradigms -->
-    <section class="mb-16">
+    <section class="mb-12">
       <h2 class="text-2xl font-bold mb-4">By Paradigm</h2>
       <div class="flex flex-wrap gap-2">
         {paradigms.map((p) => (
-          <a href={`/paradigm/${p}`} class="px-3 py-1.5 rounded-lg bg-atlas-surface border border-atlas-border text-sm text-atlas-text-muted hover:text-atlas-accent hover:border-atlas-accent/50 transition-colors">{p}</a>
+          <a href={`/paradigm/${p}`} class="tag-link tag-accent text-sm">{p.replace(/_/g, " ")}</a>
         ))}
       </div>
     </section>
@@ -93,16 +184,19 @@ const families = [...new Set(cdgs.map((c) => c.data.family))].sort();
       <h2 class="text-2xl font-bold mb-4">By Problem Family</h2>
       <div class="flex flex-wrap gap-2">
         {families.map((f) => (
-          <a href={`/family/${f}`} class="px-3 py-1.5 rounded-lg bg-atlas-surface border border-atlas-border text-sm text-atlas-text-muted hover:text-atlas-accent hover:border-atlas-accent/50 transition-colors">{f}</a>
+          <a href={`/family/${f}`} class="tag-link text-sm">{f.replace(/_/g, " ")}</a>
         ))}
       </div>
     </section>
 
     <!-- CTA -->
-    <section class="text-center py-12 bg-atlas-surface rounded-lg border border-atlas-border">
-      <h2 class="text-2xl font-bold mb-2">Build with Sciona</h2>
-      <p class="text-atlas-text-muted mb-6">Compose atoms into custom algorithmic pipelines. No boilerplate.</p>
-      <PlatformCTA label="Get Started with Sciona" />
+    <section class="text-center py-12 bg-atlas-surface rounded-lg border border-atlas-border relative overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(108,140,255,0.06)_0%,transparent_60%)] pointer-events-none"></div>
+      <h2 class="text-2xl font-bold mb-2 relative">Build with Sciona</h2>
+      <p class="text-atlas-text-muted mb-6 relative">Compose atoms into custom algorithmic pipelines. No boilerplate.</p>
+      <div class="relative">
+        <PlatformCTA label="Get Started with Sciona" />
+      </div>
     </section>
   </div>
 </BaseLayout>

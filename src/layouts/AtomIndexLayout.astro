@@ -1,0 +1,382 @@
+---
+/**
+ * Reusable atom index template. Shows:
+ * - 3 featured atoms as full contract cards
+ * - Remaining atoms in a tiled layout: domain → concept type → cards
+ * - Search filters across all tiles, hiding empty sections
+ *
+ * Used by: /atoms, /atoms/domain/[domain], /concept/[type], etc.
+ */
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/seo/Breadcrumbs.astro";
+import AtomContractCard from "../components/content/AtomContractCard.astro";
+import AtomCompactCard from "../components/content/AtomCompactCard.astro";
+import type { ContractAtom } from "../components/content/AtomContractCard.astro";
+import { getConceptDescription } from "../data/concept-descriptions";
+
+interface Props {
+  title: string;
+  description: string;
+  atoms: CollectionEntry<"atoms">[];
+  featured?: ContractAtom[];
+  breadcrumbs?: Array<{ label: string; href: string }>;
+  accentColor?: string;
+  /** Skip domain-level grouping (already filtered to one domain) */
+  flat?: boolean;
+}
+
+const {
+  title,
+  description,
+  atoms,
+  featured: featuredProp,
+  breadcrumbs: crumbs,
+  accentColor,
+  flat = false,
+} = Astro.props;
+
+const defaultCrumbs = [
+  { label: "Atlas", href: "/" },
+  { label: "Atoms", href: "/atoms" },
+  { label: title, href: Astro.url.pathname },
+];
+
+// Domain metadata
+const domainMeta: Record<string, { label: string; color: string }> = {
+  inference: { label: "Probabilistic Inference", color: "#c084fc" },
+  bio: { label: "Biology & Medicine", color: "#4ade80" },
+  physics: { label: "Physics", color: "#fb923c" },
+  signal_processing: { label: "Signal Processing", color: "#a78bfa" },
+  robotics: { label: "Robotics", color: "#38bdf8" },
+  fintech: { label: "Quantitative Finance", color: "#facc15" },
+  ml: { label: "Machine Learning", color: "#6c8cff" },
+  cs: { label: "Computer Science", color: "#6c8cff" },
+  dl: { label: "Deep Learning", color: "#f87171" },
+  state_estimation: { label: "State Estimation", color: "#c084fc" },
+  medical_imaging_3d: { label: "Medical Imaging 3D", color: "#4ade80" },
+  dynamic_programming: { label: "Dynamic Programming", color: "#6c8cff" },
+  geo: { label: "Geospatial", color: "#34d399" },
+};
+
+// Build featured cards
+let featured: ContractAtom[] = featuredProp ?? [];
+if (featured.length === 0 && atoms.length >= 3) {
+  const withIO = atoms.filter(
+    (a) => a.data.inputs.length > 0 && a.data.outputs.length > 0
+  );
+  const pool = withIO.length >= 3 ? withIO : atoms;
+  const seed = atoms.length * 7 + title.length * 13;
+  const indices = [
+    seed % pool.length,
+    (seed * 3 + 7) % pool.length,
+    (seed * 7 + 13) % pool.length,
+  ];
+  const seen = new Set<number>();
+  const picks: typeof pool = [];
+  for (const idx of indices) {
+    if (!seen.has(idx) && picks.length < 3) { seen.add(idx); picks.push(pool[idx]); }
+  }
+  for (let i = 0; picks.length < 3 && i < pool.length; i++) {
+    if (!seen.has(i)) { seen.add(i); picks.push(pool[i]); }
+  }
+
+  featured = picks.map((a) => {
+    const shortenType = (t: string) =>
+      t.replace(/NDArray\[np\.float64\]/g, "NDArray[f64]")
+        .replace(/np\.ndarray/gi, "ndarray")
+        .replace(/numpy\.ndarray/gi, "ndarray");
+    return {
+      name: a.data.predicate_id,
+      domain: a.data.domain,
+      description: a.data.informal_desc,
+      conceptType: a.data.concept_type,
+      inputs: a.data.inputs.slice(0, 5).map((inp) => ({ name: inp.name, type: shortenType(inp.type_desc) })),
+      outputs: a.data.outputs.slice(0, 3).map((out) => ({ name: out.name, type: shortenType(out.type_desc) })),
+      requires: a.data.inputs.filter((inp) => inp.constraints?.length > 0).map((inp) => `${inp.name}: ${inp.constraints}`).slice(0, 4),
+      ensures: a.data.outputs.filter((out) => out.constraints?.length > 0).map((out) => `${out.name}: ${out.constraints}`).slice(0, 3),
+      href: `/atoms/${a.id}`,
+    };
+  });
+}
+
+const featuredIds = new Set(featured.map((f) => f.name));
+const rest = atoms.filter((a) => !featuredIds.has(a.data.predicate_id));
+
+// Build domain → concept_type → atoms structure
+type ConceptGroup = { type: string; label: string; emoji: string; atoms: CollectionEntry<"atoms">[] };
+type DomainGroup = { domain: string; meta: { label: string; color: string }; concepts: ConceptGroup[] };
+
+function buildConceptGroups(atomList: CollectionEntry<"atoms">[]): ConceptGroup[] {
+  const byType = new Map<string, CollectionEntry<"atoms">[]>();
+  for (const a of atomList) {
+    const t = a.data.concept_type;
+    const list = byType.get(t) ?? [];
+    list.push(a);
+    byType.set(t, list);
+  }
+  return [...byType.entries()]
+    .sort((a, b) => b[1].length - a[1].length)
+    .map(([type, atoms]) => {
+      const desc = getConceptDescription(type);
+      return { type, label: desc.title, emoji: desc.emoji, atoms };
+    });
+}
+
+// Build display names — disambiguate duplicate predicate_ids within the same
+// domain by appending the sub-package from the FQDN.
+// e.g. "show" in physics appears in jd2cal, find_month, apply_offsets →
+//      "show (jd2cal)", "show (find_month)", "show (apply_offsets)"
+const displayNames = new Map<string, string>();
+{
+  // Group by domain + predicate_id
+  const key = (a: CollectionEntry<"atoms">) => `${a.data.domain}::${a.data.predicate_id}`;
+  const groups = new Map<string, CollectionEntry<"atoms">[]>();
+  for (const a of rest) {
+    const k = key(a);
+    const list = groups.get(k) ?? [];
+    list.push(a);
+    groups.set(k, list);
+  }
+  for (const [_, group] of groups) {
+    if (group.length <= 1) continue;
+    // Extract sub-package: second-to-last segment of FQDN
+    for (const a of group) {
+      const parts = a.data.fqdn.split(".");
+      // fqdn: sciona.atoms.{domain}.{pkg}.{subpkg}.{fn} — we want subpkg
+      const subpkg = parts.length >= 3 ? parts[parts.length - 2] : "";
+      if (subpkg && subpkg !== a.data.predicate_id) {
+        displayNames.set(a.id, `${a.data.predicate_id} (${subpkg.replace(/_/g, " ")})`);
+      }
+    }
+  }
+}
+function getDisplayName(a: CollectionEntry<"atoms">): string {
+  return displayNames.get(a.id) ?? a.data.predicate_id;
+}
+
+const showDomains = !flat;
+let domainGroups: DomainGroup[] = [];
+let conceptGroups: ConceptGroup[] = [];
+
+if (showDomains) {
+  const byDomain = new Map<string, CollectionEntry<"atoms">[]>();
+  for (const a of rest) {
+    const d = a.data.domain;
+    const list = byDomain.get(d) ?? [];
+    list.push(a);
+    byDomain.set(d, list);
+  }
+  domainGroups = [...byDomain.entries()]
+    .sort((a, b) => b[1].length - a[1].length)
+    .map(([domain, domainAtoms]) => ({
+      domain,
+      meta: domainMeta[domain] ?? { label: domain.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()), color: "#6c8cff" },
+      concepts: buildConceptGroups(domainAtoms),
+    }));
+} else {
+  conceptGroups = buildConceptGroups(rest);
+}
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="max-w-6xl mx-auto">
+    <Breadcrumbs segments={crumbs ?? defaultCrumbs} />
+
+    <h1 class="text-3xl font-bold mt-4 mb-2" style={accentColor ? `color: ${accentColor}` : undefined}>
+      {title}
+    </h1>
+    <p class="text-atlas-text-muted text-lg mb-8">{description}</p>
+
+    <slot name="intro" />
+
+    <!-- Featured contract cards -->
+    {featured.length > 0 && (
+      <section class="mb-10">
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((atom) => (
+            <AtomContractCard atom={atom} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Search -->
+    <div class="flex items-center gap-4 mb-8">
+      <input
+        type="search"
+        placeholder={`Search ${atoms.length} atoms...`}
+        class="flex-1 max-w-md px-4 py-2 rounded-lg bg-atlas-surface border border-atlas-border text-atlas-text placeholder:text-atlas-text-muted focus:outline-none focus:border-atlas-accent transition-colors"
+        data-catalog-search
+      />
+      <span class="text-sm text-atlas-text-muted" data-catalog-count>
+        {rest.length} atoms
+      </span>
+    </div>
+
+    {showDomains && (
+      <div data-catalog-grid>
+        {domainGroups.map(({ domain, meta, concepts }) => (
+          <section class="mb-10" data-domain-section={domain}>
+            <div class="flex items-center gap-3 mb-4 pl-3 border-l-2" style={`border-color: ${meta.color}`}>
+              <a href={`/atoms/domain/${domain}`} class="text-base font-semibold hover:opacity-80 transition-opacity" style={`color: ${meta.color}`}>
+                {meta.label}
+              </a>
+              <span class="text-xs text-atlas-text-muted" data-domain-count>
+                {concepts.reduce((s, c) => s + c.atoms.length, 0)}
+              </span>
+            </div>
+
+            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {concepts.map(({ type, label, emoji, atoms: conceptAtoms }) => (
+                <div
+                  class="concept-tile rounded-lg border border-atlas-border bg-atlas-bg p-3"
+                  data-concept={type}
+                  data-domain={domain}
+                >
+                  <a
+                    href={`/concept/${type}`}
+                    class="flex items-center gap-1.5 mb-2 text-xs font-medium text-atlas-text-muted hover:text-atlas-accent transition-colors"
+                  >
+                    <span>{emoji}</span>
+                    <span>{label}</span>
+                    <span class="opacity-50">({conceptAtoms.length})</span>
+                  </a>
+                  <div class="space-y-1.5 max-h-[266px] overflow-y-auto tile-scroll">
+                    {conceptAtoms.map((a) => {
+                      const name = getDisplayName(a);
+                      return (
+                        <a
+                          href={`/atoms/${a.id}`}
+                          class="atom-card block rounded px-2 py-1.5 bg-atlas-surface hover:bg-atlas-surface-2 transition-colors"
+                          data-title={a.data.title.toLowerCase() + " " + name.toLowerCase()}
+                          data-tags={[a.data.domain, a.data.concept_type, a.data.repo].join(",")}
+                          data-domain={domain}
+                          data-concept={type}
+                        >
+                          <p class="font-mono text-[11px] leading-tight" style={`color: ${meta.color}`}>
+                            {name}
+                          </p>
+                          <p class="text-[10px] text-atlas-text-muted leading-snug line-clamp-1 mt-0.5">
+                            {a.data.informal_desc}
+                          </p>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    )}
+
+    {!showDomains && (
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-catalog-grid>
+        {conceptGroups.map(({ type, label, emoji, atoms: conceptAtoms }) => (
+          <div
+            class="concept-tile rounded-lg border border-atlas-border bg-atlas-bg p-3"
+            data-concept={type}
+          >
+            <a
+              href={`/concept/${type}`}
+              class="flex items-center gap-1.5 mb-2 text-xs font-medium text-atlas-text-muted hover:text-atlas-accent transition-colors"
+            >
+              <span>{emoji}</span>
+              <span>{label}</span>
+              <span class="opacity-50">({conceptAtoms.length})</span>
+            </a>
+            <div class="space-y-1.5 max-h-[266px] overflow-y-auto tile-scroll">
+              {conceptAtoms.map((a) => {
+                const name = getDisplayName(a);
+                return (
+                  <a
+                    href={`/atoms/${a.id}`}
+                    class="atom-card block rounded px-2 py-1.5 bg-atlas-surface hover:bg-atlas-surface-2 transition-colors"
+                    data-title={a.data.title.toLowerCase() + " " + name.toLowerCase()}
+                    data-tags={[a.data.domain, a.data.concept_type, a.data.repo].join(",")}
+                    data-concept={type}
+                  >
+                    <p class="font-mono text-[11px] leading-tight" style={accentColor ? `color: ${accentColor}` : undefined}>
+                      {name}
+                    </p>
+                    <p class="text-[10px] text-atlas-text-muted leading-snug line-clamp-1 mt-0.5">
+                      {a.data.informal_desc}
+                    </p>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <p class="text-center text-atlas-text-muted text-sm mt-8 hidden" data-catalog-empty>
+      No atoms match your search.
+    </p>
+
+    <slot />
+  </div>
+</BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>("[data-catalog-search]");
+  const grid = document.querySelector<HTMLElement>("[data-catalog-grid]");
+  const countEl = document.querySelector<HTMLElement>("[data-catalog-count]");
+  const emptyEl = document.querySelector<HTMLElement>("[data-catalog-empty]");
+
+  if (input && grid) {
+    const cards = Array.from(grid.querySelectorAll(".atom-card")) as HTMLElement[];
+    const tiles = Array.from(grid.querySelectorAll(".concept-tile")) as HTMLElement[];
+    const sections = Array.from(grid.querySelectorAll("[data-domain-section]")) as HTMLElement[];
+    const total = cards.length;
+
+    input.addEventListener("input", () => {
+      const q = input.value.toLowerCase();
+      let visible = 0;
+
+      // Filter individual atom cards
+      for (const card of cards) {
+        const title = card.dataset.title ?? "";
+        const tags = card.dataset.tags ?? "";
+        const show = !q || title.includes(q) || tags.includes(q);
+        card.style.display = show ? "" : "none";
+        if (show) visible++;
+      }
+
+      // Hide empty concept tiles
+      for (const tile of tiles) {
+        const tileCards = tile.querySelectorAll(".atom-card");
+        const anyVisible = Array.from(tileCards).some(
+          (c) => (c as HTMLElement).style.display !== "none"
+        );
+        tile.style.display = anyVisible ? "" : "none";
+      }
+
+      // Hide empty domain sections
+      for (const section of sections) {
+        const domain = section.dataset.domainSection!;
+        const sectionCards = cards.filter(
+          (c) => c.dataset.domain === domain && c.style.display !== "none"
+        );
+        section.style.display = sectionCards.length > 0 ? "" : "none";
+        const countSpan = section.querySelector("[data-domain-count]");
+        if (countSpan) {
+          const origCount = cards.filter((c) => c.dataset.domain === domain).length;
+          countSpan.textContent = q
+            ? `${sectionCards.length}/${origCount}`
+            : String(origCount);
+        }
+      }
+
+      if (countEl) {
+        countEl.textContent = q ? `${visible} of ${total} atoms` : `${total} atoms`;
+      }
+      if (emptyEl) {
+        emptyEl.classList.toggle("hidden", visible > 0);
+      }
+    });
+  }
+</script>

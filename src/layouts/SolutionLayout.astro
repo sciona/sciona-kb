@@ -8,9 +8,10 @@ import GitHubEditLink from "../components/cta/GitHubEditLink.astro";
 interface Props {
   solution: CollectionEntry<"solutions">;
   contentPath: string;
+  relatedSolutions?: CollectionEntry<"solutions">[];
 }
 
-const { solution, contentPath } = Astro.props;
+const { solution, contentPath, relatedSolutions = [] } = Astro.props;
 const { data } = solution;
 
 const breadcrumbs = [
@@ -31,12 +32,28 @@ const cdgSlug = data.cdg_asset_id.replace("solution.kaggle.", "").replace(/\./g,
     <h1 class="text-3xl font-bold mt-4 mb-2">{data.title}</h1>
 
     <div class="flex flex-wrap gap-2 mb-6">
-      <span class="px-2 py-1 text-xs rounded bg-atlas-accent/10 border border-atlas-accent/30 text-atlas-accent">{data.platform}</span>
-      <span class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted">{data.placement}</span>
-      <span class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted">{data.year}</span>
-      <a href={`/paradigm/${data.paradigm}`} class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted hover:text-atlas-accent transition-colors">{data.paradigm}</a>
-      <a href={`/family/${data.family}`} class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted hover:text-atlas-accent transition-colors">{data.family}</a>
+      <span class="tag-link tag-accent">{data.platform}</span>
+      <span class="tag-link">{data.placement}</span>
+      <span class="tag-link">{data.year}</span>
+      <a href={`/paradigm/${data.paradigm}`} class="tag-link">{data.paradigm.replace(/_/g, " ")}</a>
+      <a href={`/family/${data.family}`} class="tag-link">{data.family.replace(/_/g, " ")}</a>
     </div>
+
+    <!-- CDG link banner -->
+    <a href={`/cdgs/${cdgSlug}`} class="group flex items-center gap-3 bg-atlas-surface border border-atlas-border rounded-lg p-4 mb-6 card-hover hover:border-atlas-accent/40">
+      <div class="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-atlas-accent/10 text-atlas-accent">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+        </svg>
+      </div>
+      <div class="min-w-0">
+        <p class="text-sm font-medium text-atlas-text group-hover:text-atlas-accent transition-colors">View CDG Breakdown</p>
+        <p class="text-xs text-atlas-text-muted">See the full algorithmic pipeline for this solution</p>
+      </div>
+      <svg class="w-4 h-4 ml-auto text-atlas-text-muted shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </a>
 
     {data.key_insight && (
       <div class="bg-atlas-accent/5 border border-atlas-accent/20 rounded-lg p-4 mb-6">
@@ -63,11 +80,33 @@ const cdgSlug = data.cdg_asset_id.replace("solution.kaggle.", "").replace(/\./g,
       </section>
     )}
 
+    {relatedSolutions.length > 0 && (
+      <section class="mt-10">
+        <hr class="section-rule mb-8" />
+        <div class="flex items-baseline justify-between mb-4">
+          <h2 class="text-xl font-semibold">Related Solutions</h2>
+          <a href={`/family/${data.family}`} class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">
+            All {data.family.replace(/_/g, " ")} &rarr;
+          </a>
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2">
+          {relatedSolutions.map((rel) => (
+            <a href={`/solutions/${rel.id}`} class="group flex gap-3 p-3 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
+              <div class="shrink-0 flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-atlas-accent/10 text-atlas-accent">
+                <span class="text-[10px] font-bold uppercase">{rel.data.platform}</span>
+              </div>
+              <div class="min-w-0">
+                <h3 class="font-semibold text-sm group-hover:text-atlas-accent transition-colors line-clamp-1 mb-1">{rel.data.title}</h3>
+                <p class="text-xs text-atlas-text-muted">{rel.data.competition_name} &middot; {rel.data.placement}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
     <div class="mt-12 flex flex-col sm:flex-row gap-4">
       <PlatformCTA cdgId={data.cdg_asset_id} label="Reproduce this solution in Sciona" />
-      <a href={`/cdgs/${cdgSlug}`} class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-atlas-border text-atlas-text hover:border-atlas-accent hover:text-atlas-accent transition-colors font-medium">
-        View CDG Breakdown
-      </a>
     </div>
 
     {data.source_url && (

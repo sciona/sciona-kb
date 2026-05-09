@@ -1,0 +1,99 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/seo/Breadcrumbs.astro";
+import { glossary } from "../data/glossary";
+
+const breadcrumbs = [
+  { label: "Atlas", href: "/" },
+  { label: "Glossary", href: "/glossary" },
+];
+
+// Group by first letter
+const byLetter = new Map<string, typeof glossary>();
+for (const entry of glossary) {
+  const letter = entry.term[0].toUpperCase();
+  const list = byLetter.get(letter) ?? [];
+  list.push(entry);
+  byLetter.set(letter, list);
+}
+const letters = [...byLetter.keys()].sort();
+---
+
+<BaseLayout title="Glossary" description="Definitions of abbreviations, acronyms, and technical terms used across the Algorithm Atlas.">
+  <div class="max-w-4xl mx-auto">
+    <Breadcrumbs segments={breadcrumbs} />
+
+    <h1 class="text-3xl font-bold mt-4 mb-2">Glossary</h1>
+    <p class="text-atlas-text-muted mb-8">
+      {glossary.length} terms explained at a high-school level. Every abbreviation and acronym used across the Atlas.
+    </p>
+
+    <!-- Letter navigation -->
+    <div class="flex flex-wrap gap-1.5 mb-8">
+      {letters.map((letter) => (
+        <a
+          href={`#letter-${letter}`}
+          class="w-8 h-8 flex items-center justify-center rounded text-sm font-mono font-semibold text-atlas-text-muted bg-atlas-surface border border-atlas-border hover:text-atlas-accent hover:border-atlas-accent/50 transition-colors"
+        >
+          {letter}
+        </a>
+      ))}
+    </div>
+
+    <!-- Search -->
+    <div class="mb-8">
+      <input
+        type="search"
+        placeholder={`Search ${glossary.length} terms...`}
+        class="w-full max-w-md px-4 py-2 rounded-lg bg-atlas-surface border border-atlas-border text-atlas-text placeholder:text-atlas-text-muted focus:outline-none focus:border-atlas-accent transition-colors"
+        data-glossary-search
+      />
+    </div>
+
+    <!-- Entries by letter -->
+    {letters.map((letter) => (
+      <section id={`letter-${letter}`} class="mb-8" data-glossary-section={letter}>
+        <h2 class="text-lg font-bold text-atlas-accent mb-3 pl-2 border-l-2 border-atlas-accent">{letter}</h2>
+        <div class="grid gap-2.5 sm:grid-cols-2">
+          {(byLetter.get(letter) ?? []).map((entry) => (
+            <div
+              class="glossary-entry rounded-lg bg-atlas-surface border border-atlas-border p-3"
+              id={`term-${entry.term.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}
+              data-term={entry.term.toLowerCase()}
+              data-expansion={entry.expansion.toLowerCase()}
+            >
+              <div class="flex items-baseline gap-2 mb-1">
+                <span class="font-mono text-sm font-semibold text-atlas-accent">{entry.term}</span>
+                <span class="text-sm text-atlas-accent">{entry.expansion}</span>
+              </div>
+              <p class="text-xs text-atlas-text-muted leading-relaxed">{entry.definition}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>("[data-glossary-search]");
+  if (input) {
+    const entries = Array.from(document.querySelectorAll(".glossary-entry")) as HTMLElement[];
+    const sections = Array.from(document.querySelectorAll("[data-glossary-section]")) as HTMLElement[];
+
+    input.addEventListener("input", () => {
+      const q = input.value.toLowerCase();
+      for (const entry of entries) {
+        const term = entry.dataset.term ?? "";
+        const expansion = entry.dataset.expansion ?? "";
+        const show = !q || term.includes(q) || expansion.includes(q);
+        entry.style.display = show ? "" : "none";
+      }
+      // Hide empty letter sections
+      for (const section of sections) {
+        const visible = section.querySelectorAll(".glossary-entry:not([style*='display: none'])");
+        section.style.display = visible.length > 0 ? "" : "none";
+      }
+    });
+  }
+</script>

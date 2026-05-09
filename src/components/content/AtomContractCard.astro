@@ -1,0 +1,268 @@
+---
+/**
+ * Visual contract card for an atom — HTML card with inline SVG for
+ * the I/O flow diagram. Requires/Guarantees are collapsible <details>.
+ *
+ * The SVG renders a bus topology: all input lines elbow into a single
+ * connection point on the left of a fixed-size central box, and all
+ * output lines fan out from a single point on the right.
+ */
+
+export interface ContractAtom {
+  /** Function name */
+  name: string;
+  /** Domain tag (bio, cs, signal, fintech, etc.) */
+  domain: string;
+  /** Short one-line description */
+  description: string;
+  /** Library badge (scipy, numpy, pywt, stumpy, etc.) */
+  library?: string;
+  /** Input parameters */
+  inputs: Array<{ name: string; type: string }>;
+  /** Output type(s) */
+  outputs: Array<{ name: string; type: string }>;
+  /** Precondition summaries (short, human-readable) */
+  requires: string[];
+  /** Postcondition summaries (short, human-readable) */
+  ensures: string[];
+  /** Link to atom detail page */
+  href?: string;
+  /** Concept type */
+  conceptType?: string;
+}
+
+interface Props {
+  atom: ContractAtom;
+}
+
+const { atom } = Astro.props;
+
+// SVG layout
+const CARD_W = 380;
+const PORT_SPACING = 18;
+const LABEL_PAD = 6;
+
+// Central box — fixed size, always centered
+const BOX_W = 36;
+const BOX_H = 24;
+const BOX_X = (CARD_W - BOX_W) / 2;
+
+// Port counts drive SVG height
+const inputRows = atom.inputs.length;
+const outputRows = atom.outputs.length;
+const maxRows = Math.max(inputRows, outputRows, 1);
+const SVG_H = maxRows * PORT_SPACING + 8;
+const BOX_Y = (SVG_H - BOX_H) / 2;
+
+// Bus x-positions (where vertical collector runs)
+const INPUT_BUS_X = BOX_X - 16;
+const OUTPUT_BUS_X = BOX_X + BOX_W + 16;
+
+// Center y of box (where bus connects to box)
+const CENTER_Y = SVG_H / 2;
+
+// Measure label zones
+const maxInputChars = Math.max(...atom.inputs.map((i) => i.name.length), 0);
+const INPUT_LABEL_X = Math.min(maxInputChars * 6.5 + 12, INPUT_BUS_X - 20);
+
+// Colors
+const domainColors: Record<string, string> = {
+  cs: "#6c8cff",
+  bio: "#4ade80",
+  signal: "#a78bfa",
+  signal_processing: "#a78bfa",
+  fintech: "#facc15",
+  dl: "#f87171",
+  physics: "#fb923c",
+  robotics: "#38bdf8",
+  ml: "#6c8cff",
+  geo: "#34d399",
+  inference: "#c084fc",
+  state_estimation: "#c084fc",
+};
+const accentColor = domainColors[atom.domain] ?? "#6c8cff";
+
+// Compute port y-positions (centered vertically in SVG)
+function portY(index: number, total: number): number {
+  const blockH = total * PORT_SPACING;
+  const startY = (SVG_H - blockH) / 2 + PORT_SPACING / 2;
+  return startY + index * PORT_SPACING;
+}
+---
+
+<a href={atom.href} class="group block rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50 overflow-hidden" style={`--card-accent: ${accentColor}`}>
+  <!-- Header -->
+  <div class="px-3.5 pt-3 pb-2.5" style={`background: color-mix(in srgb, ${accentColor} 8%, transparent); border-bottom: 1px solid color-mix(in srgb, ${accentColor} 15%, transparent)`}>
+    <p class="font-mono text-xs font-semibold leading-tight mb-1.5" style={`color: ${accentColor}`}>
+      {atom.name}
+    </p>
+    <div class="flex flex-wrap gap-1">
+      <span
+        class="text-[9px] px-1.5 py-0.5 rounded cursor-pointer hover:opacity-80 transition-opacity"
+        style={`background: color-mix(in srgb, ${accentColor} 15%, transparent); color: ${accentColor}`}
+        onclick={`event.preventDefault(); event.stopPropagation(); window.location.href='/atoms/domain/${atom.domain}'`}
+      >
+        {atom.domain.replace(/_/g, " ")}
+      </span>
+      {atom.library && (
+        <span class="text-[9px] px-1.5 py-0.5 rounded bg-atlas-surface-2 text-atlas-text-muted">
+          {atom.library}
+        </span>
+      )}
+      {atom.conceptType && atom.conceptType !== "custom" && atom.conceptType !== "undefined" && (
+        <span
+          class="text-[9px] px-1.5 py-0.5 rounded bg-atlas-surface-2 text-atlas-text-muted cursor-pointer hover:text-atlas-accent transition-colors"
+          onclick={`event.preventDefault(); event.stopPropagation(); window.location.href='/concept/${atom.conceptType}'`}
+        >
+          {atom.conceptType.replace(/_/g, " ")}
+        </span>
+      )}
+    </div>
+  </div>
+
+  <!-- Description -->
+  <p class="px-3.5 pt-2.5 pb-1 text-[11px] text-atlas-text-muted leading-snug">
+    {atom.description}
+  </p>
+
+  <!-- Requires (collapsible) -->
+  {atom.requires.length > 0 && (
+    <details class="group/req">
+      <summary class="flex items-center gap-1.5 px-3.5 py-1.5 cursor-pointer select-none text-[10px] font-semibold tracking-wide text-red-400/60 hover:text-red-400/80 transition-colors">
+        <svg class="w-3 h-3 shrink-0 transition-transform group-open/req:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+        </svg>
+        REQUIRES ({atom.requires.length})
+      </summary>
+      <ul class="px-3.5 pb-2 space-y-0.5">
+        {atom.requires.map((r) => (
+          <li class="text-[11px] text-atlas-text-muted leading-snug pl-4 relative before:content-[''] before:absolute before:left-1 before:top-[5px] before:w-1.5 before:h-1.5 before:rounded-full before:bg-red-400/30">
+            {r}
+          </li>
+        ))}
+      </ul>
+    </details>
+  )}
+
+  <!-- I/O Flow Diagram (SVG) — bus topology -->
+  <div class="px-1.5 py-1">
+    <svg
+      viewBox={`0 0 ${CARD_W} ${SVG_H}`}
+      class="w-full"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <!-- Central box -->
+      <rect
+        x={BOX_X}
+        y={BOX_Y}
+        width={BOX_W}
+        height={BOX_H}
+        rx="4"
+        fill={accentColor}
+        opacity="0.08"
+        stroke={accentColor}
+        stroke-width="0.75"
+        stroke-opacity="0.3"
+      />
+      <!-- fn symbol in box -->
+      <text
+        x={BOX_X + BOX_W / 2}
+        y={BOX_Y + BOX_H / 2 + 4}
+        font-family="JetBrains Mono, monospace"
+        font-size="11"
+        fill={accentColor}
+        text-anchor="middle"
+        opacity="0.5"
+      >
+        fn
+      </text>
+
+      <!-- Input connection point on box -->
+      <circle cx={BOX_X} cy={CENTER_Y} r="3" fill={accentColor} opacity="0.5" />
+      <!-- Bus line: from box to vertical collector -->
+      <line x1={INPUT_BUS_X} y1={CENTER_Y} x2={BOX_X} y2={CENTER_Y} stroke={accentColor} stroke-width="1" opacity="0.3" />
+
+      {inputRows > 1 && (() => {
+        const topY = portY(0, inputRows);
+        const bottomY = portY(inputRows - 1, inputRows);
+        return (
+          <line x1={INPUT_BUS_X} y1={topY} x2={INPUT_BUS_X} y2={bottomY} stroke={accentColor} stroke-width="1" opacity="0.25" />
+        );
+      })()}
+
+      <!-- Input ports: label → horizontal line → bus -->
+      {atom.inputs.map((inp, i) => {
+        const y = portY(i, inputRows);
+        return (
+          <g>
+            <text
+              x={INPUT_BUS_X - 14}
+              y={y + 3}
+              font-family="JetBrains Mono, monospace"
+              font-size="9"
+              fill="#8b8fa4"
+              text-anchor="end"
+            >
+              {inp.name.length > 14 ? inp.name.slice(0, 13) + "\u2026" : inp.name}
+            </text>
+            <circle cx={INPUT_BUS_X - 8} cy={y} r="1.5" fill="#8b8fa4" opacity="0.5" />
+            <line x1={INPUT_BUS_X - 8} y1={y} x2={INPUT_BUS_X} y2={y} stroke={accentColor} stroke-width="1" opacity="0.25" />
+          </g>
+        );
+      })}
+
+      <!-- Output connection point on box -->
+      <circle cx={BOX_X + BOX_W} cy={CENTER_Y} r="3" fill={accentColor} opacity="0.5" />
+      <!-- Bus line: from box to vertical collector -->
+      <line x1={BOX_X + BOX_W} y1={CENTER_Y} x2={OUTPUT_BUS_X} y2={CENTER_Y} stroke={accentColor} stroke-width="1" opacity="0.3" />
+
+      {outputRows > 1 && (() => {
+        const topY = portY(0, outputRows);
+        const bottomY = portY(outputRows - 1, outputRows);
+        return (
+          <line x1={OUTPUT_BUS_X} y1={topY} x2={OUTPUT_BUS_X} y2={bottomY} stroke={accentColor} stroke-width="1" opacity="0.25" />
+        );
+      })()}
+
+      <!-- Output ports: bus → horizontal line → label -->
+      {atom.outputs.map((out, i) => {
+        const y = portY(i, outputRows);
+        return (
+          <g>
+            <line x1={OUTPUT_BUS_X} y1={y} x2={OUTPUT_BUS_X + 8} y2={y} stroke={accentColor} stroke-width="1" opacity="0.25" />
+            <circle cx={OUTPUT_BUS_X + 8} cy={y} r="1.5" fill="#8b8fa4" opacity="0.5" />
+            <text
+              x={OUTPUT_BUS_X + 14}
+              y={y + 3}
+              font-family="JetBrains Mono, monospace"
+              font-size="9"
+              fill="#8b8fa4"
+            >
+              {out.type.length > 14 ? out.type.slice(0, 13) + "\u2026" : out.type}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  </div>
+
+  <!-- Guarantees (collapsible) -->
+  {atom.ensures.length > 0 && (
+    <details class="group/ens border-t border-atlas-border">
+      <summary class="flex items-center gap-1.5 px-3.5 py-1.5 cursor-pointer select-none text-[10px] font-semibold tracking-wide text-green-400/60 hover:text-green-400/80 transition-colors">
+        <svg class="w-3 h-3 shrink-0 transition-transform group-open/ens:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+        </svg>
+        GUARANTEES ({atom.ensures.length})
+      </summary>
+      <ul class="px-3.5 pb-2 space-y-0.5">
+        {atom.ensures.map((e) => (
+          <li class="text-[11px] text-atlas-text-muted leading-snug pl-4 relative before:content-[''] before:absolute before:left-1 before:top-[5px] before:w-1.5 before:h-1.5 before:rounded-full before:bg-green-400/30">
+            {e}
+          </li>
+        ))}
+      </ul>
+    </details>
+  )}
+</a>

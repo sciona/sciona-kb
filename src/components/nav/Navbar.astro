@@ -1,21 +1,34 @@
 ---
 const navItems = [
-  { label: "Atoms", href: "/atoms" },
   { label: "CDGs", href: "/cdgs" },
+  { label: "Atoms", href: "/atoms" },
+  { label: "Concepts", href: "/concepts", match: "/concept" },
   { label: "Solutions", href: "/solutions" },
+  { label: "Glossary", href: "/glossary" },
 ];
+
+const currentPath = Astro.url.pathname;
+function isActive(item: { href: string; match?: string }): boolean {
+  if (item.match) return currentPath.startsWith(item.match);
+  return currentPath === item.href || currentPath.startsWith(item.href + "/");
+}
 ---
 
 <header class="sticky top-0 z-40 bg-atlas-bg/80 backdrop-blur-md border-b border-atlas-border">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
     <a href="/" class="flex items-center gap-2 font-bold text-lg text-atlas-text hover:text-atlas-accent transition-colors">
-      <span class="text-atlas-accent">S</span>ciona Atlas
+      <span class="gradient-text">S</span>ciona Atlas
     </a>
-    <nav class="flex items-center gap-6">
+    <nav class="flex items-center gap-1">
       {navItems.map((item) => (
         <a
           href={item.href}
-          class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors"
+          class:list={[
+            "px-3 py-1.5 rounded-md text-sm transition-colors",
+            isActive(item)
+              ? "text-atlas-accent bg-atlas-accent/10"
+              : "text-atlas-text-muted hover:text-atlas-text hover:bg-atlas-surface-2",
+          ]}
         >
           {item.label}
         </a>

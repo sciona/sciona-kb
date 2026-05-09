@@ -1,0 +1,80 @@
+---
+/**
+ * Compact atom card for use in index listings. Shows name with
+ * domain-colored accent, linked pills, and short description.
+ */
+
+interface Props {
+  name: string;
+  href: string;
+  description: string;
+  domain: string;
+  conceptType: string;
+  typeSig?: string;
+  inputCount?: number;
+  outputCount?: number;
+}
+
+const { name, href, description, domain, conceptType, typeSig, inputCount, outputCount } = Astro.props;
+
+const domainColors: Record<string, string> = {
+  cs: "#6c8cff",
+  bio: "#4ade80",
+  signal_processing: "#a78bfa",
+  fintech: "#facc15",
+  dl: "#f87171",
+  physics: "#fb923c",
+  robotics: "#38bdf8",
+  ml: "#6c8cff",
+  geo: "#34d399",
+  inference: "#c084fc",
+  state_estimation: "#c084fc",
+  medical_imaging_3d: "#4ade80",
+  dynamic_programming: "#6c8cff",
+};
+const accent = domainColors[domain] ?? "#6c8cff";
+---
+
+<a
+  href={href}
+  class="group block rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50 overflow-hidden"
+>
+  <!-- Colored top edge -->
+  <div class="h-[2px]" style={`background: ${accent}`}></div>
+
+  <div class="px-3.5 py-3">
+    <!-- Name -->
+    <p class="font-mono text-xs font-semibold group-hover:text-atlas-accent transition-colors mb-1.5 line-clamp-1" style={`color: ${accent}`}>
+      {name}
+    </p>
+
+    <!-- Pills -->
+    <div class="flex flex-wrap gap-1 mb-2">
+      <span
+        class="tag-link tag-accent text-[9px]"
+        data-tag-href={`/atoms/domain/${domain}`}
+        onclick={`event.preventDefault(); event.stopPropagation(); window.location.href='/atoms/domain/${domain}'`}
+        style={`color: ${accent}; border-color: color-mix(in srgb, ${accent} 30%, transparent); background: color-mix(in srgb, ${accent} 10%, transparent)`}
+      >
+        {domain.replace(/_/g, " ")}
+      </span>
+      {conceptType && conceptType !== "undefined" && conceptType !== "custom" && (
+        <span
+          class="tag-link text-[9px]"
+          data-tag-href={`/concept/${conceptType}`}
+          onclick={`event.preventDefault(); event.stopPropagation(); window.location.href='/concept/${conceptType}'`}
+        >
+          {conceptType.replace(/_/g, " ")}
+        </span>
+      )}
+      {(inputCount !== undefined && inputCount > 0) && (
+        <span class="text-[9px] px-1.5 py-0.5 rounded bg-atlas-surface-2 text-atlas-text-muted">
+          {inputCount}→{outputCount ?? "?"}
+        </span>
+      )}
+    </div>
+
+    <!-- Description -->
+    <p class="text-[11px] text-atlas-text-muted leading-snug line-clamp-2">{description}</p>
+  </div>
+</a>

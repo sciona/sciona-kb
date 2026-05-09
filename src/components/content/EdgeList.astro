@@ -19,14 +19,17 @@ const lossColors: Record<string, string> = {
   lossy_allowed: "text-atlas-yellow",
   irreversible: "text-atlas-red",
 };
+
+function formatStageId(id: string): string {
+  return id.replace(/_/g, " ");
+}
 ---
 
 <div class="overflow-x-auto">
   <table class="w-full text-sm border border-atlas-border rounded-lg overflow-hidden">
     <thead class="bg-atlas-surface-2">
       <tr>
-        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">From</th>
-        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">To</th>
+        <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Flow</th>
         <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Data</th>
         <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Kind</th>
         <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Loss</th>
@@ -35,8 +38,17 @@ const lossColors: Record<string, string> = {
     <tbody class="divide-y divide-atlas-border">
       {edges.map((edge) => (
         <tr class="hover:bg-atlas-surface/50">
-          <td class="px-3 py-2 font-mono text-xs">{edge.source_stage_id}</td>
-          <td class="px-3 py-2 font-mono text-xs">{edge.target_stage_id}</td>
+          <td class="px-3 py-2">
+            <span class="inline-block text-xs font-mono px-1.5 py-0.5 rounded bg-atlas-accent/10 text-atlas-accent">
+              {formatStageId(edge.source_stage_id)}
+            </span>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="text-xs text-atlas-text-muted">&rarr;</span>
+              <span class="inline-block text-xs font-mono px-1.5 py-0.5 rounded bg-atlas-surface-2 text-atlas-text">
+                {formatStageId(edge.target_stage_id)}
+              </span>
+            </div>
+          </td>
           <td class="px-3 py-2 font-mono text-xs text-atlas-accent">{edge.output_name}</td>
           <td class="px-3 py-2 text-atlas-text-muted">{edge.data_kind}</td>
           <td class:list={["px-3 py-2", lossColors[edge.loss_class] ?? "text-atlas-text-muted"]}>{edge.loss_class}</td>

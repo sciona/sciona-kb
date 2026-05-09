@@ -1,0 +1,84 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/seo/Breadcrumbs.astro";
+import { getCollection } from "astro:content";
+import { getConceptDescription } from "../../data/concept-descriptions";
+
+const atoms = await getCollection("atoms");
+const cdgs = await getCollection("cdgs");
+
+// Union of concept types from atoms AND CDG stages
+const atomCounts = new Map<string, number>();
+for (const a of atoms) {
+  atomCounts.set(a.data.concept_type, (atomCounts.get(a.data.concept_type) ?? 0) + 1);
+}
+const stageTypes = new Set(cdgs.flatMap((c) => c.data.stages.map((s) => s.concept_type)));
+const allTypes = [...new Set([...atomCounts.keys(), ...stageTypes])].sort();
+
+const concepts = allTypes.map((type) => ({
+  type,
+  count: atomCounts.get(type) ?? 0,
+  desc: getConceptDescription(type),
+}));
+
+const breadcrumbs = [
+  { label: "Atlas", href: "/" },
+  { label: "Concepts", href: "/concepts" },
+];
+---
+
+<BaseLayout title="Concepts" description="Educational guides to every algorithmic building block in the Atlas.">
+  <div class="max-w-6xl mx-auto">
+    <Breadcrumbs segments={breadcrumbs} />
+
+    <h1 class="text-3xl font-bold mt-4 mb-2">Concepts</h1>
+    <p class="text-atlas-text-muted mb-8">
+      Educational guides to {concepts.length} algorithmic building blocks. Each concept page explains what it is, why it matters, and lists every atom in the Atlas that implements it.
+    </p>
+
+    <div class="mb-6">
+      <input
+        type="search"
+        placeholder={`Search ${concepts.length} concepts...`}
+        class="w-full max-w-md px-4 py-2 rounded-lg bg-atlas-surface border border-atlas-border text-atlas-text placeholder:text-atlas-text-muted focus:outline-none focus:border-atlas-accent transition-colors"
+        data-catalog-search
+      />
+    </div>
+
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-catalog-grid>
+      {concepts.map(({ type, count, desc }) => (
+        <a
+          href={`/concept/${type}`}
+          class="group block p-4 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50"
+          data-title={`${desc.title.toLowerCase()} ${type.toLowerCase()}`}
+          data-tags=""
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xl">{desc.emoji}</span>
+            <h2 class="font-semibold group-hover:text-atlas-accent transition-colors line-clamp-1">{desc.title}</h2>
+          </div>
+          <p class="text-sm text-atlas-text-muted line-clamp-2 mb-2">{desc.oneLiner}</p>
+          {count > 0 && (
+            <span class="text-xs text-atlas-text-muted">{count} atom{count !== 1 ? "s" : ""}</span>
+          )}
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>("[data-catalog-search]");
+  const grid = document.querySelector<HTMLElement>("[data-catalog-grid]");
+  if (input && grid) {
+    const cards = Array.from(grid.children) as HTMLElement[];
+    input.addEventListener("input", () => {
+      const q = input.value.toLowerCase();
+      for (const card of cards) {
+        const title = card.dataset.title ?? "";
+        const visible = !q || title.includes(q);
+        card.style.display = visible ? "" : "none";
+      }
+    });
+  }
+</script>

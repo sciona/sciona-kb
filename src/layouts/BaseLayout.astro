@@ -35,14 +35,44 @@ const fullTitle = `${title} | ${siteName}`;
     <main id="main" class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <slot />
     </main>
-    <footer class="border-t border-atlas-border py-8 mt-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-atlas-text-muted text-sm">
-        <p>&copy; {new Date().getFullYear()} Sciona. All rights reserved.</p>
-        <div class="flex gap-6">
-          <a href="/atoms" class="hover:text-atlas-accent transition-colors">Atoms</a>
-          <a href="/cdgs" class="hover:text-atlas-accent transition-colors">CDGs</a>
-          <a href="/solutions" class="hover:text-atlas-accent transition-colors">Solutions</a>
+    <footer class="border-t border-atlas-border py-10 mt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8 text-sm">
+          <div>
+            <h4 class="font-medium text-atlas-text mb-3">Browse</h4>
+            <ul class="space-y-2 text-atlas-text-muted">
+              <li><a href="/cdgs" class="hover:text-atlas-accent transition-colors">CDGs</a></li>
+              <li><a href="/atoms" class="hover:text-atlas-accent transition-colors">Atoms</a></li>
+              <li><a href="/solutions" class="hover:text-atlas-accent transition-colors">Solutions</a></li>
+              <li><a href="/glossary" class="hover:text-atlas-accent transition-colors">Glossary</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-medium text-atlas-text mb-3">Paradigms</h4>
+            <ul class="space-y-2 text-atlas-text-muted">
+              <li><a href="/paradigm/supervised_learning" class="hover:text-atlas-accent transition-colors">Supervised</a></li>
+              <li><a href="/paradigm/unsupervised_learning" class="hover:text-atlas-accent transition-colors">Unsupervised</a></li>
+              <li><a href="/paradigm/semi_supervised_learning" class="hover:text-atlas-accent transition-colors">Semi-supervised</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-medium text-atlas-text mb-3">Concepts</h4>
+            <ul class="space-y-2 text-atlas-text-muted">
+              <li><a href="/concept/neural_network" class="hover:text-atlas-accent transition-colors">Neural Networks</a></li>
+              <li><a href="/concept/optimization" class="hover:text-atlas-accent transition-colors">Optimization</a></li>
+              <li><a href="/concept/feature_engineering" class="hover:text-atlas-accent transition-colors">Feature Eng.</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-medium text-atlas-text mb-3">Sciona</h4>
+            <ul class="space-y-2 text-atlas-text-muted">
+              <li><a href="https://app.sciona.dev" class="hover:text-atlas-accent transition-colors" target="_blank" rel="noopener">Platform</a></li>
+              <li><a href="https://github.com/sciona-dev/sciona-kb" class="hover:text-atlas-accent transition-colors" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+          </div>
         </div>
+        <hr class="section-rule mb-6" />
+        <p class="text-atlas-text-muted text-xs text-center">&copy; {new Date().getFullYear()} Sciona. All rights reserved.</p>
       </div>
     </footer>
   </body>

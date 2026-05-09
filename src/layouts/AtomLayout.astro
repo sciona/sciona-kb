@@ -11,15 +11,16 @@ import GitHubEditLink from "../components/cta/GitHubEditLink.astro";
 interface Props {
   atom: CollectionEntry<"atoms">;
   contentPath: string;
+  relatedAtoms?: CollectionEntry<"atoms">[];
 }
 
-const { atom, contentPath } = Astro.props;
+const { atom, contentPath, relatedAtoms = [] } = Astro.props;
 const { data } = atom;
 
 const breadcrumbs = [
   { label: "Atlas", href: "/" },
   { label: "Atoms", href: "/atoms" },
-  { label: data.domain, href: `/concept/${data.concept_type}` },
+  { label: data.concept_type.replace(/_/g, " "), href: `/concept/${data.concept_type}` },
   { label: data.title, href: Astro.url.pathname },
 ];
 ---
@@ -33,9 +34,9 @@ const breadcrumbs = [
     <p class="text-atlas-text-muted text-lg mb-6">{data.informal_desc}</p>
 
     <div class="flex flex-wrap gap-2 mb-6">
-      <span class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted">{data.concept_type}</span>
-      <span class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted">{data.repo}</span>
-      <span class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted">{data.verification_level}</span>
+      <a href={`/concept/${data.concept_type}`} class="tag-link tag-accent">{data.concept_type.replace(/_/g, " ")}</a>
+      <span class="tag-link">{data.repo}</span>
+      <span class="tag-link">{data.verification_level.replace(/_/g, " ")}</span>
     </div>
 
     <TypeSignature signature={data.type_signature} />
@@ -80,6 +81,26 @@ const breadcrumbs = [
       <section class="mt-8">
         <h2 class="text-xl font-semibold mb-3">Used in CDGs</h2>
         <AtomReverseLinks cdgAssetIds={data.used_by_cdgs} />
+      </section>
+    )}
+
+    {relatedAtoms.length > 0 && (
+      <section class="mt-10">
+        <hr class="section-rule mb-8" />
+        <div class="flex items-baseline justify-between mb-4">
+          <h2 class="text-xl font-semibold">Related Atoms</h2>
+          <a href={`/concept/${data.concept_type}`} class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">
+            All {data.concept_type.replace(/_/g, " ")} &rarr;
+          </a>
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2">
+          {relatedAtoms.map((rel) => (
+            <a href={`/atoms/${rel.id}`} class="group block p-3 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
+              <h3 class="font-semibold text-sm group-hover:text-atlas-accent transition-colors mb-1 line-clamp-1">{rel.data.title}</h3>
+              <p class="text-xs text-atlas-text-muted line-clamp-2">{rel.data.informal_desc}</p>
+            </a>
+          ))}
+        </div>
       </section>
     )}
 

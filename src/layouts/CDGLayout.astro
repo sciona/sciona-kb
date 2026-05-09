@@ -2,49 +2,215 @@
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import Breadcrumbs from "../components/seo/Breadcrumbs.astro";
+import ScionaViewer from "../components/viewer/ScionaViewer";
 import ApplicabilityPanel from "../components/content/ApplicabilityPanel.astro";
 import StageCard from "../components/content/StageCard.astro";
 import EdgeList from "../components/content/EdgeList.astro";
-import BindingStatusBadge from "../components/content/BindingStatusBadge.astro";
 import PlatformCTA from "../components/cta/PlatformCTA.astro";
 import GitHubEditLink from "../components/cta/GitHubEditLink.astro";
+import GlossarySection from "../components/content/GlossarySection.astro";
 
 interface Props {
   cdg: CollectionEntry<"cdgs">;
   contentPath: string;
+  relatedCdgs?: CollectionEntry<"cdgs">[];
+  solution?: CollectionEntry<"solutions">;
 }
 
-const { cdg, contentPath } = Astro.props;
+const { cdg, contentPath, relatedCdgs = [], solution } = Astro.props;
 const { data } = cdg;
 
 const breadcrumbs = [
   { label: "Atlas", href: "/" },
   { label: "CDGs", href: "/cdgs" },
-  { label: data.paradigm, href: `/paradigm/${data.paradigm}` },
-  { label: data.family, href: `/family/${data.family}` },
+  { label: data.paradigm.replace(/_/g, " "), href: `/paradigm/${data.paradigm}` },
+  { label: data.family.replace(/_/g, " "), href: `/family/${data.family}` },
   { label: data.name, href: Astro.url.pathname },
 ];
 
 const bindingsMap = new Map(data.bindings.map((b) => [b.stage_id, b]));
+const bs = data.binding_summary;
+const coveragePct = bs && bs.total_stages > 0 ? Math.round((bs.bound_active / bs.total_stages) * 100) : 0;
+
+// Build viewer data from CDG frontmatter
+const viewerData = {
+  asset_id: data.asset_id,
+  name: data.name,
+  stages: data.stages,
+  edges: data.edges,
+  bindings: data.bindings,
+  applicability: {
+    critical_stages: data.applicability.critical_stages,
+    swappable_stages: data.applicability.swappable_stages,
+  },
+};
+
+// Build a plain-language step-by-step from dejargonized stage descriptions
+const stepsPlainLanguage = data.stages.map((s, i) => ({
+  number: i + 1,
+  name: s.name,
+  description: s.dejargonized_description || s.description,
+}));
+
+// Build text for glossary term scanning
+const glossaryScanText = [
+  data.name,
+  data.summary,
+  data.dejargonized_summary,
+  ...data.stages.flatMap((s) => [s.name, s.description, s.dejargonized_description, s.concept_type]),
+  data.applicability.key_insight,
+  ...data.applicability.use_when,
+  ...data.applicability.do_not_use_when,
+  ...data.applicability.failure_modes,
+  ...data.bindings.map((b) => b.bound_atom_fqdn ?? ""),
+  ...data.variant_hints,
+].join(" ");
 ---
 
 <BaseLayout title={data.title} description={data.description}>
-  <div class="max-w-4xl mx-auto">
+  <div class="max-w-5xl mx-auto">
     <Breadcrumbs segments={breadcrumbs} />
     <GitHubEditLink contentPath={contentPath} />
 
-    <h1 class="text-3xl font-bold mt-4 mb-2">{data.name}</h1>
-    <p class="text-atlas-text-muted text-lg mb-4">{data.dejargonized_summary}</p>
-
-    <div class="flex flex-wrap gap-2 mb-6">
-      <a href={`/paradigm/${data.paradigm}`} class="px-2 py-1 text-xs rounded bg-atlas-accent/10 border border-atlas-accent/30 text-atlas-accent hover:bg-atlas-accent/20 transition-colors">{data.paradigm}</a>
-      <a href={`/family/${data.family}`} class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted hover:text-atlas-text transition-colors">{data.family}</a>
-      {data.binding_summary && (
-        <span class="px-2 py-1 text-xs rounded bg-atlas-surface-2 border border-atlas-border text-atlas-text-muted">
-          {data.binding_summary.bound_active}/{data.binding_summary.total_stages} stages bound
-        </span>
+    <!-- Header -->
+    <h1 class="text-3xl font-bold mt-4 mb-2">{data.name.replace(/^.*?--\s*/, "").replace(/^.*?\u2014\s*/, "") || data.name}</h1>
+    <p class="text-atlas-text-muted text-sm mb-3">{data.name.includes("--") || data.name.includes("\u2014") ? data.name.split(/\s*(?:--|—)\s*/)[0] : ""}</p>
+    <div class="flex flex-wrap items-center gap-2 mb-6">
+      <a href={`/paradigm/${data.paradigm}`} class="tag-link tag-accent">{data.paradigm.replace(/_/g, " ")}</a>
+      <a href={`/family/${data.family}`} class="tag-link">{data.family.replace(/_/g, " ")}</a>
+      {bs && (
+        <div class="flex items-center gap-2 ml-auto">
+          <span class="text-xs text-atlas-text-muted">{bs.bound_active}/{bs.total_stages} bound</span>
+          <div class="binding-bar w-20">
+            <div class="binding-bar-fill" style={`width: ${coveragePct}%`}></div>
+          </div>
+        </div>
       )}
     </div>
+
+    {solution && (
+      <a href={`/solutions/${solution.id}`} class="group flex items-center gap-3 bg-atlas-accent/5 border border-atlas-accent/20 rounded-lg p-4 mb-6 card-hover hover:border-atlas-accent/40">
+        <div class="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-atlas-accent/10 text-atlas-accent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-medium text-atlas-accent group-hover:text-atlas-accent-hover transition-colors">Based on: {solution.data.title}</p>
+          <p class="text-xs text-atlas-text-muted">{solution.data.competition_name} &middot; {solution.data.placement} &middot; {solution.data.year}</p>
+        </div>
+        <svg class="w-4 h-4 ml-auto text-atlas-text-muted shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    )}
+
+    <!-- Interactive Pipeline Viewer -->
+    <section class="mb-10 rounded-lg border border-atlas-border overflow-hidden">
+      <div class="px-4 py-2.5 bg-atlas-surface border-b border-atlas-border flex items-center justify-between">
+        <span class="text-xs font-medium text-atlas-text-muted uppercase tracking-wide">Pipeline Viewer</span>
+        <span class="text-xs text-atlas-text-muted">{data.stages.length} stages &middot; {data.edges.length} edges</span>
+      </div>
+      <ScionaViewer
+        client:visible
+        cdgData={viewerData as any}
+        readOnly={true}
+        direction="LR"
+        height="420px"
+      />
+    </section>
+
+    <!-- ═══ Mental Model (accessible overview) ═══ -->
+
+    <!-- What does this pipeline do? -->
+    <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-3">What does this pipeline do?</h2>
+      <p class="text-atlas-text-muted leading-relaxed text-base">{data.dejargonized_summary}</p>
+    </section>
+
+    <!-- How it works, step by step -->
+    <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-4">How it works, step by step</h2>
+      <ol class="space-y-3">
+        {stepsPlainLanguage.map((step) => (
+          <li class="flex gap-3">
+            <span class="shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-atlas-accent/10 text-atlas-accent text-xs font-bold mt-0.5">
+              {step.number}
+            </span>
+            <div>
+              <p class="text-sm font-medium text-atlas-text mb-0.5">{step.name}</p>
+              <p class="text-sm text-atlas-text-muted leading-relaxed">{step.description}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- Why does it work? -->
+    {data.applicability.key_insight && (
+      <section class="mb-8">
+        <h2 class="text-xl font-semibold mb-3">Why does it work?</h2>
+        <div class="bg-atlas-accent/5 border border-atlas-accent/20 rounded-lg p-5">
+          <p class="text-atlas-text leading-relaxed">{data.applicability.key_insight}</p>
+        </div>
+      </section>
+    )}
+
+    <!-- When to use / not use -->
+    {(data.applicability.use_when.length > 0 || data.applicability.do_not_use_when.length > 0) && (
+      <section class="mb-8">
+        <div class="grid sm:grid-cols-2 gap-4">
+          {data.applicability.use_when.length > 0 && (
+            <div class="bg-atlas-surface rounded-lg border border-atlas-border p-4">
+              <h3 class="text-sm font-medium text-atlas-green mb-2">Good for</h3>
+              <ul class="space-y-1.5">
+                {data.applicability.use_when.map((cond) => (
+                  <li class="flex gap-2 text-sm text-atlas-text-muted">
+                    <span class="text-atlas-green shrink-0">+</span>
+                    <span>{cond}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {data.applicability.do_not_use_when.length > 0 && (
+            <div class="bg-atlas-surface rounded-lg border border-atlas-border p-4">
+              <h3 class="text-sm font-medium text-atlas-red mb-2">Not ideal for</h3>
+              <ul class="space-y-1.5">
+                {data.applicability.do_not_use_when.map((cond) => (
+                  <li class="flex gap-2 text-sm text-atlas-text-muted">
+                    <span class="text-atlas-red shrink-0">-</span>
+                    <span>{cond}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    {data.applicability.failure_modes.length > 0 && (
+      <section class="mb-8">
+        <div class="bg-atlas-surface rounded-lg border border-atlas-border p-4">
+          <h3 class="text-sm font-medium text-atlas-yellow mb-2">Watch out for</h3>
+          <ul class="space-y-1.5">
+            {data.applicability.failure_modes.map((fm) => (
+              <li class="flex gap-2 text-sm text-atlas-text-muted">
+                <span class="text-atlas-yellow shrink-0">!</span>
+                <span>{fm}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    <hr class="section-rule mb-10" />
+
+    <!-- ═══ Technical Details ═══ -->
+
+    <h2 class="text-2xl font-bold mb-6">Technical Details</h2>
 
     {data.solution_metadata && (
       <div class="bg-atlas-surface rounded-lg border border-atlas-border p-4 mb-6">
@@ -69,10 +235,14 @@ const bindingsMap = new Map(data.bindings.map((b) => [b.stage_id, b]));
       </div>
     )}
 
-    <ApplicabilityPanel applicability={data.applicability} />
+    {data.applicability.scaling_notes && (
+      <p class="text-sm text-atlas-text-muted mb-6">
+        <span class="font-medium text-atlas-text">Scaling:</span> {data.applicability.scaling_notes}
+      </p>
+    )}
 
-    <section class="mt-8">
-      <h2 class="text-xl font-semibold mb-4">Pipeline Stages</h2>
+    <section class="mb-8">
+      <h3 class="text-lg font-semibold mb-4">Pipeline Stages</h3>
       <div class="space-y-4">
         {data.stages.map((stage) => {
           const binding = bindingsMap.get(stage.stage_id);
@@ -82,15 +252,52 @@ const bindingsMap = new Map(data.bindings.map((b) => [b.stage_id, b]));
     </section>
 
     {data.edges.length > 0 && (
-      <section class="mt-8">
-        <h2 class="text-xl font-semibold mb-4">Data Flow</h2>
+      <section class="mb-8">
+        <h3 class="text-lg font-semibold mb-4">Data Flow</h3>
         <EdgeList edges={data.edges} />
       </section>
     )}
 
-    <article class="prose prose-invert max-w-none mt-8">
-      <slot />
-    </article>
+    {data.solution_metadata?.source_url && (
+      <p class="text-sm text-atlas-text-muted mt-6">
+        Source: <a href={data.solution_metadata.source_url} class="text-atlas-accent hover:text-atlas-accent-hover" target="_blank" rel="noopener">{data.solution_metadata.source_url}</a>
+        {data.solution_metadata.source_license && ` (${data.solution_metadata.source_license})`}
+      </p>
+    )}
+
+    {relatedCdgs.length > 0 && (
+      <section class="mt-10">
+        <hr class="section-rule mb-8" />
+        <div class="flex items-baseline justify-between mb-4">
+          <h2 class="text-xl font-semibold">Related CDGs</h2>
+          <a href={`/family/${data.family}`} class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">
+            All {data.family.replace(/_/g, " ")} &rarr;
+          </a>
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2">
+          {relatedCdgs.map((rel) => {
+            const rbs = rel.data.binding_summary;
+            const rpct = rbs && rbs.total_stages > 0 ? Math.round((rbs.bound_active / rbs.total_stages) * 100) : 0;
+            return (
+              <a href={`/cdgs/${rel.id}`} class="group block p-4 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
+                <h3 class="font-semibold text-sm group-hover:text-atlas-accent transition-colors mb-1 line-clamp-1">{rel.data.name}</h3>
+                <p class="text-xs text-atlas-text-muted line-clamp-2 mb-2">{rel.data.dejargonized_summary}</p>
+                {rbs && (
+                  <div class="flex items-center gap-2">
+                    <div class="binding-bar flex-1">
+                      <div class="binding-bar-fill" style={`width: ${rpct}%`}></div>
+                    </div>
+                    <span class="text-xs text-atlas-text-muted">{rbs.bound_active}/{rbs.total_stages}</span>
+                  </div>
+                )}
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    <GlossarySection text={glossaryScanText} />
 
     <div class="mt-12">
       <PlatformCTA cdgId={data.asset_id} label="Open and modify this CDG in Sciona" />

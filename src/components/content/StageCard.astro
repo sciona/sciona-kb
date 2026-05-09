@@ -30,11 +30,13 @@ function atomFqdnToPath(fqdn: string): string {
 }
 ---
 
-<div class="bg-atlas-surface rounded-lg border border-atlas-border p-4">
+<div class="bg-atlas-surface rounded-lg border border-atlas-border p-4 card-hover hover:border-atlas-accent/30">
   <div class="flex items-start justify-between gap-2 mb-2">
     <h3 class="font-semibold text-atlas-text">{stage.name}</h3>
     <div class="flex items-center gap-2 shrink-0">
-      <span class="text-xs px-1.5 py-0.5 rounded bg-atlas-surface-2 text-atlas-text-muted">{stage.concept_type}</span>
+      <a href={`/concept/${stage.concept_type}`} class="tag-link tag-accent">
+        {stage.concept_type.replace(/_/g, " ")}
+      </a>
       {binding && <BindingStatusBadge status={binding.status} confidence={binding.binding_confidence} />}
     </div>
   </div>
@@ -42,8 +44,11 @@ function atomFqdnToPath(fqdn: string): string {
   {binding?.bound_atom_fqdn && (
     <a
       href={atomFqdnToPath(binding.bound_atom_fqdn)}
-      class="inline-flex items-center gap-1 text-xs font-mono text-atlas-accent hover:text-atlas-accent-hover transition-colors"
+      class="inline-flex items-center gap-1.5 text-xs font-mono text-atlas-accent hover:text-atlas-accent-hover transition-colors"
     >
+      <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
       {binding.bound_atom_fqdn}
     </a>
   )}

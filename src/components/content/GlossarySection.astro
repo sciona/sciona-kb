@@ -1,0 +1,40 @@
+---
+/**
+ * Renders a glossary of relevant terms at the bottom of a page.
+ * Pass `text` containing the page's full content — the component
+ * auto-detects which glossary terms appear and renders only those.
+ */
+import { findRelevantTerms, type GlossaryEntry } from "../../data/glossary";
+
+interface Props {
+  /** Text to scan for glossary terms */
+  text: string;
+  /** Optional: explicitly include these terms even if not found in text */
+  extraTerms?: string[];
+}
+
+const { text, extraTerms = [] } = Astro.props;
+
+const entries = findRelevantTerms(text + " " + extraTerms.join(" "));
+---
+
+{entries.length > 0 && (
+  <section class="mt-10" id="glossary">
+    <hr class="section-rule mb-8" />
+    <h2 class="text-xl font-semibold mb-4">Glossary</h2>
+    <div class="grid gap-3 sm:grid-cols-2">
+      {entries.map((entry) => (
+        <div class="rounded-lg bg-atlas-surface border border-atlas-border p-3" id={`term-${entry.term.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}>
+          <div class="flex items-baseline gap-2 mb-1">
+            <span class="font-mono text-sm font-semibold text-atlas-accent">{entry.term}</span>
+            <span class="text-sm text-atlas-accent">{entry.expansion}</span>
+          </div>
+          <p class="text-xs text-atlas-text-muted leading-relaxed">{entry.definition}</p>
+        </div>
+      ))}
+    </div>
+    <p class="text-xs text-atlas-text-muted mt-4">
+      <a href="/glossary" class="text-atlas-accent hover:text-atlas-accent-hover transition-colors">View full glossary &rarr;</a>
+    </p>
+  </section>
+)}

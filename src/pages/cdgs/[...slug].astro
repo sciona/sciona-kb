@@ -4,17 +4,36 @@ import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
   const cdgs = await getCollection("cdgs");
-  return cdgs.map((cdg) => ({
-    params: { slug: cdg.id },
-    props: { cdg },
-  }));
+  const solutions = await getCollection("solutions");
+
+  // Index solutions by CDG asset_id
+  const solutionByCdg = new Map(solutions.map((s) => [s.data.cdg_asset_id, s]));
+
+  // Group CDGs by family for related
+  const byFamily = new Map<string, typeof cdgs>();
+  for (const c of cdgs) {
+    const list = byFamily.get(c.data.family) ?? [];
+    list.push(c);
+    byFamily.set(c.data.family, list);
+  }
+
+  return cdgs.map((cdg) => {
+    const relatedCdgs = (byFamily.get(cdg.data.family) ?? [])
+      .filter((c) => c.id !== cdg.id)
+      .slice(0, 4);
+    const solution = solutionByCdg.get(cdg.data.asset_id);
+    return {
+      params: { slug: cdg.id },
+      props: { cdg, relatedCdgs, solution },
+    };
+  });
 }
 
-const { cdg } = Astro.props;
+const { cdg, relatedCdgs, solution } = Astro.props;
 const { Content } = await render(cdg);
 const contentPath = `cdgs/${cdg.id}.mdx`;
 ---
 
-<CDGLayout cdg={cdg} contentPath={contentPath}>
+<CDGLayout cdg={cdg} contentPath={contentPath} relatedCdgs={relatedCdgs} solution={solution}>
   <Content />
 </CDGLayout>

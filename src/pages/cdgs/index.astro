@@ -9,7 +9,11 @@ const items = cdgs.map((c) => ({
   href: `/cdgs/${c.id}`,
   title: c.data.name,
   description: c.data.dejargonized_summary || c.data.summary,
-  tags: [c.data.paradigm, c.data.family, ...c.data.variant_hints.slice(0, 3)],
+  tags: [
+    { label: c.data.paradigm, href: `/paradigm/${c.data.paradigm}` },
+    { label: c.data.family, href: `/family/${c.data.family}` },
+    ...c.data.variant_hints.slice(0, 2),
+  ],
 }));
 ---
 

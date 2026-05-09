@@ -4,17 +4,31 @@ import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
   const solutions = await getCollection("solutions");
-  return solutions.map((solution) => ({
-    params: { slug: solution.id },
-    props: { solution },
-  }));
+
+  // Group by family for related solutions
+  const byFamily = new Map<string, typeof solutions>();
+  for (const s of solutions) {
+    const list = byFamily.get(s.data.family) ?? [];
+    list.push(s);
+    byFamily.set(s.data.family, list);
+  }
+
+  return solutions.map((solution) => {
+    const related = (byFamily.get(solution.data.family) ?? [])
+      .filter((s) => s.id !== solution.id)
+      .slice(0, 4);
+    return {
+      params: { slug: solution.id },
+      props: { solution, relatedSolutions: related },
+    };
+  });
 }
 
-const { solution } = Astro.props;
+const { solution, relatedSolutions } = Astro.props;
 const { Content } = await render(solution);
 const contentPath = `solutions/${solution.id}.mdx`;
 ---
 
-<SolutionLayout solution={solution} contentPath={contentPath}>
+<SolutionLayout solution={solution} contentPath={contentPath} relatedSolutions={relatedSolutions}>
   <Content />
 </SolutionLayout>

@@ -1,20 +1,130 @@
 ---
-import CatalogLayout from "../../layouts/CatalogLayout.astro";
+import AtomIndexLayout from "../../layouts/AtomIndexLayout.astro";
 import { getCollection } from "astro:content";
+import type { ContractAtom } from "../../components/content/AtomContractCard.astro";
 
 const atoms = await getCollection("atoms");
 
-const items = atoms.map((a) => ({
-  slug: a.id,
-  href: `/atoms/${a.id}`,
-  title: a.data.title,
-  description: a.data.informal_desc,
-  tags: [a.data.concept_type, a.data.domain, a.data.repo],
-}));
+// Curated featured atoms — hand-picked for visual interest and domain spread
+const curated: ContractAtom[] = [
+  {
+    name: "hungarian_assignment",
+    domain: "cs",
+    description: "Optimal bipartite matching via the Hungarian algorithm",
+    conceptType: "graph_optimization",
+    inputs: [
+      { name: "cost_matrix", type: "NDArray[f64]" },
+      { name: "maximize", type: "bool" },
+    ],
+    outputs: [{ name: "pairs", type: "list[tuple]" }],
+    requires: [
+      "cost_matrix must be 2D",
+      "at least one row and one column",
+      "all costs must be finite",
+    ],
+    ensures: [
+      "count ≤ min(rows, cols)",
+      "assignments are one-to-one",
+    ],
+    href: "/atoms/cs/assignment/hungarian-assignment",
+  },
+  {
+    name: "macenko_stain_vectors",
+    domain: "bio",
+    description: "Histology stain separation via Macenko's method",
+    conceptType: "data_extraction",
+    inputs: [
+      { name: "image", type: "ndarray" },
+      { name: "alpha", type: "float" },
+      { name: "beta", type: "float" },
+      { name: "luminosity", type: "float" },
+    ],
+    outputs: [
+      { name: "stain_matrix", type: "ndarray" },
+      { name: "concentrations", type: "ndarray" },
+    ],
+    requires: [
+      "image must be RGB (3D, last dim = 3)",
+      "alpha ∈ [0, 50] (percentile)",
+      "beta > 0, luminosity > 0",
+    ],
+    ensures: [
+      "stain matrix is (3, 2) — two RGB vectors",
+      "concentrations ≥ 0 and finite",
+    ],
+    href: "/atoms/bio/medical-imaging-3d/preprocessing/macenko-stain-vectors",
+  },
+  {
+    name: "matrix_profile_anomaly_score",
+    domain: "signal_processing",
+    description: "Normalized anomaly scoring via matrix profile",
+    conceptType: "searching",
+    inputs: [
+      { name: "series", type: "NDArray[f64]" },
+      { name: "window_size", type: "int" },
+    ],
+    outputs: [{ name: "scores", type: "NDArray[f64]" }],
+    requires: [
+      "series must be 1D and finite",
+      "3 ≤ window_size < len(series)",
+    ],
+    ensures: [
+      "one score per subsequence",
+      "scores normalized to [0, 1]",
+    ],
+    href: "/atoms/signal-processing/anomaly-detection/matrix-profile-anomaly-score",
+  },
+];
+
+// Domain summary for the intro
+const domainCounts = new Map<string, number>();
+for (const a of atoms) {
+  domainCounts.set(a.data.domain, (domainCounts.get(a.data.domain) ?? 0) + 1);
+}
+const domains = [...domainCounts.entries()].sort((a, b) => b[1] - a[1]);
+
+const domainMeta: Record<string, { label: string; color: string }> = {
+  inference: { label: "Inference", color: "#c084fc" },
+  bio: { label: "Biology", color: "#4ade80" },
+  physics: { label: "Physics", color: "#fb923c" },
+  signal_processing: { label: "Signal", color: "#a78bfa" },
+  robotics: { label: "Robotics", color: "#38bdf8" },
+  fintech: { label: "Fintech", color: "#facc15" },
+  ml: { label: "ML", color: "#6c8cff" },
+  cs: { label: "CS", color: "#6c8cff" },
+  state_estimation: { label: "State Est.", color: "#c084fc" },
+  medical_imaging_3d: { label: "Med Imaging", color: "#4ade80" },
+  dynamic_programming: { label: "DP", color: "#6c8cff" },
+  geo: { label: "Geospatial", color: "#34d399" },
+  dl: { label: "Deep Learning", color: "#f87171" },
+};
 ---
 
-<CatalogLayout
+<AtomIndexLayout
   title="Atoms"
-  description={`${items.length} mathematical building blocks -- type-checked, contract-verified, composable.`}
-  items={items}
-/>
+  description={`${atoms.length} composable, contract-verified building blocks across ${domainCounts.size} scientific domains.`}
+  atoms={atoms}
+  featured={curated}
+  breadcrumbs={[
+    { label: "Atlas", href: "/" },
+    { label: "Atoms", href: "/atoms" },
+  ]}
+>
+  <Fragment slot="intro">
+    <div class="flex flex-wrap gap-2 mb-8">
+      {domains.map(([domain, count]) => {
+        const meta = domainMeta[domain] ?? { label: domain, color: "#6c8cff" };
+        return (
+          <a
+            href={`/atoms/domain/${domain}`}
+            class="tag-link text-sm"
+            style={`color: ${meta.color}; border-color: color-mix(in srgb, ${meta.color} 30%, transparent); background: color-mix(in srgb, ${meta.color} 8%, transparent)`}
+          >
+            {meta.label}
+            <span class="ml-1 opacity-60">{count}</span>
+          </a>
+        );
+      })}
+    </div>
+  </Fragment>
+</AtomIndexLayout>
