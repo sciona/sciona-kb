@@ -1,24 +1,332 @@
 ---
-import CatalogLayout from "../../layouts/CatalogLayout.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/seo/Breadcrumbs.astro";
+import PipelineThumb from "../../components/content/PipelineThumb.astro";
 import { getCollection } from "astro:content";
 
 const cdgs = await getCollection("cdgs");
 
-const items = cdgs.map((c) => ({
-  slug: c.id,
-  href: `/cdgs/${c.id}`,
-  title: c.data.name,
-  description: c.data.dejargonized_summary || c.data.summary,
-  tags: [
-    { label: c.data.paradigm, href: `/paradigm/${c.data.paradigm}` },
-    { label: c.data.family, href: `/family/${c.data.family}` },
-    ...c.data.variant_hints.slice(0, 2),
-  ],
-}));
+// ── Paradigm map ──
+const paradigmMeta: Record<string, { label: string; emoji: string; description: string }> = {
+  neural_network: { label: "Neural Networks", emoji: "🧠", description: "Deep learning pipelines: CNNs, transformers, GNNs, and multi-modal architectures" },
+  optimization: { label: "Optimization", emoji: "📈", description: "Gradient methods, search algorithms, and iterative refinement strategies" },
+  loss_function: { label: "Loss Functions", emoji: "🎯", description: "Custom objectives, multi-task losses, and training signal design" },
+  graph_signal_processing: { label: "Graph & Signal", emoji: "🕸️", description: "Graph neural networks, spectral methods, and structured signal processing" },
+  signal_filter: { label: "Signal Filtering", emoji: "🔇", description: "Denoising, smoothing, and feature extraction from raw signals" },
+  signal_transform: { label: "Signal Transforms", emoji: "🌊", description: "Fourier, wavelet, and domain transforms for signal representation" },
+  external_tool: { label: "External Tools", emoji: "🔧", description: "Pipelines integrating pre-built models, APIs, or domain solvers" },
+  searching: { label: "Search", emoji: "🔍", description: "Beam search, tree search, and combinatorial exploration" },
+  geometry: { label: "Geometry", emoji: "📐", description: "Spatial computation, coordinate transforms, and geometric fitting" },
+  sequential_filter: { label: "Sequential Filters", emoji: "⏩", description: "State estimation and streaming data processing" },
+  analysis: { label: "Analysis", emoji: "🔬", description: "Statistical testing, evaluation, and diagnostic pipelines" },
+};
+
+const paradigmCounts = new Map<string, number>();
+for (const c of cdgs) {
+  paradigmCounts.set(c.data.paradigm, (paradigmCounts.get(c.data.paradigm) ?? 0) + 1);
+}
+const paradigms = [...paradigmCounts.entries()].sort((a, b) => b[1] - a[1]);
+
+// ── Curated highlights ──
+// Hand-picked for diversity across domains and visual interest
+const highlightIds = [
+  "adversarial-attacks-1st",
+  "trackml-5th",
+  "dsb2017-1st",
+  "connectomics-1st",
+];
+const cdgById = new Map(cdgs.map((c) => [c.id, c]));
+const highlights = highlightIds.map((id) => cdgById.get(id)).filter(Boolean) as typeof cdgs;
+
+// ── Group by family ──
+const familyMeta: Record<string, string> = {
+  structured_prediction: "Predicting complex structured outputs like sequences, trees, or graphs",
+  semantic_segmentation: "Classifying every pixel in an image into categories",
+  tabular_regression: "Predicting continuous values from structured tabular data",
+  object_detection_2d: "Finding and localizing objects in images with bounding boxes",
+  tabular_classification: "Classifying rows of structured data into discrete categories",
+  nlp_classification: "Categorizing text documents by topic, sentiment, or intent",
+  multimodal_retrieval: "Finding relevant items across different data types (images, text, embeddings)",
+  time_series_forecasting: "Predicting future values from historical sequential data",
+  time_series_classification: "Categorizing temporal patterns in sequential signals",
+  graph_inference: "Discovering relationships and structure in network data",
+  nlp_span_detection: "Identifying and extracting specific spans of text (entities, answers)",
+  bioinformatics: "Computational analysis of biological sequences, structures, and systems",
+  reinforcement_learning: "Learning optimal strategies through trial-and-error interaction",
+  medical_detection_2d: "Finding abnormalities in medical images like X-rays and mammograms",
+  learning_to_rank: "Ordering items by relevance or preference",
+  audio_classification: "Categorizing sounds, music, or speech into classes",
+};
+
+const byFamily = new Map<string, typeof cdgs>();
+for (const c of cdgs) {
+  const list = byFamily.get(c.data.family) ?? [];
+  list.push(c);
+  byFamily.set(c.data.family, list);
+}
+const familyOrder = [...byFamily.entries()].sort((a, b) => b[1].length - a[1].length);
+
+// ── Competition leaderboard ──
+const withMeta = cdgs
+  .filter((c) => c.data.solution_metadata)
+  .map((c) => ({
+    id: c.id,
+    name: c.data.name,
+    competition: c.data.solution_metadata!.competition,
+    placement: c.data.solution_metadata!.placement || "1st",
+    year: c.data.solution_metadata!.year || 0,
+    domain: c.data.solution_metadata!.problem_domain,
+    family: c.data.family,
+    paradigm: c.data.paradigm,
+    boundPct: c.data.binding_summary
+      ? Math.round((c.data.binding_summary.bound_active / c.data.binding_summary.total_stages) * 100)
+      : 0,
+  }))
+  .filter((c) => c.year > 2000)
+  .sort((a, b) => b.year - a.year || a.placement.localeCompare(b.placement));
+
+const breadcrumbs = [
+  { label: "Atlas", href: "/" },
+  { label: "CDGs", href: "/cdgs" },
+];
 ---
 
-<CatalogLayout
-  title="Conceptual Directed Graphs"
-  description={`${items.length} algorithmic pipelines decomposed into composable stages with explicit data flow.`}
-  items={items}
-/>
+<BaseLayout title="Conceptual Directed Graphs" description={`${cdgs.length} algorithmic pipelines decomposed into composable stages with explicit data flow.`}>
+  <div class="max-w-6xl mx-auto">
+    <Breadcrumbs segments={breadcrumbs} />
+
+    <h1 class="text-3xl font-bold mt-4 mb-2">Algorithmic Pipelines</h1>
+    <p class="text-atlas-text-muted text-lg mb-10">
+      {cdgs.length} competition-winning and research-grade algorithms, decomposed into composable stages you can study, modify, and recombine.
+    </p>
+
+    <!-- ═══ Paradigm Map ═══ -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Explore by Paradigm</h2>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {paradigms.map(([paradigm, count]) => {
+          const meta = paradigmMeta[paradigm] ?? { label: paradigm.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()), emoji: "🔷", description: "" };
+          return (
+            <a href={`/paradigm/${paradigm}`} class="group block p-4 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-lg">{meta.emoji}</span>
+                <h3 class="font-semibold text-sm group-hover:text-atlas-accent transition-colors">{meta.label}</h3>
+                <span class="ml-auto text-xs text-atlas-text-muted">{count}</span>
+              </div>
+              <p class="text-xs text-atlas-text-muted leading-snug">{meta.description}</p>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <hr class="section-rule mb-12" />
+
+    <!-- ═══ Curated Highlights ═══ -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-2">Start Here</h2>
+      <p class="text-sm text-atlas-text-muted mb-5">Hand-picked pipelines across different domains — each one fully decomposed with interactive viewers.</p>
+      <div class="space-y-4">
+        {highlights.map((cdg) => {
+          const bs = cdg.data.binding_summary;
+          const pct = bs && bs.total_stages > 0 ? Math.round((bs.bound_active / bs.total_stages) * 100) : 0;
+          const shortName = cdg.data.name.replace(/^.*?--\s*/, "").replace(/^.*?\u2014\s*/, "") || cdg.data.name;
+          const subtitle = cdg.data.name.includes("--") || cdg.data.name.includes("\u2014")
+            ? cdg.data.name.split(/\s*(?:--|\u2014)\s*/)[0]
+            : "";
+          return (
+            <div class="group rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50 overflow-hidden cursor-pointer" onclick={`window.location.href='/cdgs/${cdg.id}'`}>
+              <div class="flex" style="padding: 20px 24px;">
+                <div class="flex-1 min-w-0" style="margin-right: 24px;">
+                  <p class="font-semibold text-lg group-hover:text-atlas-accent transition-colors" style="margin-bottom: 4px;">{shortName}</p>
+                  {subtitle && <p class="text-sm text-atlas-text-muted" style="margin-bottom: 12px;">{subtitle}</p>}
+                  <p class="text-sm text-atlas-text-muted leading-relaxed" style="margin-bottom: 16px;">{cdg.data.dejargonized_summary}</p>
+                  <div class="flex items-center gap-3">
+                    <a href={`/paradigm/${cdg.data.paradigm}`} class="tag-link tag-accent" onclick="event.stopPropagation()">{cdg.data.paradigm.replace(/_/g, " ")}</a>
+                    <a href={`/family/${cdg.data.family}`} class="tag-link" onclick="event.stopPropagation()">{cdg.data.family.replace(/_/g, " ")}</a>
+                    {bs && (
+                      <div class="flex items-center gap-1.5 ml-auto">
+                        <div class="binding-bar w-16">
+                          <div class="binding-bar-fill" style={`width: ${pct}%`}></div>
+                        </div>
+                        <span class="text-xs text-atlas-text-muted">{bs.bound_active}/{bs.total_stages}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div class="shrink-0 hidden sm:block" style="width: 200px; height: 120px;">
+                  <PipelineThumb
+                    stages={cdg.data.stages}
+                    edges={cdg.data.edges}
+                    bindings={cdg.data.bindings}
+                    width={200}
+                    height={120}
+                  />
+                </div>
+              </div>
+              {cdg.data.applicability.key_insight && (
+                <div class="bg-atlas-accent/5 border-t border-atlas-accent/10" style="padding: 14px 24px;">
+                  <p class="text-sm text-atlas-text-muted leading-relaxed">
+                    <span class="text-atlas-accent font-medium">Key insight:</span> {cdg.data.applicability.key_insight}
+                  </p>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    <hr class="section-rule mb-12" />
+
+    <!-- ═══ Explore by Problem Family ═══ -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-2">Explore by Problem Family</h2>
+      <p class="text-sm text-atlas-text-muted mb-5">Browse {familyOrder.length} problem families. Each contains pipelines that solve the same type of challenge.</p>
+
+      <!-- Search -->
+      <div class="mb-6">
+        <input
+          type="search"
+          placeholder={`Search ${cdgs.length} pipelines...`}
+          class="w-full max-w-md px-4 py-2 rounded-lg bg-atlas-surface border border-atlas-border text-atlas-text placeholder:text-atlas-text-muted focus:outline-none focus:border-atlas-accent transition-colors"
+          data-cdg-search
+        />
+      </div>
+
+      <div data-cdg-families>
+        {familyOrder.map(([family, familyCdgs]) => {
+          const desc = familyMeta[family] ?? "";
+          const label = family.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+          return (
+            <details class="mb-3 group/fam" data-family-section={family} open={familyCdgs.length <= 6}>
+              <summary class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-atlas-surface border border-atlas-border cursor-pointer select-none hover:border-atlas-accent/30 transition-colors">
+                <svg class="w-4 h-4 shrink-0 text-atlas-text-muted transition-transform group-open/fam:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+                <a href={`/family/${family}`} class="text-sm font-semibold hover:text-atlas-accent transition-colors" onclick="event.stopPropagation()">
+                  {label}
+                </a>
+                <span class="text-xs text-atlas-text-muted">{familyCdgs.length}</span>
+                {desc && <span class="text-xs text-atlas-text-muted hidden sm:inline ml-auto">{desc}</span>}
+              </summary>
+              <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 mt-2 pl-7">
+                {familyCdgs.map((c) => {
+                  const shortName = c.data.name.replace(/^.*?--\s*/, "").replace(/^.*?\u2014\s*/, "") || c.data.name;
+                  const bs = c.data.binding_summary;
+                  const pct = bs && bs.total_stages > 0 ? Math.round((bs.bound_active / bs.total_stages) * 100) : 0;
+                  return (
+                    <a
+                      href={`/cdgs/${c.id}`}
+                      class="cdg-card group/card block rounded-lg bg-atlas-bg border border-atlas-border p-3 card-hover hover:border-atlas-accent/40"
+                      data-title={c.data.name.toLowerCase()}
+                      data-tags={[c.data.paradigm, c.data.family, ...c.data.variant_hints.slice(0, 3)].join(",")}
+                      data-family={family}
+                    >
+                      <p class="text-sm font-medium group-hover/card:text-atlas-accent transition-colors line-clamp-1 mb-1">{shortName}</p>
+                      <p class="text-xs text-atlas-text-muted line-clamp-2 mb-2">{c.data.dejargonized_summary || c.data.summary}</p>
+                      <div class="flex items-center gap-2">
+                        <span class="tag-link tag-accent text-[9px]">{c.data.paradigm.replace(/_/g, " ")}</span>
+                        {bs && (
+                          <div class="flex items-center gap-1 ml-auto">
+                            <div class="binding-bar w-10">
+                              <div class="binding-bar-fill" style={`width: ${pct}%`}></div>
+                            </div>
+                            <span class="text-[9px] text-atlas-text-muted">{bs.bound_active}/{bs.total_stages}</span>
+                          </div>
+                        )}
+                      </div>
+                    </a>
+                  );
+                })}
+              </div>
+            </details>
+          );
+        })}
+      </div>
+    </section>
+
+    <hr class="section-rule mb-12" />
+
+    <!-- ═══ Competition Leaderboard ═══ -->
+    {withMeta.length > 0 && (
+      <section class="mb-12">
+        <h2 class="text-xl font-semibold mb-2">Competition Timeline</h2>
+        <p class="text-sm text-atlas-text-muted mb-5">Winning solutions by year — click any row to see the full pipeline breakdown.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border border-atlas-border rounded-lg overflow-hidden">
+            <thead class="bg-atlas-surface-2">
+              <tr>
+                <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Year</th>
+                <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Pipeline</th>
+                <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Family</th>
+                <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Place</th>
+                <th class="text-left px-3 py-2 text-atlas-text-muted font-medium">Bound</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-atlas-border">
+              {withMeta.slice(0, 30).map((c) => {
+                const shortName = c.name.replace(/^.*?--\s*/, "").replace(/^.*?\u2014\s*/, "") || c.name;
+                return (
+                  <tr class="hover:bg-atlas-surface/50 cursor-pointer" onclick={`window.location.href='/cdgs/${c.id}'`}>
+                    <td class="px-3 py-2 text-atlas-text-muted font-mono text-xs">{c.year}</td>
+                    <td class="px-3 py-2">
+                      <a href={`/cdgs/${c.id}`} class="text-atlas-text hover:text-atlas-accent transition-colors font-medium text-xs">{shortName}</a>
+                    </td>
+                    <td class="px-3 py-2">
+                      <a href={`/family/${c.family}`} class="tag-link text-[9px]" onclick="event.stopPropagation()">{c.family.replace(/_/g, " ")}</a>
+                    </td>
+                    <td class="px-3 py-2 text-xs text-atlas-text-muted">{c.placement}</td>
+                    <td class="px-3 py-2">
+                      <div class="flex items-center gap-1.5">
+                        <div class="binding-bar w-10">
+                          <div class="binding-bar-fill" style={`width: ${c.boundPct}%`}></div>
+                        </div>
+                        <span class="text-[9px] text-atlas-text-muted">{c.boundPct}%</span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        {withMeta.length > 30 && (
+          <p class="text-xs text-atlas-text-muted mt-3 text-center">Showing 30 of {withMeta.length} competition pipelines</p>
+        )}
+      </section>
+    )}
+  </div>
+</BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>("[data-cdg-search]");
+  const familiesContainer = document.querySelector<HTMLElement>("[data-cdg-families]");
+
+  if (input && familiesContainer) {
+    const cards = Array.from(familiesContainer.querySelectorAll(".cdg-card")) as HTMLElement[];
+    const sections = Array.from(familiesContainer.querySelectorAll("[data-family-section]")) as HTMLDetailsElement[];
+
+    input.addEventListener("input", () => {
+      const q = input.value.toLowerCase();
+
+      for (const card of cards) {
+        const title = card.dataset.title ?? "";
+        const tags = card.dataset.tags ?? "";
+        const show = !q || title.includes(q) || tags.includes(q);
+        card.style.display = show ? "" : "none";
+      }
+
+      for (const section of sections) {
+        const family = section.dataset.familySection!;
+        const sectionCards = cards.filter(
+          (c) => c.dataset.family === family && c.style.display !== "none"
+        );
+        section.style.display = sectionCards.length > 0 ? "" : "none";
+        if (q && sectionCards.length > 0) {
+          section.open = true;
+        }
+      }
+    });
+  }
+</script>
