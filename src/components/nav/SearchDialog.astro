@@ -1,0 +1,202 @@
+---
+/**
+ * Global site search powered by Pagefind.
+ * Renders as a search icon in the navbar that opens a modal dialog.
+ * Pagefind JS/CSS loads only when the dialog opens (zero page-load cost).
+ */
+---
+
+<!-- Search trigger button -->
+<button
+  type="button"
+  class="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm text-atlas-text-muted hover:text-atlas-text hover:bg-atlas-surface-2 transition-colors"
+  data-search-open
+  aria-label="Search the Atlas"
+>
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+  </svg>
+  <span class="hidden sm:inline">Search</span>
+  <kbd class="hidden sm:inline text-[10px] text-atlas-text-muted bg-atlas-surface-2 border border-atlas-border px-1.5 py-0.5 rounded font-mono">/</kbd>
+</button>
+
+<!-- Search modal (hidden by default) -->
+<dialog
+  class="fixed inset-0 z-50 m-0 w-full h-full max-w-none max-h-none bg-transparent backdrop:bg-black/60"
+  data-search-dialog
+>
+  <div class="flex items-start justify-center pt-[10vh] px-4 min-h-full" data-search-backdrop>
+    <div class="w-full max-w-2xl rounded-xl bg-atlas-bg border border-atlas-border shadow-2xl overflow-hidden" data-search-container>
+      <div id="pagefind-container"></div>
+    </div>
+  </div>
+</dialog>
+
+<style is:global>
+  /* Pagefind UI overrides to match Atlas dark theme */
+  :root {
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: #6c8cff;
+    --pagefind-ui-text: #e2e4ea;
+    --pagefind-ui-background: #0f1117;
+    --pagefind-ui-border: #2a2e3a;
+    --pagefind-ui-tag: #1f2330;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-image-border-radius: 6px;
+    --pagefind-ui-image-box-ratio: 0;
+    --pagefind-ui-font: "Inter", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .pagefind-ui__form {
+    padding: 0 !important;
+  }
+
+  .pagefind-ui__search-input {
+    background: #181b24 !important;
+    color: #e2e4ea !important;
+    border-color: #2a2e3a !important;
+    padding: 14px 16px !important;
+    font-size: 16px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 1px solid #2a2e3a !important;
+    width: 100% !important;
+  }
+
+  .pagefind-ui__search-input:focus {
+    outline: none !important;
+    border-color: #6c8cff !important;
+  }
+
+  .pagefind-ui__search-input::placeholder {
+    color: #8b8fa4 !important;
+  }
+
+  .pagefind-ui__search-clear {
+    color: #8b8fa4 !important;
+    background: none !important;
+  }
+
+  .pagefind-ui__results-area {
+    margin-top: 0 !important;
+    padding: 8px !important;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .pagefind-ui__result {
+    padding: 12px !important;
+    border: none !important;
+    border-radius: 6px !important;
+  }
+
+  .pagefind-ui__result:hover {
+    background: #181b24 !important;
+  }
+
+  .pagefind-ui__result-link {
+    color: #6c8cff !important;
+    font-weight: 600 !important;
+  }
+
+  .pagefind-ui__result-link:hover {
+    color: #8aa4ff !important;
+  }
+
+  .pagefind-ui__result-excerpt {
+    color: #8b8fa4 !important;
+  }
+
+  mark.pagefind-ui__result-highlight {
+    color: #e2e4ea !important;
+    background: rgba(108, 140, 255, 0.2) !important;
+  }
+
+  .pagefind-ui__message {
+    color: #8b8fa4 !important;
+    padding: 24px 12px !important;
+  }
+
+  .pagefind-ui__button {
+    background: #1f2330 !important;
+    color: #8b8fa4 !important;
+    border: 1px solid #2a2e3a !important;
+  }
+
+  .pagefind-ui__button:hover {
+    border-color: #6c8cff !important;
+    color: #e2e4ea !important;
+  }
+
+  /* Hide the filter/sort controls for now */
+  .pagefind-ui__drawer {
+    display: none !important;
+  }
+</style>
+
+<script>
+  let pagefindLoaded = false;
+
+  const openBtn = document.querySelector("[data-search-open]");
+  const dialog = document.querySelector<HTMLDialogElement>("[data-search-dialog]");
+  const backdrop = document.querySelector("[data-search-backdrop]");
+
+  function openSearch() {
+    if (!dialog) return;
+    dialog.showModal();
+    loadPagefind();
+    // Focus the search input after a tick
+    requestAnimationFrame(() => {
+      const input = dialog.querySelector<HTMLInputElement>(".pagefind-ui__search-input");
+      input?.focus();
+    });
+  }
+
+  function closeSearch() {
+    dialog?.close();
+  }
+
+  async function loadPagefind() {
+    if (pagefindLoaded) return;
+    pagefindLoaded = true;
+
+    // Load Pagefind UI CSS
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/pagefind/pagefind-ui.css";
+    document.head.appendChild(link);
+
+    // Load Pagefind UI JS — dynamic path to avoid Vite bundling
+    const pagefindPath = "/pagefind/pagefind-ui.js";
+    const mod = await import(/* @vite-ignore */ pagefindPath);
+    new mod.PagefindUI({
+      element: "#pagefind-container",
+      showSubResults: true,
+      showImages: false,
+      autofocus: true,
+      resetStyles: false,
+    });
+  }
+
+  // Open on button click
+  openBtn?.addEventListener("click", openSearch);
+
+  // Close on backdrop click
+  backdrop?.addEventListener("click", (e) => {
+    if (e.target === backdrop) closeSearch();
+  });
+
+  // Close on Escape
+  dialog?.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeSearch();
+  });
+
+  // Open on "/" key (when not in an input)
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "/" && !["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName)) {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+</script>

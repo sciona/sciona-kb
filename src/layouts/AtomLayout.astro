@@ -39,6 +39,7 @@ const breadcrumbs = [
       <span class="tag-link">{data.verification_level.replace(/_/g, " ")}</span>
     </div>
 
+    <div data-pagefind-ignore>
     <TypeSignature signature={data.type_signature} />
 
     {data.inputs.length > 0 && (
@@ -58,6 +59,7 @@ const breadcrumbs = [
     <article class="prose prose-invert max-w-none mt-8">
       <slot />
     </article>
+    </div><!-- end data-pagefind-ignore -->
 
     {data.references.length > 0 && (
       <section class="mt-8">

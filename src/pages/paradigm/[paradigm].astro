@@ -1,5 +1,7 @@
 ---
-import CatalogLayout from "../../layouts/CatalogLayout.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/seo/Breadcrumbs.astro";
+import PipelineThumb from "../../components/content/PipelineThumb.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
@@ -9,30 +11,163 @@ export async function getStaticPaths() {
     params: { paradigm },
     props: {
       paradigm,
-      items: cdgs
-        .filter((c) => c.data.paradigm === paradigm)
-        .map((c) => ({
-          slug: c.id,
-          href: `/cdgs/${c.id}`,
-          title: c.data.name,
-          description: c.data.dejargonized_summary || c.data.summary,
-          tags: [c.data.family, ...c.data.variant_hints.slice(0, 3)],
-        })),
+      cdgs: cdgs.filter((c) => c.data.paradigm === paradigm),
     },
   }));
 }
 
-const { paradigm, items } = Astro.props;
+const { paradigm, cdgs } = Astro.props;
 const label = paradigm.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+
+const paradigmDescriptions: Record<string, string> = {
+  neural_network: "Deep learning pipelines using CNNs, transformers, GNNs, and multi-modal architectures.",
+  optimization: "Gradient methods, search algorithms, and iterative refinement strategies.",
+  loss_function: "Custom objectives, multi-task losses, and training signal design.",
+  graph_signal_processing: "Graph neural networks, spectral methods, and structured signal processing.",
+  signal_filter: "Denoising, smoothing, and feature extraction from raw signals.",
+  signal_transform: "Fourier, wavelet, and domain transforms for signal representation.",
+  external_tool: "Pipelines integrating pre-built models, APIs, or domain solvers.",
+  searching: "Beam search, tree search, and combinatorial exploration.",
+  geometry: "Spatial computation, coordinate transforms, and geometric fitting.",
+  sequential_filter: "State estimation and streaming data processing.",
+  analysis: "Statistical testing, evaluation, and diagnostic pipelines.",
+};
+
+const familyMeta: Record<string, string> = {
+  structured_prediction: "Predicting complex structured outputs like sequences, trees, or graphs",
+  semantic_segmentation: "Classifying every pixel in an image into categories",
+  tabular_regression: "Predicting continuous values from structured tabular data",
+  object_detection_2d: "Finding and localizing objects in images with bounding boxes",
+  tabular_classification: "Classifying rows of structured data into discrete categories",
+  nlp_classification: "Categorizing text documents by topic, sentiment, or intent",
+  multimodal_retrieval: "Finding relevant items across different data types (images, text, embeddings)",
+  time_series_forecasting: "Predicting future values from historical sequential data",
+  time_series_classification: "Categorizing temporal patterns in sequential signals",
+  graph_inference: "Discovering relationships and structure in network data",
+  nlp_span_detection: "Identifying and extracting specific spans of text (entities, answers)",
+  bioinformatics: "Computational analysis of biological sequences, structures, and systems",
+  reinforcement_learning: "Learning optimal strategies through trial-and-error interaction",
+  medical_detection_2d: "Finding abnormalities in medical images like X-rays and mammograms",
+  learning_to_rank: "Ordering items by relevance or preference",
+  audio_classification: "Categorizing sounds, music, or speech into classes",
+};
+
+// Pick up to 3 highlights — CDGs with most bound atoms
+const highlights = [...cdgs]
+  .sort((a, b) => (b.data.binding_summary?.bound_active ?? 0) - (a.data.binding_summary?.bound_active ?? 0))
+  .slice(0, 3);
+
+// Group by family
+const byFamily = new Map<string, typeof cdgs>();
+for (const c of cdgs) {
+  const list = byFamily.get(c.data.family) ?? [];
+  list.push(c);
+  byFamily.set(c.data.family, list);
+}
+const familyOrder = [...byFamily.entries()].sort((a, b) => b[1].length - a[1].length);
+
+const breadcrumbs = [
+  { label: "Atlas", href: "/" },
+  { label: "CDGs", href: "/cdgs" },
+  { label: label, href: `/paradigm/${paradigm}` },
+];
 ---
 
-<CatalogLayout
-  title={`${label} CDGs`}
-  description={`${items.length} algorithmic pipelines using the ${label} paradigm.`}
-  items={items}
-  breadcrumbs={[
-    { label: "Atlas", href: "/" },
-    { label: "Paradigms", href: "/cdgs" },
-    { label: label, href: `/paradigm/${paradigm}` },
-  ]}
-/>
+<BaseLayout title={`${label} Pipelines`} description={`${cdgs.length} algorithmic pipelines using the ${label} paradigm.`}>
+  <div class="max-w-6xl mx-auto">
+    <Breadcrumbs segments={breadcrumbs} />
+
+    <h1 class="text-3xl font-bold mt-4 mb-2">{label}</h1>
+    <p class="text-atlas-text-muted text-lg mb-10">
+      {cdgs.length} pipelines. {paradigmDescriptions[paradigm] ?? ""}
+    </p>
+
+    <!-- ═══ Start Here ═══ -->
+    {highlights.length > 0 && (
+      <section class="mb-12">
+        <h2 class="text-xl font-semibold mb-2">Highlights</h2>
+        <p class="text-sm text-atlas-text-muted mb-5">Top pipelines in this paradigm by implementation coverage.</p>
+        <div class="space-y-4">
+          {highlights.map((cdg) => {
+            const bs = cdg.data.binding_summary;
+            const pct = bs && bs.total_stages > 0 ? Math.round((bs.bound_active / bs.total_stages) * 100) : 0;
+            const shortName = cdg.data.name.replace(/^.*?--\s*/, "").replace(/^.*?\u2014\s*/, "") || cdg.data.name;
+            const subtitle = cdg.data.name.includes("--") || cdg.data.name.includes("\u2014")
+              ? cdg.data.name.split(/\s*(?:--|\u2014)\s*/)[0]
+              : "";
+            return (
+              <div class="group rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50 overflow-hidden cursor-pointer" onclick={`window.location.href='/cdgs/${cdg.id}'`}>
+                <div class="flex" style="padding: 20px 24px;">
+                  <div class="flex-1 min-w-0" style="margin-right: 24px;">
+                    <p class="font-semibold text-lg group-hover:text-atlas-accent transition-colors" style="margin-bottom: 4px;">{shortName}</p>
+                    {subtitle && <p class="text-sm text-atlas-text-muted" style="margin-bottom: 12px;">{subtitle}</p>}
+                    <p class="text-sm text-atlas-text-muted leading-relaxed" style="margin-bottom: 16px;">{cdg.data.dejargonized_summary}</p>
+                    <div class="flex items-center gap-3">
+                      <a href={`/family/${cdg.data.family}`} class="tag-link" onclick="event.stopPropagation()">{cdg.data.family.replace(/_/g, " ")}</a>
+                      {bs && (
+                        <div class="flex items-center gap-1.5 ml-auto">
+                          <div class="binding-bar w-16">
+                            <div class="binding-bar-fill" style={`width: ${pct}%`}></div>
+                          </div>
+                          <span class="text-xs text-atlas-text-muted">{bs.bound_active}/{bs.total_stages}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div class="shrink-0 hidden sm:block" style="width: 200px; height: 120px;">
+                    <PipelineThumb
+                      stages={cdg.data.stages}
+                      edges={cdg.data.edges}
+                      bindings={cdg.data.bindings}
+                      width={200}
+                      height={120}
+                    />
+                  </div>
+                </div>
+                {cdg.data.applicability.key_insight && (
+                  <div class="bg-atlas-accent/5 border-t border-atlas-accent/10" style="padding: 14px 24px;">
+                    <p class="text-sm text-atlas-text-muted leading-relaxed">
+                      <span class="text-atlas-accent font-medium">Key insight:</span> {cdg.data.applicability.key_insight}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    <hr class="section-rule mb-12" />
+
+    <!-- ═══ Explore by Problem Family ═══ -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-2">Explore by Problem Family</h2>
+      <p class="text-sm text-atlas-text-muted mb-5">{familyOrder.length} problem families in this paradigm.</p>
+
+      <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {familyOrder.map(([family, familyCdgs]) => {
+          const desc = familyMeta[family] ?? "";
+          const familyLabel = family.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+          return (
+            <details class="group/fam rounded-lg bg-atlas-surface border border-atlas-border hover:border-atlas-accent/40 transition-colors">
+              <summary class="flex items-center gap-3 px-4 py-3 cursor-pointer select-none">
+                <svg class="w-3.5 h-3.5 shrink-0 text-atlas-text-muted transition-transform group-open/fam:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                </svg>
+                <span class="flex-1 text-sm font-semibold text-atlas-text">{familyLabel}</span>
+                <span class="shrink-0 text-xs text-atlas-text-muted bg-atlas-surface-2 px-2 py-0.5 rounded">{familyCdgs.length}</span>
+              </summary>
+              <div class="px-4 pb-3 pt-1">
+                {desc && <p class="text-xs text-atlas-text-muted leading-relaxed mb-2">{desc}</p>}
+                <a href={`/family/${family}`} class="text-xs text-atlas-accent hover:text-atlas-accent-hover transition-colors">
+                  View all {familyLabel} pipelines &rarr;
+                </a>
+              </div>
+            </details>
+          );
+        })}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

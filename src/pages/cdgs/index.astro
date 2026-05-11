@@ -184,61 +184,24 @@ const breadcrumbs = [
       <h2 class="text-xl font-semibold mb-2">Explore by Problem Family</h2>
       <p class="text-sm text-atlas-text-muted mb-5">Browse {familyOrder.length} problem families. Each contains pipelines that solve the same type of challenge.</p>
 
-      <!-- Search -->
-      <div class="mb-6">
-        <input
-          type="search"
-          placeholder={`Search ${cdgs.length} pipelines...`}
-          class="w-full max-w-md px-4 py-2 rounded-lg bg-atlas-surface border border-atlas-border text-atlas-text placeholder:text-atlas-text-muted focus:outline-none focus:border-atlas-accent transition-colors"
-          data-cdg-search
-        />
-      </div>
-
-      <div data-cdg-families>
+      <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {familyOrder.map(([family, familyCdgs]) => {
           const desc = familyMeta[family] ?? "";
           const label = family.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
           return (
-            <details class="mb-3 group/fam" data-family-section={family} open={familyCdgs.length <= 6}>
-              <summary class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-atlas-surface border border-atlas-border cursor-pointer select-none hover:border-atlas-accent/30 transition-colors">
-                <svg class="w-4 h-4 shrink-0 text-atlas-text-muted transition-transform group-open/fam:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            <details class="group/fam rounded-lg bg-atlas-surface border border-atlas-border hover:border-atlas-accent/40 transition-colors">
+              <summary class="flex items-center gap-3 px-4 py-3 cursor-pointer select-none">
+                <svg class="w-3.5 h-3.5 shrink-0 text-atlas-text-muted transition-transform group-open/fam:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
                 </svg>
-                <a href={`/family/${family}`} class="text-sm font-semibold hover:text-atlas-accent transition-colors" onclick="event.stopPropagation()">
-                  {label}
-                </a>
-                <span class="text-xs text-atlas-text-muted">{familyCdgs.length}</span>
-                {desc && <span class="text-xs text-atlas-text-muted hidden sm:inline ml-auto">{desc}</span>}
+                <span class="flex-1 text-sm font-semibold text-atlas-text">{label}</span>
+                <span class="shrink-0 text-xs text-atlas-text-muted bg-atlas-surface-2 px-2 py-0.5 rounded">{familyCdgs.length}</span>
               </summary>
-              <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 mt-2 pl-7">
-                {familyCdgs.map((c) => {
-                  const shortName = c.data.name.replace(/^.*?--\s*/, "").replace(/^.*?\u2014\s*/, "") || c.data.name;
-                  const bs = c.data.binding_summary;
-                  const pct = bs && bs.total_stages > 0 ? Math.round((bs.bound_active / bs.total_stages) * 100) : 0;
-                  return (
-                    <a
-                      href={`/cdgs/${c.id}`}
-                      class="cdg-card group/card block rounded-lg bg-atlas-bg border border-atlas-border p-3 card-hover hover:border-atlas-accent/40"
-                      data-title={c.data.name.toLowerCase()}
-                      data-tags={[c.data.paradigm, c.data.family, ...c.data.variant_hints.slice(0, 3)].join(",")}
-                      data-family={family}
-                    >
-                      <p class="text-sm font-medium group-hover/card:text-atlas-accent transition-colors line-clamp-1 mb-1">{shortName}</p>
-                      <p class="text-xs text-atlas-text-muted line-clamp-2 mb-2">{c.data.dejargonized_summary || c.data.summary}</p>
-                      <div class="flex items-center gap-2">
-                        <span class="tag-link tag-accent text-[9px]">{c.data.paradigm.replace(/_/g, " ")}</span>
-                        {bs && (
-                          <div class="flex items-center gap-1 ml-auto">
-                            <div class="binding-bar w-10">
-                              <div class="binding-bar-fill" style={`width: ${pct}%`}></div>
-                            </div>
-                            <span class="text-[9px] text-atlas-text-muted">{bs.bound_active}/{bs.total_stages}</span>
-                          </div>
-                        )}
-                      </div>
-                    </a>
-                  );
-                })}
+              <div class="px-4 pb-3 pt-1">
+                {desc && <p class="text-xs text-atlas-text-muted leading-relaxed mb-2">{desc}</p>}
+                <a href={`/family/${family}`} class="text-xs text-atlas-accent hover:text-atlas-accent-hover transition-colors">
+                  View all {label} pipelines &rarr;
+                </a>
               </div>
             </details>
           );
@@ -299,34 +262,3 @@ const breadcrumbs = [
   </div>
 </BaseLayout>
 
-<script>
-  const input = document.querySelector<HTMLInputElement>("[data-cdg-search]");
-  const familiesContainer = document.querySelector<HTMLElement>("[data-cdg-families]");
-
-  if (input && familiesContainer) {
-    const cards = Array.from(familiesContainer.querySelectorAll(".cdg-card")) as HTMLElement[];
-    const sections = Array.from(familiesContainer.querySelectorAll("[data-family-section]")) as HTMLDetailsElement[];
-
-    input.addEventListener("input", () => {
-      const q = input.value.toLowerCase();
-
-      for (const card of cards) {
-        const title = card.dataset.title ?? "";
-        const tags = card.dataset.tags ?? "";
-        const show = !q || title.includes(q) || tags.includes(q);
-        card.style.display = show ? "" : "none";
-      }
-
-      for (const section of sections) {
-        const family = section.dataset.familySection!;
-        const sectionCards = cards.filter(
-          (c) => c.dataset.family === family && c.style.display !== "none"
-        );
-        section.style.display = sectionCards.length > 0 ? "" : "none";
-        if (q && sectionCards.length > 0) {
-          section.open = true;
-        }
-      }
-    });
-  }
-</script>

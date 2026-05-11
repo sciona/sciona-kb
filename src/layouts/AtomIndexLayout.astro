@@ -215,7 +215,7 @@ if (showDomains) {
     </div>
 
     {showDomains && (
-      <div data-catalog-grid>
+      <div data-catalog-grid data-pagefind-ignore>
         {domainGroups.map(({ domain, meta, concepts }) => (
           <section class="mb-10" data-domain-section={domain}>
             <div class="flex items-center gap-3 mb-4 pl-3 border-l-2" style={`border-color: ${meta.color}`}>
@@ -273,7 +273,7 @@ if (showDomains) {
     )}
 
     {!showDomains && (
-      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-catalog-grid>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-catalog-grid data-pagefind-ignore>
         {conceptGroups.map(({ type, label, emoji, atoms: conceptAtoms }) => (
           <div
             class="concept-tile rounded-lg border border-atlas-border bg-atlas-bg p-3"

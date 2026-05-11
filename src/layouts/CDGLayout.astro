@@ -209,7 +209,7 @@ const glossaryScanText = [
     <hr class="section-rule mb-10" />
 
     <!-- ═══ Technical Details ═══ -->
-
+    <div data-pagefind-ignore>
     <h2 class="text-2xl font-bold mb-6">Technical Details</h2>
 
     {data.solution_metadata && (
@@ -264,6 +264,8 @@ const glossaryScanText = [
         {data.solution_metadata.source_license && ` (${data.solution_metadata.source_license})`}
       </p>
     )}
+
+    </div><!-- end data-pagefind-ignore -->
 
     {relatedCdgs.length > 0 && (
       <section class="mt-10">

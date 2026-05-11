@@ -1,4 +1,6 @@
 ---
+import SearchDialog from "./SearchDialog.astro";
+
 const navItems = [
   { label: "CDGs", href: "/cdgs" },
   { label: "Atoms", href: "/atoms" },
@@ -33,6 +35,9 @@ function isActive(item: { href: string; match?: string }): boolean {
           {item.label}
         </a>
       ))}
+      <div class="ml-1 border-l border-atlas-border pl-2">
+        <SearchDialog />
+      </div>
     </nav>
   </div>
 </header>
