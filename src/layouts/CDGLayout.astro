@@ -89,20 +89,22 @@ const glossaryScanText = [
     </div>
 
     {solution && (
-      <a href={`/solutions/${solution.id}`} class="group flex items-center gap-3 bg-atlas-accent/5 border border-atlas-accent/20 rounded-lg p-4 mb-6 card-hover hover:border-atlas-accent/40">
+      <div class="flex items-center gap-3 bg-atlas-accent/5 border border-atlas-accent/20 rounded-lg p-4 mb-6">
         <div class="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-atlas-accent/10 text-atlas-accent">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
           </svg>
         </div>
         <div class="min-w-0">
-          <p class="text-sm font-medium text-atlas-accent group-hover:text-atlas-accent-hover transition-colors">Based on: {solution.data.title}</p>
-          <p class="text-xs text-atlas-text-muted">{solution.data.competition_name} &middot; {solution.data.placement} &middot; {solution.data.year}</p>
+          <p class="text-sm font-medium text-atlas-accent">{solution.data.competition_name}</p>
+          <p class="text-xs text-atlas-text-muted">{solution.data.placement} &middot; {solution.data.year} &middot; {solution.data.platform}</p>
         </div>
-        <svg class="w-4 h-4 ml-auto text-atlas-text-muted shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </a>
+        {solution.data.source_url && (
+          <a href={solution.data.source_url} class="ml-auto text-xs text-atlas-accent hover:text-atlas-accent-hover transition-colors shrink-0" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            Source &rarr;
+          </a>
+        )}
+      </div>
     )}
 
     <!-- Interactive Pipeline Viewer -->

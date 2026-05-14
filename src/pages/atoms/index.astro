@@ -1,130 +1,161 @@
 ---
-import AtomIndexLayout from "../../layouts/AtomIndexLayout.astro";
-import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/seo/Breadcrumbs.astro";
+import AtomContractCard from "../../components/content/AtomContractCard.astro";
 import type { ContractAtom } from "../../components/content/AtomContractCard.astro";
+import { getCollection } from "astro:content";
+import { getConceptDescription } from "../../data/concept-descriptions";
 
 const atoms = await getCollection("atoms");
 
-// Curated featured atoms — hand-picked for visual interest and domain spread
-const curated: ContractAtom[] = [
-  {
-    name: "hungarian_assignment",
-    domain: "cs",
-    description: "Optimal bipartite matching via the Hungarian algorithm",
-    conceptType: "graph_optimization",
-    inputs: [
-      { name: "cost_matrix", type: "NDArray[f64]" },
-      { name: "maximize", type: "bool" },
-    ],
-    outputs: [{ name: "pairs", type: "list[tuple]" }],
-    requires: [
-      "cost_matrix must be 2D",
-      "at least one row and one column",
-      "all costs must be finite",
-    ],
-    ensures: [
-      "count ≤ min(rows, cols)",
-      "assignments are one-to-one",
-    ],
-    href: "/atoms/cs/assignment/hungarian-assignment",
-  },
-  {
-    name: "macenko_stain_vectors",
-    domain: "bio",
-    description: "Histology stain separation via Macenko's method",
-    conceptType: "data_extraction",
-    inputs: [
-      { name: "image", type: "ndarray" },
-      { name: "alpha", type: "float" },
-      { name: "beta", type: "float" },
-      { name: "luminosity", type: "float" },
-    ],
-    outputs: [
-      { name: "stain_matrix", type: "ndarray" },
-      { name: "concentrations", type: "ndarray" },
-    ],
-    requires: [
-      "image must be RGB (3D, last dim = 3)",
-      "alpha ∈ [0, 50] (percentile)",
-      "beta > 0, luminosity > 0",
-    ],
-    ensures: [
-      "stain matrix is (3, 2) — two RGB vectors",
-      "concentrations ≥ 0 and finite",
-    ],
-    href: "/atoms/bio/medical-imaging-3d/preprocessing/macenko-stain-vectors",
-  },
-  {
-    name: "matrix_profile_anomaly_score",
-    domain: "signal_processing",
-    description: "Normalized anomaly scoring via matrix profile",
-    conceptType: "searching",
-    inputs: [
-      { name: "series", type: "NDArray[f64]" },
-      { name: "window_size", type: "int" },
-    ],
-    outputs: [{ name: "scores", type: "NDArray[f64]" }],
-    requires: [
-      "series must be 1D and finite",
-      "3 ≤ window_size < len(series)",
-    ],
-    ensures: [
-      "one score per subsequence",
-      "scores normalized to [0, 1]",
-    ],
-    href: "/atoms/signal-processing/anomaly-detection/matrix-profile-anomaly-score",
-  },
-];
+// ── Random featured cards (changes each build) ──
+const withIO = atoms.filter(
+  (a) => a.data.inputs.length >= 2 && a.data.outputs.length >= 1
+);
+const pool = withIO.length >= 3 ? withIO : atoms;
 
-// Domain summary for the intro
+// Use build timestamp as seed for true randomness across builds
+const seed = Date.now();
+function seededRandom(s: number): number {
+  s = ((s >>> 0) * 1664525 + 1013904223) >>> 0;
+  return (s >>> 0) / 4294967296;
+}
+
+// Pick 3 from different domains
+const domainsSeen = new Set<string>();
+const picks: typeof pool = [];
+let s = seed;
+const shuffled = [...pool];
+for (let i = shuffled.length - 1; i > 0; i--) {
+  s = ((s >>> 0) * 1664525 + 1013904223) >>> 0;
+  const j = (s >>> 0) % (i + 1);
+  [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+}
+for (const a of shuffled) {
+  if (picks.length >= 3) break;
+  if (domainsSeen.has(a.data.domain) && picks.length < shuffled.length) continue;
+  domainsSeen.add(a.data.domain);
+  picks.push(a);
+}
+// Fill if we couldn't get 3 different domains
+for (const a of shuffled) {
+  if (picks.length >= 3) break;
+  if (!picks.includes(a)) picks.push(a);
+}
+
+const shortenType = (t: string) =>
+  t.replace(/NDArray\[np\.float64\]/g, "NDArray[f64]")
+    .replace(/np\.ndarray/gi, "ndarray")
+    .replace(/numpy\.ndarray/gi, "ndarray");
+
+const featured: ContractAtom[] = picks.map((a) => ({
+  name: a.data.predicate_id,
+  domain: a.data.domain,
+  description: a.data.informal_desc,
+  conceptType: a.data.concept_type,
+  inputs: a.data.inputs.slice(0, 5).map((inp) => ({ name: inp.name, type: shortenType(inp.type_desc) })),
+  outputs: a.data.outputs.slice(0, 3).map((out) => ({ name: out.name, type: shortenType(out.type_desc) })),
+  requires: a.data.inputs.filter((inp) => inp.constraints?.length > 0).map((inp) => `${inp.name}: ${inp.constraints}`).slice(0, 4),
+  ensures: a.data.outputs.filter((out) => out.constraints?.length > 0).map((out) => `${out.name}: ${out.constraints}`).slice(0, 3),
+  href: `/atoms/${a.id}`,
+}));
+
+// ── Domain tiles ──
+const domainMeta: Record<string, { label: string; color: string; description: string }> = {
+  inference: { label: "Probabilistic Inference", color: "#c084fc", description: "MCMC kernels, message passing, Bayesian computation, and posterior updates" },
+  bio: { label: "Biology & Medicine", color: "#4ade80", description: "Molecular docking, protein structure, medical imaging, and bioinformatics" },
+  physics: { label: "Physics", color: "#fb923c", description: "Particle tracking, simulation, physical constants, and experimental analysis" },
+  signal_processing: { label: "Signal Processing", color: "#a78bfa", description: "Audio analysis, EEG processing, anomaly detection, and wavelet transforms" },
+  robotics: { label: "Robotics", color: "#38bdf8", description: "State estimation, motion planning, sensor fusion, and control systems" },
+  fintech: { label: "Quantitative Finance", color: "#facc15", description: "Market microstructure, Kalman filtering, risk models, and execution algorithms" },
+  ml: { label: "Machine Learning", color: "#6c8cff", description: "Classical ML primitives: preprocessing, model selection, and sklearn wrappers" },
+  cs: { label: "Computer Science", color: "#6c8cff", description: "Assignment problems, metaheuristics, game AI, and string algorithms" },
+  dl: { label: "Deep Learning", color: "#f87171", description: "Adversarial attacks, loss functions, gradient methods, and neural architectures" },
+  state_estimation: { label: "State Estimation", color: "#c084fc", description: "Kalman filters, state space models, and sequential estimation" },
+  medical_imaging_3d: { label: "Medical Imaging 3D", color: "#4ade80", description: "Volumetric preprocessing, augmentation, and 3D segmentation" },
+  dynamic_programming: { label: "Dynamic Programming", color: "#6c8cff", description: "Optimal substructure algorithms and memoized solutions" },
+  geo: { label: "Geospatial", color: "#34d399", description: "Coordinate transforms, spatial indexing, and geographic computation" },
+};
+
 const domainCounts = new Map<string, number>();
 for (const a of atoms) {
   domainCounts.set(a.data.domain, (domainCounts.get(a.data.domain) ?? 0) + 1);
 }
 const domains = [...domainCounts.entries()].sort((a, b) => b[1] - a[1]);
 
-const domainMeta: Record<string, { label: string; color: string }> = {
-  inference: { label: "Inference", color: "#c084fc" },
-  bio: { label: "Biology", color: "#4ade80" },
-  physics: { label: "Physics", color: "#fb923c" },
-  signal_processing: { label: "Signal", color: "#a78bfa" },
-  robotics: { label: "Robotics", color: "#38bdf8" },
-  fintech: { label: "Fintech", color: "#facc15" },
-  ml: { label: "ML", color: "#6c8cff" },
-  cs: { label: "CS", color: "#6c8cff" },
-  state_estimation: { label: "State Est.", color: "#c084fc" },
-  medical_imaging_3d: { label: "Med Imaging", color: "#4ade80" },
-  dynamic_programming: { label: "DP", color: "#6c8cff" },
-  geo: { label: "Geospatial", color: "#34d399" },
-  dl: { label: "Deep Learning", color: "#f87171" },
-};
+// ── Concept type tiles ──
+const conceptCounts = new Map<string, number>();
+for (const a of atoms) {
+  conceptCounts.set(a.data.concept_type, (conceptCounts.get(a.data.concept_type) ?? 0) + 1);
+}
+const conceptTypes = [...conceptCounts.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .map(([type, count]) => ({ type, count, desc: getConceptDescription(type) }));
+
+const breadcrumbs = [
+  { label: "Atlas", href: "/" },
+  { label: "Atoms", href: "/atoms" },
+];
 ---
 
-<AtomIndexLayout
-  title="Atoms"
-  description={`${atoms.length} composable, contract-verified building blocks across ${domainCounts.size} scientific domains.`}
-  atoms={atoms}
-  featured={curated}
-  breadcrumbs={[
-    { label: "Atlas", href: "/" },
-    { label: "Atoms", href: "/atoms" },
-  ]}
->
-  <Fragment slot="intro">
-    <div class="flex flex-wrap gap-2 mb-8">
-      {domains.map(([domain, count]) => {
-        const meta = domainMeta[domain] ?? { label: domain, color: "#6c8cff" };
-        return (
-          <a
-            href={`/atoms/domain/${domain}`}
-            class="tag-link text-sm"
-            style={`color: ${meta.color}; border-color: color-mix(in srgb, ${meta.color} 30%, transparent); background: color-mix(in srgb, ${meta.color} 8%, transparent)`}
-          >
-            {meta.label}
-            <span class="ml-1 opacity-60">{count}</span>
+<BaseLayout title="Atoms" description={`${atoms.length} composable, contract-verified building blocks across ${domainCounts.size} scientific domains.`}>
+  <div class="max-w-6xl mx-auto">
+    <Breadcrumbs segments={breadcrumbs} />
+
+    <h1 class="text-3xl font-bold mt-4 mb-2">Atoms</h1>
+    <p class="text-atlas-text-muted text-lg mb-10">
+      {atoms.length} composable, contract-verified building blocks across {domainCounts.size} scientific domains. Every atom declares what it requires and what it guarantees.
+    </p>
+
+    <!-- ═══ Featured contract cards ═══ -->
+    <section class="mb-10">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {featured.map((atom) => (
+          <AtomContractCard atom={atom} />
+        ))}
+      </div>
+    </section>
+
+    <hr class="section-rule mb-12" />
+
+    <!-- ═══ Browse by Domain ═══ -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-2">Browse by Domain</h2>
+      <p class="text-sm text-atlas-text-muted mb-5">{domains.length} scientific domains, each with its own set of specialized atoms.</p>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {domains.map(([domain, count]) => {
+          const meta = domainMeta[domain] ?? { label: domain.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()), color: "#6c8cff", description: "" };
+          return (
+            <a href={`/atoms/domain/${domain}`} class="group block p-4 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
+              <div class="flex items-center gap-2 mb-1.5">
+                <h3 class="font-semibold text-sm group-hover:text-atlas-accent transition-colors" style={`color: ${meta.color}`}>{meta.label}</h3>
+                <span class="ml-auto text-xs text-atlas-text-muted bg-atlas-surface-2 px-2 py-0.5 rounded">{count}</span>
+              </div>
+              {meta.description && <p class="text-xs text-atlas-text-muted leading-snug">{meta.description}</p>}
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <hr class="section-rule mb-12" />
+
+    <!-- ═══ Browse by Concept Type ═══ -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-2">Browse by Concept</h2>
+      <p class="text-sm text-atlas-text-muted mb-5">{conceptTypes.length} algorithmic building blocks. Each concept page explains the idea and lists all atoms that implement it.</p>
+      <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {conceptTypes.map(({ type, count, desc }) => (
+          <a href={`/concept/${type}`} class="group flex items-center gap-3 px-4 py-3 rounded-lg bg-atlas-surface border border-atlas-border hover:border-atlas-accent/40 transition-colors">
+            <span class="text-lg">{desc.emoji}</span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold group-hover:text-atlas-accent transition-colors">{desc.title}</p>
+              <p class="text-xs text-atlas-text-muted line-clamp-1">{desc.oneLiner}</p>
+            </div>
+            <span class="shrink-0 text-xs text-atlas-text-muted bg-atlas-surface-2 px-2 py-0.5 rounded">{count}</span>
           </a>
-        );
-      })}
-    </div>
-  </Fragment>
-</AtomIndexLayout>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

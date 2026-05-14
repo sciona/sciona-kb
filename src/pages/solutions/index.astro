@@ -1,24 +1,156 @@
 ---
-import CatalogLayout from "../../layouts/CatalogLayout.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/seo/Breadcrumbs.astro";
 import { getCollection } from "astro:content";
 
 const solutions = await getCollection("solutions");
+const cdgs = await getCollection("cdgs");
+const cdgById = new Map(cdgs.map((c) => [c.id, c]));
 
-const items = solutions.map((s) => ({
-  slug: s.id,
-  href: `/solutions/${s.id}`,
-  title: s.data.title,
-  description: s.data.description,
-  tags: [
-    s.data.platform,
-    { label: s.data.paradigm, href: `/paradigm/${s.data.paradigm}` },
-    { label: s.data.family, href: `/family/${s.data.family}` },
-  ],
-}));
+// Merge solution + CDG data
+const entries = solutions.map((s) => {
+  const cdg = cdgById.get(s.id);
+  const shortName = s.data.title.replace(/^.*?--\s*/, "").replace(/^.*?\u2014\s*/, "") || s.data.title;
+  const subtitle = s.data.title.includes("--") || s.data.title.includes("\u2014")
+    ? s.data.title.split(/\s*(?:--|\u2014)\s*/)[0]
+    : s.data.competition_name;
+  const bs = cdg?.data.binding_summary;
+  const boundPct = bs && bs.total_stages > 0 ? Math.round((bs.bound_active / bs.total_stages) * 100) : 0;
+  return {
+    id: s.id,
+    shortName,
+    subtitle,
+    description: s.data.description,
+    platform: s.data.platform,
+    placement: s.data.placement,
+    year: s.data.year,
+    family: s.data.family,
+    paradigm: s.data.paradigm,
+    domain: s.data.domain,
+    keyInsight: s.data.key_insight,
+    tags: s.data.tags,
+    boundPct,
+    bs,
+  };
+}).sort((a, b) => b.year - a.year || a.placement.localeCompare(b.placement));
+
+// Group by year
+const byYear = new Map<number, typeof entries>();
+for (const e of entries) {
+  if (e.year <= 2000) continue;
+  const list = byYear.get(e.year) ?? [];
+  list.push(e);
+  byYear.set(e.year, list);
+}
+const yearOrder = [...byYear.entries()].sort((a, b) => b[0] - a[0]);
+
+// Platform counts
+const platformCounts = new Map<string, number>();
+for (const e of entries) {
+  platformCounts.set(e.platform, (platformCounts.get(e.platform) ?? 0) + 1);
+}
+
+// Domain counts (top families)
+const familyCounts = new Map<string, number>();
+for (const e of entries) {
+  familyCounts.set(e.family, (familyCounts.get(e.family) ?? 0) + 1);
+}
+const topFamilies = [...familyCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12);
+
+const breadcrumbs = [
+  { label: "Atlas", href: "/" },
+  { label: "Solutions", href: "/solutions" },
+];
 ---
 
-<CatalogLayout
-  title="Solutions"
-  description={`${items.length} competition-winning solutions explained step-by-step with CDG breakdowns.`}
-  items={items}
-/>
+<BaseLayout title="Competition Solutions" description={`${solutions.length} competition-winning algorithms with full pipeline breakdowns.`}>
+  <div class="max-w-6xl mx-auto">
+    <Breadcrumbs segments={breadcrumbs} />
+
+    <h1 class="text-3xl font-bold mt-4 mb-2">Competition Hall of Fame</h1>
+    <p class="text-atlas-text-muted text-lg mb-10">
+      {solutions.length} winning solutions from Kaggle, NeurIPS, and beyond. Each one fully decomposed into an interactive algorithmic pipeline.
+    </p>
+
+    <!-- ═══ Quick filters ═══ -->
+    <section class="mb-10">
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="text-sm text-atlas-text-muted self-center mr-2">Filter by family:</span>
+        {topFamilies.map(([family, count]) => (
+          <a href={`/family/${family}`} class="tag-link text-sm">
+            {family.replace(/_/g, " ")}
+            <span class="ml-1 opacity-50">{count}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- ═══ Timeline by year ═══ -->
+    {yearOrder.map(([year, yearEntries]) => (
+      <section class="mb-10">
+        <div class="flex items-center gap-3 mb-4">
+          <h2 class="text-xl font-bold text-atlas-accent">{year}</h2>
+          <span class="text-sm text-atlas-text-muted">{yearEntries.length} solutions</span>
+          <hr class="flex-1 border-atlas-border" />
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {yearEntries.map((e) => (
+            <div
+              class="group rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50 overflow-hidden cursor-pointer"
+              onclick={`window.location.href='/cdgs/${e.id}'`}
+            >
+              <div style="padding: 16px 20px;">
+                <p class="font-semibold text-sm group-hover:text-atlas-accent transition-colors mb-1 line-clamp-1">{e.shortName}</p>
+                <p class="text-xs text-atlas-text-muted mb-3">{e.subtitle}</p>
+                {e.keyInsight && (
+                  <p class="text-xs text-atlas-text-muted leading-snug line-clamp-2 mb-3">{e.keyInsight}</p>
+                )}
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="tag-link tag-accent text-[9px]">{e.platform}</span>
+                  <a href={`/family/${e.family}`} class="tag-link text-[9px]" onclick="event.stopPropagation()">{e.family.replace(/_/g, " ")}</a>
+                  {e.placement && <span class="text-[10px] text-atlas-text-muted">{e.placement}</span>}
+                  {e.bs && (
+                    <div class="flex items-center gap-1 ml-auto">
+                      <div class="binding-bar w-10">
+                        <div class="binding-bar-fill" style={`width: ${e.boundPct}%`}></div>
+                      </div>
+                      <span class="text-[9px] text-atlas-text-muted">{e.bs.bound_active}/{e.bs.total_stages}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <!-- Solutions without year -->
+    {entries.filter((e) => e.year <= 2000).length > 0 && (
+      <section class="mb-10">
+        <div class="flex items-center gap-3 mb-4">
+          <h2 class="text-xl font-bold text-atlas-text-muted">Other</h2>
+          <span class="text-sm text-atlas-text-muted">{entries.filter((e) => e.year <= 2000).length} solutions</span>
+          <hr class="flex-1 border-atlas-border" />
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {entries.filter((e) => e.year <= 2000).map((e) => (
+            <div
+              class="group rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50 overflow-hidden cursor-pointer"
+              onclick={`window.location.href='/cdgs/${e.id}'`}
+            >
+              <div style="padding: 16px 20px;">
+                <p class="font-semibold text-sm group-hover:text-atlas-accent transition-colors mb-1 line-clamp-1">{e.shortName}</p>
+                <p class="text-xs text-atlas-text-muted mb-3">{e.subtitle}</p>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="tag-link tag-accent text-[9px]">{e.platform}</span>
+                  <a href={`/family/${e.family}`} class="tag-link text-[9px]" onclick="event.stopPropagation()">{e.family.replace(/_/g, " ")}</a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>
