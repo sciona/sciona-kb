@@ -40,8 +40,41 @@ function writeMdx(dir: string, filename: string, frontmatter: Record<string, unk
 }
 
 function readJson(filepath: string): unknown {
-  return JSON.parse(fs.readFileSync(filepath, "utf-8"));
+  try {
+    return JSON.parse(fs.readFileSync(filepath, "utf-8"));
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    throw new Error(`Failed to read/parse JSON: ${filepath}\n  ${message}`);
+  }
 }
+
+// ─── Sync Report ─────────────────────────────────────────────────
+
+interface SyncReport {
+  timestamp: string;
+  workspace: string;
+  repos_found: string[];
+  atoms: { total: number; written: number };
+  cdgs: { total: number; written: number };
+  solutions: { total: number; written: number };
+  atom_code: { extracted: number; total_bound: number };
+  swap_candidates: { types_with_alternatives: number };
+  warnings: string[];
+  errors: string[];
+}
+
+const syncReport: SyncReport = {
+  timestamp: new Date().toISOString(),
+  workspace: WORKSPACE,
+  repos_found: [],
+  atoms: { total: 0, written: 0 },
+  cdgs: { total: 0, written: 0 },
+  solutions: { total: 0, written: 0 },
+  atom_code: { extracted: 0, total_bound: 0 },
+  swap_candidates: { types_with_alternatives: 0 },
+  warnings: [],
+  errors: [],
+};
 
 // Escape content that could be interpreted as JSX in MDX.
 // MDX treats { } and < > as JSX. We must escape them in prose while
@@ -94,10 +127,23 @@ function discoverAtomRepos(): string[] {
   const repos: string[] = [];
   // core repo
   const core = path.join(WORKSPACE, "sciona-atoms");
-  if (fs.existsSync(core)) repos.push(core);
+  if (fs.existsSync(core)) {
+    repos.push(core);
+  } else {
+    syncReport.errors.push(`Core atom repo not found: ${core}`);
+    console.error(`ERROR: Core atom repo not found at ${core}`);
+    console.error(`  Set SCIONA_WORKSPACE or ensure sciona-atoms/ is a sibling directory.`);
+  }
   // satellite repos
   const satellites = globSync(path.join(WORKSPACE, "sciona-atoms-*/"));
   repos.push(...satellites);
+  syncReport.repos_found = repos.map((r) => path.basename(r));
+  if (repos.length === 0) {
+    throw new Error(
+      `No atom repos found in workspace: ${WORKSPACE}\n` +
+      `  Ensure sciona-atoms* repos exist as siblings, or set SCIONA_WORKSPACE.`
+    );
+  }
   return repos;
 }
 
@@ -122,14 +168,24 @@ function buildAtomToCdgMap(): Map<string, string[]> {
   const map = new Map<string, string[]>();
   const bindingFiles = globSync(path.join(CDG_DIR, "*_bindings.json"));
   for (const bf of bindingFiles) {
-    const data = readJson(bf) as BindingFile;
-    const assetId = data.solution_id;
-    for (const b of data.bindings) {
-      if (b.bound_artifact_fqdn && b.status === "active") {
-        const existing = map.get(b.bound_artifact_fqdn) ?? [];
-        if (!existing.includes(assetId)) existing.push(assetId);
-        map.set(b.bound_artifact_fqdn, existing);
+    try {
+      const data = readJson(bf) as BindingFile;
+      const assetId = data.solution_id;
+      if (!assetId) {
+        syncReport.warnings.push(`Binding file missing solution_id: ${path.basename(bf)}`);
+        continue;
       }
+      for (const b of data.bindings) {
+        if (b.bound_artifact_fqdn && b.status === "active") {
+          const existing = map.get(b.bound_artifact_fqdn) ?? [];
+          if (!existing.includes(assetId)) existing.push(assetId);
+          map.set(b.bound_artifact_fqdn, existing);
+        }
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      syncReport.errors.push(`Failed to parse binding file ${path.basename(bf)}: ${message}`);
+      console.error(`ERROR: ${message}`);
     }
   }
   return map;
@@ -276,7 +332,18 @@ function buildAtomCodeMap(): Map<string, AtomCodeEntry> {
     }
   }
 
+  // Report atoms with no extractable code
+  const missingCode = [...allFqdns].filter((fqdn) => !map.has(fqdn));
+  if (missingCode.length > 0) {
+    for (const fqdn of missingCode) {
+      syncReport.warnings.push(`No extractable code for bound atom: ${fqdn}`);
+    }
+  }
+  syncReport.atom_code = { extracted: map.size, total_bound: allFqdns.size };
   console.log(`  atom code: extracted ${map.size}/${allFqdns.size} bound atom sources`);
+  if (missingCode.length > 0) {
+    console.warn(`  WARNING: ${missingCode.length} bound atoms have no extractable code`);
+  }
   return map;
 }
 
@@ -323,6 +390,7 @@ function buildSwapCandidatesMap(): Map<string, SwapCandidate[]> {
   }
 
   const multiCount = [...map.values()].filter((v) => v.length >= 2).length;
+  syncReport.swap_candidates.types_with_alternatives = multiCount;
   console.log(`  swap candidates: ${multiCount} concept_types with 2+ atoms`);
   return map;
 }
@@ -426,7 +494,15 @@ function syncAtoms(atomToCdg: Map<string, string[]>) {
 
     for (const matchFile of matchFiles) {
       const dir = path.dirname(matchFile);
-      const matches = readJson(matchFile) as MatchEntry[];
+      let matches: MatchEntry[];
+      try {
+        matches = readJson(matchFile) as MatchEntry[];
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        syncReport.errors.push(`Failed to parse matches file: ${matchFile}\n  ${message}`);
+        console.error(`ERROR: ${message}`);
+        continue;
+      }
       if (!matches.length) continue;
 
       // Read sibling files
@@ -492,6 +568,7 @@ function syncAtoms(atomToCdg: Map<string, string[]>) {
     }
   }
 
+  syncReport.atoms.written = count;
   console.log(`  atoms: ${count} files written`);
 }
 
@@ -543,10 +620,25 @@ function syncCdgs(atomCodeMap: Map<string, AtomCodeEntry>, swapMap: Map<string, 
     .filter((f) => !f.endsWith("_bindings.json"));
 
   let count = 0;
+  syncReport.cdgs.total = cdgFiles.length;
 
   for (const cdgFile of cdgFiles) {
-    const cdg = readJson(cdgFile) as SolutionCdg;
     const baseName = path.basename(cdgFile, ".json");
+    let cdg: SolutionCdg;
+    try {
+      cdg = readJson(cdgFile) as SolutionCdg;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      syncReport.errors.push(`Failed to parse CDG: ${baseName} — ${message}`);
+      console.error(`ERROR: ${message}`);
+      continue;
+    }
+
+    if (!cdg.asset_id || !cdg.name || !Array.isArray(cdg.stages)) {
+      syncReport.warnings.push(`CDG missing required fields (asset_id, name, or stages): ${baseName}`);
+      console.warn(`  WARNING: Skipping CDG with missing required fields: ${baseName}`);
+      continue;
+    }
 
     // Load bindings
     const bindingsPath = path.join(CDG_DIR, `${baseName}_bindings.json`);
@@ -658,6 +750,7 @@ function syncCdgs(atomCodeMap: Map<string, AtomCodeEntry>, swapMap: Map<string, 
     count++;
   }
 
+  syncReport.cdgs.written = count;
   console.log(`  cdgs: ${count} files written`);
 }
 
@@ -713,10 +806,17 @@ function syncSolutions() {
     .filter((f) => !f.endsWith("_bindings.json"));
 
   let count = 0;
+  syncReport.solutions.total = cdgFiles.length;
 
   for (const cdgFile of cdgFiles) {
-    const cdg = readJson(cdgFile) as SolutionCdg;
     const baseName = path.basename(cdgFile, ".json");
+    let cdg: SolutionCdg;
+    try {
+      cdg = readJson(cdgFile) as SolutionCdg;
+    } catch (err) {
+      // Already reported in syncCdgs, skip silently
+      continue;
+    }
 
     const bindingsPath = path.join(CDG_DIR, `${baseName}_bindings.json`);
     const bindingsData = fs.existsSync(bindingsPath)
@@ -758,6 +858,7 @@ function syncSolutions() {
     count++;
   }
 
+  syncReport.solutions.written = count;
   console.log(`  solutions: ${count} files written`);
 }
 
@@ -826,6 +927,22 @@ async function main() {
   syncCdgs(atomCodeMap, swapMap);
   syncSolutions();
 
+  // Write sync report
+  const reportPath = path.resolve(__dirname, "../sync-report.json");
+  fs.writeFileSync(reportPath, JSON.stringify(syncReport, null, 2), "utf-8");
+
+  // Summary
+  console.log("\n── Sync Report ──");
+  console.log(`  Repos: ${syncReport.repos_found.join(", ")}`);
+  console.log(`  Atoms: ${syncReport.atoms.written} | CDGs: ${syncReport.cdgs.written} | Solutions: ${syncReport.solutions.written}`);
+  console.log(`  Atom code: ${syncReport.atom_code.extracted}/${syncReport.atom_code.total_bound} extracted`);
+  if (syncReport.warnings.length > 0) {
+    console.warn(`  Warnings: ${syncReport.warnings.length}`);
+  }
+  if (syncReport.errors.length > 0) {
+    console.error(`  Errors: ${syncReport.errors.length}`);
+  }
+  console.log(`  Full report: ${reportPath}`);
   console.log("Done.");
 }
 
@@ -849,4 +966,7 @@ async function highlightAllCode(codeMap: Map<string, AtomCodeEntry>) {
   console.log(`  syntax highlight: ${entries.length} snippets`);
 }
 
-main();
+main().catch((err) => {
+  console.error("\nSync failed:", err instanceof Error ? err.message : String(err));
+  process.exit(1);
+});

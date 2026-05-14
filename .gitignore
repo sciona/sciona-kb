@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# generated sync report
+sync-report.json
+
 # macOS-specific files
 .DS_Store
 

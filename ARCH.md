@@ -104,7 +104,7 @@ Every page type includes platform CTAs:
 
 ### Viewer
 
-- **Embed viewer in CDG pages** -- replace the current `ScionaViewerPlaceholder.astro` (static placeholder) with the real `ScionaViewer` React component on each CDG detail page. Requires passing the CDG frontmatter as props to the island.
+- ~~**Embed viewer in CDG pages**~~ -- done. `CDGLayout.astro` passes CDG frontmatter as props to `ScionaViewer` via `client:visible`. The `ScionaViewerPlaceholder.astro` component is no longer used in any layout.
 - **Edge routing per-port** -- currently uses single default handles. Adding per-port handles (one per input/output) would let edges connect to specific ports, making the data flow more precise for CDGs with many cross-connections.
 - **Viewer for atom-level CDGs** -- atoms with `cdg.json` have their own sub-graphs (parent → children decomposition). A mini-viewer on atom pages would show this hierarchy.
 - **Keyboard navigation** -- arrow keys to move between nodes, Enter to open detail panel, Escape to close.
