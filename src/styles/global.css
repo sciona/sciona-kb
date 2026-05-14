@@ -99,6 +99,10 @@ html {
   scrollbar-width: thin;
   scrollbar-color: var(--color-atlas-border) transparent;
 }
+.tile-scroll > * {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 38px;
+}
 .tile-scroll::-webkit-scrollbar {
   width: 4px;
 }
