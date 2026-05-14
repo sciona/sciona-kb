@@ -35,44 +35,59 @@ const fullTitle = `${title} | ${siteName}`;
     <main id="main" class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-pagefind-body>
       <slot />
     </main>
-    <footer class="border-t border-atlas-border py-10 mt-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8 text-sm">
-          <div>
-            <h4 class="font-medium text-atlas-text mb-3">Browse</h4>
-            <ul class="space-y-2 text-atlas-text-muted">
-              <li><a href="/cdgs" class="hover:text-atlas-accent transition-colors">CDGs</a></li>
-              <li><a href="/atoms" class="hover:text-atlas-accent transition-colors">Atoms</a></li>
-              <li><a href="/solutions" class="hover:text-atlas-accent transition-colors">Solutions</a></li>
-              <li><a href="/glossary" class="hover:text-atlas-accent transition-colors">Glossary</a></li>
-            </ul>
+    <footer class="border-t border-atlas-border mt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Top: branding + nav columns -->
+        <div class="grid gap-10 sm:grid-cols-12 mb-10">
+          <!-- Branding -->
+          <div class="sm:col-span-4">
+            <a href="/" class="font-bold text-lg text-atlas-text mb-3 block">
+              <span class="gradient-text">S</span>ciona Atlas
+            </a>
+            <p class="text-sm text-atlas-text-muted leading-relaxed">
+              An open encyclopedia of algorithmic pipelines and composable building blocks. Learn how competition-winning algorithms work, from high-level mental models to contract-verified code.
+            </p>
           </div>
-          <div>
-            <h4 class="font-medium text-atlas-text mb-3">Paradigms</h4>
-            <ul class="space-y-2 text-atlas-text-muted">
-              <li><a href="/paradigm/supervised_learning" class="hover:text-atlas-accent transition-colors">Supervised</a></li>
-              <li><a href="/paradigm/unsupervised_learning" class="hover:text-atlas-accent transition-colors">Unsupervised</a></li>
-              <li><a href="/paradigm/semi_supervised_learning" class="hover:text-atlas-accent transition-colors">Semi-supervised</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="font-medium text-atlas-text mb-3">Concepts</h4>
-            <ul class="space-y-2 text-atlas-text-muted">
-              <li><a href="/concept/neural_network" class="hover:text-atlas-accent transition-colors">Neural Networks</a></li>
-              <li><a href="/concept/optimization" class="hover:text-atlas-accent transition-colors">Optimization</a></li>
-              <li><a href="/concept/feature_engineering" class="hover:text-atlas-accent transition-colors">Feature Eng.</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="font-medium text-atlas-text mb-3">Sciona</h4>
-            <ul class="space-y-2 text-atlas-text-muted">
-              <li><a href="https://app.sciona.dev" class="hover:text-atlas-accent transition-colors" target="_blank" rel="noopener">Platform</a></li>
-              <li><a href="https://github.com/sciona-dev/sciona-kb" class="hover:text-atlas-accent transition-colors" target="_blank" rel="noopener">GitHub</a></li>
-            </ul>
+
+          <!-- Nav columns -->
+          <div class="sm:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-8 text-sm">
+            <div>
+              <h4 class="font-medium text-atlas-text mb-3">Explore</h4>
+              <ul class="space-y-2 text-atlas-text-muted">
+                <li><a href="/cdgs" class="hover:text-atlas-accent transition-colors">Pipelines</a></li>
+                <li><a href="/atoms" class="hover:text-atlas-accent transition-colors">Atoms</a></li>
+                <li><a href="/concepts" class="hover:text-atlas-accent transition-colors">Concepts</a></li>
+                <li><a href="/solutions" class="hover:text-atlas-accent transition-colors">Solutions</a></li>
+                <li><a href="/glossary" class="hover:text-atlas-accent transition-colors">Glossary</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium text-atlas-text mb-3">Popular</h4>
+              <ul class="space-y-2 text-atlas-text-muted">
+                <li><a href="/paradigm/neural_network" class="hover:text-atlas-accent transition-colors">Neural Networks</a></li>
+                <li><a href="/paradigm/optimization" class="hover:text-atlas-accent transition-colors">Optimization</a></li>
+                <li><a href="/concept/loss_function" class="hover:text-atlas-accent transition-colors">Loss Functions</a></li>
+                <li><a href="/concept/data_assembly" class="hover:text-atlas-accent transition-colors">Data Assembly</a></li>
+                <li><a href="/concept/signal_transform" class="hover:text-atlas-accent transition-colors">Signal Transforms</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium text-atlas-text mb-3">Sciona</h4>
+              <ul class="space-y-2 text-atlas-text-muted">
+                <li><a href="https://app.sciona.dev" class="hover:text-atlas-accent transition-colors" target="_blank" rel="noopener">Platform</a></li>
+                <li><a href="https://github.com/sciona" class="hover:text-atlas-accent transition-colors" target="_blank" rel="noopener">GitHub</a></li>
+                <li><a href="https://github.com/sciona/sciona-kb" class="hover:text-atlas-accent transition-colors" target="_blank" rel="noopener">Atlas Source</a></li>
+              </ul>
+            </div>
           </div>
         </div>
-        <hr class="section-rule mb-6" />
-        <p class="text-atlas-text-muted text-xs text-center">&copy; {new Date().getFullYear()} Sciona. All rights reserved.</p>
+
+        <!-- Bottom bar -->
+        <hr class="section-rule mb-5" />
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-atlas-text-muted">
+          <p>&copy; {new Date().getFullYear()} Sciona. All rights reserved.</p>
+          <p>Built with <a href="https://astro.build" class="text-atlas-accent hover:text-atlas-accent-hover transition-colors" target="_blank" rel="noopener">Astro</a> &middot; Search by <a href="https://pagefind.app" class="text-atlas-accent hover:text-atlas-accent-hover transition-colors" target="_blank" rel="noopener">Pagefind</a></p>
+        </div>
       </div>
     </footer>
   </body>

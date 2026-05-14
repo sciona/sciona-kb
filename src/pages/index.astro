@@ -2,194 +2,227 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import { getConceptDescription } from "../data/concept-descriptions";
+import ScionaViewer from "../components/viewer/ScionaViewer";
+import AtomContractCard from "../components/content/AtomContractCard.astro";
+import type { ContractAtom } from "../components/content/AtomContractCard.astro";
 import PlatformCTA from "../components/cta/PlatformCTA.astro";
 
 const cdgs = await getCollection("cdgs");
 const atoms = await getCollection("atoms");
 const solutions = await getCollection("solutions");
 
-// Featured: CDGs with most bound atoms
-const featured = [...cdgs]
-  .sort((a, b) => (b.data.binding_summary?.bound_active ?? 0) - (a.data.binding_summary?.bound_active ?? 0))
-  .slice(0, 6);
+// ── Seeded random (changes each build) ──
+let seed = Date.now();
+function nextSeed(): number {
+  seed = ((seed >>> 0) * 1664525 + 1013904223) >>> 0;
+  return seed;
+}
+function pick<T>(arr: T[]): T {
+  return arr[nextSeed() % arr.length];
+}
+function shuffle<T>(arr: T[]): T[] {
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = nextSeed() % (i + 1);
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
 
-// Unique paradigms and families for navigation
-const paradigms = [...new Set(cdgs.map((c) => c.data.paradigm))].sort();
-const families = [...new Set(cdgs.map((c) => c.data.family))].sort();
+// ── Featured pipeline (1 random CDG with good visual data) ──
+const viewerCandidates = cdgs.filter(
+  (c) => (c.data.stages?.length ?? 0) >= 5
+    && (c.data.edges?.length ?? 0) >= 4
+    && (c.data.binding_summary?.bound_active ?? 0) >= 3
+);
+const featuredCdg = pick(viewerCandidates.length > 0 ? viewerCandidates : cdgs);
+const viewerData = {
+  asset_id: featuredCdg.data.asset_id,
+  name: featuredCdg.data.name,
+  stages: featuredCdg.data.stages,
+  edges: featuredCdg.data.edges,
+  bindings: featuredCdg.data.bindings,
+  applicability: {
+    critical_stages: featuredCdg.data.applicability.critical_stages,
+    swappable_stages: featuredCdg.data.applicability.swappable_stages,
+  },
+};
+const featuredShortName = featuredCdg.data.name.replace(/^.*?--\s*/, "").replace(/^.*?\u2014\s*/, "") || featuredCdg.data.name;
 
-// Popular concept types (by atom count)
+// ── Featured atoms (3 random, different domains) ──
+const atomPool = atoms.filter(
+  (a) => a.data.inputs.length >= 2 && a.data.outputs.length >= 1
+);
+const atomShuffled = shuffle(atomPool.length >= 3 ? atomPool : [...atoms]);
+const atomDomainsSeen = new Set<string>();
+const atomPicks: typeof atomShuffled = [];
+for (const a of atomShuffled) {
+  if (atomPicks.length >= 3) break;
+  if (atomDomainsSeen.has(a.data.domain)) continue;
+  atomDomainsSeen.add(a.data.domain);
+  atomPicks.push(a);
+}
+for (const a of atomShuffled) {
+  if (atomPicks.length >= 3) break;
+  if (!atomPicks.includes(a)) atomPicks.push(a);
+}
+
+const shortenType = (t: string) =>
+  t.replace(/NDArray\[np\.float64\]/g, "NDArray[f64]")
+    .replace(/np\.ndarray/gi, "ndarray")
+    .replace(/numpy\.ndarray/gi, "ndarray");
+
+const featuredAtoms: ContractAtom[] = atomPicks.map((a) => ({
+  name: a.data.predicate_id,
+  domain: a.data.domain,
+  description: a.data.informal_desc,
+  conceptType: a.data.concept_type,
+  inputs: a.data.inputs.slice(0, 5).map((inp) => ({ name: inp.name, type: shortenType(inp.type_desc) })),
+  outputs: a.data.outputs.slice(0, 3).map((out) => ({ name: out.name, type: shortenType(out.type_desc) })),
+  requires: a.data.inputs.filter((inp) => inp.constraints?.length > 0).map((inp) => `${inp.name}: ${inp.constraints}`).slice(0, 4),
+  ensures: a.data.outputs.filter((out) => out.constraints?.length > 0).map((out) => `${out.name}: ${out.constraints}`).slice(0, 3),
+  href: `/atoms/${a.id}`,
+}));
+
+// ── Concept types (top 12) ──
 const conceptCounts = new Map<string, number>();
 for (const a of atoms) {
   conceptCounts.set(a.data.concept_type, (conceptCounts.get(a.data.concept_type) ?? 0) + 1);
 }
 const topConcepts = [...conceptCounts.entries()]
   .sort((a, b) => b[1] - a[1])
-  .slice(0, 8)
+  .slice(0, 12)
   .map(([type, count]) => ({ type, count, desc: getConceptDescription(type) }));
 
-// Recent solutions (by year, then placement)
-const recentSolutions = [...solutions]
-  .sort((a, b) => {
-    const yearDiff = parseInt(b.data.year) - parseInt(a.data.year);
-    return yearDiff !== 0 ? yearDiff : a.data.placement.localeCompare(b.data.placement);
-  })
-  .slice(0, 4);
+// ── Navigation pills ──
+const paradigms = [...new Set(cdgs.map((c) => c.data.paradigm))].sort();
+const families = [...new Set(cdgs.map((c) => c.data.family))].sort();
 
-// Binding coverage stat
+// ── Stats ──
 const totalStages = cdgs.reduce((sum, c) => sum + (c.data.binding_summary?.total_stages ?? 0), 0);
 const boundStages = cdgs.reduce((sum, c) => sum + (c.data.binding_summary?.bound_active ?? 0), 0);
 const coveragePct = totalStages > 0 ? Math.round((boundStages / totalStages) * 100) : 0;
 ---
 
-<BaseLayout title="Algorithm Atlas" description="Wikipedia-style encyclopedia of algorithms, mental models, and competitive solutions -- powered by Sciona's composable atom system.">
+<BaseLayout title="Algorithm Atlas" description="An interactive encyclopedia of algorithms, mental models, and competition-winning solutions — powered by Sciona's composable atom system.">
   <div class="max-w-6xl mx-auto">
-    <!-- Hero -->
-    <section class="text-center py-20 relative">
+
+    <!-- ═══ Hero ═══ -->
+    <section class="text-center py-16 relative">
       <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(108,140,255,0.08)_0%,transparent_70%)] pointer-events-none"></div>
       <h1 class="text-5xl sm:text-6xl font-bold mb-5 relative">
         <span class="gradient-text">Algorithm</span> Atlas
       </h1>
-      <p class="text-xl text-atlas-text-muted max-w-2xl mx-auto mb-10 leading-relaxed relative">
-        An interconnected encyclopedia of {cdgs.length} algorithmic pipelines, {atoms.length} composable atoms, and {solutions.length} competition-winning solutions.
+      <p class="text-xl text-atlas-text-muted max-w-2xl mx-auto mb-8 leading-relaxed relative">
+        An interactive encyclopedia of algorithmic pipelines, composable atoms, and competition-winning solutions.
       </p>
-      <div class="flex flex-wrap justify-center gap-3 relative">
-        <a href="/cdgs" class="px-6 py-3 rounded-lg bg-atlas-accent text-white font-medium hover:bg-atlas-accent-hover transition-colors">
-          Browse Pipelines
+      <div class="flex flex-wrap justify-center gap-6 relative text-sm">
+        <a href="/cdgs" class="group text-atlas-text-muted hover:text-atlas-accent transition-colors">
+          <span class="text-2xl font-bold text-atlas-accent block">{cdgs.length}</span> Pipelines
         </a>
-        <a href="/atoms" class="px-6 py-3 rounded-lg border border-atlas-border text-atlas-text font-medium hover:border-atlas-accent hover:text-atlas-accent transition-colors">
-          Explore Atoms
+        <a href="/atoms" class="group text-atlas-text-muted hover:text-atlas-accent transition-colors">
+          <span class="text-2xl font-bold text-atlas-accent block">{atoms.length}</span> Atoms
         </a>
-        <a href="/solutions" class="px-6 py-3 rounded-lg border border-atlas-border text-atlas-text font-medium hover:border-atlas-accent hover:text-atlas-accent transition-colors">
-          Study Solutions
+        <a href="/solutions" class="group text-atlas-text-muted hover:text-atlas-accent transition-colors">
+          <span class="text-2xl font-bold text-atlas-accent block">{solutions.length}</span> Solutions
         </a>
+        <div class="text-atlas-text-muted">
+          <span class="text-2xl font-bold text-atlas-green block">{coveragePct}%</span> Bound
+        </div>
       </div>
     </section>
 
-    <!-- Stats — linked -->
-    <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16">
-      <a href="/atoms" class="group bg-atlas-surface rounded-lg border border-atlas-border p-5 text-center card-hover hover:border-atlas-accent/50">
-        <p class="text-3xl font-bold text-atlas-accent mb-1">{atoms.length}</p>
-        <p class="text-atlas-text-muted text-sm group-hover:text-atlas-text transition-colors">Atoms</p>
-      </a>
-      <a href="/cdgs" class="group bg-atlas-surface rounded-lg border border-atlas-border p-5 text-center card-hover hover:border-atlas-accent/50">
-        <p class="text-3xl font-bold text-atlas-accent mb-1">{cdgs.length}</p>
-        <p class="text-atlas-text-muted text-sm group-hover:text-atlas-text transition-colors">CDGs</p>
-      </a>
-      <a href="/solutions" class="group bg-atlas-surface rounded-lg border border-atlas-border p-5 text-center card-hover hover:border-atlas-accent/50">
-        <p class="text-3xl font-bold text-atlas-accent mb-1">{solutions.length}</p>
-        <p class="text-atlas-text-muted text-sm group-hover:text-atlas-text transition-colors">Solutions</p>
-      </a>
-      <div class="bg-atlas-surface rounded-lg border border-atlas-border p-5 text-center">
-        <p class="text-3xl font-bold text-atlas-green mb-1">{coveragePct}%</p>
-        <p class="text-atlas-text-muted text-sm">Stages Bound</p>
+    <!-- ═══ Featured Pipeline (interactive viewer) ═══ -->
+    <section class="mb-14">
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="text-xl font-semibold">Featured Pipeline</h2>
+        <a href="/cdgs" class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">All pipelines &rarr;</a>
+      </div>
+      <div class="rounded-lg border border-atlas-border overflow-hidden">
+        <div class="px-5 py-3 bg-atlas-surface border-b border-atlas-border flex items-center justify-between">
+          <div>
+            <a href={`/cdgs/${featuredCdg.id}`} class="font-semibold hover:text-atlas-accent transition-colors">{featuredShortName}</a>
+            <p class="text-xs text-atlas-text-muted mt-0.5 line-clamp-1 max-w-xl">{featuredCdg.data.dejargonized_summary}</p>
+          </div>
+          <a href={`/cdgs/${featuredCdg.id}`} class="shrink-0 text-xs text-atlas-accent hover:text-atlas-accent-hover transition-colors ml-4">
+            Full breakdown &rarr;
+          </a>
+        </div>
+        <ScionaViewer
+          client:visible
+          cdgData={viewerData as any}
+          readOnly={true}
+          direction="LR"
+          height="380px"
+        />
       </div>
     </section>
 
-    <!-- Featured CDGs -->
-    <section class="mb-16">
-      <div class="flex items-baseline justify-between mb-6">
-        <h2 class="text-2xl font-bold">Featured Pipelines</h2>
-        <a href="/cdgs" class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">View all &rarr;</a>
-      </div>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {featured.map((cdg) => {
-          const bs = cdg.data.binding_summary;
-          const pct = bs && bs.total_stages > 0 ? Math.round((bs.bound_active / bs.total_stages) * 100) : 0;
-          return (
-            <a href={`/cdgs/${cdg.id}`} class="group block p-5 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
-              <h3 class="font-semibold group-hover:text-atlas-accent transition-colors mb-2 line-clamp-2">{cdg.data.name}</h3>
-              <p class="text-sm text-atlas-text-muted line-clamp-2 mb-3">{cdg.data.dejargonized_summary}</p>
-              {bs && (
-                <div class="mb-3">
-                  <div class="flex justify-between text-xs text-atlas-text-muted mb-1">
-                    <span>{bs.bound_active}/{bs.total_stages} stages bound</span>
-                    <span>{pct}%</span>
-                  </div>
-                  <div class="binding-bar">
-                    <div class="binding-bar-fill" style={`width: ${pct}%`}></div>
-                  </div>
-                </div>
-              )}
-              <div class="flex gap-2">
-                <a href={`/paradigm/${cdg.data.paradigm}`} class="tag-link tag-accent" onclick="event.stopPropagation()">{cdg.data.paradigm.replace(/_/g, " ")}</a>
-                <a href={`/family/${cdg.data.family}`} class="tag-link" onclick="event.stopPropagation()">{cdg.data.family.replace(/_/g, " ")}</a>
-              </div>
-            </a>
-          );
-        })}
-      </div>
-    </section>
+    <hr class="section-rule mb-14" />
 
-    <hr class="section-rule mb-16" />
-
-    <!-- Popular Concepts -->
-    <section class="mb-16">
-      <div class="flex items-baseline justify-between mb-6">
-        <h2 class="text-2xl font-bold">Explore by Concept</h2>
+    <!-- ═══ Featured Atoms (3 random contract cards) ═══ -->
+    <section class="mb-14">
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="text-xl font-semibold">Featured Atoms</h2>
         <a href="/atoms" class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">All atoms &rarr;</a>
       </div>
-      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {featuredAtoms.map((atom) => (
+          <AtomContractCard atom={atom} />
+        ))}
+      </div>
+    </section>
+
+    <hr class="section-rule mb-14" />
+
+    <!-- ═══ Explore Concepts ═══ -->
+    <section class="mb-14">
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="text-xl font-semibold">Explore Concepts</h2>
+        <a href="/concepts" class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">All concepts &rarr;</a>
+      </div>
+      <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {topConcepts.map(({ type, count, desc }) => (
-          <a href={`/concept/${type}`} class="group block p-4 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="text-xl">{desc.emoji}</span>
-              <h3 class="font-semibold text-sm group-hover:text-atlas-accent transition-colors">{desc.title}</h3>
+          <a href={`/concept/${type}`} class="group flex items-center gap-3 px-4 py-3 rounded-lg bg-atlas-surface border border-atlas-border hover:border-atlas-accent/40 transition-colors">
+            <span class="text-lg">{desc.emoji}</span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold group-hover:text-atlas-accent transition-colors">{desc.title}</p>
+              <p class="text-xs text-atlas-text-muted line-clamp-1">{desc.oneLiner}</p>
             </div>
-            <p class="text-xs text-atlas-text-muted line-clamp-2 mb-2">{desc.oneLiner}</p>
-            <span class="text-xs text-atlas-text-muted">{count} atoms</span>
+            <span class="shrink-0 text-xs text-atlas-text-muted bg-atlas-surface-2 px-2 py-0.5 rounded">{count}</span>
           </a>
         ))}
       </div>
     </section>
 
-    <!-- Recent Solutions -->
-    <section class="mb-16">
-      <div class="flex items-baseline justify-between mb-6">
-        <h2 class="text-2xl font-bold">Competition Solutions</h2>
-        <a href="/solutions" class="text-sm text-atlas-text-muted hover:text-atlas-accent transition-colors">View all &rarr;</a>
-      </div>
-      <div class="grid gap-4 sm:grid-cols-2">
-        {recentSolutions.map((sol) => (
-          <a href={`/cdgs/${sol.id}`} class="group flex gap-4 p-4 rounded-lg bg-atlas-surface border border-atlas-border card-hover hover:border-atlas-accent/50">
-            <div class="shrink-0 flex flex-col items-center justify-center w-14 h-14 rounded-lg bg-atlas-accent/10 text-atlas-accent">
-              <span class="text-xs font-bold uppercase">{sol.data.platform}</span>
-            </div>
-            <div class="min-w-0">
-              <h3 class="font-semibold text-sm group-hover:text-atlas-accent transition-colors line-clamp-1 mb-1">{sol.data.title}</h3>
-              <p class="text-xs text-atlas-text-muted line-clamp-1 mb-2">{sol.data.competition_name} &middot; {sol.data.placement} &middot; {sol.data.year}</p>
-              <div class="flex gap-2">
-                <a href={`/paradigm/${sol.data.paradigm}`} class="tag-link" onclick="event.stopPropagation()">{sol.data.paradigm.replace(/_/g, " ")}</a>
-                <a href={`/family/${sol.data.family}`} class="tag-link" onclick="event.stopPropagation()">{sol.data.family.replace(/_/g, " ")}</a>
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
+    <hr class="section-rule mb-14" />
 
-    <hr class="section-rule mb-16" />
-
-    <!-- Paradigms -->
-    <section class="mb-12">
-      <h2 class="text-2xl font-bold mb-4">By Paradigm</h2>
-      <div class="flex flex-wrap gap-2">
-        {paradigms.map((p) => (
-          <a href={`/paradigm/${p}`} class="tag-link tag-accent text-sm">{p.replace(/_/g, " ")}</a>
-        ))}
+    <!-- ═══ Quick navigation ═══ -->
+    <section class="mb-14">
+      <div class="grid sm:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-sm font-semibold text-atlas-text mb-3">By Paradigm</h3>
+          <div class="flex flex-wrap gap-1.5">
+            {paradigms.map((p) => (
+              <a href={`/paradigm/${p}`} class="tag-link tag-accent text-xs">{p.replace(/_/g, " ")}</a>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 class="text-sm font-semibold text-atlas-text mb-3">By Problem Family</h3>
+          <div class="flex flex-wrap gap-1.5">
+            {families.slice(0, 20).map((f) => (
+              <a href={`/family/${f}`} class="tag-link text-xs">{f.replace(/_/g, " ")}</a>
+            ))}
+            {families.length > 20 && (
+              <a href="/cdgs" class="tag-link text-xs">+{families.length - 20} more</a>
+            )}
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Families -->
-    <section class="mb-16">
-      <h2 class="text-2xl font-bold mb-4">By Problem Family</h2>
-      <div class="flex flex-wrap gap-2">
-        {families.map((f) => (
-          <a href={`/family/${f}`} class="tag-link text-sm">{f.replace(/_/g, " ")}</a>
-        ))}
-      </div>
-    </section>
-
-    <!-- CTA -->
+    <!-- ═══ CTA ═══ -->
     <section class="text-center py-12 bg-atlas-surface rounded-lg border border-atlas-border relative overflow-hidden">
       <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(108,140,255,0.06)_0%,transparent_60%)] pointer-events-none"></div>
       <h2 class="text-2xl font-bold mb-2 relative">Build with Sciona</h2>
