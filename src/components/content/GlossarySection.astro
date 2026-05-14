@@ -21,7 +21,10 @@ const entries = findRelevantTerms(text + " " + extraTerms.join(" "));
 {entries.length > 0 && (
   <section class="mt-10" id="glossary" data-pagefind-ignore>
     <hr class="section-rule mb-8" />
-    <h2 class="text-xl font-semibold mb-4">Glossary</h2>
+    <div class="flex items-baseline justify-between mb-4">
+      <h2 class="text-xl font-semibold">Glossary</h2>
+      <span class="text-xs text-atlas-text-muted">{entries.length} terms used on this page</span>
+    </div>
     <div class="grid gap-3 sm:grid-cols-2">
       {entries.map((entry) => (
         <div class="rounded-lg bg-atlas-surface border border-atlas-border p-3" id={`term-${entry.term.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}>

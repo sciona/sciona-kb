@@ -57,6 +57,26 @@ const highlights = [...cdgs]
   .sort((a, b) => (b.data.binding_summary?.bound_active ?? 0) - (a.data.binding_summary?.bound_active ?? 0))
   .slice(0, 3);
 
+// Collect bound atoms across all CDGs in this paradigm
+const atomCounts = new Map<string, { fqdn: string; count: number }>();
+for (const c of cdgs) {
+  for (const b of c.data.bindings) {
+    if (b.status !== "active" || !b.bound_atom_fqdn) continue;
+    const entry = atomCounts.get(b.bound_atom_fqdn) ?? { fqdn: b.bound_atom_fqdn, count: 0 };
+    entry.count++;
+    atomCounts.set(b.bound_atom_fqdn, entry);
+  }
+}
+const topAtoms = [...atomCounts.values()]
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 8)
+  .map((a) => {
+    const parts = a.fqdn.replace("sciona.atoms.", "").split(".");
+    const name = parts[parts.length - 1];
+    const href = `/atoms/${parts.map((p) => p.replace(/_/g, "-")).join("/")}`;
+    return { name, href, count: a.count };
+  });
+
 // Group by family
 const byFamily = new Map<string, typeof cdgs>();
 for (const c of cdgs) {
@@ -169,5 +189,19 @@ const breadcrumbs = [
         })}
       </div>
     </section>
+
+    {topAtoms.length > 0 && (
+      <section class="mb-12">
+        <h2 class="text-lg font-semibold mb-3">Common Atoms in {label}</h2>
+        <div class="flex flex-wrap gap-2">
+          {topAtoms.map((a) => (
+            <a href={a.href} class="group flex items-center gap-2 px-3 py-2 rounded-lg bg-atlas-surface border border-atlas-border hover:border-atlas-accent/40 transition-colors">
+              <span class="font-mono text-xs text-atlas-accent group-hover:text-atlas-accent-hover transition-colors">{a.name.replace(/_/g, " ")}</span>
+              <span class="text-[10px] text-atlas-text-muted">used in {a.count} pipeline{a.count !== 1 ? "s" : ""}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
   </div>
 </BaseLayout>

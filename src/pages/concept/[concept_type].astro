@@ -57,11 +57,24 @@ export async function getStaticPaths() {
       }
     }
 
-    return { params: { concept_type }, props: { concept_type, realAtoms, synthesized } };
+    // CDGs that have stages of this concept type (for "Used in Pipelines")
+    const usingCdgs: Array<{ id: string; name: string; stageName: string; family: string }> = [];
+    const cdgSeen = new Set<string>();
+    for (const cdg of cdgs) {
+      for (const stage of cdg.data.stages) {
+        if (stage.concept_type !== concept_type) continue;
+        if (cdgSeen.has(cdg.id)) continue;
+        cdgSeen.add(cdg.id);
+        const shortName = cdg.data.name.replace(/^.*?--\s*/, "").replace(/^.*?\u2014\s*/, "") || cdg.data.name;
+        usingCdgs.push({ id: cdg.id, name: shortName, stageName: stage.name, family: cdg.data.family });
+      }
+    }
+
+    return { params: { concept_type }, props: { concept_type, realAtoms, synthesized, usingCdgs } };
   });
 }
 
-const { concept_type, realAtoms, synthesized } = Astro.props;
+const { concept_type, realAtoms, synthesized, usingCdgs } = Astro.props;
 const desc = getConceptDescription(concept_type);
 const totalCount = realAtoms.length + synthesized.length;
 const breadcrumbs = [
@@ -115,6 +128,31 @@ const breadcrumbs = [
             </li>
           ))}
         </ul>
+      </section>
+    )}
+
+    <!-- Pipelines using this concept -->
+    {usingCdgs.length > 0 && (
+      <section class="mb-10">
+        <h2 class="text-xl font-semibold mb-3">
+          Used in Pipelines <span class="text-atlas-text-muted font-normal">({usingCdgs.length})</span>
+        </h2>
+        <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {usingCdgs.slice(0, 9).map((c) => (
+            <a href={`/cdgs/${c.id}`} class="group flex items-center gap-3 px-3 py-2.5 rounded-lg bg-atlas-surface border border-atlas-border hover:border-atlas-accent/40 transition-colors">
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium group-hover:text-atlas-accent transition-colors line-clamp-1">{c.name}</p>
+                <p class="text-xs text-atlas-text-muted line-clamp-1">as {c.stageName}</p>
+              </div>
+              <span class="tag-link text-[9px] shrink-0">{c.family.replace(/_/g, " ")}</span>
+            </a>
+          ))}
+        </div>
+        {usingCdgs.length > 9 && (
+          <p class="text-xs text-atlas-text-muted mt-3">
+            And {usingCdgs.length - 9} more pipelines use {desc.title.toLowerCase()} stages.
+          </p>
+        )}
       </section>
     )}
 

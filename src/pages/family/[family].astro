@@ -5,29 +5,52 @@ import { getCollection } from "astro:content";
 export async function getStaticPaths() {
   const cdgs = await getCollection("cdgs");
   const families = [...new Set(cdgs.map((c) => c.data.family))];
-  return families.map((family) => ({
-    params: { family },
-    props: {
-      family,
-      items: cdgs
-        .filter((c) => c.data.family === family)
-        .map((c) => ({
+  return families.map((family) => {
+    const familyCdgs = cdgs.filter((c) => c.data.family === family);
+
+    // Collect bound atoms across all CDGs in this family
+    const atomCounts = new Map<string, { fqdn: string; count: number }>();
+    for (const c of familyCdgs) {
+      for (const b of c.data.bindings) {
+        if (b.status !== "active" || !b.bound_atom_fqdn) continue;
+        const entry = atomCounts.get(b.bound_atom_fqdn) ?? { fqdn: b.bound_atom_fqdn, count: 0 };
+        entry.count++;
+        atomCounts.set(b.bound_atom_fqdn, entry);
+      }
+    }
+    const topAtoms = [...atomCounts.values()]
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6)
+      .map((a) => {
+        const parts = a.fqdn.replace("sciona.atoms.", "").split(".");
+        const name = parts[parts.length - 1];
+        const href = `/atoms/${parts.map((p) => p.replace(/_/g, "-")).join("/")}`;
+        return { fqdn: a.fqdn, name, href, count: a.count };
+      });
+
+    return {
+      params: { family },
+      props: {
+        family,
+        topAtoms,
+        items: familyCdgs.map((c) => ({
           slug: c.id,
           href: `/cdgs/${c.id}`,
           title: c.data.name,
           description: c.data.dejargonized_summary || c.data.summary,
           tags: [c.data.paradigm, ...c.data.variant_hints.slice(0, 3)],
         })),
-    },
-  }));
+      },
+    };
+  });
 }
 
-const { family, items } = Astro.props;
+const { family, items, topAtoms } = Astro.props;
 const label = family.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
 ---
 
 <CatalogLayout
-  title={`${label} Solutions`}
+  title={`${label} Pipelines`}
   description={`${items.length} algorithmic pipelines in the ${label} problem family.`}
   items={items}
   breadcrumbs={[
@@ -35,4 +58,19 @@ const label = family.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUppe
     { label: "Families", href: "/cdgs" },
     { label: label, href: `/family/${family}` },
   ]}
-/>
+>
+  {topAtoms.length > 0 && (
+    <section class="mt-10">
+      <hr class="section-rule mb-6" />
+      <h2 class="text-lg font-semibold mb-3">Common Atoms in {label}</h2>
+      <div class="flex flex-wrap gap-2">
+        {topAtoms.map((a) => (
+          <a href={a.href} class="group flex items-center gap-2 px-3 py-2 rounded-lg bg-atlas-surface border border-atlas-border hover:border-atlas-accent/40 transition-colors">
+            <span class="font-mono text-xs text-atlas-accent group-hover:text-atlas-accent-hover transition-colors">{a.name.replace(/_/g, " ")}</span>
+            <span class="text-[10px] text-atlas-text-muted">used in {a.count} pipeline{a.count !== 1 ? "s" : ""}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+</CatalogLayout>
