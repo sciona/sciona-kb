@@ -86,6 +86,31 @@ const breadcrumbs = [
       </section>
     )}
 
+    {data.used_with && data.used_with.length > 0 && (
+      <section class="mt-8">
+        <h2 class="text-xl font-semibold mb-3">Often Used With</h2>
+        <div class="space-y-2">
+          {data.used_with.map((uw) => {
+            const parts = uw.atom.replace("sciona.atoms.", "").split(".");
+            const name = parts[parts.length - 1].replace(/_/g, " ");
+            const href = `/atoms/${parts.map((p: string) => p.replace(/_/g, "-")).join("/")}`;
+            const arrow = uw.direction === "upstream" ? "←" : "→";
+            const label = uw.direction === "upstream" ? "feeds into this" : "receives from this";
+            return (
+              <a href={href} class="group flex items-center gap-3 px-3 py-2 rounded-lg bg-atlas-surface border border-atlas-border hover:border-atlas-accent/40 transition-colors">
+                <span class="text-atlas-text-muted text-sm">{arrow}</span>
+                <div class="flex-1 min-w-0">
+                  <span class="font-mono text-xs text-atlas-accent group-hover:text-atlas-accent-hover transition-colors">{name}</span>
+                  <span class="text-xs text-atlas-text-muted ml-2">{label}</span>
+                </div>
+                <span class="text-[10px] text-atlas-text-muted bg-atlas-surface-2 px-1.5 py-0.5 rounded">{uw.relationship.replace(/_/g, " ")}</span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
     {relatedAtoms.length > 0 && (
       <section class="mt-10">
         <hr class="section-rule mb-8" />

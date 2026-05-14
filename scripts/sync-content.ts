@@ -423,15 +423,24 @@ interface CdgNode {
   name: string;
   description: string;
   concept_type: string;
+  type_signature?: string;
   inputs: Array<Record<string, unknown>>;
   outputs: Array<Record<string, unknown>>;
   status: string;
   matched_primitive: string | null;
 }
 
+interface CdgEdge {
+  source_id: string;
+  target_id: string;
+  edge_type?: string;
+  output_name?: string;
+  input_name?: string;
+}
+
 interface AtomCdg {
   nodes: CdgNode[];
-  edges: unknown[];
+  edges: CdgEdge[];
   metadata: Record<string, unknown>;
 }
 
@@ -568,8 +577,127 @@ function syncAtoms(atomToCdg: Map<string, string[]>) {
     }
   }
 
+  // ── Fallback: generate atoms from cdg.json when matches.json is absent ──
+  let cdgFallbackCount = 0;
+  const alreadySynced = new Set<string>(); // track FQDNs already written from matches.json
+
+  // Collect FQDNs from the matches.json pass above
+  for (const repoPath of repos) {
+    const matchFiles = globSync(path.join(repoPath, "src/sciona/atoms/**/matches.json"));
+    for (const matchFile of matchFiles) {
+      try {
+        const matches = readJson(matchFile) as MatchEntry[];
+        const { fqdn: groupFqdn } = fqdnFromPath(repoPath, matchFile);
+        for (const match of matches) {
+          alreadySynced.add(`${groupFqdn}.${match.pdg_node.predicate_id}`);
+        }
+      } catch { /* already reported */ }
+    }
+  }
+
+  for (const repoPath of repos) {
+    const cdgFiles = globSync(path.join(repoPath, "src/sciona/atoms/**/cdg.json"));
+
+    for (const cdgFile of cdgFiles) {
+      const dir = path.dirname(cdgFile);
+      // Skip if this directory already has matches.json (handled above)
+      if (fs.existsSync(path.join(dir, "matches.json"))) continue;
+
+      let cdg: AtomCdg;
+      try {
+        cdg = readJson(cdgFile) as AtomCdg;
+      } catch { continue; }
+
+      if (!cdg.nodes?.length) continue;
+
+      const refsPath = path.join(dir, "references.json");
+      const refs: ReferenceEntry[] = extractRefs(refsPath);
+      const repo = path.basename(repoPath);
+
+      // Build FQDN from path
+      const atomsRoot = path.join(repoPath, "src/sciona/atoms");
+      const relDir = path.dirname(cdgFile).replace(atomsRoot + "/", "");
+      const segments = relDir.split("/").filter(Boolean);
+      const domain = segments[0] ?? "core";
+      const groupFqdn = `sciona.atoms.${segments.join(".")}`;
+
+      // Build edge map for used_with relationships
+      const edges = cdg.edges ?? [];
+      const neighbors = new Map<string, Array<{ node_id: string; relationship: string; direction: "upstream" | "downstream" }>>();
+      for (const edge of edges) {
+        const rel = edge.edge_type || (edge.output_name ? `${edge.output_name} → ${edge.input_name}` : "data_flow");
+        // Source → Target: source has downstream neighbor, target has upstream neighbor
+        const srcList = neighbors.get(edge.source_id) ?? [];
+        srcList.push({ node_id: edge.target_id, relationship: rel, direction: "downstream" });
+        neighbors.set(edge.source_id, srcList);
+
+        const tgtList = neighbors.get(edge.target_id) ?? [];
+        tgtList.push({ node_id: edge.source_id, relationship: rel, direction: "upstream" });
+        neighbors.set(edge.target_id, tgtList);
+      }
+
+      const atomicNodes = cdg.nodes.filter((n) => n.status === "atomic");
+
+      for (const node of atomicNodes) {
+        const predicateId = node.node_id;
+        const atomFqdn = `${groupFqdn}.${predicateId}`;
+
+        // Skip if already synced from matches.json
+        if (alreadySynced.has(atomFqdn)) continue;
+
+        const conceptType = normalizeConcept(node.concept_type ?? "custom");
+        const inputs = node.inputs ?? [];
+        const outputs = node.outputs ?? [];
+        const usedByCdgs = atomToCdg.get(atomFqdn) ?? [];
+
+        // Build used_with from edge neighbors
+        const nodeNeighbors = neighbors.get(predicateId) ?? [];
+        const usedWith = nodeNeighbors.map((n) => ({
+          atom: `${groupFqdn}.${n.node_id}`,
+          direction: n.direction,
+          relationship: n.relationship,
+        }));
+
+        const title = predicateId
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+
+        const frontmatter: Record<string, unknown> = {
+          fqdn: atomFqdn,
+          predicate_id: predicateId,
+          repo,
+          domain,
+          type_signature: node.type_signature ?? `(${inputs.map((i: any) => `${i.name}: ${i.type_desc ?? "Any"}`).join(", ")}) -> ${outputs.length === 1 ? (outputs[0] as any).type_desc ?? "Any" : `tuple[${outputs.map((o: any) => (o as any).type_desc ?? "Any").join(", ")}]`}`,
+          informal_desc: node.description || title,
+          conceptual_summary: "",
+          inputs,
+          outputs,
+          concept_type: conceptType,
+          verification_level: "cdg_only",
+          used_by_cdgs: usedByCdgs,
+          used_with: usedWith,
+          references: refs,
+          title,
+          description: truncate(node.description || title, 160),
+        };
+
+        const slugSegments = atomFqdn
+          .replace("sciona.atoms.", "")
+          .split(".")
+          .map(slugify);
+        const outDir = path.join(OUT_DIR, "atoms", ...slugSegments.slice(0, -1));
+        const filename = `${slugSegments.at(-1)}.mdx`;
+
+        const body = escapeMdx(generateAtomBody(frontmatter));
+        writeMdx(outDir, filename, frontmatter, body);
+        count++;
+        cdgFallbackCount++;
+      }
+    }
+  }
+
   syncReport.atoms.written = count;
-  console.log(`  atoms: ${count} files written`);
+  console.log(`  atoms: ${count} files written (${cdgFallbackCount} from cdg.json fallback)`);
 }
 
 function generateAtomBody(fm: Record<string, unknown>): string {

@@ -44,6 +44,11 @@ const atoms = defineCollection({
     verification_level: z.string().default("type_checked"),
 
     used_by_cdgs: z.array(z.string()).default([]),
+    used_with: z.array(z.object({
+      atom: z.string(),
+      direction: z.enum(["upstream", "downstream"]),
+      relationship: z.string(),
+    })).default([]),
     references: z.array(ReferenceSchema).default([]),
 
     title: z.string(),
