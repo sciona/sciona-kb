@@ -42,6 +42,7 @@ const atoms = defineCollection({
 
     concept_type: ConceptType,
     verification_level: z.string().default("type_checked"),
+    interest_score: z.number().min(0).max(5).default(0),
 
     used_by_cdgs: z.array(z.string()).default([]),
     used_with: z.array(z.object({

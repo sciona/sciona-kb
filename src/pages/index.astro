@@ -49,9 +49,9 @@ const viewerData = {
 };
 const featuredShortName = featuredCdg.data.name.replace(/^.*?--\s*/, "").replace(/^.*?\u2014\s*/, "") || featuredCdg.data.name;
 
-// ── Featured atoms (3 random, different domains) ──
+// ── Featured atoms (3 random, different domains, interesting) ──
 const atomPool = atoms.filter(
-  (a) => a.data.inputs.length >= 2 && a.data.outputs.length >= 1
+  (a) => a.data.interest_score >= 3 && a.data.inputs.length >= 2 && a.data.outputs.length >= 1
 );
 const atomShuffled = shuffle(atomPool.length >= 3 ? atomPool : [...atoms]);
 const atomDomainsSeen = new Set<string>();

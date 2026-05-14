@@ -63,7 +63,7 @@ const domainMeta: Record<string, { label: string; color: string }> = {
 let featured: ContractAtom[] = featuredProp ?? [];
 if (featured.length === 0 && atoms.length >= 3) {
   const withIO = atoms.filter(
-    (a) => a.data.inputs.length > 0 && a.data.outputs.length > 0
+    (a) => a.data.interest_score >= 3 && a.data.inputs.length > 0 && a.data.outputs.length > 0
   );
   const pool = withIO.length >= 3 ? withIO : atoms;
   const seed = atoms.length * 7 + title.length * 13;

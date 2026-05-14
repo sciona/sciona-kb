@@ -116,6 +116,66 @@ function truncate(s: string, max: number): string {
   return s.slice(0, max - 1) + "\u2026";
 }
 
+// ─── Interest scoring ────────────────────────────────────────────
+
+const HIGH_INTEREST_CONCEPTS = new Set([
+  "optimization", "neural_network", "signal_transform", "signal_filter",
+  "loss_function", "geometry", "clustering", "dimensionality_reduction",
+  "searching", "graph_optimization", "graph_traversal", "sampler",
+  "information_theory", "mcmc_kernel", "mcmc_proposal", "posterior_update",
+  "dynamic_programming", "greedy", "divide_and_conquer", "fixed_point",
+  "sequential_filter", "message_passing", "probabilistic_aggregation",
+]);
+
+const PLUMBING_NAME_PATTERNS = /(?:guard|bookkeeping|callback|passthrough|shell|formatting|setup|api_|tag_|validation_mode|deprecation|routing_bookkeeping|metadata_request|sentinel|version_solver|loop_bookkeeping|postfit_return|return_identity|return_passthrough|cached_result|cached_value)/;
+
+const PLUMBING_DESC_PATTERNS = /^(?:Return (?:whether|the )|Set the |Store the |Get the |Check (?:if|whether)|Validate |Pass through)/i;
+
+/**
+ * Score an atom's educational interest from 0 (pure plumbing) to 5 (deep insight).
+ * Used to filter featured cards and sort concept page catalogs.
+ */
+function computeInterestScore(opts: {
+  predicateId: string;
+  conceptType: string;
+  description: string;
+  inputs: unknown[];
+  outputs: unknown[];
+  usedByCdgs: string[];
+  usedWith: unknown[];
+  hasConstraints: boolean;
+}): number {
+  let score = 0;
+
+  // Concept type signal (+2 for high-interest, +1 for mid, 0 for custom)
+  if (HIGH_INTEREST_CONCEPTS.has(opts.conceptType)) {
+    score += 2;
+  } else if (opts.conceptType !== "custom") {
+    score += 1;
+  }
+
+  // I/O richness (+1 for 2+ inputs, +1 for meaningful output)
+  if (opts.inputs.length >= 2) score += 1;
+  if (opts.outputs.length >= 1 && opts.inputs.length >= 1) score += 0; // baseline
+
+  // Reuse across CDGs (+1)
+  if (opts.usedByCdgs.length >= 1) score += 1;
+
+  // Pipeline connectivity (+1)
+  if (opts.usedWith.length >= 1) score += 1;
+
+  // Description quality (+1 for substantive description)
+  if (opts.description.length > 40 && !PLUMBING_DESC_PATTERNS.test(opts.description)) {
+    score += 1;
+  }
+
+  // Penalties
+  if (PLUMBING_NAME_PATTERNS.test(opts.predicateId)) score -= 2;
+  if (opts.conceptType === "custom" && opts.inputs.length <= 1 && !opts.hasConstraints) score -= 1;
+
+  return Math.max(0, Math.min(5, score));
+}
+
 // Normalize concept_type: lowercase + map granular types to canonical broad types
 import { canonicalizeConcept } from "../src/data/concept-type-mapping.js";
 
@@ -546,22 +606,35 @@ function syncAtoms(atomToCdg: Map<string, string[]>) {
           .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
           .replace(/^./, (c) => c.toUpperCase());
 
+        const desc = decl.docstring || match.pdg_node.informal_desc;
+        const interestScore = computeInterestScore({
+          predicateId,
+          conceptType,
+          description: desc,
+          inputs,
+          outputs,
+          usedByCdgs,
+          usedWith: [],
+          hasConstraints: inputs.some((i: any) => i.constraints?.length > 0),
+        });
+
         const frontmatter = {
           fqdn: atomFqdn,
           predicate_id: predicateId,
           repo,
           domain,
           type_signature: decl.type_signature,
-          informal_desc: decl.docstring || match.pdg_node.informal_desc,
+          informal_desc: desc,
           conceptual_summary: decl.conceptual_summary,
           inputs,
           outputs,
           concept_type: conceptType,
           verification_level: match.verified_match.verification_level || "type_checked",
+          interest_score: interestScore,
           used_by_cdgs: usedByCdgs,
           references: refs,
           title,
-          description: truncate(decl.docstring || match.pdg_node.informal_desc, 160),
+          description: truncate(desc, 160),
         };
 
         // Build slug path mirroring FQDN
@@ -664,23 +737,36 @@ function syncAtoms(atomToCdg: Map<string, string[]>) {
           .replace(/_/g, " ")
           .replace(/\b\w/g, (c) => c.toUpperCase());
 
+        const nodeDesc = node.description || title;
+        const interestScore = computeInterestScore({
+          predicateId,
+          conceptType,
+          description: nodeDesc,
+          inputs,
+          outputs,
+          usedByCdgs,
+          usedWith,
+          hasConstraints: inputs.some((i: any) => i.constraints?.length > 0),
+        });
+
         const frontmatter: Record<string, unknown> = {
           fqdn: atomFqdn,
           predicate_id: predicateId,
           repo,
           domain,
           type_signature: node.type_signature ?? `(${inputs.map((i: any) => `${i.name}: ${i.type_desc ?? "Any"}`).join(", ")}) -> ${outputs.length === 1 ? (outputs[0] as any).type_desc ?? "Any" : `tuple[${outputs.map((o: any) => (o as any).type_desc ?? "Any").join(", ")}]`}`,
-          informal_desc: node.description || title,
+          informal_desc: nodeDesc,
           conceptual_summary: "",
           inputs,
           outputs,
           concept_type: conceptType,
           verification_level: "cdg_only",
+          interest_score: interestScore,
           used_by_cdgs: usedByCdgs,
           used_with: usedWith,
           references: refs,
           title,
-          description: truncate(node.description || title, 160),
+          description: truncate(nodeDesc, 160),
         };
 
         const slugSegments = atomFqdn

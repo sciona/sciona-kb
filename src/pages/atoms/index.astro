@@ -8,9 +8,9 @@ import { getConceptDescription } from "../../data/concept-descriptions";
 
 const atoms = await getCollection("atoms");
 
-// ── Random featured cards (changes each build) ──
+// ── Random featured cards (changes each build, interesting atoms only) ──
 const withIO = atoms.filter(
-  (a) => a.data.inputs.length >= 2 && a.data.outputs.length >= 1
+  (a) => a.data.interest_score >= 3 && a.data.inputs.length >= 2 && a.data.outputs.length >= 1
 );
 const pool = withIO.length >= 3 ? withIO : atoms;
 
