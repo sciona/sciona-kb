@@ -116,9 +116,11 @@ function truncate(s: string, max: number): string {
   return s.slice(0, max - 1) + "\u2026";
 }
 
-// Normalize concept_type from UPPER_CASE source to lower_case for Zod enum
+// Normalize concept_type: lowercase + map granular types to canonical broad types
+import { canonicalizeConcept } from "../src/data/concept-type-mapping.js";
+
 function normalizeConcept(raw: string): string {
-  return raw.toLowerCase();
+  return canonicalizeConcept(raw.toLowerCase());
 }
 
 // ─── Discover Atom Repos ──────────────────────────────────────────
